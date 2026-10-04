@@ -48,3 +48,12 @@ Keep run evidence outside the repo. Record plugin Git SHA, host version, consume
 ## Deferred work
 
 Layer 2 retains work ledgers, leases, cancellation, worker accounting, managed isolation and unattended authority contracts. Parsers, evidence schemas and deterministic archives are dropped from Layer 1. Performance, benchmark wiring, eval, reflect, teach, recall, figure-it-out, no-comments, technical-writing, bro, multi-phase plans and automatic workflows are deferred. Automate-me, make-bot-ui and Benny are not planned. Store submission, physical-device performance certification, system SDK/JDK changes and full upstream parity are non-goals.
+
+### Post-first-release workflow additions
+
+Both additions below are explicitly deferred until after the first release. They add no 0.1.0 acceptance criteria and do not weaken the existing build, test, native-caller or UI proof checks. Keep feature implementation paused at this checkpoint while the owner reviews WP1 PR #1.
+
+| Addition | Post-release acceptance | Rationale |
+|---|---|---|
+| Consumer-app feature map | For each chosen consumer app, maintain a short summary of its key user-visible features and expected behavior. Keep consumer app source outside the plugin. | Give the owner and agents a simple shared picture of the app's features. |
+| CLI-first verification for easy paths | Identify straightforward checks that CLI commands can prove; record argv, exit codes and artifacts. Retain required native/UI verification wherever CLI is insufficient. | Reduce token use on easy paths while preserving the proof bar. |
