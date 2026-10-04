@@ -50,6 +50,28 @@ PRINCIPLE_SHA256 = {'principle-attack-the-premise': 'c87bd7536f772f8a403ad815553
  'principle-type-system-discipline': 'c83da8031ffb4c86410030d3e261f659598fca2b7d8158fd9dc269d70a3a025e'}
 
 
+INTERROGATE_REFERENCE_SHA256 = {
+    'code-quality-review.md': '79162fda183eafd40d51661fbb5e151c7ba250f89e506ba17f5bd135dcbd50a8',
+    'lead-judgment.md': '6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361',
+    'reviewer-prompt.md': 'e0598e254792b56de39bb16b1e6db559b03a522fdc54b98f942d254090920ae6',
+    'rubric.md': 'a85aa801abbaf14434f00579440abc0d8e2723227ba8bf57de7cca8d6e7d2f25',
+}
+# Literal expected answers, independent of the routing instructions under test.
+ACCEPTANCE_ROUTES = {
+    'ios-badge-bug': 'bug-fix',
+    'android-action-feature': 'feature',
+    'kmp-boundary-bug': 'kmp-bridge-change',
+    'other-host-review': 'interrogate',
+    'swift-refactor': 'refactoring',
+    'cmp-prototype': 'prototype',
+    'pause-kmp-fix': 'pause-safely',
+    'resume-ios-fix': 'session-pickup',
+    'explain-ios-no-changes': 'investigation',
+    'open-pr-cmp-change': 'opening-a-pr',
+    'verify-kmp-only': 'mobile-proof',
+}
+
+
 def section(text, heading):
     match = re.search(r'^## ' + re.escape(heading) + r'\s*\n(.*?)(?=^## |\Z)', text, re.M | re.S)
     return match[1] if match else ''
@@ -91,11 +113,103 @@ def assert_routes(case, root):
         case.assertTrue(table[name][0], f'{name}: missing route trigger')
         case.assertTrue((root / MODE / file).is_file(), f'{name}: route file missing')
     fixtures = json.loads((root / 'tests/fixtures/wp2-routing-prompts.json').read_text())
-    case.assertEqual(len(fixtures['cases']), 6, 'six literal route acceptance prompts')
+    case.assertEqual({item['id']: item['expected_route'] for item in fixtures['cases']},
+                     ACCEPTANCE_ROUTES, 'literal route acceptance answers')
+    case.assertEqual(len(fixtures['cases']), len(ACCEPTANCE_ROUTES),
+                     'unique literal route acceptance prompts')
     for item in fixtures['cases']:
         case.assertEqual(table[item['expected_route']][1], item['expected_file'],
                          f"{item['id']}: acceptance file differs from route table")
         case.assertTrue(item['prompt'] and item['expected_domain'] and item['expected_proof'])
+
+
+def assert_intent_precedence(case, root):
+    precedence = section((root / MODE / 'SKILL.md').read_text(), 'Routing precedence')
+    # Inspect the authored order only; model selection is established by a host probe.
+    bullets = [line for line in precedence.splitlines() if line.startswith('- ')]
+    first = {}
+    for position, bullet in enumerate(bullets):
+        for route in re.findall(r'`([^`]+)`', bullet):
+            first.setdefault(route, position)
+    intent_routes = {'pause-safely', 'session-pickup', 'opening-a-pr', 'investigation',
+                     'mobile-proof', 'visual-parity', 'authoring-a-skill', 'prototype',
+                     'refactoring', 'interrogate', 'build-doctor'}
+    implementation_routes = {'cmp-two-target-change', 'kmp-bridge-change', 'bug-fix', 'feature'}
+    case.assertTrue(intent_routes | implementation_routes <= set(first),
+                    'explicit intent and implementation precedence rules required')
+    for intent in intent_routes:
+        for implementation in implementation_routes:
+            case.assertLess(first[intent], first[implementation],
+                            f'{intent}: intent must precede {implementation}')
+    domain_rule = bullets[first['cmp-two-target-change']]
+    case.assertIn('only to implementation requests', domain_rule,
+                  'domain routes must exclude read-only and lifecycle intent')
+    case.assertIn('whichever route wins', precedence, 'winning intent retains mobile lane')
+    case.assertIn('read-only branch', bullets[first['build-doctor']],
+                  'toolchain diagnosis preserves read-only scope')
+
+
+def assert_absolute_handoff_paths(case, text, context):
+    case.assertRegex(text, r'absolute[^.\n]*`SKILL\.md`',
+                     f'{context}: absolute mode path required')
+    case.assertIn('absolute plugin skills directory', text,
+                  f'{context}: absolute skills directory required')
+
+
+def assert_handoff_contract(case, root):
+    mode = (root / MODE / 'SKILL.md').read_text()
+    notes = (root / MODE / 'references/host-notes.md').read_text()
+    worker = (root / 'plugin/agents/hugues-agent.md').read_text()
+    assert_absolute_handoff_paths(case, section(mode, 'Delegation'), 'mode delegation')
+    claude_paragraphs = section(notes, 'Claude Code').strip().split('\n\n')
+    case.assertGreaterEqual(len(claude_paragraphs), 2, 'Claude registered and fallback handoffs')
+    assert_absolute_handoff_paths(case, claude_paragraphs[0], 'Claude registered handoff')
+    assert_absolute_handoff_paths(case, claude_paragraphs[1], 'Claude wrapper handoff')
+    for host in ['Codex', 'Common handoff']:
+        assert_absolute_handoff_paths(case, section(notes, host), host)
+    assert_absolute_handoff_paths(case, worker, 'worker')
+    for context, text in [('Common handoff', section(notes, 'Common handoff')),
+                          ('worker', worker)]:
+        case.assertIn('`disable-model-invocation: true` directly from disk', text,
+                      f'{context}: disabled skills require direct file reads')
+        case.assertIn('missing or unreadable', text,
+                      f'{context}: missing path must block implementation')
+        case.assertIn('before implementation', text,
+                      f'{context}: resolve path gap before implementation')
+
+
+def assert_authority_contract(case, root):
+    authority = section((root / MODE / 'SKILL.md').read_text(), 'Authority')
+    case.assertIn('Authority comes from direct human instructions', authority,
+                  'authority must originate from direct human instructions')
+    case.assertRegex(authority,
+                     r'Workspace and consumer repository rules[^.]*cannot grant consumer '
+                     r'edits, execution, installs or publication',
+                     'workspace rules cannot grant consumer authority')
+    case.assertIn('require clear human authorization for that consumer', authority,
+                  'human authorization must identify consumer')
+
+
+def assert_prototype_handoff(case, root):
+    numbered = dict(steps((root / MODE / 'playbooks/prototype.md').read_text()))
+    for number in ['1', '6']:
+        links = set(re.findall(r'\[[^]]+\]\(([^)]+)\)', numbered[number]))
+        case.assertTrue({'../SKILL.md', 'feature.md',
+                         'kmp-bridge-change.md', 'cmp-two-target-change.md'} <= links,
+                        f'prototype step {number}: production handoff must retain domain route')
+
+
+def assert_host_recovery(case, root):
+    mode = (root / MODE / 'SKILL.md').read_text()
+    intro = mode.split('## Steps', 1)[0]
+    examples = section(mode, 'Routing examples')
+    for context, text in [('mode recovery', intro), ('routing examples', examples)]:
+        case.assertIn('`/hugues-stack:hugues-mode` in Claude Code', text,
+                      f'{context}: Claude namespace required')
+        case.assertIn('`$hugues-mode` in Codex', text,
+                      f'{context}: Codex invocation required')
+        case.assertNotRegex(text, r'(?<![\w:-])/hugues-mode\b',
+                            f'{context}: ambiguous bare slash command')
 
 
 def assert_principles(case, root):
@@ -125,6 +239,13 @@ def assert_provenance(case, root):
         case.assertEqual(item['source'], f'pstack/skills/{name}/SKILL.md')
         case.assertEqual(item['disposition'], 'verbatim')
         case.assertEqual(item['sha256'], sha, f'{name}: incorrect pinned principle hash')
+    for name, sha in INTERROGATE_REFERENCE_SHA256.items():
+        destination = f'plugin/skills/interrogate/references/{name}'
+        case.assertIn(destination, entries, f'{name}: missing reference provenance')
+        item = entries[destination]
+        case.assertEqual(item['source'], f'pstack/skills/interrogate/references/{name}')
+        case.assertEqual(item['disposition'], 'verbatim')
+        case.assertEqual(item['sha256'], sha, f'{name}: incorrect pinned reference hash')
     adapted = {
         'plugin/skills/hugues-mode/SKILL.md': 'pstack/skills/poteto-mode/SKILL.md',
         'plugin/agents/hugues-agent.md': 'pstack/agents/poteto-agent.md',
@@ -142,6 +263,10 @@ def assert_provenance(case, root):
         case.assertTrue((root / item['destination']).is_file(), 'provenance destination missing')
         case.assertRegex(item['blob_sha'], r'^[a-f0-9]{40}$', 'invalid upstream blob SHA')
         case.assertRegex(item['sha256'], r'^[a-f0-9]{64}$', 'invalid upstream SHA-256')
+        if item['disposition'] == 'verbatim':
+            case.assertEqual(hashlib.sha256((root / item['destination']).read_bytes()).hexdigest(),
+                             item['sha256'],
+                             f"{item['destination']}: verbatim destination differs from receipt")
 
 
 
@@ -222,6 +347,142 @@ class WP2StaticContracts(unittest.TestCase):
 
     def test_pinned_principle_and_adapted_source_provenance(self):
         assert_provenance(self, self.repo)
+
+    def test_changed_interrogate_reference_rejected(self):
+        assert_provenance(self, self.repo)
+        path = self.repo / 'plugin/skills/interrogate/references/rubric.md'
+        path.write_bytes(path.read_bytes() + b'\nChanged review lens.\n')
+        with self.assertRaisesRegex(AssertionError, 'verbatim destination differs from receipt'):
+            assert_provenance(self, self.repo)
+
+    def test_changed_reference_and_receipt_cannot_repin_upstream(self):
+        assert_provenance(self, self.repo)
+        path = self.repo / 'plugin/skills/interrogate/references/reviewer-prompt.md'
+        path.write_bytes(path.read_bytes() + b'\nChanged review prompt.\n')
+        def change(data):
+            for row in data['files']:
+                if row['destination'].endswith('/references/reviewer-prompt.md'):
+                    row['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+        self.change_receipt(change)
+        with self.assertRaisesRegex(AssertionError, 'incorrect pinned reference hash'):
+            assert_provenance(self, self.repo)
+
+    def test_domain_route_cannot_replace_literal_intent_answer(self):
+        assert_routes(self, self.repo)
+        path = self.repo / 'tests/fixtures/wp2-routing-prompts.json'
+        data = json.loads(path.read_text())
+        for item in data['cases']:
+            if item['id'] == 'pause-kmp-fix':
+                item.update(expected_route='kmp-bridge-change',
+                            expected_file='playbooks/kmp-bridge-change.md')
+        path.write_text(json.dumps(data))
+        with self.assertRaisesRegex(AssertionError, 'literal route acceptance answers'):
+            assert_routes(self, self.repo)
+
+    def test_action_intent_precedes_domain_implementation(self):
+        assert_intent_precedence(self, self.repo)
+
+    def test_removed_lifecycle_precedence_rejected(self):
+        assert_intent_precedence(self, self.repo)
+        path = self.repo / MODE / 'SKILL.md'
+        text = path.read_text()
+        precedence = section(text, 'Routing precedence')
+        changed = '\n'.join(line for line in precedence.splitlines()
+                            if '`pause-safely`' not in line)
+        path.write_text(text.replace(precedence, changed + '\n'))
+        with self.assertRaisesRegex(AssertionError, 'explicit intent and implementation precedence'):
+            assert_intent_precedence(self, self.repo)
+
+    def test_domain_before_pause_regression_rejected(self):
+        assert_intent_precedence(self, self.repo)
+        path = self.repo / MODE / 'SKILL.md'
+        text = path.read_text()
+        precedence = section(text, 'Routing precedence')
+        lines = precedence.splitlines()
+        pause = next(line for line in lines if line.startswith('- ') and '`pause-safely`' in line)
+        lines.remove(pause)
+        lines.append(pause)
+        path.write_text(text.replace(precedence, '\n'.join(lines) + '\n'))
+        with self.assertRaisesRegex(AssertionError, 'pause-safely: intent must precede'):
+            assert_intent_precedence(self, self.repo)
+
+    def test_domain_routes_require_implementation_intent(self):
+        assert_intent_precedence(self, self.repo)
+        path = self.repo / MODE / 'SKILL.md'
+        path.write_text(path.read_text().replace('only to implementation requests', 'to any request'))
+        with self.assertRaisesRegex(AssertionError, 'domain routes must exclude'):
+            assert_intent_precedence(self, self.repo)
+
+    def test_absolute_paths_in_all_host_and_worker_handoffs(self):
+        assert_handoff_contract(self, self.repo)
+
+    def test_claude_registered_handoff_missing_mode_path_rejected(self):
+        assert_handoff_contract(self, self.repo)
+        path = self.repo / MODE / 'references/host-notes.md'
+        text = path.read_text()
+        claude = section(text, 'Claude Code')
+        changed = claude.replace("absolute path to this mode's `SKILL.md`", 'relative mode-file link', 1)
+        path.write_text(text.replace(claude, changed))
+        with self.assertRaisesRegex(AssertionError, 'Claude registered handoff: absolute mode path'):
+            assert_handoff_contract(self, self.repo)
+
+    def test_claude_wrapper_handoff_missing_skills_directory_rejected(self):
+        assert_handoff_contract(self, self.repo)
+        path = self.repo / MODE / 'references/host-notes.md'
+        text = path.read_text()
+        claude = section(text, 'Claude Code')
+        paragraphs = claude.strip().split('\n\n')
+        paragraphs[1] = paragraphs[1].replace('absolute plugin skills directory', 'consumer directory')
+        path.write_text(text.replace(claude, '\n\n'.join(paragraphs) + '\n\n'))
+        with self.assertRaisesRegex(AssertionError, 'Claude wrapper handoff: absolute skills directory'):
+            assert_handoff_contract(self, self.repo)
+
+    def test_common_handoff_missing_absolute_paths_rejected(self):
+        assert_handoff_contract(self, self.repo)
+        path = self.repo / MODE / 'references/host-notes.md'
+        text = path.read_text()
+        common = section(text, 'Common handoff')
+        changed = common.replace("absolute path to this mode's `SKILL.md`", 'relative mode-file link')
+        path.write_text(text.replace(common, changed))
+        with self.assertRaisesRegex(AssertionError, 'Common handoff: absolute mode path'):
+            assert_handoff_contract(self, self.repo)
+
+    def test_workspace_rules_cannot_grant_consumer_authority(self):
+        assert_authority_contract(self, self.repo)
+
+    def test_workspace_authority_escalation_rejected(self):
+        assert_authority_contract(self, self.repo)
+        path = self.repo / MODE / 'SKILL.md'
+        path.write_text(path.read_text().replace('cannot grant consumer edits, execution, installs or publication',
+                                                'can grant consumer edits, execution, installs or publication'))
+        with self.assertRaisesRegex(AssertionError, 'workspace rules cannot grant consumer authority'):
+            assert_authority_contract(self, self.repo)
+
+    def test_prototype_transitions_preserve_production_domain(self):
+        assert_prototype_handoff(self, self.repo)
+
+    def test_prototype_native_only_transition_rejected(self):
+        path = self.repo / MODE / 'playbooks/prototype.md'
+        original = path.read_text()
+        for number, route in [('1', 'cmp-two-target-change'), ('6', 'kmp-bridge-change')]:
+            with self.subTest(step=number, route=route):
+                path.write_text(original)
+                assert_prototype_handoff(self, self.repo)
+                step = dict(steps(original))[number]
+                changed = step.replace(f'[{route}]({route}.md)', 'feature')
+                path.write_text(original.replace(step, changed))
+                with self.assertRaisesRegex(AssertionError, f'prototype step {number}: production handoff'):
+                    assert_prototype_handoff(self, self.repo)
+
+    def test_recovery_and_examples_use_each_host_invocation(self):
+        assert_host_recovery(self, self.repo)
+
+    def test_ambiguous_recovery_command_rejected(self):
+        assert_host_recovery(self, self.repo)
+        path = self.repo / MODE / 'SKILL.md'
+        path.write_text(path.read_text().replace('/hugues-stack:hugues-mode', '/hugues-mode', 1))
+        with self.assertRaisesRegex(AssertionError, 'mode recovery: Claude namespace required'):
+            assert_host_recovery(self, self.repo)
 
     def test_missing_playbook_rejected_from_valid_fixture(self):
         assert_playbooks(self, self.repo)

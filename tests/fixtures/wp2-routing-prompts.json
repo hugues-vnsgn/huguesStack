@@ -74,6 +74,67 @@
         "semantics",
         "text scaling"
       ]
+    },
+    {
+      "id": "pause-kmp-fix",
+      "prompt": "Pause the KMP discount fix and save state before compaction.",
+      "expected_route": "pause-safely",
+      "expected_file": "playbooks/pause-safely.md",
+      "expected_domain": "KMP shared logic",
+      "expected_proof": [
+        "handoff",
+        "evidence",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "resume-ios-fix",
+      "prompt": "Resume the iOS badge bug fix from yesterday's handoff.",
+      "expected_route": "session-pickup",
+      "expected_file": "playbooks/session-pickup.md",
+      "expected_domain": "Swift/iOS",
+      "expected_proof": [
+        "handoff",
+        "current branch",
+        "prior evidence"
+      ]
+    },
+    {
+      "id": "explain-ios-no-changes",
+      "prompt": "Why does the iOS article list jump when the unread badge updates? Explain only, change nothing.",
+      "expected_route": "investigation",
+      "expected_file": "playbooks/investigation.md",
+      "expected_domain": "Swift/iOS",
+      "expected_proof": [
+        "read-only",
+        "cause",
+        "no changes"
+      ]
+    },
+    {
+      "id": "open-pr-cmp-change",
+      "prompt": "Open a PR for the shared Compose reading panel change.",
+      "expected_route": "opening-a-pr",
+      "expected_file": "playbooks/opening-a-pr.md",
+      "expected_domain": "CMP shared UI",
+      "expected_proof": [
+        "diff",
+        "checks",
+        "review description"
+      ]
+    },
+    {
+      "id": "verify-kmp-only",
+      "prompt": "Verify the existing KMP discount fix on Android and iOS, including its native callers. Make no code changes.",
+      "expected_route": "mobile-proof",
+      "expected_file": "playbooks/mobile-proof.md",
+      "expected_domain": "KMP shared logic",
+      "expected_proof": [
+        "common tests",
+        "Android",
+        "iOS",
+        "native caller"
+      ]
     }
   ],
   "lanes": [

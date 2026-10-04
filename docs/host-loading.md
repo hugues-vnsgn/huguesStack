@@ -112,15 +112,32 @@ against the WP2 revision; record live routing separately.
 For Codex, a fresh disposable project may expose this checkout's skills through
 `.agents/skills` for a manual project-skill route preview. Record the exact plugin
 SHA, setup, host version, selected file, copied steps, domain and proof, with
-argv and exit status outside the repository. Use the six literal prompts in the
-[WP2 fixture](../tests/fixtures/wp2-routing-prompts.json). The coordinator observed this manual path with Codex 0.160.0 on 4 October 2026:
+argv and exit status outside the repository. Use the literal prompts in the
+[WP2 fixture](../tests/fixtures/wp2-routing-prompts.json). The initial coordinator
+preview used six cases with Codex 0.160.0 on 4 October 2026:
 six expected routes, domains and all 38 numbered steps matched, exit 0. The host
 exposed no todo/plan tool, so the displayed checklist fallback was observed;
 native todo integration remains unverified. Eight read-only skill-file reads
 supplied the preview. A preview must stop before delegation or consumer execution. This tests planning behavior through
 the manual path; it does not demonstrate native plugin invocation or delegated
-execution. No external Claude review or model invocation is part of WP2's
-recorded checks.
+execution. The six-case result describes head `17ba517`; changes after that
+preview need separate verification.
+
+After the six review fixes, a fresh Codex 0.160.0 manual preview exited 0 with
+all eleven expected routes and domains matched, including the five explicit
+intent cases. All 61 numbered steps matched the current selected files
+byte-for-byte. Thirteen read-only skill-file reads succeeded; no delegates,
+writes or consumer commands ran. All 48 plugin file fingerprints matched the
+preview. The host again exposed no todo/plan tool, so this result covers the
+displayed JSON checklist fallback. Native todo integration remains unrun. The
+final tested head and review result are recorded in
+[PR #3](https://github.com/hugues-vnsgn/huguesStack/pull/3).
+
+The owner subsequently authorized Claude Code review. Claude Code 2.1.286 with
+`claude-opus-5-5` completed a static code review of that head in plan permission
+mode using only Read, Glob and Grep. This review did not load the plugin, invoke
+its router or execute a worker. Record code review separately from routing and
+runtime checks; see the [review audit](reviews/wp2-claude-review.md).
 
 See [WP1 validation](wp1-validation.md) for historical evidence and incomplete
 initial probe attempts, and [WP2 validation](wp2-validation.md) for current
