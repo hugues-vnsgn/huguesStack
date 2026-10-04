@@ -1,0 +1,16 @@
+# Build doctor
+
+source: Conceptual adaptation of osxsystem/hstack at `99cc6129aea3f702ee6cd3b448e4f67700b4353c`, `skills/core/hstack/playbooks/build-doctor.md`; huguesStack first-release requirements. No managed-worker runtime is imported.
+
+Diagnose first. Repair only within explicit authority.
+
+## Steps
+
+1. Capture the failing argv, exit code, relevant output, environment, selected target and expected artifact. Read repository instructions and [mobile lanes](../references/mobile-lanes.md) before choosing experiments.
+2. Diagnose with repository evidence and authorized safe reproduction. Separate a code/configuration defect from a missing tool, SDK, license, signing capability, runtime or wrong target. Finish with a supported cause or a precise unresolved hypothesis.
+3. Determine whether the owner requested diagnosis or scoped repair. Diagnosis-only ends with the evidence and blockers; retain later steps with skip reasons. A generic mode request grants no consumer edit/execution authority or permission to change global SDKs, JDKs, licenses, credentials or system settings.
+4. For an authorized repair, establish the scoped checkout and brief a fresh implementation subagent with cause, owned files, permitted changes and original failing check. Prefer process-local configuration within that authority; report system changes as required permissions. The worker owns its diff directly and does not recursively delegate.
+5. Inspect the actual diff and rerun the original command yourself, then the lane's relevant build, tests and runtime proof. Give every correction round to a fresh worker; retain every unavailable check with its missing prerequisite.
+6. Obtain an independent fresh review of the cause and repair. Resolve findings and repeat coordinator verification; [opening a PR](opening-a-pr.md) prepares local review material unless publication is separately authorized.
+
+**Reply:** cause, exact command outcomes, repair scope, evidence paths and remaining permission or tool blockers.

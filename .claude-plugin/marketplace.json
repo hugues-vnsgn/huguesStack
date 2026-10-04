@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "hugues-stack",
-      "description": "Read-only loader probe for the huguesStack mobile workflow scaffold; routing follows in WP2.",
+      "description": "Mobile routing, playbooks and principles for huguesStack in Claude Code and Codex.",
       "source": "./plugin"
     }
   ]

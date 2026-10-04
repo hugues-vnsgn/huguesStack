@@ -1,0 +1,302 @@
+{
+  "repository": "https://github.com/cursor/plugins",
+  "revision": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a",
+  "upstream_version": "0.15.9",
+  "files": [
+    {
+      "source": "pstack/skills/poteto-mode/SKILL.md",
+      "destination": "plugin/skills/hugues-mode/SKILL.md",
+      "disposition": "adapted",
+      "blob_sha": "90bfebeecd3b8344eee39d08803a3e2a0f09e3c9",
+      "sha256": "404c0ef4a78e93451b2ab555ca532e7197b5cf87de29205b6f7109dbee5d9c4d"
+    },
+    {
+      "source": "pstack/agents/poteto-agent.md",
+      "destination": "plugin/agents/hugues-agent.md",
+      "disposition": "adapted",
+      "blob_sha": "f9d79a75560520cbb2f939c587ce00fa7e33037a",
+      "sha256": "abe41c169ecbfe65641f1725f4188d568e046c0dec7fd2dc271abb594c299201"
+    },
+    {
+      "source": "pstack/skills/interrogate/SKILL.md",
+      "destination": "plugin/skills/interrogate/SKILL.md",
+      "disposition": "adapted",
+      "blob_sha": "bd82e5b179f186e1cd7913dd112db9f8b07b4846",
+      "sha256": "59d498c3e9848a24b2d105eb3f05b808aa4152adf4cb1de7bbb6aff4f4cd9b68"
+    },
+    {
+      "source": "pstack/skills/principle-attack-the-premise/SKILL.md",
+      "destination": "plugin/skills/principle-attack-the-premise/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "f9785ff9fdcf37d1c689e4468da7d611f3b76d4b",
+      "sha256": "c87bd7536f772f8a403ad8155535ee17a1bbec9a353156693eb3bb1520c87ae3"
+    },
+    {
+      "source": "pstack/skills/principle-boundary-discipline/SKILL.md",
+      "destination": "plugin/skills/principle-boundary-discipline/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "dfe9a6fb0e5acd6ae43a41437ee0951adfe839cb",
+      "sha256": "62ac2862c2caa22dd14531f51c9c6bb445ceb198ca98a687e25b4d47c1f10a28"
+    },
+    {
+      "source": "pstack/skills/principle-build-the-lever/SKILL.md",
+      "destination": "plugin/skills/principle-build-the-lever/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "277189a10b00fddc7cbb63fcf2323c7341abb0df",
+      "sha256": "458b269eab8e95a1573276955312f7d2a13ae8599879a9efc748248f6bc34b56"
+    },
+    {
+      "source": "pstack/skills/principle-encode-lessons-in-structure/SKILL.md",
+      "destination": "plugin/skills/principle-encode-lessons-in-structure/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "df9cd5ff2fb3c18267349cc6aecd8121848ef834",
+      "sha256": "77044c83a9ac6df78fc643887ea5f1f11f082adaf14b717c060cdaed03cce863"
+    },
+    {
+      "source": "pstack/skills/principle-exhaust-the-design-space/SKILL.md",
+      "destination": "plugin/skills/principle-exhaust-the-design-space/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "85dd16f1312f3427e2dddcfc8e7deb89e2555bb3",
+      "sha256": "8583310d7297b7823d75494faa57b003564d436807febecdecbd8321abe5cf6e"
+    },
+    {
+      "source": "pstack/skills/principle-experience-first/SKILL.md",
+      "destination": "plugin/skills/principle-experience-first/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "5ea51741302cf3af4cc0b90ec70815bd3208dbf2",
+      "sha256": "58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b"
+    },
+    {
+      "source": "pstack/skills/principle-explain-the-number/SKILL.md",
+      "destination": "plugin/skills/principle-explain-the-number/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "9c22351d1fbe1ffcf277e61aef9fdb7816306fa7",
+      "sha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c"
+    },
+    {
+      "source": "pstack/skills/principle-fix-root-causes/SKILL.md",
+      "destination": "plugin/skills/principle-fix-root-causes/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "7e5a419aeec97b4076fa517865013677428a9fa3",
+      "sha256": "ba4cd38da1dcc8fe5432feb64457cba95594736a9b21b2ebf8f8c52aee068707"
+    },
+    {
+      "source": "pstack/skills/principle-foundational-thinking/SKILL.md",
+      "destination": "plugin/skills/principle-foundational-thinking/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "19cc6c0eaa6fcbc2863fb73d1d25ca196c6a46e0",
+      "sha256": "864b827e8199d946ce58beca0f89c4ed4099ed6e426fb698a3aaa45de2a9eea2"
+    },
+    {
+      "source": "pstack/skills/principle-guard-the-context-window/SKILL.md",
+      "destination": "plugin/skills/principle-guard-the-context-window/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "c4db544909b26981c45eed9caa6591d32885f841",
+      "sha256": "d2cef147862576e3d709b7afc149d85196245e8338b9c7eef337c95fba412b3e"
+    },
+    {
+      "source": "pstack/skills/principle-laziness-protocol/SKILL.md",
+      "destination": "plugin/skills/principle-laziness-protocol/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "e5bc77e62aa96ae13e482a84df61b3c711c5d828",
+      "sha256": "9006579e9e3f33955d17569733db688ae65f22577dc3b21803d219a5a8445aff"
+    },
+    {
+      "source": "pstack/skills/principle-make-operations-idempotent/SKILL.md",
+      "destination": "plugin/skills/principle-make-operations-idempotent/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "a0834247ca99b09c11441747717a8034d4c22d7c",
+      "sha256": "540738217c3da7bf513b9886924ad6a2bc77e58be867f5bd2e1831c74bf2ce70"
+    },
+    {
+      "source": "pstack/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
+      "destination": "plugin/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "06c7cfd87becc62d614d0af075b792f8ec6eb21d",
+      "sha256": "09978915a4a11990cf0a9a02d9c08cc59e0b7a04c5c24b83aa560fbe4146f75b"
+    },
+    {
+      "source": "pstack/skills/principle-minimize-reader-load/SKILL.md",
+      "destination": "plugin/skills/principle-minimize-reader-load/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "64541d963123e344078d82fd3977e857e76129df",
+      "sha256": "42551c5dc74cd578163c148da552db3ff67d29b78600ef216bfd311fb828fe69"
+    },
+    {
+      "source": "pstack/skills/principle-model-the-domain/SKILL.md",
+      "destination": "plugin/skills/principle-model-the-domain/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "e1d664a19243c90a84e5e7a816e9e05146c88720",
+      "sha256": "bbadbb9a723fac3f76e782ae45665eb94058ec10993e4bae36d4dc6b0e4eac07"
+    },
+    {
+      "source": "pstack/skills/principle-never-block-on-the-human/SKILL.md",
+      "destination": "plugin/skills/principle-never-block-on-the-human/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "11f08b6ef1fd93a3b3e47c57eb84716dc9acbff9",
+      "sha256": "f2764bb9338cbfc788c903cf4b9cd0a5f4042d3a04dd6d59cbd525d9beaadd0a"
+    },
+    {
+      "source": "pstack/skills/principle-outcome-oriented-execution/SKILL.md",
+      "destination": "plugin/skills/principle-outcome-oriented-execution/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "c49be0bc74783f0dee013101365ae09b2abb48a2",
+      "sha256": "10eb91633aa570355ba4bb37088fcade2b22e498df7a58edc749e65bc5a78e2d"
+    },
+    {
+      "source": "pstack/skills/principle-prove-it-works/SKILL.md",
+      "destination": "plugin/skills/principle-prove-it-works/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "5dc14a3b06f9d579e5c17cd8a7242f432ddb3125",
+      "sha256": "ec79a15025bac8d33d62011c54f3b612733fd2a024e623b531b3637aa75070e2"
+    },
+    {
+      "source": "pstack/skills/principle-redesign-from-first-principles/SKILL.md",
+      "destination": "plugin/skills/principle-redesign-from-first-principles/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "090a4325f43a96080cce3895f0e932b62c39146a",
+      "sha256": "a1c7fd0a96b40e12a74bceb0e6bb20a9666dd844dcabfb624acb27da23b929fe"
+    },
+    {
+      "source": "pstack/skills/principle-separate-before-serializing-shared-state/SKILL.md",
+      "destination": "plugin/skills/principle-separate-before-serializing-shared-state/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "ff93b4a2032c08e2232992a9a24f2891ee14e58f",
+      "sha256": "05294b40448e927c5da1c7b6f5c6b9fed3744637e3833d2d948b9154a9dd00bb"
+    },
+    {
+      "source": "pstack/skills/principle-sequence-verifiable-units/SKILL.md",
+      "destination": "plugin/skills/principle-sequence-verifiable-units/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "986371260ebccd9a5a6818c9561e88c1d270d0ee",
+      "sha256": "2ccbbacc56ace5afdfb8670cef19d7bd009fb2a0033b9a741cbdf2b6baf72187"
+    },
+    {
+      "source": "pstack/skills/principle-subtract-before-you-add/SKILL.md",
+      "destination": "plugin/skills/principle-subtract-before-you-add/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "d28770cf47a5798d0250a25ad494aedfecad154e",
+      "sha256": "a983a50e732c1ed315eba7aaf47a61329e31c4794eb1ab9d25d9945265b31e03"
+    },
+    {
+      "source": "pstack/skills/principle-test-behavior-not-implementation/SKILL.md",
+      "destination": "plugin/skills/principle-test-behavior-not-implementation/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "42de6f8f7cab01b9f67aa28bd59b128f7574fbab",
+      "sha256": "87e40efe4e486f7ea639d2ed1fc0abe6c93b8fd0e89a81218086909d2470a52e"
+    },
+    {
+      "source": "pstack/skills/principle-type-system-discipline/SKILL.md",
+      "destination": "plugin/skills/principle-type-system-discipline/SKILL.md",
+      "disposition": "verbatim",
+      "blob_sha": "6030f171bee0d1902cf7ca91f06225e09f0f5433",
+      "sha256": "c83da8031ffb4c86410030d3e261f659598fca2b7d8158fd9dc269d70a3a025e"
+    },
+    {
+      "source": "pstack/skills/interrogate/references/code-quality-review.md",
+      "destination": "plugin/skills/interrogate/references/code-quality-review.md",
+      "disposition": "verbatim",
+      "blob_sha": "16581250d81044c7e80fe234c4970a3f7b7fc98a",
+      "sha256": "79162fda183eafd40d51661fbb5e151c7ba250f89e506ba17f5bd135dcbd50a8"
+    },
+    {
+      "source": "pstack/skills/interrogate/references/lead-judgment.md",
+      "destination": "plugin/skills/interrogate/references/lead-judgment.md",
+      "disposition": "verbatim",
+      "blob_sha": "5ce526097fdd3dfeaf4cd3b126a3f486c3ee36ae",
+      "sha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361"
+    },
+    {
+      "source": "pstack/skills/interrogate/references/reviewer-prompt.md",
+      "destination": "plugin/skills/interrogate/references/reviewer-prompt.md",
+      "disposition": "verbatim",
+      "blob_sha": "13a252b2c3cd18522d4c8dc39a7030477037b249",
+      "sha256": "e0598e254792b56de39bb16b1e6db559b03a522fdc54b98f942d254090920ae6"
+    },
+    {
+      "source": "pstack/skills/interrogate/references/rubric.md",
+      "destination": "plugin/skills/interrogate/references/rubric.md",
+      "disposition": "verbatim",
+      "blob_sha": "2d92f1b83e13be03fb10f20cba12639a1406a2da",
+      "sha256": "a85aa801abbaf14434f00579440abc0d8e2723227ba8bf57de7cca8d6e7d2f25"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/investigation.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/investigation.md",
+      "disposition": "adapted",
+      "blob_sha": "cd119f04f23e0b7acb3f8cc5ba13ce4ab7aa6c7d",
+      "sha256": "dc66bcf6af3a074fc7f67aa5e12b93ef571a4fb4d8e17f2f1af5ae5359f42e46"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/bug-fix.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/bug-fix.md",
+      "disposition": "adapted",
+      "blob_sha": "eeebc42b7477d435d8ac61d631d84822f908f59c",
+      "sha256": "018bbc146ae19145caa6c7e70591fee081b64447dda1c1c4b681c9974d928b13"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/feature.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/feature.md",
+      "disposition": "adapted",
+      "blob_sha": "79a6bbbe0ce61c3b5ef9af1ee8e3ccdb0557edc6",
+      "sha256": "3a62cc4a8cbcf144bb9dd05f05420a15be0d38b784d3b141bb730a5852f50a62"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/prototype.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/prototype.md",
+      "disposition": "adapted",
+      "blob_sha": "18bedc7e9249d180f9198d5b4b13e3817d41d281",
+      "sha256": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/refactoring.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/refactoring.md",
+      "disposition": "adapted",
+      "blob_sha": "df2a863b531906c64f92b9f9d8feb62f8c7a8665",
+      "sha256": "50f4f7d3d301551f8b8a57c3303c99958c5ca630ae0d0051823b6987c0eb5b96"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/visual-parity.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/visual-parity.md",
+      "disposition": "adapted",
+      "blob_sha": "248830ec74a593fc22143a842026388f92f1b9f4",
+      "sha256": "950ca51999a6454c98eee6bcbc3d1bbe501a4e3a5d5439b6f6ddc378991b256c"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/authoring-a-skill.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/authoring-a-skill.md",
+      "disposition": "adapted",
+      "blob_sha": "8c5a55a44f5e95bba92f652da0ac87e941c49538",
+      "sha256": "f6a13a445c360b48d6cd72780ac01955f45b82826476efe0e67c7559329407aa"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/session-pickup.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/session-pickup.md",
+      "disposition": "adapted",
+      "blob_sha": "9b2ed06e0ff8b01bf03b7a0d6a4cbb8ba3a46720",
+      "sha256": "1604fb463f7c7410d43fa024ca76c1c1824c166a01fd69d61f073d06fdca2a47"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/pause-safely.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/pause-safely.md",
+      "disposition": "adapted",
+      "blob_sha": "9d1c5f8303976fff40de099f7f28185909430c11",
+      "sha256": "77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
+      "destination": "plugin/skills/hugues-mode/playbooks/opening-a-pr.md",
+      "disposition": "adapted",
+      "blob_sha": "4e25989729174580e48ce36e265f298231c6de7f",
+      "sha256": "ab40de7163c1c6e274f46ee559b2e53ef45673703f601f13f4931c199e6fb90f"
+    }
+  ],
+  "deferred_links": [
+    {
+      "source": "plugin/skills/principle-explain-the-number/SKILL.md",
+      "target": "../benchmark-checklist/SKILL.md",
+      "source_sha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c",
+      "reason": "benchmark-checklist is deferred to 0.2 by current plan"
+    }
+  ]
+}

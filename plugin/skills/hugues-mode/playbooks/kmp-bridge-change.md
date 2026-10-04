@@ -1,0 +1,15 @@
+# KMP bridge change
+
+source: huguesStack first-release requirements; conceptual reference to osxsystem/hstack at `99cc6129aea3f702ee6cd3b448e4f67700b4353c`, `packs/mobile/references/kmp-compose-pilot.md`, `packs/mobile/references/platforms.md` and `packs/mobile/references/evidence.md`. No fixture or consumer source is imported.
+
+Own the shared contract and prove both native boundaries.
+
+## Steps
+
+1. Establish the authorized consumer checkout and affected targets using [mobile lanes](../references/mobile-lanes.md). Read the shared API, source sets and Android/iOS callers; use the owner's available `kmp-boundaries`, `kmp-ios-integration`, `kmp-test-seams` and `tdd-kmp` skills where relevant, disclosing missing skills.
+2. Pin behavior and boundary cases in common tests before edits. For a bug, observe the failing case on the affected target and preserve red evidence; record Android and iOS export, lifecycle, threading, cancellation and error contracts that the change touches.
+3. Design the smallest shared change and account for every platform adapter and caller. Brief a fresh implementation subagent with owned paths, target tasks and at least one native caller per side; the worker owns its diff directly and does not recursively delegate. Each correction round uses a fresh worker.
+4. Inspect the actual diff and run [mobile proof](mobile-proof.md) yourself: execute common tests on each Android and iOS target, build each affected native artifact and exercise at least one Android caller and one iOS caller. Framework linking or a JVM-only pass does not prove either native call path.
+5. Obtain an independent fresh review of shared behavior and exported boundaries. Resolve findings, repeat coordinator proof and run [opening a PR](opening-a-pr.md) with separate target outcomes and any gaps.
+
+**Reply:** shared contract, changed boundaries, each target's test and native-caller evidence, independent review and limits.

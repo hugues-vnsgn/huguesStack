@@ -1,31 +1,37 @@
 # Support evidence
 
-WP1 supplies the plugin package and a read-only loader probe. The coordinator
-records live host outcomes here when evidence exists. Static validation does
-not establish observed support.
+WP2 adds authored routing, playbooks and mobile proof requirements. Static tests
+check the package contracts; observed host and mobile support require separate
+runs. Current results below cover development version `0.1.0-dev.2` on
+4 October 2026. WP1 loader results are historical evidence for the WP1 revision.
 
 | Cell | State | Evidence or gap |
 |---|---|---|
-| Manifests, paths, skill metadata and authored local links | static-tested | `./scripts/check-plugin.sh` passed; all 27 stdlib regression tests passed on 4 October 2026 |
-| Claude Code manifest acceptance | static-tested | `claude plugin validate --strict ./plugin` and marketplace validation passed on 4 October 2026 |
-| Claude Code cold load and probe invocation | observed-pass | Claude Code 2.1.286, fresh session, direct `/hugues-stack:hugues-mode` invocation via `--plugin-dir` and `--print`; exact probe reply, exit 0 |
-| Codex native marketplace discovery | observed-pass | [PR #1 reviewer](https://github.com/hugues-vnsgn/huguesStack/pull/1), 4 October 2026, Codex 0.160.0: per-invocation local marketplace override listed `hugues-stack@hugues-stack` as not installed at `$REPO/plugin`; config byte-identical before and after; see [host loading](host-loading.md#codex) |
-| Codex native install and `$hugues-mode` invocation | blocked | WP1 excludes global installation; `codex plugin add` installs globally and was not run |
-| Codex manual project skill probe | observed-pass | Codex 0.160.0, fresh scratch project, temporary `.agents/skills` symlink discovery and read-only skill inspection; `$hugues-mode` reply matched, exit 0 |
-| Request routing and playbooks, both hosts | deferred | WP2 |
-| Fresh delegate and mode persistence, both hosts | deferred | WP2 and later live tasks |
-| Swift/iOS consumer proof | deferred | WP3 and WP4; no consumer access authorized for WP1 |
-| Kotlin/Android consumer proof | deferred | WP3 and WP4 |
-| KMP shared logic proof on each target | deferred | WP3 and WP4 |
-| CMP shared UI proof on each target | deferred | WP3 and WP4 |
-| Cross-host review | deferred | Later package; independent WP1 code review is a separate static check |
-| Upstream pin and inventory reconciliation | deferred | WP5; target pin is recorded in the immutable plan |
+| WP2 manifests, skill metadata, paths and authored local links | static-tested | `./scripts/check-plugin.sh` passed on the WP2 working tree, 4 October 2026; 26 skills. One unchanged upstream benchmark-helper link is explicitly deferred and its bytes and provenance verified |
+| WP1 package regressions | static-tested | All 27 original tests remain and passed with the WP2 package |
+| WP2 routing table, 14 playbooks, four lanes and bounded worker | static-tested | 27 new static contract and mutation tests passed; 54 total stdlib tests passed on the WP2 working tree, 4 October 2026. These check guidance, not model behavior |
+| WP2 upstream source receipts and verbatim copies | static-tested | All 41 source receipts independently verified against the pstack 0.15.9 pin; 28 files copied verbatim, including all 24 principles. Full inline index and adapted mappings checked |
+| WP2 Claude Code manifest acceptance | static-tested | Strict Claude plugin and marketplace metadata validators passed for `0.1.0-dev.2`; no external Claude model run |
+| WP2 Codex planning-only routing | observed-pass | Codex 0.160.0, fresh manual project-skill session, exit 0: all six expected routes and domains matched, all 38 numbered playbook steps copied byte-for-byte; eight read-only skill-file reads, no delegates or consumer commands |
+| WP2 native todo integration | blocked | The Codex CLI preview exposed no native todo/plan tool. Its displayed JSON checklist fallback passed; native todo integration was unrun |
+| WP2 Claude Code routing | deferred | Unrun; external Claude model invocation is outside this work package's authority |
+| WP2 fresh delegate and mode persistence | authored | Contracts supplied; native delegation and multi-turn persistence were unrun |
+| WP1 Claude Code cold load and probe invocation | observed-pass | Claude Code 2.1.286, fresh `--plugin-dir` session, exact read-only probe reply, exit 0; historical WP1 body |
+| WP1 Codex native marketplace discovery | observed-pass | [PR #1 reviewer](https://github.com/hugues-vnsgn/huguesStack/pull/1), 4 October 2026, Codex 0.160.0: local per-invocation override listed `hugues-stack@hugues-stack` as not installed; config unchanged; see [host loading](host-loading.md#codex) |
+| Codex native install and skill invocation | blocked | Global installation is outside the present scope; native invocation remains unverified |
+| WP1 Codex manual project skill probe | observed-pass | Codex 0.160.0, fresh scratch project and temporary `.agents/skills` discovery, exact read-only probe reply, exit 0; historical WP1 body |
+| Swift/iOS consumer proof | authored | Swift/XCTest/simulator lane supplied; observed app proof remains WP3/WP4 and needs consumer authority |
+| Kotlin/Android consumer proof | authored | Kotlin/JUnit/emulator lane supplied; observed app proof remains WP3/WP4 |
+| KMP shared logic proof on each target | authored | Common tests and native callers required separately on Android and iOS; no consumer run |
+| CMP shared UI proof on each target | authored | Android and iOS UI observations plus semantics or text scaling required; no consumer run |
+| Cross-host review | deferred | Guidance supplied; no other-host review run. Fresh same-host review establishes process independence only |
+| Full upstream inventory and weekly sync | deferred | WP2 inputs verified at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`; full reconciliation remains WP5 |
 
 Use the plan's states: authored, static-tested, observed-pass, observed-fail,
 blocked and deferred. Record run outcomes separately as pass, fail, flaky,
-skipped or incomplete. The current scaffold is not the 0.1.0 release candidate.
+skipped or incomplete. The development package is not the 0.1.0 release candidate.
 
-See [WP1 validation](wp1-validation.md) for probe limitations, incomplete attempts,
-and the independent review fixes. Codex marketplace discovery and the manual
-project skill probe have separate observed passes; native installation and skill
-invocation remain blocked by WP1 scope.
+See [WP1 validation](wp1-validation.md) for historical probe evidence and
+[WP2 validation](wp2-validation.md) for current acceptance boundaries. Feature
+maps and the CLI-first verification addition remain post-first-release work;
+current native, test and UI proof requirements stay in place.

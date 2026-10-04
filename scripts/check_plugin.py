@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -170,6 +171,49 @@ for path in sorted(found):
     if 'disable-model-invocation' in fields and not isinstance(fields['disable-model-invocation'], bool):
         fail(f'{path.relative_to(root)}: expected boolean disable-model-invocation')
 
+# Preserve one verbatim upstream reference to a deliberately deferred helper.
+# This receipt is bounded to known bytes and cannot allow arbitrary broken links.
+deferred_links, deferred_warnings = set(), []
+receipt_path = root / 'docs/upstream/wp2-provenance.json'
+if receipt_path.exists():
+    receipt = load(receipt_path)
+    deferred = receipt.get('deferred_links', [])
+    expected_source = 'plugin/skills/principle-explain-the-number/SKILL.md'
+    expected_target = '../benchmark-checklist/SKILL.md'
+    expected_sha256 = '5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c'
+    expected_pin = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
+    if not isinstance(deferred, list) or len(deferred) != 1:
+        fail('WP2 deferred link: expected exactly one bounded receipt')
+    else:
+        row = deferred[0]
+        if (not isinstance(row, dict) or
+                set(row) != {'source', 'target', 'source_sha256', 'reason'} or
+                row.get('source') != expected_source or
+                row.get('target') != expected_target or
+                row.get('source_sha256') != expected_sha256 or
+                not isinstance(row.get('reason'), str) or not row['reason'].strip()):
+            fail('WP2 deferred link: invalid source, target, hash or reason')
+        elif (receipt.get('repository') != 'https://github.com/cursor/plugins' or
+                receipt.get('revision') != expected_pin or
+                receipt.get('upstream_version') != '0.15.9'):
+            fail('WP2 deferred link: upstream pin mismatch')
+        else:
+            files = receipt.get('files')
+            matches = [item for item in files if isinstance(item, dict) and
+                       item.get('destination') == expected_source] if isinstance(files, list) else []
+            source = root / expected_source
+            if (len(matches) != 1 or matches[0].get('source') !=
+                    'pstack/skills/principle-explain-the-number/SKILL.md' or
+                    matches[0].get('disposition') != 'verbatim' or
+                    matches[0].get('sha256') != expected_sha256):
+                fail('WP2 deferred link: missing matching verbatim provenance')
+            elif not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest() != expected_sha256:
+                fail('WP2 deferred link: source bytes differ from pinned upstream')
+            elif (source.parent / expected_target).exists():
+                fail('WP2 deferred link: target is present; remove stale deferral')
+            else:
+                deferred_links.add((expected_source, expected_target))
+
 # This small link checker covers authored inline and full/collapsed references.
 def prose(text):
     text = re.sub(r'^(`{3,}|~{3,}).*?^\1[^\n]*$', '', text, flags=re.M | re.S)
@@ -212,10 +256,15 @@ for path in sorted(root.rglob('*.md')):
         if not inside(target, root):
             fail(f'{relative}: link escapes root {value}')
         elif not target.exists():
-            fail(f'{relative}: broken local link {value}')
+            if (str(relative), value) in deferred_links:
+                deferred_warnings.append(f'DEFERRED: {relative} -> {value} (pstack 0.15.9 helper deferred to 0.2; source bytes verified)')
+            else:
+                fail(f'{relative}: broken local link {value}')
         elif parsed.fragment and target.suffix == '.md' and unquote(parsed.fragment) not in headings(target):
             fail(f'{relative}: missing heading {value}')
 if errors:
     print('\n'.join(errors), file=sys.stderr)
     sys.exit(1)
-print(f'PASS: WP1 manifests, {len(found)} skill(s), paths and authored Markdown links')
+for warning in sorted(set(deferred_warnings)):
+    print(warning)
+print(f'PASS: manifests, {len(found)} skill(s), paths and authored Markdown links')
