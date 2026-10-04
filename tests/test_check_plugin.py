@@ -26,32 +26,27 @@ class PackageChecks(unittest.TestCase):
         self.assertIn(diagnostic, result.stderr)
         self.assertNotIn('Traceback', result.stderr)
 
-    def manifest(self, change, both=True):
-        for path in ['plugin/.claude-plugin/plugin.json', 'plugin/plugin.json'] if both else ['plugin/plugin.json']:
-            file = self.repo / path
-            data = json.loads(file.read_text())
-            change(data)
-            file.write_text(json.dumps(data))
+    def manifest(self, change):
+        file = self.repo / 'plugin/.claude-plugin/plugin.json'
+        data = json.loads(file.read_text())
+        change(data)
+        file.write_text(json.dumps(data))
 
     def skill(self, text):
         (self.repo / 'plugin/skills/hugues-mode/SKILL.md').write_text(text)
 
     def test_valid_package_and_cwd_independence(self):
-        result = subprocess.run(['sh', str(CHECKER)], cwd=self.temp.name, text=True, capture_output=True)
+        result = subprocess.run(['sh', str(self.repo / 'scripts/check-plugin.sh')], cwd=self.temp.name, text=True, capture_output=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(self.run_check().returncode, 0)
 
     def test_invalid_json(self):
-        (self.repo / 'plugin/plugin.json').write_text('{')
-        self.assert_rejected('plugin/plugin.json')
+        (self.repo / 'plugin/.claude-plugin/plugin.json').write_text('{')
+        self.assert_rejected('plugin/.claude-plugin/plugin.json')
 
     def test_duplicate_json_keys(self):
-        (self.repo / 'plugin/plugin.json').write_text('{"name":"first","name":"second"}')
+        (self.repo / 'plugin/.claude-plugin/plugin.json').write_text('{"name":"first","name":"second"}')
         self.assert_rejected('duplicate JSON key')
-
-    def test_manifest_mirror_drift(self):
-        self.manifest(lambda m: m.update(version='0.2.0'), both=False)
-        self.assert_rejected('plugin manifests differ')
 
     def test_marketplace_wrong_name(self):
         file = self.repo / '.claude-plugin/marketplace.json'
@@ -96,10 +91,32 @@ class PackageChecks(unittest.TestCase):
         self.assert_rejected('symlinks are forbidden')
 
     def test_missing_and_malformed_frontmatter(self):
-        for text in ['# No metadata\n', '---\nname: hugues-mode\nname: hugues-mode\ndescription: probe\n---\n', '---\nname: hugues-mode\ndescription: |\n  multiline\n---\n']:
+        for text in ['# No metadata\n', '---\nname: hugues-mode\ndescription: |\n  multiline\n---\n']:
             with self.subTest(text=text):
                 self.skill(text)
-                self.assert_rejected('frontmatter' if text.startswith('#') or 'name: hugues-mode\nname' in text else 'unsupported scalar')
+                self.assert_rejected('frontmatter' if text.startswith('#') else 'unsupported scalar')
+
+    def test_frontmatter_blank_line_accepted(self):
+        for line in ['', '   ', '\t']:
+            with self.subTest(line=line):
+                self.skill(f'---\nname: hugues-mode\n{line}\ndescription: probe\n---\n')
+                result = self.run_check()
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_frontmatter_comment_line_accepted(self):
+        for line in ['# Loader metadata', '   # Loader metadata']:
+            with self.subTest(line=line):
+                self.skill(f'---\n{line}\nname: hugues-mode\ndescription: probe\n---\n')
+                result = self.run_check()
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_frontmatter_allowed_tools_list_rejected(self):
+        self.skill('---\nname: hugues-mode\ndescription: probe\nallowed-tools:\n  - Read\n---\n')
+        self.assert_rejected('unsupported frontmatter line; WP1 accepts single-line "key: value" scalars')
+
+    def test_frontmatter_duplicate_key_rejected(self):
+        self.skill('---\nname: hugues-mode\nname: hugues-mode\ndescription: probe\n---\n')
+        self.assert_rejected('invalid or duplicate frontmatter field')
 
     def test_invalid_skill_name_and_description_types(self):
         for name, description in [('wrong-folder', 'probe'), ('hugues-mode', 'null'), ('hugues-mode', 'true'), ('hugues-mode', '123'), ('hugues-mode', '""')]:

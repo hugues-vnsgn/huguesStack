@@ -1,9 +1,7 @@
 # Host loading for WP1
 
-The marketplace entry points to `./plugin`. `plugin/plugin.json` follows the
-owner's jev-ios-bridge packaging template. Claude's standard manifest lives at
-`plugin/.claude-plugin/plugin.json`. Both files carry identical metadata; the
-static checker rejects drift. Their paths resolve from the plugin root.
+The marketplace entry points to `./plugin`. The plugin manifest lives at
+`plugin/.claude-plugin/plugin.json`. Component paths resolve from the plugin root.
 
 Claude's [manifest reference](https://code.claude.com/docs/en/plugins-reference)
 places metadata in `.claude-plugin/plugin.json` and skills at the plugin root.
@@ -40,9 +38,24 @@ by name without supplying the token or its body.
 
 ## Codex
 
-The inspected CLI exposes plugin installation and marketplace commands, but no
-session-local `--plugin-dir` option. Native local marketplace loading remains
-unverified. No global registration or installation is part of this package.
+**Codex native marketplace discovery** is **observed-pass**. The
+[PR #1 reviewer](https://github.com/hugues-vnsgn/huguesStack/pull/1) reported this
+per-invocation override on 4 October 2026 with Codex 0.160.0 (`$REPO` denotes the
+reviewed checkout):
+
+```sh
+codex -c 'marketplaces.hs.source_type="local"' -c 'marketplaces.hs.source="$REPO"' plugin list
+```
+
+The output listed `` Marketplace `hugues-stack` `` at
+`$REPO/.claude-plugin/marketplace.json` and the row
+`hugues-stack@hugues-stack  not installed  $REPO/plugin`.
+`~/.codex/config.toml` was byte-identical before and after. Codex names the
+marketplace after the manifest's `name`, rather than the config key `hs`.
+This records the reviewer's observation; the override was not rerun here.
+
+**Codex native install and `$hugues-mode` invocation** is **blocked** by WP1 scope.
+`codex plugin add` installs globally and was not run.
 
 Use a disposable project skill fallback only when the coordinator authorizes
 that host probe. In the observed Codex 0.160.0 run on 4 October 2026, a temporary
@@ -59,12 +72,20 @@ separate cells in [support](support.md).
 
 ## Static checker boundary
 
-`check-plugin.sh` checks the WP1 manifest shape and mirror, relative component
+`scripts/check-plugin.sh` delegates to `scripts/check_plugin.py` and keeps the same
+`[repository-root]` argument and exit codes. With no argument, the Python checker
+uses the repository containing the script, independently of the working directory.
+
+It checks the WP1 manifest shape, relative component
 paths, repository symlinks, single-line skill frontmatter, unique names and
 descriptions, and local Markdown link files and heading fragments. It accepts
-inline links and full/collapsed reference links. Keep authored frontmatter to
+inline links and full/collapsed reference links. Blank or whitespace-only
+frontmatter lines and `#` comment lines are accepted. Keep authored frontmatter to
 plain or quoted single-line scalar values; YAML blocks and nested values are
-outside this checker. Single-quoted values require closing quotes and doubled
+outside this checker, and YAML lists are rejected. An unparseable line reports
+`unsupported frontmatter line; WP1 accepts single-line "key: value" scalars`;
+duplicate keys report `invalid or duplicate frontmatter field`.
+Single-quoted values require closing quotes and doubled
 apostrophes (`''`); backslashes remain literal. The checker skips `.git` and leaves the immutable
 `docs/planning` snapshots out of Markdown/frontmatter linting. It still rejects
 symlinks there. External link availability is not checked.

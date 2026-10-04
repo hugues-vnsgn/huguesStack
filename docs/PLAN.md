@@ -1,6 +1,6 @@
 # huguesStack implementation plan
 
-Public requirements summary of the owner's revised 4 October 2026 plan. The exact source documents remain preserved locally, with SHA-256 provenance. This summary omits personal machine inventories and historical consumer-project research.
+Public requirements summary of the owner’s revised 4 October 2026 plan. The exact source documents remain preserved locally, with SHA-256 provenance. This summary omits personal machine inventories and historical consumer-project research.
 
 ## Product and boundaries
 
@@ -8,13 +8,13 @@ Build a standalone, mobile-first adaptation of pstack for Claude Code and Codex.
 
 Layer 1 is the entire 0.1.0 release candidate: skills, playbooks, principles, one agent definition, two small scripts, and documentation. Layer 2 is the deferred hstack-alpha managed-worker runtime. Its earlier evidence does not establish Layer 1 support. The inaccessible mobile-stack prototype ZIP and its reported 44-test baseline are superseded; this implementation does not depend on them.
 
-Target completion remains end of day **9 October 2026, GMT+7**. The revised plan assigns five working blocks, 5-9 October. Deadline alone establishes no readiness claim.
+Target completion remains end of day **9 October 2026, GMT+7**. The revised plan assigns five working blocks, 5–9 October. Deadline alone establishes no readiness claim.
 
 ## Method
 
-The owner supplies a goal and a way to check it. `hugues-mode` selects a playbook and copies its steps into the host's todo list. The coordinator investigates, designs, delegates implementation to a fresh subagent each round, and verifies independently. Same-vendor fresh-agent review provides process independence; cross-host review provides model independence. Each completed package gets a separate draft pull request for owner-arranged Claude review. Do not merge automatically.
+The owner supplies a goal and a way to check it. `hugues-mode` selects a playbook and copies its steps into the host’s todo list. The coordinator investigates, designs, delegates implementation to a fresh subagent each round, and verifies independently. Same-vendor fresh-agent review provides process independence; cross-host review provides model independence. Each completed package gets a separate draft pull request for owner-arranged Claude review. Do not merge automatically.
 
-Claude Code is the primary host; Codex is smoke-tested. Default model roles inherit the parent. Use the owner's existing mobile and authoring skills rather than duplicating them. Compose jev-ios-bridge for device screen checks when available.
+Claude Code is the primary host; Codex is smoke-tested. Default model roles inherit the parent. Use the owner’s existing mobile and authoring skills rather than duplicating them. Compose jev-ios-bridge for device screen checks when available.
 
 ## Work packages
 
@@ -31,7 +31,7 @@ WP1 is the first implementation package. Its loader probe does not claim WP2 rou
 
 ## Planned upstream baseline
 
-Upstream: [cursor/plugins pstack](https://github.com/cursor/plugins/tree/e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a/pstack), version 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. The owner's research reports 161 files and a 21-file delta from version 0.15.5 at `2eb7ed4613cfc8f098dfe464a23680ea44d84c5e`. Re-fetch and verify these during WP5; they are planning inputs until independently checked. Forked skills retain upstream `source:` paths. Port principles verbatim with MIT attribution. Weekly triage compares blob SHAs; read playbook diffs rather than overwriting adaptations.
+Upstream: [cursor/plugins pstack](https://github.com/cursor/plugins/tree/e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a/pstack), version 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. The owner’s research reports 161 files and a 21-file delta from version 0.15.5 at `2eb7ed4613cfc8f098dfe464a23680ea44d84c5e`. Re-fetch and verify these during WP5; they are planning inputs until independently checked. Forked skills retain upstream `source:` paths. Port principles verbatim with MIT attribution. Weekly triage compares blob SHAs; read playbook diffs rather than overwriting adaptations.
 
 0.1.0 functional scope: mode, how, why, architect, arena, interrogate, tdd, blast-radius, bounded local swarm, create/maintain verification skills, show-me-your-work, correct, setup-huguesstack, fresh worker, and the 24 principles. Reference the installed unslop skill where available.
 
