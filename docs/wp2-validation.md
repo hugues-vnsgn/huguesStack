@@ -15,10 +15,13 @@ its source bytes and provenance verified. Shell syntax, whitespace and strict
 Claude plugin and marketplace metadata validators also passed. Metadata
 acceptance does not establish Claude model behavior.
 
-After the six accepted Claude findings were corrected, all 71 tests passed on
-the working tree: 27 existing package regressions and 44 WP2 tests, including
+After the six accepted Claude findings were corrected, all 71 tests passed at
+`25c7a8a77af4c5f7fe8f23fe16c14c98127647bf`: 27 existing package regressions and 44 WP2 tests, including
 17 new regressions. The package checker passed for 26 skills with the same
-explicit deferred link. The final tested commit is recorded in
+explicit deferred link. After the low-severity WP2-R7 clarification, all
+72 tests passed: 27 existing package regressions and 45 WP2 tests, including
+a mutation test that rejects investigation preceding mobile-proof. The final
+tested commit is recorded in
 [PR #3](https://github.com/hugues-vnsgn/huguesStack/pull/3). WP2 tests check:
 
 - The exact fourteen-playbook set, valid route links and nonempty numbered steps.
@@ -86,8 +89,8 @@ against the fixture and selected playbooks, and inspected the tool events.
 Plugin bytes matched the recorded smoke-run hashes. Raw replies, argv, host
 version and plugin fingerprints are retained outside the public repository.
 
-After the six review fixes, a fresh Codex 0.160.0 manual project-skill preview
-on 4 October 2026 exited 0. All eleven expected routes and domains matched,
+At head `25c7a8a`, after the six review fixes, a fresh Codex 0.160.0 manual
+project-skill preview on 4 October 2026 exited 0. All eleven expected routes and domains matched,
 including the five new precedence cases. Review domain remained unresolved
 without a supplied diff. All 61 numbered steps matched the current selected
 files byte-for-byte: the original 38, plus 4 pause, 5 resume, 4 investigation,
@@ -96,8 +99,23 @@ reads succeeded. The coordinator checked the literal routes, selected-file
 steps, domain and proof requirements, and tool events; all 48 plugin file
 fingerprints matched the preview. No delegates, writes or consumer commands
 ran. This is **observed-pass for eleven-case manual route preview and displayed
-checklist fallback**. The host exposed no native todo/plan tool; that integration
-remains unrun. The final tested head is recorded in
+checklist fallback** at that head. The host exposed no native todo/plan tool;
+that integration remains unrun. The later WP2-R7 clarification changed mode
+bytes, so these fingerprints do not verify the final instructions. A full
+eleven-case repeat after WP2-R7 timed out after 300 seconds before final JSON;
+that run was incomplete and supplies no pass claim.
+
+After the WP2-R7 clarification, a fresh Codex 0.160.0 targeted preview exited
+0. Both affected cases matched their expected routes and domains: the iOS
+explanation selected investigation, and KMP verification without code edits
+selected mobile-proof. All nine numbered steps matched the selected files
+byte-for-byte. Two successful read-only `cat` commands read four skill/reference
+files; all 48 current plugin fingerprints matched. The session used the displayed
+JSON checklist fallback and ran no delegates, writes or consumer commands.
+This is **observed-pass for the two affected intents and checklist fallback**;
+it does not establish a completed eleven-case pass on the final instruction
+bytes. Native todo integration remains unrun. The final tested head and
+verification receipt are recorded in
 [PR #3](https://github.com/hugues-vnsgn/huguesStack/pull/3).
 
 The owner subsequently authorized Claude Code review. The static review of

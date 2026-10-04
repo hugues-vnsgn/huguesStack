@@ -26,8 +26,8 @@ Apply the first matching route in this order. Explicit action intent takes prece
 - PR preparation or opening a PR for an existing change goes to `opening-a-pr`, within the recorded authority.
 - A diff from the other host or an adversarial review goes directly to `interrogate`.
 - A build, test-runner, SDK or toolchain failure goes to `build-doctor`, including diagnosis-only requests; use its read-only branch when repairs or execution are outside scope.
-- A read-only explanation, diagnosis or scope decision goes to `investigation`.
-- A verify-only request for an existing mobile change goes to `mobile-proof`.
+- A request to verify or run checks on an existing mobile change goes to `mobile-proof`, even when code edits are prohibited; run only the authorized checks.
+- A read-only explanation, diagnosis or scope decision without a request to run checks goes to `investigation`.
 - A request to match mobile UI implementations visually goes to `visual-parity`.
 - A request to create or edit agent-facing skills goes to `authoring-a-skill`.
 - An explicit throwaway prototype or experiment goes to `prototype`.

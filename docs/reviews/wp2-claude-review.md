@@ -26,7 +26,8 @@ The coordinator independently evaluated and accepted these six findings:
 | WP2-R5 | Prototype production handoff always selected the native feature route | Select the matching native, KMP or CMP production route |
 | WP2-R6 | Mode recovery gave a bare slash command for both hosts | Document the namespaced Claude and Codex invocation forms |
 
-The corrective working tree passed all 71 stdlib tests: the original 54 plus
+The corrective head `25c7a8a77af4c5f7fe8f23fe16c14c98127647bf` passed all
+71 stdlib tests: the original 54 plus
 17 regression tests for the accepted findings. The package checker accepted
 26 skills with the same explicit deferred benchmark link. A fresh Codex
 0.160.0 manual preview exited 0: all eleven expected routes and domains matched,
@@ -35,18 +36,46 @@ thirteen read-only skill-file reads succeeded. All 48 plugin file fingerprints
 matched that preview. No delegates, writes or consumer commands ran. The host
 exposed no todo/plan tool, so only its displayed checklist fallback was observed.
 
-The initial head required corrections. The final tested head, verification
-results and exact-head Claude re-review verdict are recorded in
-[PR #3](https://github.com/hugues-vnsgn/huguesStack/pull/3). Raw evidence and the
-commit-bound audit are retained outside the public repository. This file records
-the initial review and the corrective scope; it does not substitute for that
-final review evidence.
+## Re-review and routing clarification
+
+Claude Code 2.1.286 with `claude-opus-5-5` re-reviewed
+`25c7a8a77af4c5f7fe8f23fe16c14c98127647bf` against the same base on
+4 October 2026. It used Read, Glob and Grep in plan permission mode and exited 0.
+It resolved WP2-R1 through WP2-R6 and returned `no-material-findings`. One
+Grep call used unsupported regex lookbehind; the reviewer retried with a simpler
+search. The reviewer ran no commands, edits or consumer operations.
+
+The report also raised low-severity WP2-R7: a request to verify an existing
+mobile change while allowing no code edits could match read-only investigation
+before mobile-proof. The coordinator put mobile-proof before investigation,
+clarified that verification can run authorized checks without code edits, and
+added a regression that rejects the reverse order. This guards the authored precedence; the eleven-case Codex preview had
+already selected mobile-proof for the verify-only case, so WP2-R7 was not an
+observed routing failure.
+
+After WP2-R7, all 72 stdlib tests passed. A fresh Codex 0.160.0 targeted
+preview exited 0: explanation selected investigation, verify-only selected
+mobile-proof, both domains matched and all nine numbered steps matched
+byte-for-byte. Two successful read-only commands read four skill/reference
+files, and all 48 current plugin fingerprints matched. It used the displayed
+JSON checklist fallback; no delegates, writes or consumer commands ran. A full
+eleven-case repeat timed out after 300 seconds before final JSON and was
+incomplete. The earlier complete eleven-case pass belongs to `25c7a8a`.
+
+The final tested head, verification results and exact-head Claude verdict are
+recorded in [PR #3](https://github.com/hugues-vnsgn/huguesStack/pull/3). Raw
+evidence and the commit-bound audit are retained outside the public repository.
+This file records completed review rounds and accepted corrections; the external
+receipt binds the final review to its commit without a self-referential hash in
+this document.
 
 ## Review limits
 
 Claude performed static code review and ran no tests, package checker or host
 validator. It did not invoke plugin routing, run a native worker, test mode
-persistence or operate a mobile app. The original six-case Codex preview and 54
+persistence or operate a mobile app. The re-review checked current files against
+the changed-file list rather than every diff hunk. It inspected hash checks for
+the verbatim files rather than reading all imported bodies. The original six-case Codex preview and 54
 passing tests are separately recorded in [WP2 validation](../wp2-validation.md).
 The expanded eleven-case preview verifies planning behavior through the manual
 Codex project-skill path. Native todo integration remains unverified.

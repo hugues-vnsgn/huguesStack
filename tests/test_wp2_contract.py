@@ -141,6 +141,8 @@ def assert_intent_precedence(case, root):
         for implementation in implementation_routes:
             case.assertLess(first[intent], first[implementation],
                             f'{intent}: intent must precede {implementation}')
+    case.assertLess(first['mobile-proof'], first['investigation'],
+                    'mobile-proof: verification intent must precede read-only investigation')
     domain_rule = bullets[first['cmp-two-target-change']]
     case.assertIn('only to implementation requests', domain_rule,
                   'domain routes must exclude read-only and lifecycle intent')
@@ -404,6 +406,21 @@ class WP2StaticContracts(unittest.TestCase):
         lines.append(pause)
         path.write_text(text.replace(precedence, '\n'.join(lines) + '\n'))
         with self.assertRaisesRegex(AssertionError, 'pause-safely: intent must precede'):
+            assert_intent_precedence(self, self.repo)
+
+    def test_investigation_before_verification_regression_rejected(self):
+        assert_intent_precedence(self, self.repo)
+        path = self.repo / MODE / 'SKILL.md'
+        text = path.read_text()
+        precedence = section(text, 'Routing precedence')
+        lines = precedence.splitlines()
+        proof = next(i for i, line in enumerate(lines)
+                     if line.startswith('- ') and '`mobile-proof`' in line)
+        investigation = next(i for i, line in enumerate(lines)
+                             if line.startswith('- ') and '`investigation`' in line)
+        lines[proof], lines[investigation] = lines[investigation], lines[proof]
+        path.write_text(text.replace(precedence, '\n'.join(lines) + '\n'))
+        with self.assertRaisesRegex(AssertionError, 'verification intent must precede'):
             assert_intent_precedence(self, self.repo)
 
     def test_domain_routes_require_implementation_intent(self):
