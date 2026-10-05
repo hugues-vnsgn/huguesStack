@@ -208,6 +208,18 @@ class PinnedEvidenceTests(unittest.TestCase):
             row.update(blob_sha='1' * 40, sha256='1' * 64)
         self.check_wp3_mutation(mutate_ledger=change_generator)
 
+    def test_shipping_generator_cannot_downgrade_ledger_state(self):
+        for state in ('planned', 'deferred'):
+            for stale_blob in (False, True):
+                with self.subTest(state=state, stale_blob=stale_blob):
+                    def downgrade_generator(ledger):
+                        row = next(r for r in ledger['items']
+                                   if r['path'] == 'pstack/skills/create-verification-skill/SKILL.md')
+                        row.update(implementation_state=state, destinations=[])
+                        if stale_blob:
+                            row.update(blob_sha='1' * 40, sha256='1' * 64)
+                    self.check_wp3_mutation(mutate_ledger=downgrade_generator)
+
     def test_pin_digest_anchors_snapshot_bytes(self):
         with tempfile.TemporaryDirectory() as folder:
             directory = Path(folder)

@@ -293,7 +293,10 @@ def check_destinations(ledger, source, root):
                 and row['disposition'] == {'verbatim': 'port verbatim', 'adapted': 'port with adaptation'}[receipt['disposition']],
                 'WP2 receipt does not match reconciled ledger')
     generator = files.get('pstack/skills/create-verification-skill/SKILL.md')
-    if generator and generator['implementation_state'] == 'present':
+    generator_destination = root / 'plugin/skills/create-verification-skill/SKILL.md'
+    if (generator and generator['implementation_state'] == 'present') or generator_destination.exists():
+        require(generator and generator['implementation_state'] == 'present',
+                'WP3 receipt requires a present ledger row for the shipping generator')
         wp3 = load(root / 'docs/wp3-source-receipts.json')
         inputs = [receipt for receipt in wp3['inputs']
                   if receipt.get('repository') == REPOSITORY and receipt.get('source') == generator['path']]
