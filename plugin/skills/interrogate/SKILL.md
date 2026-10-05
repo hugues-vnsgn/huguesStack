@@ -9,6 +9,8 @@ source: pstack/skills/interrogate/SKILL.md
 
 Return an adjudicated review. Apply no fixes and perform no remote actions during this review. The review is read-only.
 
+For new huguesStack PR reviews, follow the owner's [PR review policy](../hugues-mode/references/pr-review-policy.md): use supported GPT-6 Astra High delegation settings for both fresh reviewers. This explicit PR choice overrides the inherited reviewer default below; it does not change implementation workers or Claude host compatibility checks.
+
 ## Steps
 
 1. Establish the exact review scope and base from the user's files, diff or PR. Read the actual changes and surrounding context. State the intended behavior in one paragraph; ask only when the intent cannot be established from available evidence.
