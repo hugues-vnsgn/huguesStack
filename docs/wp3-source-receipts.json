@@ -1,0 +1,233 @@
+{
+  "purpose": "WP3 source receipts, separate from WP5 upstream re-pin and responsibility ledger",
+  "inputs": [
+    {
+      "repository": "https://github.com/cursor/plugins",
+      "revision": "2eb7ed4613cfc8f098dfe464a23680ea44d84c5e",
+      "version": "0.15.5",
+      "source": "pstack/skills/create-verification-skill/SKILL.md",
+      "blob_sha": "f869e26122991252373d5b8f6357e5b9ff195a00",
+      "sha256": "644f2551403c1bca01a2855b34611b6e7be0ce0dc5b204514c376c0f6a6e6ac4",
+      "disposition": "adapted",
+      "destinations": [
+        "plugin/skills/create-verification-skill/SKILL.md",
+        "plugin/skills/create-verification-skill/references/project-skill-template.md"
+      ],
+      "adaptations": [
+        "Replace Cursor loader with project .claude/skills and .agents/skills; preserve user files and disclose loader gaps.",
+        "Keep one agreed journey; defer upstream feature-map phase as required by current plan.",
+        "Compose installed jev skills and repository-permitted fallbacks; separate authored recipe from per-target executed proof.",
+        "Keep consumer artifacts private and external; omit implicit repair/install/cleanup/publication authority."
+      ]
+    },
+    {
+      "repository": "https://github.com/osxsystem/hstack",
+      "revision": "99cc6129aea3f702ee6cd3b448e4f67700b4353c",
+      "source": "packs/mobile/skills/mobile-proof/SKILL.md",
+      "sha256": "5b70bf2758a23421f8ee2731ad35895a89d86e89f7d75ea0bd77680a97032a44",
+      "disposition": "conceptual adaptation",
+      "destinations": [
+        "plugin/skills/hugues-mode/playbooks/mobile-proof.md",
+        "plugin/skills/hugues-mode/references/evidence-guide.md"
+      ],
+      "adaptations": [
+        "Retain WP2 lane requirements; replace Work Units/managed-worker runtime with Markdown evidence and direct recorded command/tool results."
+      ]
+    },
+    {
+      "repository": "https://github.com/osxsystem/hstack",
+      "revision": "99cc6129aea3f702ee6cd3b448e4f67700b4353c",
+      "source": "packs/mobile/references/evidence.md",
+      "sha256": "3733454a12a328618db0430280058fa6c6debb1e347033dc174483819876d353",
+      "disposition": "conceptual adaptation",
+      "destinations": [
+        "plugin/skills/hugues-mode/playbooks/mobile-proof.md",
+        "plugin/skills/hugues-mode/references/evidence-guide.md"
+      ],
+      "adaptations": [
+        "Retain WP2 lane requirements; replace Work Units/managed-worker runtime with Markdown evidence and direct recorded command/tool results."
+      ]
+    },
+    {
+      "repository": "https://github.com/osxsystem/hstack",
+      "revision": "99cc6129aea3f702ee6cd3b448e4f67700b4353c",
+      "source": "packs/mobile/references/platforms.md",
+      "sha256": "318c8506d9c2018330ec2e53ecc7e2a34c7f37c5bc888d52a26fcc064ca18c1f",
+      "disposition": "conceptual adaptation",
+      "destinations": [
+        "plugin/skills/hugues-mode/playbooks/mobile-proof.md",
+        "plugin/skills/hugues-mode/references/evidence-guide.md"
+      ],
+      "adaptations": [
+        "Retain WP2 lane requirements; replace Work Units/managed-worker runtime with Markdown evidence and direct recorded command/tool results."
+      ]
+    },
+    {
+      "repository": "https://github.com/osxsystem/hstack",
+      "revision": "99cc6129aea3f702ee6cd3b448e4f67700b4353c",
+      "source": "skills/core/hstack/playbooks/build-doctor.md",
+      "sha256": "a71e1bdf9475de158a6ad5febbccfcafb606f38779461f1f1a697baf74dce2a8",
+      "disposition": "conceptual adaptation",
+      "destinations": [
+        "plugin/skills/hugues-mode/playbooks/build-doctor.md",
+        "plugin/skills/hugues-mode/references/evidence-guide.md"
+      ],
+      "adaptations": [
+        "Retain WP2 lane requirements; replace Work Units/managed-worker runtime with Markdown evidence and direct recorded command/tool results."
+      ]
+    },
+    {
+      "repository": "https://github.com/hugues-vnsgn/jev-ios-bridge",
+      "version": "1.3.0",
+      "revision": null,
+      "source": "skills/test-ios/SKILL.md",
+      "sha256": "7e6c1e319db9545075efdca439efe90555074a82cfd552394e3d931d82f7d940",
+      "disposition": "integration reference only",
+      "destinations": [
+        "plugin/skills/hugues-mode/references/jev-drive.md"
+      ],
+      "adaptations": [
+        "No source copied; use currently installed skills and guides, subject to consumer repository restrictions and authority.",
+        "Text verdict is distinct from pixel-layout observations; preserve private reports and disclose TypeSafe screen-text transmission."
+      ],
+      "limits": "Hash records readable installed cache bytes; no upstream commit identity inferred from plugin version.",
+      "observed_tool_names": [
+        "start_scenario",
+        "get_report",
+        "cancel_run",
+        "resolve_step"
+      ],
+      "source_sections": [
+        "Steps (submit, poll and cancel)",
+        "Driven mode (experimental, only when it is on)"
+      ]
+    },
+    {
+      "repository": "https://github.com/hugues-vnsgn/jev-ios-bridge",
+      "version": "1.3.0",
+      "revision": null,
+      "source": "skills/test-android/SKILL.md",
+      "sha256": "36eb1bb46478145ac8498e2f6d6696968535fb33b31ec6976a58d383479a49a2",
+      "disposition": "integration reference only",
+      "destinations": [
+        "plugin/skills/hugues-mode/references/jev-drive.md"
+      ],
+      "adaptations": [
+        "No source copied; use currently installed skills and guides, subject to consumer repository restrictions and authority.",
+        "Text verdict is distinct from pixel-layout observations; preserve private reports and disclose TypeSafe screen-text transmission."
+      ],
+      "limits": "Hash records readable installed cache bytes; no upstream commit identity inferred from plugin version.",
+      "observed_tool_names": [
+        "start_scenario",
+        "get_report",
+        "cancel_run",
+        "resolve_step"
+      ],
+      "source_sections": [
+        "Steps (submit, poll and cancel)",
+        "Driven mode (experimental, only when it is on)"
+      ]
+    },
+    {
+      "repository": "https://github.com/hugues-vnsgn/jev-ios-bridge",
+      "version": "1.3.0",
+      "revision": null,
+      "source": "dist/cli.js",
+      "sha256": "342b134051f53254a1f882dbd22ff5e98727e09393605881c1b259103711f5e1",
+      "disposition": "integration reference only",
+      "destinations": [
+        "plugin/skills/hugues-mode/references/jev-drive.md"
+      ],
+      "observed_help_argv": [
+        "node",
+        "dist/cli.js",
+        "--help"
+      ],
+      "observed_help_exit_code": 0,
+      "adaptations": [
+        "Document discovered version 1 run/report CLI alternative without downloading tools; version 2 handbacks require MCP."
+      ],
+      "limits": "Read-only help in installed cache; no mobile run or upstream revision inferred.",
+      "observed_help_usage": [
+        "run <script.json> [--json] [--no-log-pane] [--no-device-window] [--max-steps N] [--timeout-ms N]",
+        "report <run-id> [--json]",
+        "logs <run-id>",
+        "capture [--serial S | --avd A] [--jev]",
+        "mcp",
+        "--version | --help"
+      ],
+      "observed_help_version": "jev-ios-bridge 1.3.0",
+      "observed_at": "2026-10-05"
+    },
+    {
+      "repository": "https://github.com/hugues-vnsgn/jev-ios-bridge",
+      "version": "1.3.0",
+      "revision": null,
+      "source": "docs/guide/06-running.md",
+      "sha256": "dc8b953fd4d115209d3d1c943d027fd32c678a519bdd551d607f73805c6c5d5c",
+      "disposition": "integration reference only",
+      "destinations": [
+        "plugin/skills/hugues-mode/references/jev-drive.md"
+      ],
+      "source_sections": [
+        "From the terminal",
+        "From Claude Code (MCP, /test-ios and /test-android)"
+      ],
+      "observed_at": "2026-10-05",
+      "limits": "Readable installed guide bytes; no callable MCP access, native run or upstream revision inferred.",
+      "observed_tool_names": [
+        "start_scenario",
+        "get_report",
+        "cancel_run",
+        "resolve_step"
+      ]
+    },
+    {
+      "repository": "https://github.com/hugues-vnsgn/jev-ios-bridge",
+      "version": "1.3.0",
+      "revision": null,
+      "source": "docs/guide/13-driven-steps.md",
+      "sha256": "462cd4455bbd3f2bf6f9c94a85e0f60fa1420415ee7056dd05dcb497a0697c80",
+      "disposition": "integration reference only",
+      "destinations": [
+        "plugin/skills/hugues-mode/references/jev-drive.md"
+      ],
+      "source_sections": [
+        "Turning it on",
+        "Hand-backs to Claude"
+      ],
+      "observed_at": "2026-10-05",
+      "limits": "Readable installed guide bytes; no callable MCP access, native run or upstream revision inferred.",
+      "observed_tool_names": [
+        "resolve_step"
+      ]
+    },
+    {
+      "repository": "https://github.com/hugues-vnsgn/jev-ios-bridge",
+      "version": "1.3.0",
+      "revision": null,
+      "source": "docs/guide/09-data-handling.md",
+      "sha256": "bd2412cf2a38a76765b2b2f881c416f587a26499fb8d90127842752e794ada0d",
+      "disposition": "integration reference only",
+      "destinations": [
+        "plugin/skills/hugues-mode/references/jev-drive.md"
+      ],
+      "source_sections": [
+        "What leaves your Mac",
+        "What stays on your Mac"
+      ],
+      "observed_at": "2026-10-05",
+      "limits": "Readable installed guide bytes; no callable MCP access, native run or upstream revision inferred."
+    }
+  ],
+  "original_files": [
+    "plugin/skills/hugues-mode/references/evidence-template.md",
+    "docs/wp3-validation.md",
+    "tests/test_wp3_contract.py"
+  ],
+  "limits": [
+    "The create-verification-skill input is the verified 0.15.5 local snapshot, not an independently fetched 0.15.9 claim.",
+    "WP2 pstack 0.15.9 receipts remain unchanged; these conceptual inputs add no verbatim copies, parser or runtime.",
+    "Native consumer proof and host discovery require separate recorded execution."
+  ]
+}

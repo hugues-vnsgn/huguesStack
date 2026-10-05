@@ -4,11 +4,13 @@ huguesStack adapts pstack for mobile work in Claude Code and Codex: Swift/iOS,
 Kotlin/Android, KMP shared logic and CMP shared UI. Consumer apps remain in
 separate repositories.
 
-This checkout adds **WP2: mode and playbooks** to the WP1 package. `hugues-mode`
-selects one of fourteen playbooks, copies its steps into a todo list and names
+This checkout adds **WP3: proof lane** to the WP1 package and WP2 mode/playbooks.
+`hugues-mode` selects one of fourteen playbooks, copies its steps into a todo list and names
 the mobile proof required. The package includes a fresh-task worker,
 `interrogate` review guidance and the 24 verbatim upstream principles.
-It is a development version, not the 0.1.0 release candidate.
+WP3 adds a project-local verification generator, jev Drive guidance and a durable
+Markdown evidence outline. Version `0.1.0-dev.3` is a development version;
+first-release readiness remains unproven.
 
 Use `/hugues-stack:hugues-mode` in Claude Code, or `$hugues-mode` through the
 Codex loading path described in [host loading](docs/host-loading.md). Give it a
@@ -29,7 +31,8 @@ Run the static checks with Python 3 and a POSIX shell:
 python3 -m unittest discover -s tests -v
 ```
 
-See [WP2 validation](docs/wp2-validation.md) for acceptance cases and check
+See [WP3 validation](docs/wp3-validation.md) for the proof-lane scope and gaps,
+and [WP2 validation](docs/wp2-validation.md) for acceptance cases and check
 boundaries, and [support](docs/support.md) for observed evidence and gaps.
 The [public plan](docs/PLAN.md) summarizes the release scope; private planning
 snapshots remain local in ignored `docs/planning`. The deadline remains
@@ -54,3 +57,9 @@ recorded in the WP5 sync package below.
 [Upstream sync](docs/upstream/README.md) records the pstack 0.15.9 pin, full
 responsibility ledger and deterministic delta. Validate it with
 `python3 scripts/upstream-diff.py check`; weekly triage never overwrites the fork.
+
+WP3 adapts the verification generator from the verified pstack 0.15.5 local
+snapshot, omitting its feature-map phase as deferred by the current plan.
+Its exact source inputs and adaptation limits are in
+[WP3 source receipts](docs/wp3-source-receipts.json). These historical WP3 inputs
+remain distinct from the complete WP5 inventory at pstack 0.15.9.
