@@ -13,6 +13,11 @@ WP3 adds a project-local verification generator, jev Drive guidance and a durabl
 Markdown evidence outline. Version `0.1.0-dev.3` is a development version;
 first-release readiness remains unproven.
 
+New PR reviews use independent GPT-6 Astra reviewers with High effort. Read the
+[PR review policy](plugin/skills/hugues-mode/references/pr-review-policy.md) before
+launching a reviewer or re-reviewing a final head. Historical Claude review
+receipts and Claude host compatibility checks retain their stated scope.
+
 Start with the short [workflow guide](docs/WORKFLOW.md) and
 [support matrix](docs/support.md). Use `/hugues-stack:hugues-mode` in Claude Code,
 or the documented Codex manual project-skill/direct-read fallback in

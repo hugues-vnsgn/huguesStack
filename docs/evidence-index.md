@@ -6,6 +6,9 @@ on **5 October 2026**. [Support](support.md) summarizes the cells;
 screenshots, identifiers, credentials and machine paths stay private. Public
 summaries below are coordinator-observed receipts, with their limits retained.
 They are historical evidence, not new executions by this documentation package.
+This combined checkout includes PRs #6 and #7. Publication states below describe
+pre-integration snapshots; exact integration checks and current merge state
+belong in those PR receipts.
 
 ## Framework and host receipts
 
@@ -15,13 +18,14 @@ They are historical evidence, not new executions by this documentation package.
 | WP2 mode/playbooks | [PR #3](https://github.com/hugues-vnsgn/huguesStack/pull/3), [validation](wp2-validation.md), [Claude review audit](reviews/wp2-claude-review.md) | Merged tree equals tested `51ca48ef7a65751d7817f1fd5e985f986eaef6a2`. 72 tests and Codex planning-only preview: 11 routes, 61 steps. No delegated mobile execution inferred |
 | WP5 upstream sync | [PR #4](https://github.com/hugues-vnsgn/huguesStack/pull/4), [sync procedure](upstream/README.md), [Claude review audit](reviews/wp5-claude-review.md) | Merged `76f13b791cbefd984a028cad2841ce867165d012`; reviewed `7550c9e` CLEAN. Pin 0.15.9, 161 responsibilities; 3 added / 18 changed / 0 removed |
 | WP3 integrated proof lane | [PR #5](https://github.com/hugues-vnsgn/huguesStack/pull/5), [validation](wp3-validation.md), [source receipts](wp3-source-receipts.json) | Merged `89e7125490a659a77381a3c12336abc56bb58dda`; tree `280f42f14603f9e0b89b3a049ca8a3e831d43d88` equals tested/reviewed integration `cdc44dc`. 119 framework tests and package/upstream/strict metadata/shell/whitespace checks passed; Fable High CLEAN after fixes |
-| Verification continuation and review policy | [PR #6](https://github.com/hugues-vnsgn/huguesStack/pull/6), [head-bound receipt](https://github.com/hugues-vnsgn/huguesStack/blob/b2d75a0085429d25827f663ed99fd1f872707be0/docs/verification-continuation.md), [review policy](https://github.com/hugues-vnsgn/huguesStack/blob/b2d75a0085429d25827f663ed99fd1f872707be0/plugin/skills/hugues-mode/references/pr-review-policy.md) | Open draft at `b2d75a0085429d25827f663ed99fd1f872707be0`. 120 framework tests and package/upstream/strict metadata/shell/whitespace checks passed; independent Astra High final-head review CLEAN. Separate from merged main and from WP6 |
+| Verification continuation and review policy | [PR #6](https://github.com/hugues-vnsgn/huguesStack/pull/6), [head-bound receipt](https://github.com/hugues-vnsgn/huguesStack/blob/b2d75a0085429d25827f663ed99fd1f872707be0/docs/verification-continuation.md), [review policy](https://github.com/hugues-vnsgn/huguesStack/blob/b2d75a0085429d25827f663ed99fd1f872707be0/plugin/skills/hugues-mode/references/pr-review-policy.md) | Draft at the WP6 review snapshot, `b2d75a0085429d25827f663ed99fd1f872707be0`. 120 framework tests and package/upstream/strict metadata/shell/whitespace checks passed; independent Astra High final-head review CLEAN. Distinct pre-integration head; its changes are included in this combined checkout |
 | Deferred additions | [PR #2](https://github.com/hugues-vnsgn/huguesStack/pull/2), [plan](PLAN.md) | Open draft at `4f032119f887407885a5e90851633d1887cc57cc`; consumer feature maps and CLI-first verification remain post-first-release work |
 
 Historical Opus/Fable reviews remain evidence for their stated revisions. New PR
 reviews use independent GPT-6 Astra High. Static review proves neither host
-routing nor native app behavior. WP6's own tests and review belong in its draft
-PR at the final reviewed head; the 119/120 counts above are not WP6 results.
+routing nor native app behavior. WP6's own tests and review belong in
+[PR #7](https://github.com/hugues-vnsgn/huguesStack/pull/7) at its final reviewed
+head; the 119/120 counts above are not WP6 results.
 
 ## Bounded shared-task observations
 
@@ -93,4 +97,6 @@ execution; serialize authorized device runs. Independent documentation and
 static review can proceed in parallel. Full applied-recipe and four-domain task
 coverage remain incomplete. The owner may consider a release checkpoint with
 labelled reasons under the revised [plan](PLAN.md); WP6 neither claims readiness
-nor authorizes a merge/tag.
+nor authorizes a release tag. The later owner-approved integration and merge of
+PRs #6 and #7 requires its own exact-head tests and review; native scope
+expansions remain pending.

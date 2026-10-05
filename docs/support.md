@@ -3,7 +3,9 @@
 Status snapshot: **5 October 2026**, development package `0.1.0-dev.3`.
 The [evidence index](evidence-index.md) is authoritative for receipts, revisions,
 counts, failed attempts and prerequisites. Use [WORKFLOW](WORKFLOW.md) to start
-a task. WP6 adds documentation; it runs no consumer proof.
+a task. This combined PR #6/#7 checkout retains WP6 documentation and the
+[verification continuation](verification-continuation.md). It runs no consumer
+proof; PR publication states below describe the pre-integration snapshots.
 
 Use per-cell states **authored**, **static-tested**, **observed-pass**,
 **observed-fail**, **blocked** and **deferred**. Separately record run outcomes
@@ -13,7 +15,7 @@ assertion, and a successful retry retains its flaky outcome.
 
 | Cell | State | Evidence and limits |
 |---|---|---|
-| Package, 27 skills and local contracts | static-tested | Integrated main: 119 framework tests and package/upstream/strict metadata/shell/whitespace checks passed. Draft #6: 120 tests on its distinct head. Counts are historical; WP6 final-head checks belong in its PR |
+| Package, 27 skills and local contracts | static-tested | Integrated main: 119 framework tests and package/upstream/strict metadata/shell/whitespace checks passed. PR #6 pre-integration head: 120 tests. Counts are historical; combined final-head checks belong in the integration PR receipts |
 | Upstream inventory | static-tested | pstack 0.15.9; all 161 responsibilities reconciled; verified delta 3 added / 18 changed / 0 removed. [Manual sync procedure](upstream/README.md); deferred benchmark link preserves exact upstream bytes |
 | Claude historical cold load | observed-pass | WP1 fresh session and exact probe reply; historical body only |
 | Claude project recipe invocation | observed-pass | Later native Skill-tool read-only invocation passed; two earlier unknown-skill probes retained |
@@ -38,16 +40,20 @@ PRs [#1](https://github.com/hugues-vnsgn/huguesStack/pull/1),
 [#3](https://github.com/hugues-vnsgn/huguesStack/pull/3),
 [#4](https://github.com/hugues-vnsgn/huguesStack/pull/4) and
 [#5](https://github.com/hugues-vnsgn/huguesStack/pull/5) are merged.
-[#6](https://github.com/hugues-vnsgn/huguesStack/pull/6) remains a separate draft
-for continuation evidence and review policy; [#2](https://github.com/hugues-vnsgn/huguesStack/pull/2)
+[#6](https://github.com/hugues-vnsgn/huguesStack/pull/6) was a separate draft
+for continuation evidence and review policy at WP6 review; its changes are
+included in this combined checkout. [#2](https://github.com/hugues-vnsgn/huguesStack/pull/2)
 remains a deferred draft. Read the evidence index for exact heads and review
 verdicts. Historical cross-host Opus/Fable reviews remain preserved; new PR
 reviews use independent **GPT-6 Astra High**, with exact final-head evidence.
-Same-host agent review establishes process independence, not cross-host proof.
+Read the [PR review policy](../plugin/skills/hugues-mode/references/pr-review-policy.md)
+before launching those reviews. Same-host agent review establishes process
+independence, not cross-host proof.
 
-The approved WP6 package covers docs, checks, review and a new draft PR. Pending
-consumer-guide/screens, Swift runtime and Kotlin download decisions remain
-separate. This package authorizes no dependent consumer run, merge or release.
+WP6 originally covered docs, checks, review and a new draft PR. The owner later
+approved integrating and merging PRs #6 and #7 after combined checks and review.
+Consumer-guide/screens, Swift runtime and Kotlin download decisions remain
+pending; no dependent consumer run or release is authorized.
 The four-domain coverage and full generated cycle remain incomplete. The
 owner's revised [plan](PLAN.md) permits a release checkpoint with labelled gap
 reasons; those reasons never become observed support. Target remains

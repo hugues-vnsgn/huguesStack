@@ -36,6 +36,34 @@ The WP1 probe reply contained the two fixed lines documented in
 a token from the user prompt has not proved skill discovery: invoke the skill
 by name without supplying the token or its body.
 
+## WP3 Claude invocation observations
+
+On 5 October 2026, Claude Code 2.1.286 / `claude-fable-5-1`, high effort,
+successfully invoked an existing project recipe through its native Skill tool.
+The fresh session included `--setting-sources project,local` and the consumer's
+canonical skill plus verified Claude-directory symlink. Earlier restricted and
+empty-setting-source probes returned unknown-skill; their failures remain in
+the evidence. No symlink freshness cause was established.
+
+A separate fresh session loaded this checkout's plugin with `--plugin-dir` and
+invoked `/hugues-stack:create-verification-skill` directly. The generator uses
+`disable-model-invocation: true`; direct user invocation is the appropriate path.
+It read the repository and template and returned a complete private candidate,
+exit 0. It performed no file write, build or drive. Preserve an existing recipe's
+invocation metadata when considering a candidate update; review any proposed
+change to how the host can invoke it. Claude's `disable-model-invocation` and
+Codex's `allow_implicit_invocation` govern different host behavior and are not
+interchangeable flags.
+
+Both probes were read-only sessions: plan permission mode, only Skill/Read/Glob/
+Grep tools, no persistence, strict empty MCP configuration, and per-invocation
+`disableAllHooks`. That isolation is evidence for loading only. Use the consumer's
+normal hook and execution policy for implementation or command-running sessions;
+these probes supply no authority to disable those controls. Record argv, settings
+sources, tool availability and actual invocation response separately from the
+candidate's content. See [verification continuation](verification-continuation.md)
+for the full-cycle gap.
+
 ## Codex
 
 **Codex native marketplace discovery** is **observed-pass**. The
