@@ -50,8 +50,8 @@ verbatim principle bytes, lane requirements and bounded delegation. Exact
 working-tree results and later exact-head reviews belong in the PR; this
 document supplies the reproducible checks rather than claiming a future pass.
 
-The current framework working tree has 86 passing tests. This records the
-observed working-tree run; the final commit, full checks and exact-head review
+The WP3 working tree before WP5 integration had 86 passing tests. This records
+that historical run; integrated checks, final commits and exact-head reviews
 must be recorded separately before a clean review or release claim.
 
 ## Scoped host and native acceptance

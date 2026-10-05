@@ -113,8 +113,12 @@ python3 scripts/upstream-diff.py csv \
   --output /tmp/pstack-ledger-candidate.csv
 ```
 
-A changed pin requires matching WP2/source receipts or a reviewed update to
-those receipts; stale provenance is rejected rather than silently accepted.
+A changed pin requires matching WP2 receipts and WP3 generator source
+fingerprints, or a reviewed update to those receipts. The WP3 receipt retains
+its historical 0.15.5 input revision; its generator blob and byte SHA-256 must
+match the current ledger because that input is unchanged at the 0.15.9 pin.
+A future changed generator requires source review before re-pinning; stale
+provenance is rejected rather than silently accepted.
 
 ## Attribution
 
@@ -123,6 +127,7 @@ Keep [PSTACK-LICENSE](../../PSTACK-LICENSE) and the fork's
 source and destination of imported plugin files. Adapted skills/playbooks
 retain `source:` annotations. The 24 principles and four interrogate references
 remain byte-for-byte upstream copies, with attribution in the receipts instead
-of altered frontmatter. The WP5 checker binds all WP2 receipts to the complete
-inventory and verifies bytes at every present verbatim ledger destination.
+of altered frontmatter. The checker binds all WP2 receipts and the present WP3
+generator's source fingerprints, adaptation disposition and ledger destinations
+to the complete inventory. It verifies bytes at every present verbatim ledger destination.
 This sync package adds no skills or mobile app code.
