@@ -290,7 +290,7 @@ def check_destinations(ledger, source, root):
         row = files[receipt['source']]
         require(row['implementation_state'] == 'present' and receipt['destination'] in row['destinations']
                 and receipt['blob_sha'] == row['blob_sha'] and receipt['sha256'] == row['sha256']
-                and row['disposition'] == ('port verbatim' if receipt['disposition'] == 'verbatim' else 'port with adaptation'),
+                and row['disposition'] == {'verbatim': 'port verbatim', 'adapted': 'port with adaptation'}[receipt['disposition']],
                 'WP2 receipt does not match reconciled ledger')
 
 

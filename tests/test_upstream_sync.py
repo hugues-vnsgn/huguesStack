@@ -157,6 +157,22 @@ class PinnedEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'receipt'):
             u.check_destinations(ledger, self.after, ROOT)
 
+    def test_unknown_receipt_disposition_rejected(self):
+        row = next(r for r in self.ledger['items'] if r['path'] == 'pstack/skills/poteto-mode/SKILL.md')
+        receipts = u.load(ROOT / 'docs/upstream/wp2-provenance.json')
+        receipt = next(r for r in receipts['files'] if r['source'] == row['path'])
+        for disposition in ('adpated', 'Verbatim', 'unverified'):
+            with self.subTest(disposition=disposition), tempfile.TemporaryDirectory() as folder:
+                root = Path(folder)
+                destination = root / row['destinations'][0]
+                destination.parent.mkdir(parents=True)
+                destination.write_bytes(b'User adaptation.')
+                path = root / 'docs/upstream/wp2-provenance.json'
+                path.parent.mkdir(parents=True)
+                path.write_bytes(u.encode(dict(receipts, files=[dict(receipt, disposition=disposition)])))
+                with self.assertRaises(KeyError):
+                    u.check_destinations({'items': [row]}, self.after, root)
+
     def test_pin_digest_anchors_snapshot_bytes(self):
         with tempfile.TemporaryDirectory() as folder:
             directory = Path(folder)

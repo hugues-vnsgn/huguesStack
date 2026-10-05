@@ -24,9 +24,17 @@ The coordinator independently accepted all four corrections:
 
 Independent coordinator checks also reject partially completed triage and
 conflicting byte fingerprints for the same Git blob across snapshots. The
-corrective implementation passes all 99 stdlib tests (72 prior plus 27 WP5),
+corrective implementation passes all 100 stdlib tests (72 prior plus 28 WP5),
 the complete upstream checker, the plugin checker and `git diff --check`.
 The known upstream benchmark link remains explicitly deferred to 0.2.
+
+A second Fable High read-only review of
+`e89d1ddb6fd79143b98e945172b7f6d50167ed48` exited 0 with
+`no-material-findings` and confirmed all four earlier corrections. The
+coordinator also accepted low-severity WP5-R2-01: the receipt lookup treated
+any unknown spelling as adapted. A closed two-value lookup now rejects
+unknown values; regression cases cover misspelled, case-changed and
+unsupported dispositions.
 
 Exact final-head re-review and test receipts are retained outside the public
 repository and recorded in the draft PR. This avoids a self-referential commit
