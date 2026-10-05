@@ -48,4 +48,9 @@ WP2 uses pstack 0.15.9 at
 `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. All 24 principle files are copied
 verbatim. Adapted guidance and per-file source hashes are recorded in
 [upstream provenance](docs/upstream/wp2-provenance.json). This records the
-WP2 inputs; the full responsibility inventory and weekly sync remain WP5 work.
+WP2 inputs; the complete responsibility inventory and weekly procedure are
+recorded in the WP5 sync package below.
+
+[Upstream sync](docs/upstream/README.md) records the pstack 0.15.9 pin, full
+responsibility ledger and deterministic delta. Validate it with
+`python3 scripts/upstream-diff.py check`; weekly triage never overwrites the fork.
