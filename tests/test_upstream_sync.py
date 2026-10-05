@@ -90,6 +90,14 @@ class PinnedEvidenceTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     u.validate_snapshot(data)
 
+    def test_unchanged_blob_cannot_have_conflicting_byte_fingerprints(self):
+        for key, value in [('size', 123), ('sha256', '0' * 64)]:
+            with self.subTest(key=key):
+                after = copy.deepcopy(self.after)
+                next(r for r in after['files'] if r['path'] == 'pstack/.gitignore')[key] = value
+                with self.assertRaisesRegex(ValueError, 'inconsistent byte'):
+                    u.changes(self.before, after)
+
     def test_unsafe_paths_modes_and_unsorted_inventory_rejected(self):
         for path in ('pstack/../escape', 'pstack//double', 'pstack/pipe|name', 'elsewhere/file', 'pstack/back\\slash'):
             with self.subTest(path=path), self.assertRaises(ValueError):
@@ -126,6 +134,28 @@ class PinnedEvidenceTests(unittest.TestCase):
         for path in ('/tmp/file', '../private', 'plugin/../private', 'plugin\\file'):
             with self.subTest(path=path), self.assertRaises(ValueError):
                 u.destination_path(path)
+
+    def test_partial_triage_cannot_validate_for_repin(self):
+        for key in ('implementation_state', 'release_target'):
+            with self.subTest(key=key):
+                ledger = copy.deepcopy(self.ledger)
+                ledger['items'][0][key] = 'pending'
+                with self.assertRaisesRegex(ValueError, 'incomplete triage'):
+                    u.validate_ledger(ledger, self.after)
+                u.validate_ledger(ledger, self.after, allow_pending=True)
+
+    def test_present_verbatim_mutation_and_receipt_disposition_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            row = next(r for r in self.ledger['items'] if r['path'] == 'pstack/LICENSE')
+            (root / 'PSTACK-LICENSE').write_bytes(b'corrupt')
+            with self.assertRaisesRegex(ValueError, 'verbatim'):
+                u.check_destinations({'items': [row]}, self.after, root)
+        ledger = copy.deepcopy(self.ledger)
+        row = next(r for r in ledger['items'] if r['path'] == 'pstack/skills/poteto-mode/SKILL.md')
+        row['disposition'] = 'ignore with reason'
+        with self.assertRaisesRegex(ValueError, 'receipt'):
+            u.check_destinations(ledger, self.after, ROOT)
 
     def test_pin_digest_anchors_snapshot_bytes(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -196,6 +226,23 @@ class PinnedEvidenceTests(unittest.TestCase):
             self.assertEqual(target.read_bytes(), b'user adaptation')
         self.assertEqual((ROOT / 'docs/upstream/pin.json').read_bytes(), pin)
         self.assertEqual(observed, {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in observed})
+
+    def test_csv_cli_validates_source_and_preserves_existing_output(self):
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder) / 'ledger.csv'
+            args = [sys.executable, str(SCRIPT), 'csv', '--ledger', str(ROOT / 'docs/upstream/huguesStack-dispositions.json'),
+                    '--snapshot', str(ROOT / 'docs/upstream/snapshots/pstack-0.15.9.json'), '--output', str(output)]
+            subprocess.run(args, check=True, capture_output=True)
+            self.assertEqual(output.read_bytes(), (ROOT / 'docs/upstream/huguesStack-dispositions.csv').read_bytes())
+            subprocess.run(args + ['--check'], check=True, capture_output=True)
+            output.write_bytes(b'curated export')
+            self.assertNotEqual(subprocess.run(args, capture_output=True).returncode, 0)
+            self.assertEqual(output.read_bytes(), b'curated export')
+            bad = Path(folder) / 'bad.csv'
+            args[args.index('--output') + 1] = str(bad)
+            args[args.index('--snapshot') + 1] = str(ROOT / 'docs/upstream/snapshots/pstack-0.15.5.json')
+            self.assertNotEqual(subprocess.run(args, capture_output=True).returncode, 0)
+            self.assertFalse(bad.exists())
 
 
 class LocalGitTests(unittest.TestCase):
@@ -286,6 +333,19 @@ class LocalGitTests(unittest.TestCase):
                                  '--revision', self.before['revision'], '--output', str(output)], capture_output=True)
         self.assertEqual(result.returncode, 0, result.stderr.decode())
         self.assertEqual(u.load(output), self.before)
+
+    def test_signature_display_config_cannot_change_capture_date(self):
+        commit = base64.b64decode(self.before['commit_object'])
+        header, message = commit.split(b'\n\n', 1)
+        signed = header + b'\ngpgsig -----BEGIN PGP SIGNATURE-----\n fixture\n -----END PGP SIGNATURE-----\n\n' + message
+        result = subprocess.run(['git', '-C', str(self.repo), 'hash-object', '-t', 'commit', '-w', '--stdin'],
+                                input=signed, capture_output=True, check=True)
+        revision = result.stdout.decode().strip()
+        u.git(self.repo, 'update-ref', 'HEAD', revision)
+        u.git(self.repo, 'config', 'log.showSignature', 'true')
+        captured = u.snapshot(self.repo, revision)
+        self.assertEqual(captured['committed_at_utc'], self.before['committed_at_utc'])
+        self.assertEqual(captured['revision'], revision)
 
 
 if __name__ == '__main__':

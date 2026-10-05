@@ -103,8 +103,16 @@ it never updates the pin, ledger or plugin automatically.
 Commit the reviewed snapshot, ledger, CSV, pin digest and corresponding delta
 in a separately reviewed change. The current `check` command validates the
 maintained baseline-to-current report and rejects pending active rows. Export
-CSV deterministically with the script's `render_csv` helper. Until triage and
+CSV to a new output path with the validated command below, then include it in
+the reviewed update. Existing human edits are never overwritten. Until triage and
 checks finish, list the candidate delta as pending in [support](../support.md).
+```sh
+python3 scripts/upstream-diff.py csv \
+  --ledger /tmp/pstack-ledger-proposal.json \
+  --snapshot /tmp/pstack-candidate.json \
+  --output /tmp/pstack-ledger-candidate.csv
+```
+
 A changed pin requires matching WP2/source receipts or a reviewed update to
 those receipts; stale provenance is rejected rather than silently accepted.
 

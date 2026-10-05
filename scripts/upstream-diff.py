@@ -108,6 +108,20 @@ def inventory_tree(files):
     return digest(root)
 
 
+def consistent_blobs(files):
+    fingerprints = {}
+    for item in files:
+        fingerprint = (item['size'], item['sha256'])
+        previous = fingerprints.setdefault(item['blob_sha'], fingerprint)
+        require(previous == fingerprint, 'inconsistent byte fingerprints for the same Git blob')
+
+
+def commit_date(commit):
+    header = commit.split(b'\n\n', 1)[0]
+    date_line = next(line for line in header.split(b'\n') if line.startswith(b'committer '))
+    return datetime.fromtimestamp(int(date_line.rsplit(b' ', 2)[1]), timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
 def validate_snapshot(data):
     require(data['schema_version'] == 1 and data['repository'] == REPOSITORY, 'unknown snapshot source/schema')
     commit = base64.b64decode(data['commit_object'], validate=True)
@@ -121,6 +135,7 @@ def validate_snapshot(data):
     for item in files:
         sha(item['sha256'], 64)
         require(type(item['size']) is int and item['size'] >= 0, 'invalid blob size')
+    consistent_blobs(files)
     require(inventory_tree(files) == data['pstack_tree_sha'], 'incomplete/inconsistent pstack tree')
     manifest = base64.b64decode(data['manifest_object'], validate=True)
     entry = next(i for i in files if i['path'] == 'pstack/.cursor-plugin/plugin.json')
@@ -128,9 +143,7 @@ def validate_snapshot(data):
             and hashlib.sha256(manifest).hexdigest() == entry['sha256'], 'manifest does not match inventory')
     version = json.loads(manifest, object_pairs_hook=unique)['version']
     require(version == data['version'], 'version does not match manifest')
-    date_line = next(line for line in commit.split(b'\n') if line.startswith(b'committer '))
-    date = datetime.fromtimestamp(int(date_line.rsplit(b' ', 2)[1]), timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-    require(date == data['committed_at_utc'], 'date does not match commit')
+    require(commit_date(commit) == data['committed_at_utc'], 'date does not match commit')
     return data
 
 
@@ -157,10 +170,9 @@ def snapshot(repo, revision):
         if name == 'pstack/.cursor-plugin/plugin.json':
             manifest = body
     require(manifest is not None, 'missing pstack manifest')
-    date = git(repo, 'show', '-s', '--format=%ct', resolved).decode().strip()
     data = {'schema_version': 1, 'repository': REPOSITORY, 'revision': resolved,
             'version': json.loads(manifest)['version'],
-            'committed_at_utc': datetime.fromtimestamp(int(date), timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'committed_at_utc': commit_date(commit),
             'pstack_tree_sha': subtree, 'file_count': len(files),
             'commit_object': base64.b64encode(commit).decode(),
             'root_tree_object': base64.b64encode(root_tree).decode(),
@@ -171,6 +183,7 @@ def snapshot(repo, revision):
 
 def changes(before, after):
     require(before['repository'] == after['repository'], 'source mismatch')
+    consistent_blobs(before['files'] + after['files'])
     old = {i['path']: i for i in before['files']}
     new = {i['path']: i for i in after['files']}
     result = []
@@ -188,6 +201,8 @@ def decision(row, allow_pending):
     require(isinstance(row['reason'], str) and row['reason'].strip(), 'missing triage reason')
     require(row['implementation_state'] in STATES, 'invalid implementation state')
     require(row['release_target'] in {'0.1.0', '0.2', 'not planned', 'pending'}, 'invalid release target')
+    require(allow_pending or (row['implementation_state'] != 'pending' and row['release_target'] != 'pending'),
+            'incomplete triage decision')
     require(isinstance(row['destinations'], list) and all(isinstance(p, str) and p for p in row['destinations']), 'invalid destinations')
     for path in row['destinations']:
         destination_path(path)
@@ -274,7 +289,8 @@ def check_destinations(ledger, source, root):
     for receipt in receipts['files']:
         row = files[receipt['source']]
         require(row['implementation_state'] == 'present' and receipt['destination'] in row['destinations']
-                and receipt['blob_sha'] == row['blob_sha'] and receipt['sha256'] == row['sha256'],
+                and receipt['blob_sha'] == row['blob_sha'] and receipt['sha256'] == row['sha256']
+                and row['disposition'] == ('port verbatim' if receipt['disposition'] == 'verbatim' else 'port with adaptation'),
                 'WP2 receipt does not match reconciled ledger')
 
 
@@ -348,11 +364,20 @@ def main(argv=None):
     rec.add_argument('--ledger', type=Path, required=True)
     rec.add_argument('--output', type=Path, required=True)
     rec.add_argument('--check', action='store_true')
+    export = sub.add_parser('csv', help='export a fully triaged ledger after source validation')
+    export.add_argument('--ledger', type=Path, required=True)
+    export.add_argument('--snapshot', type=Path, required=True)
+    export.add_argument('--output', type=Path, required=True)
+    export.add_argument('--check', action='store_true')
     verify = sub.add_parser('check', help='validate checked-in pin, complete ledger and historical delta')
     verify.add_argument('--root', type=Path, default=ROOT)
     args = parser.parse_args(argv)
     if args.command == 'snapshot':
         write_output(args.output, encode(snapshot(args.repo, args.revision)), args.check)
+    elif args.command == 'csv':
+        source = validate_snapshot(load(args.snapshot))
+        ledger = validate_ledger(load(args.ledger), source)
+        write_output(args.output, render_csv(ledger), args.check)
     elif args.command == 'reconcile':
         before = validate_snapshot(load(args.from_snapshot))
         after = validate_snapshot(load(args.to_snapshot))
