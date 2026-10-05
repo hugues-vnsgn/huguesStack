@@ -4,7 +4,8 @@ huguesStack adapts pstack for mobile work in Claude Code and Codex: Swift/iOS,
 Kotlin/Android, KMP shared logic and CMP shared UI. Consumer apps remain in
 separate repositories.
 
-This checkout adds **WP3: proof lane** to the WP1 package and WP2 mode/playbooks.
+This checkout includes the WP1 package, WP2 mode/playbooks, WP3 proof lane,
+WP5 upstream sync and **WP6 workflow/evidence documentation**.
 `hugues-mode` selects one of fourteen playbooks, copies its steps into a todo list and names
 the mobile proof required. The package includes a fresh-task worker,
 `interrogate` review guidance and the 24 verbatim upstream principles.
@@ -12,8 +13,11 @@ WP3 adds a project-local verification generator, jev Drive guidance and a durabl
 Markdown evidence outline. Version `0.1.0-dev.3` is a development version;
 first-release readiness remains unproven.
 
-Use `/hugues-stack:hugues-mode` in Claude Code, or `$hugues-mode` through the
-Codex loading path described in [host loading](docs/host-loading.md). Give it a
+Start with the short [workflow guide](docs/WORKFLOW.md) and
+[support matrix](docs/support.md). Use `/hugues-stack:hugues-mode` in Claude Code,
+or the documented Codex manual project-skill/direct-read fallback in
+[host loading](docs/host-loading.md); native Codex installation/invocation remains
+unverified. Give it a
 goal and a way to check it. For example:
 
 ```text
@@ -31,9 +35,10 @@ Run the static checks with Python 3 and a POSIX shell:
 python3 -m unittest discover -s tests -v
 ```
 
-See [WP3 validation](docs/wp3-validation.md) for the proof-lane scope and gaps,
-and [WP2 validation](docs/wp2-validation.md) for acceptance cases and check
-boundaries, and [support](docs/support.md) for observed evidence and gaps.
+The [evidence index](docs/evidence-index.md) separates merged packages, open drafts,
+historical passed checks and current blocked/unrun proof. See
+[WP3 validation](docs/wp3-validation.md) for the proof-lane scope and
+[WP2 validation](docs/wp2-validation.md) for acceptance cases and check boundaries.
 The [public plan](docs/PLAN.md) summarizes the release scope; private planning
 snapshots remain local in ignored `docs/planning`. The deadline remains
 9 October 2026, end of day GMT+7. Consumer feature maps and the proposed CLI-first
