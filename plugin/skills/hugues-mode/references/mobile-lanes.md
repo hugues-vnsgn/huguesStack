@@ -8,7 +8,7 @@ Read this file before a mobile build, bug fix, feature, refactor, prototype or p
 
 Establish the consumer repo, revision, worktree, permitted files and execution authority from the owner's instruction. A generic mode request or a plan naming an app grants no consumer edit, copy, build, install or runtime authority. Keep consumer apps and copied fixtures outside the plugin; preserve tracked fixture baselines. If authority is missing, perform the authorized read-only investigation and report the required scope.
 
-Read the consumer's AGENTS.md and build configuration before selecting argv. Identify Xcode project/workspace, schemes, test plans and destinations; Gradle wrapper, modules, flavors, targets and source sets; native entry points; and existing verification scripts. Use repository-supported commands and explicit target/device identities rather than cached versions or guessed tasks. For the plan's selected consumers, verify the actual `NetNewsWire-iOS` scheme and `demoDebug` variant before use.
+Read the consumer's AGENTS.md and build configuration before selecting argv. Identify Xcode project/workspace, schemes, test plans and destinations; Gradle wrapper, modules, flavors, targets and source sets; native entry points; and existing verification scripts. Read an applicable project `verify-<app>/SKILL.md` under `.agents/skills` or `.claude/skills` directly, even if its model invocation is disabled; use its recorded commands, selectors and readiness signals only after checking current authority and repository facts. Use repository-supported commands and explicit target/device identities rather than cached versions or guessed tasks. Resolve the current authorized consumer and its actual scheme/variant from the task; a historical plan selection is not the current target.
 
 Keep SDK/JDK selection process-local when authorized. Missing tools, licenses, signing, credentials or system changes are blockers to name, not implied repair authority. Serialize simulator and emulator runs when local resource contention would mix evidence. Allocate, boot, install or stop a runtime only within the owner's scope; retained artifacts must survive cleanup.
 
@@ -17,7 +17,7 @@ Keep SDK/JDK selection process-local when authorized. Missing tools, licenses, s
 | Domain | Build and tests | Behavior proof | Relevant installed owner skills |
 | --- | --- | --- | --- |
 | Swift/iOS | Repository-selected Xcode build and relevant XCTest slice on the explicit simulator destination. Preserve xcodebuild logs and xcresult. | Drive the changed user path on that iOS simulator and retain screenshots/verdict. For a bug, preserve the failing path before the fix. | `ios-tdd-practitioner`, `swiftui-expert-skill`, `uikit-expert` |
-| Kotlin/Android | Wrapper-selected unit tests, relevant instrumentation tests for affected platform behavior, and selected APK variant. Use `demoDebug` for nowinandroid; preserve Gradle/JUnit reports and APK identity. | Install that APK and drive the changed path on the explicit Android emulator. For a bug, preserve the failing path before the fix. | Repository's Kotlin/Android guidance and test skills |
+| Kotlin/Android | Wrapper-selected unit tests, relevant instrumentation tests for affected platform behavior, and selected APK variant. Preserve Gradle/JUnit reports and APK identity for the repository-selected variant. | Install that APK and drive the changed path on the explicit Android emulator. For a bug, preserve the failing path before the fix. | Repository's Kotlin/Android guidance and test skills |
 | KMP shared logic | Execute common tests on each Android and iOS target, plus affected platform tests and native builds. Preserve each target's result and exported API identity. | Exercise at least one Android native caller and one iOS native caller of the changed shared contract. Check affected export, threading, cancellation, lifecycle and error behavior. | `kmp-boundaries`, `kmp-ios-integration`, `kmp-test-seams`, `tdd-kmp`; `kmp-ktor` for networking |
 | CMP shared UI | Build/test affected targets and native hosts; retain separate Android and iOS results. | Drive the changed shared UI on an Android emulator and an iOS simulator. Preserve screenshots and one explicit semantics or text-scaling observation, accounting for both runtimes and affected interop. | `compose-multiplatform-ui` plus relevant native and KMP skills |
 
@@ -27,7 +27,7 @@ For changes spanning domains, select every affected lane. A linked framework is 
 
 ## Evidence and outcomes
 
-Store each authorized run outside the repository in a task-specific evidence folder, for example `~/huguesstack-evidence/<date>-<task>/`. Preserve raw logs, xcresult bundles, JUnit XML, UI reports and screenshots next to evidence.md. Record:
+Read the [durable evidence guide](evidence-guide.md) for recording commands and tools, dirty work, result-file provenance and post-teardown checks. Use its [Markdown template](evidence-template.md). Store each authorized run outside the repository in a task-specific evidence folder, for example `~/huguesstack-evidence/<date>-<task>/`. Preserve raw logs, xcresult bundles, JUnit XML, UI reports and screenshots next to evidence.md. Record:
 
 - Plugin SHA, host name/version, consumer repo and SHA, and any dirty consumer diff that changes the tested artifact.
 - Domain, scheme/variant, target and explicit simulator UDID or emulator serial/API identity.
@@ -41,7 +41,7 @@ Report run outcomes (pass, fail, flaky, skipped, incomplete) separately from sup
 
 ## Missing capabilities
 
-Use the available jev-ios-bridge mobile skills for judged screen proof after confirming their prerequisites and scoped execution authority. If the bridge or its required tools are unavailable, use authorized XCTest UI tests and simulator/device tooling for iOS, or instrumentation/UI tooling and adb screenshots for Android. Label this fallback **no judged verdict**, record what it actually observed and list the missing bridge proof. Screenshots alone do not show that the interaction passed.
+Read [jev Drive](jev-drive.md) before choosing screen tooling. Repository instructions govern every fallback; missing required MCP access does not authorize a prohibited raw CLI. Use the available jev-ios-bridge mobile skills for judged screen proof after confirming their prerequisites and scoped execution authority. If the bridge or its required tools are unavailable, use authorized XCTest UI tests and simulator/device tooling for iOS, or instrumentation/UI tooling and adb screenshots for Android. Label this fallback **no judged verdict**, record what it actually observed and list the missing bridge proof. Screenshots alone do not show that the interaction passed.
 
 If the runtime, host, device or execution authority is absent, mark the check blocked with that prerequisite. Keep the required check in the todo list. Finish the available checks and report the gap; do not replace runtime or native-caller evidence with compilation.
 

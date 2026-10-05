@@ -98,9 +98,9 @@ When executing as an assigned scoped worker, read this mode and relevant princip
 
 ## Available guidance
 
-This package ships this mode, the 14 playbooks, `interrogate`, `hugues-agent` and the 24 principles below. Read shipped Markdown files directly when a host cannot invoke a skill by name. Use project-native build and test tools already available, and disclose missing host tools or optional owner skills.
+This package ships this mode, the 14 playbooks, `interrogate`, [create-verification-skill](../create-verification-skill/SKILL.md), `hugues-agent` and the 24 principles below. Read the verification generator when the task calls for a project-local mobile proof recipe; its path and execution authority remain consumer-local. Read shipped Markdown files directly when a host cannot invoke a skill by name. Use project-native build and test tools already available, and disclose missing host tools or optional owner skills.
 
-The planned `how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`, `swarm`, verification-skill authoring and maintenance, `show-me-your-work`, `correct` and `setup-huguesstack` leaves are not shipped in WP2. Their mentions in upstream material are guidance, not mandatory missing invocations. Use the corresponding investigation, design, review or proof steps in the matched playbook and report the gap. Deferred performance, unattended-work and cleanup workflows remain outside this package. Consumer feature maps and CLI-first verification policy remain post-first-release backlog items.
+The planned `how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`, `swarm`, verification-skill maintenance, `show-me-your-work`, `correct` and `setup-huguesstack` leaves remain unshipped. Their mentions in upstream material are guidance, not mandatory missing invocations. Use the corresponding investigation, design, review or proof steps in the matched playbook and report the gap. Deferred performance, unattended-work and cleanup workflows remain outside this package. Consumer feature maps and CLI-first verification policy remain post-first-release backlog items.
 
 ## Principles
 

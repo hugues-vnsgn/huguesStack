@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "hugues-stack",
-      "description": "Mobile routing, playbooks and principles for huguesStack in Claude Code and Codex.",
+      "description": "Mobile routing, proof guidance and principles for huguesStack in Claude Code and Codex.",
       "source": "./plugin"
     }
   ]

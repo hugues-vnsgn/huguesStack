@@ -1,0 +1,26 @@
+# Jev Drive for mobile proof
+
+Read this file when the agreed proof needs a mobile screen journey. Compose the installed jev-ios-bridge skills; this plugin ships no bridge client or scenario runtime. Read the current installed `test-ios` or `test-android` SKILL.md and the guide pages they name before authoring a scenario. Record the actual bridge version and resolved guide paths rather than assuming this reference matches every version.
+
+## Capability and authority
+
+Read the consumer repository instructions first. Discover callable tools and existing permitted CLI entry points; establish the app/bundle ID, explicit simulator UDID or emulator AVD/serial, launch state, test data and artifact identity. Confirm prerequisites without printing credentials. A missing connection, key, tool, runtime or restricted command is a blocker. A configured server alone does not prove access.
+
+Use only tools consistent with repository instructions and current authority. If a repository mandates an Xcode MCP tool, absence of that tool does not permit raw `xcodebuild`, `xcrun` or `simctl`. The bridge's own examples also remain subject to repository restrictions. Report the required setup/permission and continue other permitted checks. Do not install tools, download a new CLI through `npx`, accept licenses, connect credentials or change device/system settings as a fallback.
+
+Before the first bridge run, confirm that the owner's existing explicit authority covers checkpoint screen-text transmission to TypeSafe, including visible typed values. Record that authority and disclose the transmission; screenshots and logs remain local under the bridge's documented data policy. Do not ask again when that transmission is already explicitly authorized. If it is not covered, obtain the owner's acceptance before sending screen text; keep judged proof blocked and continue the permitted local fallback meanwhile. Use authorized test data. Treat any broader external data transmission as a scope question when it is not covered by the current request. Do not send private consumer artifacts to this public plugin repository.
+
+## Script and run
+
+1. Author a bounded version 1 scenario from source and fresh authorized screen captures. Use stable identifiers or role/label selectors that match one selectable element. Pin the device and app explicitly, guard each screen and finish with checkpoints describing the agreed expected text. Keep credentials in environment references, never literals. Save the scenario and captures in local evidence.
+2. Submit the scenario once through the available `start_scenario` tool with scoped limits. Save its run ID, watch URL and response; show the watch URL to the owner. Poll `get_report` with its documented bounded wait until finished or interrupted. If MCP is unavailable but an installed bridge CLI is permitted, inspect its local `--help` and use its documented version 1 `run <script.json> --json` and `report <run-id> --json` path. Resolve the existing executable; avoid download launchers. Record real process exit codes and the report verdict separately. Preserve errors and intermediate responses; a running status is progress, not a verdict.
+3. Read the final report and checkpoint evidence. Report its recorded `passed`, `failed` or `inconclusive` verdict and reason code, decisive checkpoint and evidence path. Inconclusive is never a pass. A guard/target error can be a script problem; diagnose before claiming an app regression. A screenshot or a completed action is not a judged checkpoint.
+4. Copy or retain the original scenario, report, screenshots and logs in the durable task folder before authorized teardown. Keep per-target attempts distinct. Use `cancel_run` only when stopping the owned run is in scope, and retain the report it leaves. Confirm evidence remains readable afterward.
+
+Experimental driven mode is optional. Use version 2 only when the installed server offers `resolve_step`, the project already enables it within authority, and its guide has been read. A `doneWhen` stops actions; it does not assert the expected result. Preserve checkpoints and record handbacks and who decided/completed each step. The version 1 CLI path cannot answer driven-mode handbacks; use MCP for version 2. Unsupported driven mode is a reason to use the supported version 1 path, not to change global configuration.
+
+## Permitted fallback
+
+If the bridge is unavailable, follow existing authorized UI-test/device tooling consistent with the repository instructions. Record action and outcome evidence and label **no judged verdict**. On iOS that may be a permitted XCTest UI test/MCP path; on Android it may be instrumentation and allowed adb captures. Screenshots alone establish appearance, not interaction success. If no compliant runtime tooling is available, keep that target blocked and complete the available build/test checks.
+
+Jev judges captured screen text, not pixels. Inspect screenshot geometry separately for clipping, narrow layouts and enlarged-text claims; pair visual observations with current hierarchy/semantics where available. One shared UI journey proves only the exercised shared logic, shared UI and native hosts, not independent Swift and Kotlin features or every domain.
