@@ -1,7 +1,7 @@
 {
   "name": "hugues-stack",
-  "version": "0.1.0-dev.1",
-  "description": "Read-only loader probe for the huguesStack mobile workflow scaffold; routing follows in WP2.",
+  "version": "0.1.0-dev.2",
+  "description": "Mobile routing, playbooks and principles for huguesStack in Claude Code and Codex.",
   "author": {
     "name": "hugues-vnsgn"
   },
@@ -15,5 +15,8 @@
   ],
   "skills": [
     "./skills"
+  ],
+  "agents": [
+    "./agents/hugues-agent.md"
   ]
 }

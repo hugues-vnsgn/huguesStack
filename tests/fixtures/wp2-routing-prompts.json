@@ -1,0 +1,178 @@
+{
+  "purpose": "Literal planning-only acceptance cases; static checks do not establish observed model routing.",
+  "cases": [
+    {
+      "id": "ios-badge-bug",
+      "prompt": "The article list jumps when the unread badge updates. Repro on the iOS simulator first, then fix and verify.",
+      "expected_route": "bug-fix",
+      "expected_file": "playbooks/bug-fix.md",
+      "expected_domain": "Swift/iOS",
+      "expected_proof": [
+        "iOS simulator",
+        "XCTest",
+        "screen"
+      ]
+    },
+    {
+      "id": "android-action-feature",
+      "prompt": "Add a mark older as read action to the topic screen. Prove it on the Pixel emulator and keep the unit tests green.",
+      "expected_route": "feature",
+      "expected_file": "playbooks/feature.md",
+      "expected_domain": "Kotlin/Android",
+      "expected_proof": [
+        "Android emulator",
+        "JUnit",
+        "screen"
+      ]
+    },
+    {
+      "id": "kmp-boundary-bug",
+      "prompt": "The discount boundary is wrong in shared code. Fix it once and show me it passing on Android and iOS.",
+      "expected_route": "kmp-bridge-change",
+      "expected_file": "playbooks/kmp-bridge-change.md",
+      "expected_domain": "KMP shared logic",
+      "expected_proof": [
+        "common tests",
+        "Android",
+        "iOS",
+        "native caller"
+      ]
+    },
+    {
+      "id": "other-host-review",
+      "prompt": "Interrogate this diff from the other host. No nitpicks, only behavior regressions.",
+      "expected_route": "interrogate",
+      "expected_file": "../interrogate/SKILL.md",
+      "expected_domain": "derive from diff",
+      "expected_proof": [
+        "other host",
+        "behavior regressions",
+        "independence"
+      ]
+    },
+    {
+      "id": "swift-refactor",
+      "prompt": "Refactor the duplicated Swift article formatting into one implementation. Preserve behavior and verify the iOS callers.",
+      "expected_route": "refactoring",
+      "expected_file": "playbooks/refactoring.md",
+      "expected_domain": "Swift/iOS",
+      "expected_proof": [
+        "iOS",
+        "XCTest",
+        "caller"
+      ]
+    },
+    {
+      "id": "cmp-prototype",
+      "prompt": "Prototype two shared Compose reading panel layouts. Compare them on Android and iOS, including text scaling, before choosing.",
+      "expected_route": "prototype",
+      "expected_file": "playbooks/prototype.md",
+      "expected_domain": "CMP shared UI",
+      "expected_proof": [
+        "Android emulator",
+        "iOS simulator",
+        "semantics",
+        "text scaling"
+      ]
+    },
+    {
+      "id": "pause-kmp-fix",
+      "prompt": "Pause the KMP discount fix and save state before compaction.",
+      "expected_route": "pause-safely",
+      "expected_file": "playbooks/pause-safely.md",
+      "expected_domain": "KMP shared logic",
+      "expected_proof": [
+        "handoff",
+        "evidence",
+        "unresolved"
+      ]
+    },
+    {
+      "id": "resume-ios-fix",
+      "prompt": "Resume the iOS badge bug fix from yesterday's handoff.",
+      "expected_route": "session-pickup",
+      "expected_file": "playbooks/session-pickup.md",
+      "expected_domain": "Swift/iOS",
+      "expected_proof": [
+        "handoff",
+        "current branch",
+        "prior evidence"
+      ]
+    },
+    {
+      "id": "explain-ios-no-changes",
+      "prompt": "Why does the iOS article list jump when the unread badge updates? Explain only, change nothing.",
+      "expected_route": "investigation",
+      "expected_file": "playbooks/investigation.md",
+      "expected_domain": "Swift/iOS",
+      "expected_proof": [
+        "read-only",
+        "cause",
+        "no changes"
+      ]
+    },
+    {
+      "id": "open-pr-cmp-change",
+      "prompt": "Open a PR for the shared Compose reading panel change.",
+      "expected_route": "opening-a-pr",
+      "expected_file": "playbooks/opening-a-pr.md",
+      "expected_domain": "CMP shared UI",
+      "expected_proof": [
+        "diff",
+        "checks",
+        "review description"
+      ]
+    },
+    {
+      "id": "verify-kmp-only",
+      "prompt": "Verify the existing KMP discount fix on Android and iOS, including its native callers. Make no code changes.",
+      "expected_route": "mobile-proof",
+      "expected_file": "playbooks/mobile-proof.md",
+      "expected_domain": "KMP shared logic",
+      "expected_proof": [
+        "common tests",
+        "Android",
+        "iOS",
+        "native caller"
+      ]
+    }
+  ],
+  "lanes": [
+    {
+      "domain": "Swift/iOS",
+      "required": [
+        "xcodebuild",
+        "XCTest",
+        "simulator",
+        "SwiftUI",
+        "UIKit"
+      ]
+    },
+    {
+      "domain": "Kotlin/Android",
+      "required": [
+        "Gradle",
+        "JUnit",
+        "emulator"
+      ]
+    },
+    {
+      "domain": "KMP shared logic",
+      "required": [
+        "common tests",
+        "Android",
+        "iOS",
+        "native caller"
+      ]
+    },
+    {
+      "domain": "CMP shared UI",
+      "required": [
+        "Android",
+        "iOS",
+        "semantics",
+        "text scaling"
+      ]
+    }
+  ]
+}
