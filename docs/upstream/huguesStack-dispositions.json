@@ -869,12 +869,12 @@
       "size": 5879,
       "sha256": "644f2551403c1bca01a2855b34611b6e7be0ce0dc5b204514c376c0f6a6e6ac4",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "WP3 supplies the mobile project-local verification generator, adapted from the verified pstack 0.15.5 snapshot with feature maps deferred. Its separate source receipts preserve that historical input; this ledger records the responsibility at the 0.15.9 pin without claiming its adapted body is a verbatim 0.15.9 copy.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/create-verification-skill/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",

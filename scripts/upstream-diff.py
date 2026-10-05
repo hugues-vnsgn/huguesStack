@@ -292,6 +292,24 @@ def check_destinations(ledger, source, root):
                 and receipt['blob_sha'] == row['blob_sha'] and receipt['sha256'] == row['sha256']
                 and row['disposition'] == {'verbatim': 'port verbatim', 'adapted': 'port with adaptation'}[receipt['disposition']],
                 'WP2 receipt does not match reconciled ledger')
+    generator = files.get('pstack/skills/create-verification-skill/SKILL.md')
+    generator_destination = root / 'plugin/skills/create-verification-skill/SKILL.md'
+    if (generator and generator['implementation_state'] == 'present') or generator_destination.exists():
+        require(generator and generator['implementation_state'] == 'present',
+                'WP3 receipt requires a present ledger row for the shipping generator')
+        wp3 = load(root / 'docs/wp3-source-receipts.json')
+        inputs = [receipt for receipt in wp3['inputs']
+                  if receipt.get('repository') == REPOSITORY and receipt.get('source') == generator['path']]
+        require(len(inputs) == 1, 'WP3 receipt missing or duplicated for present generator')
+        receipt = inputs[0]
+        # Keep the historical input revision: the 0.15.5 and current 0.15.9
+        # generator blobs are identical. A changed upstream blob requires review.
+        require(receipt.get('blob_sha') == generator['blob_sha']
+                and receipt.get('sha256') == generator['sha256']
+                and receipt.get('disposition') == 'adapted'
+                and generator['disposition'] == 'port with adaptation'
+                and set(generator['destinations']).issubset(receipt.get('destinations', [])),
+                'WP3 receipt does not match reconciled ledger')
 
 
 def render_delta(before, after, ledger=None):

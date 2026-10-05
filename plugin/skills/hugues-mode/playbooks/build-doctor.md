@@ -6,8 +6,8 @@ Diagnose first. Repair only within explicit authority.
 
 ## Steps
 
-1. Capture the failing argv, exit code, relevant output, environment, selected target and expected artifact. Read repository instructions and [mobile lanes](../references/mobile-lanes.md) before choosing experiments.
-2. Diagnose with repository evidence and authorized safe reproduction. Separate a code/configuration defect from a missing tool, SDK, license, signing capability, runtime or wrong target. Finish with a supported cause or a precise unresolved hypothesis.
+1. Capture the failing argv, exit code, relevant output, environment, selected target and expected artifact. Read repository instructions, [mobile lanes](../references/mobile-lanes.md) and the [evidence guide](../references/evidence-guide.md) before choosing experiments. Capture tool calls as tool calls, with their real response status.
+2. Diagnose with repository evidence and authorized safe reproduction. Separate a code/configuration defect from a missing tool, SDK, license, signing capability, runtime or wrong target. A missing required MCP tool does not authorize an otherwise prohibited CLI alternative. Finish with a supported cause or a precise unresolved hypothesis.
 3. Determine whether the owner requested diagnosis or scoped repair. Diagnosis-only ends with the evidence and blockers; retain later steps with skip reasons. A generic mode request grants no consumer edit/execution authority or permission to change global SDKs, JDKs, licenses, credentials or system settings.
 4. For an authorized repair, establish the scoped checkout and brief a fresh implementation subagent with cause, owned files, permitted changes and original failing check. Prefer process-local configuration within that authority; report system changes as required permissions. The worker owns its diff directly and does not recursively delegate.
 5. Inspect the actual diff and rerun the original command yourself, then the lane's relevant build, tests and runtime proof. Give every correction round to a fresh worker; retain every unavailable check with its missing prerequisite.

@@ -4,6 +4,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -172,6 +173,52 @@ class PinnedEvidenceTests(unittest.TestCase):
                 path.write_bytes(u.encode(dict(receipts, files=[dict(receipt, disposition=disposition)])))
                 with self.assertRaises(KeyError):
                     u.check_destinations({'items': [row]}, self.after, root)
+
+    def check_wp3_mutation(self, mutate_receipts=None, mutate_ledger=None):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder) / 'package'
+            shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns('.git', '__pycache__', 'planning'))
+            receipt_path = root / 'docs/wp3-source-receipts.json'
+            receipts = u.load(receipt_path)
+            ledger = copy.deepcopy(self.ledger)
+            if mutate_receipts:
+                mutate_receipts(receipts)
+                receipt_path.write_bytes(u.encode(receipts))
+            if mutate_ledger:
+                mutate_ledger(ledger)
+            with self.assertRaisesRegex(ValueError, 'WP3 receipt'):
+                u.check_destinations(ledger, self.after, root)
+
+    def test_wp3_generator_receipt_fingerprint_mismatch_rejected(self):
+        for key, value in (('blob_sha', '0' * 40), ('sha256', '0' * 64)):
+            with self.subTest(key=key):
+                self.check_wp3_mutation(lambda receipts: receipts['inputs'][0].update({key: value}))
+
+    def test_wp3_generator_receipt_missing_or_duplicate_rejected(self):
+        self.check_wp3_mutation(lambda receipts: receipts['inputs'].pop(0))
+        self.check_wp3_mutation(lambda receipts: receipts['inputs'].append(copy.deepcopy(receipts['inputs'][0])))
+
+    def test_wp3_generator_receipt_disposition_and_destination_rejected(self):
+        self.check_wp3_mutation(lambda receipts: receipts['inputs'][0].update(disposition='integration reference only'))
+        self.check_wp3_mutation(lambda receipts: receipts['inputs'][0].update(destinations=[]))
+
+    def test_changed_present_generator_requires_receipt_update(self):
+        def change_generator(ledger):
+            row = next(r for r in ledger['items'] if r['path'] == 'pstack/skills/create-verification-skill/SKILL.md')
+            row.update(blob_sha='1' * 40, sha256='1' * 64)
+        self.check_wp3_mutation(mutate_ledger=change_generator)
+
+    def test_shipping_generator_cannot_downgrade_ledger_state(self):
+        for state in ('planned', 'deferred'):
+            for stale_blob in (False, True):
+                with self.subTest(state=state, stale_blob=stale_blob):
+                    def downgrade_generator(ledger):
+                        row = next(r for r in ledger['items']
+                                   if r['path'] == 'pstack/skills/create-verification-skill/SKILL.md')
+                        row.update(implementation_state=state, destinations=[])
+                        if stale_blob:
+                            row.update(blob_sha='1' * 40, sha256='1' * 64)
+                    self.check_wp3_mutation(mutate_ledger=downgrade_generator)
 
     def test_pin_digest_anchors_snapshot_bytes(self):
         with tempfile.TemporaryDirectory() as folder:
