@@ -75,6 +75,14 @@ class WP3PackageRegressions(unittest.TestCase):
         path.write_text(path.read_text().split('---', 2)[2].lstrip())
         self.rejected('create-verification-skill/SKILL.md: missing frontmatter')
 
+    def test_missing_pr_review_policy_breaks_workflow_links(self):
+        path = self.repo / 'plugin/skills/hugues-mode/references/pr-review-policy.md'
+        path.unlink()
+        self.rejected('broken local link')
+        result = self.check()
+        self.assertIn('playbooks/opening-a-pr.md:', result.stderr)
+        self.assertIn('plugin/skills/interrogate/SKILL.md:', result.stderr)
+
     def test_generator_wrong_registration_name_rejected(self):
         path = self.repo / GENERATOR
         path.write_text(path.read_text().replace('name: create-verification-skill',

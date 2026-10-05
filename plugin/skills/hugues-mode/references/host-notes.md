@@ -20,4 +20,4 @@ Set a bounded scope and writable paths. Every handoff, including a registered Cl
 
 If native subagents are unavailable or delegation is prohibited by current instructions, finish read-only investigation or route preview and report implementation delegation as blocked. Never claim a delegated implementation or independent review that did not occur. Keep scoped worker outputs as evidence for the coordinator's own checks.
 
-Missing model-role configuration means `inherit-parent`. No setup command is required in WP2. Same-host reviewers provide process independence only. The user arranges any cross-host review; never contact another host or external agent automatically.
+Missing model-role configuration means `inherit-parent`. For new huguesStack PR reviews, apply the owner's explicit Astra High choice through the [PR review policy](pr-review-policy.md); implementation defaults stay unchanged. No setup command is required in WP2. Same-host reviewers provide process independence only. The user arranges any cross-host review; never contact another host or external agent automatically.

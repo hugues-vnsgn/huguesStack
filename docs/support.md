@@ -44,7 +44,7 @@ the historical WP1 package.
 | Historical WP2 Codex affected-intent preview after WP2-R7 | observed-pass | Fresh Codex 0.160.0 manual project-skill session, exit 0: explanation selected investigation, verify-only selected mobile-proof; both domains matched and all nine numbered steps matched byte-for-byte. Two successful read-only commands read four skill/reference files; all 48 current plugin fingerprints matched. Displayed JSON checklist fallback only; no delegates, writes or consumer commands. A full eleven-case repeat timed out after 300 seconds before final JSON and was incomplete |
 | WP2 exact-head full Codex preview at `51ca48e` | observed-pass | 5 October 2026, Codex 0.160.0 fresh manual project-skill session, exit 0: all eleven routes/domains and all 61 numbered steps matched byte-for-byte, thirteen successful read-only commands, all 48 plugin fingerprints matched. The merged PR #3 tree is identical. Displayed JSON checklist fallback; no delegates, writes or consumer commands |
 | WP2 native todo integration | blocked | The Codex CLI preview exposed no native todo/plan tool. Its displayed JSON checklist fallback passed; native todo integration was unrun |
-| WP2 Claude Code routing | deferred | Unrun. The owner now authorizes Claude Code review; a static code review does not establish routing behavior |
+| WP2 Claude Code routing | deferred | Routing remains unrun. Historical static reviews do not establish routing behavior |
 | WP2 fresh delegate and mode persistence | authored | Contracts supplied; native delegation and multi-turn persistence were unrun |
 | WP1 Claude Code cold load and probe invocation | observed-pass | Claude Code 2.1.286, fresh `--plugin-dir` session, exact read-only probe reply, exit 0; historical WP1 body |
 | WP1 Codex native marketplace discovery | observed-pass | [PR #1 reviewer](https://github.com/hugues-vnsgn/huguesStack/pull/1), 4 October 2026, Codex 0.160.0: local per-invocation override listed `hugues-stack@hugues-stack` as not installed; config unchanged; see [host loading](host-loading.md#codex) |
@@ -68,8 +68,13 @@ observed-fail, blocked and deferred. The review row uses observed-performed to
 record review completion; its verdict is stated separately. Record run outcomes
 as pass, fail, flaky, skipped or incomplete. The development package is not the 0.1.0 release candidate.
 
-The owner authorizes the implementation → Claude Code review → adjudicated
-fixes → tests → re-review workflow through first-release readiness. PRs #3, #4
+The owner authorizes implementation → independent GPT-6 Astra High review →
+adjudicated fixes → full tests → exact-head re-review through first-release
+readiness. The [PR review policy](../plugin/skills/hugues-mode/references/pr-review-policy.md)
+records the current supported settings and evidence requirements. The owner's
+5 October preference replaces Claude for new PR reviews; historical Claude
+receipts above remain evidence for their stated revisions, and Claude host
+compatibility checks remain separate. PRs #3, #4
 and #5 merged with explicit authorization. PR #2 remains draft and unmerged.
 The continuation authorizes bounded verification and separate new draft PRs.
 Consumer publication, further PR merges and release publication remain outside
