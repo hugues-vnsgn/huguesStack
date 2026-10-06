@@ -2561,13 +2561,11 @@
       "blob_sha": "1009e73c6116c8f6c24b5870c8f0600ae144b631",
       "size": 5548,
       "sha256": "125dd0c8f588782cfb271efae8f97a0719e43e79f56b3495c095f460bcee6389",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
-      "release_target": "0.1.0",
-      "destinations": [
-        "plugin/skills/setup-huguesstack/SKILL.md"
-      ],
-      "implementation_state": "planned",
+      "disposition": "ignore with reason",
+      "reason": "Owner approval on 6 October 2026 defers this family to 0.2; preserve private owner originals and ship no files in this retained-eight package.",
+      "release_target": "0.2",
+      "destinations": [],
+      "implementation_state": "deferred",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2580,13 +2578,11 @@
       "blob_sha": "d350a150c36ca16382b4aa6d4196b39e67454ad1",
       "size": 6418,
       "sha256": "bcff5f7f9fd23f92c12b251f9cd6b947e9485e1055cfacb6fdd9cae0789d7550",
-      "disposition": "port verbatim",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
-      "release_target": "0.1.0",
-      "destinations": [
-        "plugin/skills/show-me-your-work/SKILL.md"
-      ],
-      "implementation_state": "planned",
+      "disposition": "ignore with reason",
+      "reason": "Owner approval on 6 October 2026 defers this family to 0.2; preserve private owner originals and ship no files in this retained-eight package.",
+      "release_target": "0.2",
+      "destinations": [],
+      "implementation_state": "deferred",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Include",
@@ -2599,13 +2595,11 @@
       "blob_sha": "db220376ecb8c582a6a4f6575a8f26469603a38d",
       "size": 38,
       "sha256": "6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76",
-      "disposition": "port verbatim",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
-      "release_target": "0.1.0",
-      "destinations": [
-        "plugin/skills/show-me-your-work/references/decision-log-template.tsv"
-      ],
-      "implementation_state": "planned",
+      "disposition": "ignore with reason",
+      "reason": "Owner approval on 6 October 2026 defers this family to 0.2; preserve private owner originals and ship no files in this retained-eight package.",
+      "release_target": "0.2",
+      "destinations": [],
+      "implementation_state": "deferred",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Include",
@@ -2618,13 +2612,11 @@
       "blob_sha": "052e53b7e1090579eaec1d3d59f7a1cd2f2e452a",
       "size": 1377,
       "sha256": "a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e",
-      "disposition": "port verbatim",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
-      "release_target": "0.1.0",
-      "destinations": [
-        "plugin/skills/show-me-your-work/scripts/log.sh"
-      ],
-      "implementation_state": "planned",
+      "disposition": "ignore with reason",
+      "reason": "Owner approval on 6 October 2026 defers this family to 0.2; preserve private owner originals and ship no files in this retained-eight package.",
+      "release_target": "0.2",
+      "destinations": [],
+      "implementation_state": "deferred",
       "category": "script_config_test_helper",
       "earlier_proposal": {
         "recommendation": "Include",
@@ -2637,13 +2629,11 @@
       "blob_sha": "db22b8787966abc61216052d9f3142018404cab8",
       "size": 2949,
       "sha256": "bdcee4168e22428036e93d7cdeec3f391dbc4132f927f6db2540328c22db0273",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
-      "release_target": "0.1.0",
-      "destinations": [
-        "plugin/skills/swarm/SKILL.md"
-      ],
-      "implementation_state": "planned",
+      "disposition": "ignore with reason",
+      "reason": "Owner approval on 6 October 2026 defers this family to 0.2; preserve private owner originals and ship no files in this retained-eight package.",
+      "release_target": "0.2",
+      "destinations": [],
+      "implementation_state": "deferred",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
