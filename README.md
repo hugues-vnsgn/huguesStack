@@ -13,12 +13,12 @@ The eight approved retained tools add research, design, regression proof, downst
 safety checks, bounded recipe maintenance and recurring-mistake enforcement. The
 package now ships 35 skills; read [retained integration](docs/retained-integration.md)
 for direct playbook handoffs and source receipts. WP3 adds a project-local verification generator, jev Drive guidance and a durable
-Markdown evidence outline. Version **`0.1.0-rc.2`** is a prerelease candidate
-for review, not an accepted 0.1.0 release. See the [RC notes](docs/RELEASE-0.1.0.md)
-for current evidence and gaps. The owner selected combined draft
-[PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13), based on main;
-the later local documentation candidate is unpublished. No tag or release has
-been created.
+Markdown evidence outline. Version **`0.1.0`** contains this Layer 1 package.
+See the [release notes](docs/RELEASE-0.1.0.md) for evidence and gaps.
+Combined [PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13) merged
+into main at `18c73d183f19ed9b401f4b58c6743705a6bfc3da`.
+Consult [GitHub Releases](https://github.com/hugues-vnsgn/huguesStack/releases)
+for publication and final-check receipts.
 
 New PR reviews use independent GPT-6 Astra reviewers with High effort. Read the
 [PR review policy](plugin/skills/hugues-mode/references/pr-review-policy.md) before
@@ -33,8 +33,9 @@ unverified. Historical RC1 read-only previews matched 16 cases across all fourte
 playbooks and `interrogate` in both hosts, with displayed checklists, on
 `21a82942019292f7212ff1185e9ef187ac96e86d` plugin bytes. RC2 changes those
 bodies and adds eight tools. Later repaired planning previews passed six unique
-cases and 36 copied steps per host; all 79 tested plugin fingerprints now match
-committed `68cb710`. This is byte binding, with no clean-head invocation claim.
+cases and 36 copied steps per host; all 79 tested RC2 plugin fingerprints match
+committed `68cb710`. The 0.1.0 manifest changes version metadata only within the
+plugin; these historical probes establish no fresh 0.1.0 host load.
 See [RC2 host validation](docs/rc2-host-validation.md) and the bounded
 [Swift/Kotlin feature proof](docs/rc2-native-feature-proof.md). The
 [RC validation receipt](docs/rc-validation.md) records the domain limits and
@@ -56,7 +57,7 @@ Run the static checks with Python 3 and a POSIX shell:
 python3 -m unittest discover -s tests -v
 ```
 
-The [evidence index](docs/evidence-index.md) separates merged packages, open drafts,
+The [evidence index](docs/evidence-index.md) separates merged packages, the deferred draft,
 historical passed checks and current blocked/unrun proof. See
 [WP3 validation](docs/wp3-validation.md) for the proof-lane scope and
 [WP2 validation](docs/wp2-validation.md) for acceptance cases and check boundaries.

@@ -1,10 +1,10 @@
-# 0.1.0 release candidate
+# 0.1.0 release notes
 
-**Candidate: `0.1.0-rc.2`, 6 October 2026.** This is prerelease metadata and
-review documentation for owner-selected combined draft
-[PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13), based on merged main
-`94560c43bd4a5a062177870188f60a7ebafb5028`. It does not create or approve a merge,
-0.1.0 tag, GitHub release or first-release readiness. Target remains
+**Version: `0.1.0`, 6 October 2026.** This package is based on merged main
+`18c73d183f19ed9b401f4b58c6743705a6bfc3da`, which
+includes combined [PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13).
+Consult [GitHub Releases](https://github.com/hugues-vnsgn/huguesStack/releases)
+for publication, final-check and independent-review receipts. Target remains
 **9 October 2026, end of day GMT+7**.
 
 ## What is included
@@ -19,7 +19,8 @@ are included. Consumer app source stays outside the plugin. MIT attribution and
 pstack's license notice are preserved; upstream pin remains pstack 0.15.9 at
 `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`.
 
-PRs #1, #3, #4, #5, #6 and #7 are merged. PR #2 remains an open draft at
+PRs #1, #3, #4, #5, #6, #7 and combined #13 are merged. The only open PR
+verified on 6 October is deferred draft #2 at
 `4f032119f887407885a5e90851633d1887cc57cc`: consumer feature maps and CLI-first
 verification remain post-first-release work. Layer 2 managed workers and the
 other explicit deferred responsibilities remain outside this candidate.
@@ -43,7 +44,8 @@ from authored guidance and gaps.
 | Kotlin preparation | 21 artifact rows/25 components/15 core edges and offline APK build; 159 local mocked guard/resolver fixtures, distinct from framework and native assertion counts |
 | RC2 routing repair | `68cb710`: 194 framework tests/seven checks PASS, independent same-host Astra High CLEAN; all 79 repaired-probe plugin hashes bind to committed bytes. Six unique planning cases/36 steps per host; no clean-head invocation claim |
 | RC2 S1 Swift feature | Actual seven-case RED/pause/fresh pickup, separate guarded Shift-Return change. GREEN/recipe/maintenance each 12 methods/14 invocations, zero fail/skip, four inspected native bar images, Xcode 27/iOS 26.4.1. Synthetic delegate/selector dispatch; cleanup/continuity limits prevent full clean-cycle acceptance |
-| RC2 K1 Kotlin feature | Actual 15-case RED with three intended failures; pause/fresh pickup and separate normalization fix, 15/15 unit GREEN. Offline UI-test APK built after a retained compile failure and corrected retry. Six new native selectors/four checkpoints and recipe/maintenance all blocked/unrun |
+| RC2 K1 Kotlin feature | Actual 15-case RED with three intended failures; pause/fresh pickup and separate normalization fix, historical 15/15 unit GREEN and corrected APK assembly. Original readiness/STOP failures retained. Later GREEN/recipe/maintenance each six native cases PASS, zero fail/skip/unrun and four reopened/decoded/coordinator-viewed images on Android 16 / SDK 36 / full SDK 36.1. Owned cleanup/evidence survival verified; feature host/fakes only, with image limits in the native receipt |
+| Merged combined PR #13 | Historical 202 framework tests/seven checks PASS and independent Astra High final-head review on the merged package; these do not validate the final 0.1.0 metadata/docs change |
 
 Historical native slices exercise existing tests. The later
 [RC2 feature receipt](rc2-native-feature-proof.md) records the separate S1/K1
@@ -60,10 +62,11 @@ The owner approved eight retained leaves for 0.1.0 on 6 October 2026:
 static-tested, with direct playbook handoffs in RC2. The same approval defers
 `swarm`, `show-me-your-work` and `setup-huguesstack` to 0.2. Feature maps,
 CLI-first verification and Layer 2 retain their existing deferred scope.
-Bounded native Swift execution and Kotlin logic/build proof are observed; full
+Bounded native Swift execution and Kotlin logic/build/native cycle proof are observed; full
 adherence of the eight workflows remains unproven.
 
-Kotlin device proof and four-domain feature-task completeness remain incomplete.
+Bounded K1 device/recipe/maintenance proof is observed; four-domain feature-task
+completeness remains incomplete.
 Actual pause/checkpoint-only pickup and resumed GREEN are observed; full mode
 execution, native todo integration and compaction/general persistence remain
 unproven. S1 recipe assertions passed, with original data continuity and
@@ -73,7 +76,7 @@ retain their historical scope; same-host independent review supplies process
 independence only. The owner's personal-workflow checkpoint may retain labelled
 gaps, but correctness of reporting remains required.
 
-## Candidate validation record
+## Validation and publication
 
 The [RC validation receipt](rc-validation.md) records historical RC1 host observations,
 plugin fingerprint binding and historical RC1 initial-candidate static checks/review. Historical
@@ -84,11 +87,13 @@ than the recorded base SHA alone. RC2 has 79 plugin files and changed mode and
 playbooks. The [RC2 host receipt](rc2-host-validation.md) records fresh bounded
 loading, planning and synthetic observations plus repaired-probe byte binding
 to `68cb710`. That routing head passed 194 framework tests/seven checks and
-independent Astra High review. The later documentation candidate remains local
-and unpublished; its exact-head checks, independent Astra High review and any
-fresh host probes are UNRUN at this writing. Publication is blocked pending
-direct owner authorization. [Delivery alternatives](retained-integration.md#delivery-path)
-remain separate. No future head or final pass is assumed. Use the
+independent Astra High review. Combined PR #13 is now merged. The final 0.1.0
+metadata/docs change requires its own checks and independent Astra High review
+of the exact final candidate. The owner authorized completion, push, merge and
+release on 6 October.
+[Delivery status](retained-integration.md#delivery-path) records the merged path
+and deferred draft. GitHub Releases is the place to verify the published tag,
+revision and release-asset receipts. Use the
 [host-loading methods](host-loading.md) and run:
 
 ```sh
@@ -98,6 +103,12 @@ python3 scripts/upstream-diff.py check
 claude plugin validate --strict ./plugin
 claude plugin validate --strict ./.claude-plugin/marketplace.json
 ```
+
+The plugin manifest version changes to 0.1.0 while skill, playbook and worker
+bodies remain unchanged. Historical `68cb710` host bindings remain valid for
+those bodies; the changed manifest has no fresh host-load observation. Native
+consumer builds and unit results reused in the K1 continuation remain historical
+exact-artifact evidence, with no new build or unit-test execution claim.
 
 Raw receipts, test reports, screenshots, machine paths and device identifiers
 remain private. Historical `wp*-validation` and verification-continuation files

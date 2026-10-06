@@ -151,6 +151,7 @@ def host_binding_errors(root):
                       'RC2 bounded retained workflow observations',
                       'Historical RC2 static recipe/cold pickup',
                       'RC2 native Swift S1 feature', 'RC2 native Kotlin K1 feature logic',
+                      'RC2 K1 native UI/recipe/maintenance',
                       'RC2 native project recipe discovery'}
     actual_observed = {row[0] for row in rows if len(row) == 3 and row[1] == 'observed-pass'}
     optional_observed = {'RC2 repaired lane previews'}
@@ -241,10 +242,18 @@ def native_binding_errors(root, by_cell):
             '15-case RED with three intended failures', 'actual pause/fresh pickup',
             'separate ViewModel normalization fix, 15/15 GREEN',
             'one retained compile failure and one corrected retry', '(rc2-native-feature-proof.md)')),
-        'RC2 K1 native UI/recipe/maintenance': ('blocked', 'K1 live phases unrun', (
+        'Historical RC2 K1 native readiness': ('blocked', 'K1 historical readiness blocked', (
+            'Original readiness snapshot',
             'Six selectors/four checkpoints have source coverage',
             'all new native, recipe and maintenance runs unrun', 'blocked readiness',
             'no task-owned target/package started or unrelated device targeted')),
+        'RC2 K1 native UI/recipe/maintenance': ('observed-pass', 'K1 bounded live proof', (
+            'GREEN, recipe and maintenance each: six exact cases PASS, zero fail/skip/unrun',
+            'four reopened, decoded, coordinator-viewed native images',
+            'Android 16 / SDK 36 / full SDK 36.1', 'same retained APK',
+            'bounded feature host/fakes only', 'Owned cleanup and evidence survival verified',
+            'Original STOP/failures retained', 'no Room/full-app/hardware Enter/analytics proof',
+            '(rc2-native-feature-proof.md#k1-private-continuation)')),
         'RC2 native project recipe discovery': ('observed-pass', 'native recipe fallback only', (
             'Both hosts actually read full S1/K1 recipe Markdown',
             'Claude catalog omitted these recipes',
@@ -292,15 +301,54 @@ def native_binding_errors(root, by_cell):
             'no full clean-cycle PASS')),
         'K1 offline demo Debug UI-test APK': ('K1 built artifact is not live proof', (
             'Initial missing compile API failure retained', 'one retry built the APK',
+            'Historical assembly snapshot',
             'BUILT, with no installation or driven result')),
-        'K1 native UI, recipe and maintenance': ('K1 live receipt unrun', (
+        'Historical K1 native readiness': ('K1 historical receipt blocked', (
+            'Original readiness snapshot',
             'Six selectors/four checkpoint images covered in source',
             'all new live phases BLOCKED/UNRUN', 'failed empty-inventory readiness',
             'No task device/package created or unrelated device targeted')),
+        'Current K1 native UI, recipe and maintenance': ('K1 bounded live receipt', (
+            'GREEN, recipe and maintenance each: six exact cases PASS, zero fail/skip/unrun',
+            'four 1080 × 2400 native PNGs per phase reopened, decoded and viewed by the coordinator',
+            'Android 16 / SDK 36 / full SDK 36.1', 'retained APK installed on the exact owned target',
+            'Feature host/fake repositories only', 'owned cleanup and evidence survival verified',
+            '(#k1-private-continuation)')),
     }
     for target, (error, required) in native_contracts.items():
         if not all(item in by_target.get(target, '') for item in required):
             errors.append(error)
+
+    continuation = ' '.join(section(receipt, 'K1 private continuation').split())
+    if not all(item in continuation for item in (
+            'attempt 1 retained its STOP', 'unsupported SDK-minor validation',
+            'defunct-process cleanup failure', 'successful guarded cleanup',
+            'attempt 2 reached PREPARED', 'Android 16 / SDK 36 / full SDK 36.1',
+            'Positive exact-package absence', 'APK installation Success',
+            'GREEN, recipe and maintenance each ran six exact cases once',
+            'six PASS, zero fail/skip/unrun, with no protocol errors',
+            'all twelve were reopened and decoded after cleanup',
+            'individually viewed by the coordinator', 'not eighteen unique tests',
+            'No new assertion or build retry', 'no fresh build or unit-test execution claim',
+            'No Room persistence/deduplication, full-app journey, hardware Enter',
+            'analytics behavior or whole-OS network proof',
+            'whitespace come from native assertions, not pixels alone',
+            'Checkpoint 04 captures the cleared editor after whitespace assertions',
+            'native Autofill bubble', 'Exact-package absence and exact owned-process absence',
+            'Known preexisting Codex config drift remains unattributed and untouched',
+            'post-cleanup inventory is an observation, not an accepted future baseline',
+            'Attempt 3 was unclaimed and is unavailable after PREPARED',
+            'PASS_BOUNDED_NATIVE_CYCLE_AND_REOPENED_EVIDENCE', 'checker exit 0')):
+        errors.append('K1 continuation scope and closure')
+    # Bind the current result to its own opaque final receipt, never the APK
+    # hash or a historical native/host packet standing in for runtime proof.
+    final_binding = re.search(r'checker exit 0\. SHA-256: `([0-9a-f]{64})`', continuation)
+    index = (root / 'docs/evidence-index.md').read_text()
+    current_index = next((line for line in index.splitlines()
+                          if line.startswith('| RC2 S1/K1 feature continuation |')), '')
+    if (not final_binding or final_binding[1] not in current_index or
+            final_binding[1] in section(receipt, 'Public artifact identities')):
+        errors.append('K1 final receipt binding')
 
     preservation = ' '.join(section(receipt, 'Recipe discovery and preservation').split())
     if not all(item in preservation for item in (
@@ -420,10 +468,10 @@ class RetainedIntegration(unittest.TestCase):
         # A deferred directory cannot masquerade as one of the retained tools.
         self.assertTrue(RETAINED.isdisjoint(DEFERRED))
 
-    def test_RC_versions_match_without_native_execution_claim(self):
+    def test_release_versions_match_without_native_execution_claim(self):
         plugin = json.loads((self.root / 'plugin/.claude-plugin/plugin.json').read_text())
         market = json.loads((self.root / '.claude-plugin/marketplace.json').read_text())
-        self.assertEqual(plugin['version'], '0.1.0-rc.2')
+        self.assertEqual(plugin['version'], '0.1.0')
         self.assertEqual(market['plugins'][0]['version'], plugin['version'])
         self.assertEqual(market['plugins'][0]['source'], './plugin')
         self.assertEqual(plugin['skills'], ['./skills'])
@@ -540,14 +588,41 @@ class RetainedIntegration(unittest.TestCase):
 
     def test_K1_source_coverage_build_and_historical_UI_cannot_promote_live_phases(self):
         for document, old, new, error in (
-                ('support.md', '| RC2 K1 native UI/recipe/maintenance | blocked |',
-                 '| RC2 K1 native UI/recipe/maintenance | observed-pass |', 'K1 live phases unrun'),
+                ('support.md', '| Historical RC2 K1 native readiness | blocked |',
+                 '| Historical RC2 K1 native readiness | observed-pass |', 'K1 historical readiness blocked'),
                 ('support.md', 'all new native, recipe and maintenance runs unrun',
-                 'all new native, recipe and maintenance runs passed', 'K1 live phases unrun'),
+                 'all new native, recipe and maintenance runs passed', 'K1 historical readiness blocked'),
                 ('rc2-native-feature-proof.md', 'all new live phases BLOCKED/UNRUN',
-                 'all new live phases PASS; unrelated compaction remains unproven', 'K1 live receipt unrun'),
+                 'all new live phases PASS; unrelated compaction remains unproven', 'K1 historical receipt blocked'),
                 ('rc2-native-feature-proof.md', 'BUILT, with no installation or driven result',
                  'BUILT, installed and driven successfully', 'K1 built artifact is not live proof'),
+                ('support.md', 'six exact cases PASS, zero fail/skip/unrun',
+                 'source selectors and historical five-UI proof only', 'K1 bounded live proof'),
+                ('support.md', '(rc2-native-feature-proof.md#k1-private-continuation)',
+                 '(rc2-host-validation.md)', 'K1 bounded live proof'),
+                ('rc2-native-feature-proof.md',
+                 'six exact cases PASS, zero fail/skip/unrun', 'APK assembly PASS only',
+                 'K1 bounded live receipt'),
+                ('rc2-native-feature-proof.md',
+                 'all twelve were reopened and decoded after\ncleanup',
+                 'all twelve were covered only in source', 'K1 continuation scope and closure'),
+                ('rc2-native-feature-proof.md',
+                 'No new\nassertion or build retry', 'Fresh assertion and build retries passed',
+                 'K1 continuation scope and closure'),
+                ('rc2-native-feature-proof.md',
+                 'No Room persistence/deduplication, full-app journey, hardware Enter',
+                 'Room persistence and full-app hardware Enter proved',
+                 'K1 continuation scope and closure'),
+                ('rc2-native-feature-proof.md',
+                 'Checkpoint 04 captures the cleared editor\nafter whitespace assertions',
+                 'Checkpoint 04 pixels prove exact whitespace', 'K1 continuation scope and closure'),
+                ('rc2-native-feature-proof.md',
+                 'post-cleanup inventory is an observation, not an accepted future\nbaseline',
+                 'post-cleanup inventory is the accepted future baseline',
+                 'K1 continuation scope and closure'),
+                ('rc2-native-feature-proof.md',
+                 'checker exit 0. SHA-256:', 'historical build SHA-256:',
+                 'K1 final receipt binding'),
                 ('rc2-native-feature-proof.md', 'they supply no K1 new UI proof',
                  'they establish K1 new UI proof', 'historical native slices cannot prove current coverage')):
             with self.subTest(document=document, evidence=old):

@@ -1,12 +1,13 @@
 # Retained tools and RC2 integration
 
-`0.1.0-rc.2` combines the eight owner-approved retained tools with the existing
-mobile mode. This is a separate unmerged proposal based on main
-`94560c43bd4a5a062177870188f60a7ebafb5028`. The owner selected combined
-[PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13); the later local
-candidate is unpublished. PR #8's RC1 and draft PR #2's deferred feature
-maps/CLI-first changes remain separate. No merge, tag or release
-is established. Target remains 9 October 2026, end of day GMT+7.
+RC2 combined the eight owner-approved retained tools with the existing mobile
+mode. Combined [PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13)
+merged into main at `18c73d183f19ed9b401f4b58c6743705a6bfc3da`.
+The final 0.1.0 metadata/docs change has separate checks and review obligations;
+publication receipts belong with
+[GitHub Releases](https://github.com/hugues-vnsgn/huguesStack/releases).
+Draft PR #2's feature maps/CLI-first changes remain deferred. Target remains
+9 October 2026, end of day GMT+7.
 
 ## Reviewed package inputs
 
@@ -70,8 +71,8 @@ Mutations remove or move those inputs; real package checking rejects missing
 shipped targets. This tests Markdown/package contracts, not LLM adherence or
 native execution. Run the existing unittest, package, upstream, strict Claude
 plugin/marketplace, shell syntax and whitespace checks. Record their exact
-integration head/tree, raw-log hashes and independent final-head review in the
-separate RC2 draft record before publication; no future SHA or verdict is assumed.
+candidate head/tree, raw-log hashes and independent final-head review before
+publication; no future SHA or verdict is assumed.
 
 The [RC1 receipt](rc-validation.md) retains 54 fingerprints bound only to the
 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d`. Its two-host
@@ -81,8 +82,9 @@ Claude loading and manual Codex previews at `e2ff899`. The [RC2 receipt](rc2-hos
 records sixteen route cases/87 exact steps per host, the unsupported-language
 gap, bounded synthetic workflows and later six-case lane-evidence observations.
 Later [S1/K1 native proof](rc2-native-feature-proof.md) establishes bounded
-Swift RED/GREEN/native assertion phases and Kotlin RED/GREEN/unit/build evidence.
-Full eight-workflow adherence, Kotlin device proof, native todo behavior,
+Swift RED/GREEN/native assertion phases and Kotlin RED/GREEN/unit/build evidence,
+plus a later bounded K1 device/recipe/maintenance cycle with owned cleanup and
+reopened evidence. Full eight-workflow adherence, native todo behavior,
 four-domain feature completeness, compaction/general persistence and the clean
 generated-recipe cycle remain incomplete. Historical failures, native results and target limits
 remain in [support](support.md) and the [evidence index](evidence-index.md).
@@ -95,20 +97,22 @@ bounded planning previews. Full workflow adherence remains unproven. Final
 committed-byte binding now matches all 79 files at `68cb710`, tree
 `41dcde6fbe6330aec21ec6570fe70b107ba69da9`. That clean routing candidate passed
 194 framework tests/seven checks and independent same-host Astra High review.
-These receipts cover that head; the later documentation candidate needs its own
-exact-head checks/review. Fresh host probes for it are UNRUN at this writing.
+These receipts cover that head. Merged combined PR #13 subsequently passed
+202 framework tests/seven checks and independent Astra High final-head review.
+The final 0.1.0 metadata/docs candidate needs its own checks/review. The version
+change preserves skill, playbook and worker bodies; no fresh host load with the
+0.1.0 manifest has been observed.
 
 ## Delivery path
 
-Read-only remote state on 6 October: combined PR #13 is OPEN/DRAFT on main at
-`e2ff899f226184e6109029e5bdb3ac19838b80e4`. The owner chose this combined path.
-The later local routing/documentation candidate has not updated that remote.
-Publication remains blocked pending direct owner authorization; no push, merge,
-close, tag or release is established here. Every future landed PR requires an
-independent GPT-6 Astra High review of its final exact head.
+Verified remote state on 6 October: the selected combined PR #13 is merged into
+main at `18c73d183f19ed9b401f4b58c6743705a6bfc3da`. The earlier alternative
+draft stack #8 → #9 → #10 → #11 → #12 is no longer open. Its individual
+reviewed inputs remain historical receipts above. The only open PR is deferred
+draft [#2](https://github.com/hugues-vnsgn/huguesStack/pull/2) at
+`4f032119f887407885a5e90851633d1887cc57cc`; it remains unmerged and outside 0.1.0.
 
-The alternative stack remains PR #8 → #9 → #10 → #11 → #12: #8 is based on
-main, with each following draft based on its predecessor. PR #13 is the combined
-main-based proposal, rather than another step in that stack. Preserve #8–#12
-and deferred draft #2 while selecting one delivery path; accepting both paths
-requires a separate integration decision.
+The owner authorized completion, push, merge and release on 6 October. The final
+metadata/docs change must pass applicable package checks and fresh independent
+GPT-6 Astra High review before publication. Consult GitHub Releases for the
+published tag, exact revision and release-asset verification.
