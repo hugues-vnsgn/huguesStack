@@ -260,3 +260,11 @@ were withheld. The [repaired receipt](rc2-host-validation.md#repaired-schema-pro
 binds all 79 plugin fingerprints and actual fixture reads. These planning-only
 results used a different protocol from the initial probes. Full workflow
 adherence, native mobile execution and general host reliability remain unproven.
+
+## Final 0.1.0 metadata boundary
+
+The final candidate changes the plugin manifest version to `0.1.0` and preserves
+the skill, playbook and worker bodies. The RC2 receipts above retain their exact
+historical bindings; no fresh host load with the 0.1.0 manifest is claimed.
+Native Codex installation and namespaced invocation remain unproven;
+marketplace discovery and manual/direct-read fallback retain their observed scopes.

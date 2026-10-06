@@ -1,11 +1,12 @@
 # Support evidence
 
-Status snapshot: **6 October 2026**, prerelease candidate **`0.1.0-rc.2`**.
-The owner selected combined draft [PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13)
-based on main. The later local candidate remains unpublished; no merge, tag or
-release is established. The [evidence index](evidence-index.md) records historical revisions,
+Status snapshot: **6 October 2026**, package version **`0.1.0`**.
+Combined [PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13) merged
+into main at `18c73d183f19ed9b401f4b58c6743705a6bfc3da`.
+Consult [GitHub Releases](https://github.com/hugues-vnsgn/huguesStack/releases)
+for publication and final-check receipts. The [evidence index](evidence-index.md) records historical revisions,
 receipts, failed attempts and limits. Read [WORKFLOW](WORKFLOW.md) to start a task
-and the [RC notes](RELEASE-0.1.0.md) for the review scope.
+and the [release notes](RELEASE-0.1.0.md) for the review scope.
 
 Use per-cell states **authored**, **static-tested**, **observed-pass**,
 **observed-fail**, **blocked** and **deferred**. Separately record run outcomes
@@ -47,7 +48,8 @@ assertion. A successful same-artifact retry retains its flaky outcome.
 | Native Kotlin demo build and selected unit tests | observed-pass | Now in Android at `a49ed253d75e61a2b6ab80a8da677b57437b08eb`: offline demo build and nine SearchViewModel tests PASS, zero failures/errors/skips. Unit results historical and not rerun in Espresso 3.7 round |
 | Native Kotlin selected UI tests | observed-pass | Five existing non-image search methods PASS in one Espresso 3.7 instrumentation attempt; zero fail/skip/unrun, Android 16/SDK 36 with empty minor field. Strict core/idling 3.7 dependency change limited to isolated AndroidTest configuration. Original Espresso 3.5 five initialization failures retained; changed APK/conditions are not a flaky retry |
 | RC2 native Kotlin K1 feature logic | observed-pass | 15-case RED with three intended failures; actual pause/fresh pickup; separate ViewModel normalization fix, 15/15 GREEN. Offline UI-test APK built after one retained compile failure and one corrected retry. [Proof](rc2-native-feature-proof.md) |
-| RC2 K1 native UI/recipe/maintenance | blocked | Six selectors/four checkpoints have source coverage; all new native, recipe and maintenance runs unrun. Connected phone/existing emulator blocked readiness; no task-owned target/package started or unrelated device targeted |
+| Historical RC2 K1 native readiness | blocked | Original readiness snapshot: Six selectors/four checkpoints have source coverage; all new native, recipe and maintenance runs unrun. Connected phone/existing emulator blocked readiness; no task-owned target/package started or unrelated device targeted. Later results have their own receipt below |
+| RC2 K1 native UI/recipe/maintenance | observed-pass | GREEN, recipe and maintenance each: six exact cases PASS, zero fail/skip/unrun and four reopened, decoded, coordinator-viewed native images. Android 16 / SDK 36 / full SDK 36.1; same retained APK, bounded feature host/fakes only. Owned cleanup and evidence survival verified. Original STOP/failures retained; no Room/full-app/hardware Enter/analytics proof. [Receipt and image limits](rc2-native-feature-proof.md#k1-private-continuation) |
 | RC2 native project recipe discovery | observed-pass | Both hosts actually read full S1/K1 recipe Markdown. Claude catalog omitted these recipes; Codex native discovery is self-reported without raw catalog proof. Direct read establishes fallback only. [Limits](rc2-native-feature-proof.md#recipe-discovery-and-preservation) |
 | Layer 2, feature maps and CLI-first addition | deferred | Managed-worker runtime outside Layer 1; draft PR #2 remains post-first-release work |
 
@@ -56,12 +58,17 @@ PRs [#1](https://github.com/hugues-vnsgn/huguesStack/pull/1),
 [#4](https://github.com/hugues-vnsgn/huguesStack/pull/4),
 [#5](https://github.com/hugues-vnsgn/huguesStack/pull/5),
 [#6](https://github.com/hugues-vnsgn/huguesStack/pull/6) and
-[#7](https://github.com/hugues-vnsgn/huguesStack/pull/7) are merged.
+[#7](https://github.com/hugues-vnsgn/huguesStack/pull/7) and
+combined [#13](https://github.com/hugues-vnsgn/huguesStack/pull/13) are merged.
 [#2](https://github.com/hugues-vnsgn/huguesStack/pull/2) remains an open deferred
 draft. Historical Opus/Fable reviews keep their original scope; new PR reviews
 use independent **GPT-6 Astra High**, with actual final-head evidence. Read the
 [PR review policy](../plugin/skills/hugues-mode/references/pr-review-policy.md).
 Same-host review provides process independence, not cross-host proof.
+
+Historical RC2 host bindings retain their exact bytes. The 0.1.0 change alters
+the plugin manifest version while preserving skill, playbook and worker bodies;
+no fresh host load of that manifest has been observed.
 
 The owner approved eight retained leaves for 0.1.0 on 6 October 2026:
 `how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`,
@@ -72,13 +79,14 @@ CLI-first verification and Layer 2 retain their existing deferred scope.
 Bounded synthetic observations cover parts of `how`, `tdd`, `blast-radius`,
 `architect` and `arena`; they do not establish full adherence of any eight-tool
 workflow set. The later [native proof](rc2-native-feature-proof.md) adds bounded
-Swift execution and Kotlin unit/build evidence without establishing that set.
+Swift execution and Kotlin unit/build and bounded native cycle evidence without
+establishing that set.
 
 Swift and Kotlin RED/GREEN work and checkpoint-only fresh pickup are observed.
-Kotlin device proof, four-domain feature-task coverage, complete mode execution,
+Bounded K1 device/recipe/maintenance proof is observed. Four-domain feature-task coverage, complete mode execution,
 compaction/native persistent todos and a full clean generated cycle remain incomplete. The revised [plan](PLAN.md) permits an owner checkpoint with labelled
-gaps; those gaps never become observed support. First-release readiness is
-unestablished. Target remains **9 October 2026, end of day GMT+7**.
+gaps; those gaps never become observed support. Target remains
+**9 October 2026, end of day GMT+7**.
 
 Historical [WP1](wp1-validation.md), [WP2](wp2-validation.md),
 [WP3](wp3-validation.md) and [verification continuation](verification-continuation.md)

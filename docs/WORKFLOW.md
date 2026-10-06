@@ -2,8 +2,8 @@
 
 Read this guide in under five minutes. For current results and prerequisites,
 open [support](support.md); for their receipts, open the
-[evidence index](evidence-index.md). The package is the `0.1.0-rc.2` prerelease candidate. Read the
-[RC notes](RELEASE-0.1.0.md) for current evidence and remaining gaps.
+[evidence index](evidence-index.md). The package version is `0.1.0`. Read the
+[release notes](RELEASE-0.1.0.md) for evidence and remaining gaps.
 
 ## Give the host a goal and a check
 
@@ -27,8 +27,9 @@ and prove the native caller on Android and iOS. Report blocked targets separatel
 To inspect the proposed work first, request **route preview**. The mode reads a
 playbook and displays its steps, domain and required proof, then stops before
 delegation or consumer commands. A preview proves planning behavior only. The retained 16-case/87-step host
-previews tested historical RC1 bytes; the changed RC2 playbooks and 79 plugin
-files have no fresh loading or workflow-adherence observation.
+previews tested historical RC1 bytes. Later RC2 loading and repaired planning
+probes are recorded in the [host receipt](rc2-host-validation.md); full workflow
+adherence and a fresh host load with the 0.1.0 manifest remain unproven.
 
 ## Follow the selected playbook
 
