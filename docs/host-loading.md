@@ -62,7 +62,8 @@ normal hook and execution policy for implementation or command-running sessions;
 these probes supply no authority to disable those controls. Record argv, settings
 sources, tool availability and actual invocation response separately from the
 candidate's content. See [verification continuation](verification-continuation.md)
-for the full-cycle gap.
+for that historical full-cycle gap and the [current evidence index](evidence-index.md)
+for the later applied cycle and its remaining limits.
 
 ## Codex
 
@@ -82,7 +83,8 @@ The output listed `` Marketplace `hugues-stack` `` at
 marketplace after the manifest's `name`, rather than the config key `hs`.
 This records the reviewer's observation; the override was not rerun here.
 
-**Codex native install and `$hugues-mode` invocation** is **blocked** by WP1 scope.
+**Codex native install and `$hugues-mode` invocation** remains **unrun**.
+The historical WP1 probe was blocked by its scope.
 `codex plugin add` installs globally and was not run.
 
 Use a disposable project skill fallback only when the coordinator authorizes
@@ -170,3 +172,11 @@ runtime checks; see the [review audit](reviews/wp2-claude-review.md).
 See [WP1 validation](wp1-validation.md) for historical evidence and incomplete
 initial probe attempts, and [WP2 validation](wp2-validation.md) for current
 acceptance boundaries.
+
+## Current RC probes
+
+Fresh `0.1.0-rc.1` host probes are **UNRUN pending recorded results**.
+The observations above retain their historical revisions and methods. A new
+probe must bind the actual candidate bytes, host version and invocation; it
+cannot inherit an older pass or an unknown future commit. See the
+[RC notes](RELEASE-0.1.0.md).

@@ -2,7 +2,8 @@
 
 Read this guide in under five minutes. For current results and prerequisites,
 open [support](support.md); for their receipts, open the
-[evidence index](evidence-index.md). The package remains `0.1.0-dev.3`.
+[evidence index](evidence-index.md). The package is the `0.1.0-rc.1` prerelease candidate. Read the
+[RC notes](RELEASE-0.1.0.md) for current evidence and remaining gaps.
 
 ## Give the host a goal and a check
 

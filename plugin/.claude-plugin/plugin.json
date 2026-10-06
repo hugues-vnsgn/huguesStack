@@ -1,6 +1,6 @@
 {
   "name": "hugues-stack",
-  "version": "0.1.0-dev.3",
+  "version": "0.1.0-rc.1",
   "description": "Mobile routing, proof guidance and principles for huguesStack in Claude Code and Codex.",
   "author": {
     "name": "hugues-vnsgn"

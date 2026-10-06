@@ -10,8 +10,9 @@ WP5 upstream sync and **WP6 workflow/evidence documentation**.
 the mobile proof required. The package includes a fresh-task worker,
 `interrogate` review guidance and the 24 verbatim upstream principles.
 WP3 adds a project-local verification generator, jev Drive guidance and a durable
-Markdown evidence outline. Version `0.1.0-dev.3` is a development version;
-first-release readiness remains unproven.
+Markdown evidence outline. Version **`0.1.0-rc.1`** is a prerelease candidate
+for review, not an accepted 0.1.0 release. See the [RC notes](docs/RELEASE-0.1.0.md)
+for current evidence and gaps; no tag or release has been created.
 
 New PR reviews use independent GPT-6 Astra reviewers with High effort. Read the
 [PR review policy](plugin/skills/hugues-mode/references/pr-review-policy.md) before
@@ -22,7 +23,7 @@ Start with the short [workflow guide](docs/WORKFLOW.md) and
 [support matrix](docs/support.md). Use `/hugues-stack:hugues-mode` in Claude Code,
 or the documented Codex manual project-skill/direct-read fallback in
 [host loading](docs/host-loading.md); native Codex installation/invocation remains
-unverified. Give it a
+unverified. Fresh RC host probes are UNRUN pending their recorded results. Give it a
 goal and a way to check it. For example:
 
 ```text
