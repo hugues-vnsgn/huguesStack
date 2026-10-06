@@ -818,12 +818,12 @@
       "size": 3851,
       "sha256": "5f02db9101ccf26c20254718f0fcd5c2c7ac5d4292b0e0923d0944ac47237aff",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Adapt pstack 0.15.9 blast-radius for mobile, direct host reading and current authority; retained contracts and deviations are recorded in retained-verification-provenance.json.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/blast-radius/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -853,13 +853,13 @@
       "blob_sha": "c09f486e32935a154dd98daa13aa8187856600fe",
       "size": 2445,
       "sha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904",
-      "disposition": "port verbatim",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port with adaptation",
+      "reason": "Adapt pstack 0.15.9 correct for mobile, direct host reading and current authority; retained contracts and deviations are recorded in retained-verification-provenance.json.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/correct/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill"
     },
     {
@@ -1108,12 +1108,12 @@
       "size": 4922,
       "sha256": "515c0eaa054b3f6be1b1fb06f2c2f173c80fddb58bbcac57576f89c479bc68e8",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Adapt pstack 0.15.9 maintain-verification-skill for mobile, direct host reading and current authority; retained contracts and deviations are recorded in retained-verification-provenance.json.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/maintain-verification-skill/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2655,13 +2655,13 @@
       "blob_sha": "ca6f24c963001d9d518db2936dfe3d12f29b4e94",
       "size": 3143,
       "sha256": "eeb868e2dfebee528d730a67d7b17498fac4bb85dec2e38bc5c5176aca4d5d2f",
-      "disposition": "port verbatim",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port with adaptation",
+      "reason": "Adapt pstack 0.15.9 tdd for mobile, direct host reading and current authority; retained contracts and deviations are recorded in retained-verification-provenance.json.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/tdd/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Include",
