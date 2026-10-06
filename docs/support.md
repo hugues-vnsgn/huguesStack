@@ -14,17 +14,20 @@ assertion. A successful same-artifact retry retains its flaky outcome.
 
 | Cell | State | Evidence and limits |
 |---|---|---|
-| Package, 27 skills and local contracts | static-tested | Merged main `94560c43bd4a5a062177870188f60a7ebafb5028`: historical 120 framework tests and seven checks passed on the identical reviewed integration tree. RC checks require their own receipts |
+| Package, 27 skills and local contracts | static-tested | Initial RC `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests and seven checks PASS; independent Astra High CLEAN. Use the RC PR for final-head checks/review; this row binds the initial head. Historical merged-main receipt remains separate |
 | Upstream inventory | static-tested | pstack 0.15.9; 161 responsibilities reconciled; delta 3 added / 18 changed / 0 removed. [Sync procedure](upstream/README.md); exact upstream benchmark link remains deferred |
 | Claude historical cold load | observed-pass | WP1 fresh-session probe on its historical body |
 | Claude project recipe invocation | observed-pass | Read-only native Skill invocation passed; two earlier unknown-skill probes retained |
 | Claude verification generator invocation | observed-pass | Complete private candidate authored; this invocation wrote no consumer guide or ran a cycle |
-| Claude full mode routing | deferred | Unrun; static review and generator invocation do not establish fourteen-playbook routing |
+| Claude RC read-only routing | observed-pass | Claude Code 2.1.290 / actual `claude-opus-5-5`: session-local native plugin load, 16 cases/15 routes (fourteen playbooks plus `interrogate`), 87 exact numbered steps. Original eleven fixture domain/proof decisions matched; supplemental Android-only language inference was over-specific. No execution proof |
 | Codex marketplace discovery/manual path | observed-pass | Historical discovery without installation, manual project-skill probes and direct-read fallback; WP2 planning preview: 11 routes/61 steps on its recorded head |
 | Codex native install/invocation | blocked | Unrun; global installation outside recorded probe authority |
-| Fresh RC host probes | authored | UNRUN pending recorded results; historical host passes do not bind this candidate |
-| Native todo integration | blocked | Codex historical preview used displayed checklist fallback; native todo behavior unrun |
-| Fresh host delegation and multi-turn persistence | authored | Guidance supplied; end-to-end native runtime behavior unrun |
+| Codex RC read-only routing | observed-pass | Codex 0.160.1 manual project-skill/direct-read fallback: 16 cases/15 routes, 87 exact numbered steps; original eleven fixture domain/proof decisions matched. Android-only implementation language correctly unresolved. Actual served model unconfirmed; no native install claim |
+| Fresh RC plugin/settings preservation | observed-pass | All 54 plugin fingerprints and both user-settings hashes unchanged before/after; candidate plugin bytes match. [Receipt and binding limits](rc-validation.md) |
+| Native todo integration | blocked | Both RC preview sessions lacked native todo tools and displayed checklists; native todo behavior unrun |
+| Claude synthetic delegation/artifact review | observed-pass | Fresh registered `hugues-stack:hugues-agent` wrote one scratch function; fresh native Explore reviewer read actual source and found no behavior defects. Parented mode/principle/target reads retained; same-host process independence only. Initial ineffective Write rule/denial retained as setup failure, not a platform automatic-review rejection |
+| Synthetic artifact behavior | observed-pass | Same artifact: 22 outer-worker assertions PASS and 14 independent coordinator literal checks PASS. Separate overlapping sets, not 36 unique tests or additions to 120 framework tests. No native-session commands/tests ran. [Binding and limits](rc-validation.md) |
+| Full mode execution/multi-turn persistence | authored | End-to-end execution unrun; ephemeral/no-session-persistence previews establish no durable resume |
 | Applied generated-recipe cycle | blocked | Later approved guide body applied; 12 Android/eight iOS tests and five local journeys passed with retained failed attempts/fallback. Final iOS boot-state preservation unresolved; revised guide native invocation unrun. No full clean-cycle pass |
 | Historical KMP shared navigation/header task | observed-pass | Android/iOS logic and native callers observed on bounded artifacts; older 11-test snapshot remains distinct from later 12-test reports |
 | Historical CMP journey/header task | observed-pass | Android and two iOS runtime journeys, normal/enlarged text within recorded scope; successful attempts followed retained failures. Native Android enlarged text/forced ellipsis unrun; iOS bottom-tab clipping remains outside header scope |
@@ -57,7 +60,7 @@ reduced functional scope. The actual 27 skills/fourteen playbooks do not fill
 that gap.
 
 Four-domain feature-task coverage, native Swift/Kotlin red-green work, complete
-mode routing/delegation/persistence and a full clean generated cycle remain
+mode execution/delegated mobile implementation/persistence and a full clean generated cycle remain
 incomplete. The revised [plan](PLAN.md) permits an owner checkpoint with labelled
 gaps; those gaps never become observed support. First-release readiness is
 unestablished. Target remains **9 October 2026, end of day GMT+7**.

@@ -96,7 +96,7 @@ Label this result **manual project skill**. No global installation was performed
 Keep temporary symlinks outside the plugin repository: its static checker rejects
 repository symlinks. Record the actual scratch setup with the run evidence.
 
-A manual probe does not demonstrate the marketplace entry, plugin namespacing,
+A WP1 manual probe does not demonstrate the marketplace entry, plugin namespacing,
 mode persistence, routing, delegation or mobile execution. Those checks have
 separate cells in [support](support.md).
 
@@ -175,8 +175,58 @@ acceptance boundaries.
 
 ## Current RC probes
 
-Fresh `0.1.0-rc.1` host probes are **UNRUN pending recorded results**.
-The observations above retain their historical revisions and methods. A new
-probe must bind the actual candidate bytes, host version and invocation; it
-cannot inherit an older pass or an unknown future commit. See the
-[RC notes](RELEASE-0.1.0.md).
+Fresh `0.1.0-rc.1` read-only previews completed on 6 October 2026. Claude Code
+2.1.290 directly loaded the session-local plugin; its event stream confirms
+`claude-opus-5-5`. Codex 0.160.1 used a disposable manual project-skill symlink
+and direct reads. It inherited configured `gpt-6.1-sol` without an override;
+the actual served model is not exposed in the retained stream. No native Codex
+installation or invocation is established.
+
+Each preview matched 16 route/file decisions across all fourteen playbooks plus
+`interrogate`, and 87 numbered steps exactly. The original eleven fixture
+domain/proof decisions matched. The supplemental Android Gradle-only prompt
+established no implementation language: Codex left it unresolved, while Claude
+inferred Kotlin without repository evidence. Both hosts lacked native todo tools
+and used displayed checklists. These are planning observations, not full mode
+execution or proof of every supplemental domain choice.
+
+Initial read-only sandbox attempts failed with Claude `authentication_failed`
+and Codex runtime `Operation not permitted`. The same scoped CLI probes then
+completed under authorized escalation for existing authentication/runtime access.
+Both failures remain retained; no installation, global settings change or
+permission bypass occurred. Route probes restricted tools and disabled hooks
+per invocation. Their isolation grants no implementation authority.
+
+A separate initial synthetic Claude session kept normal hook policy and launched the
+registered `hugues-stack:hugues-agent` and a fresh native Explore reviewer.
+Parented events show mode/principle reads. Claude denied the one exact scratch
+Write despite the explicit one-path `allowedTools` setting: the authorized
+probe lacked an effective matching grant and its noninteractive session had no
+approval surface. This was a probe setup/runtime permission limit, not withheld
+owner authority or a platform automatic approval review rejection. The target
+stayed absent; this attempt executed no behavioral assertions. The reviewer's
+static assessment of an unwritten proposal accepted no artifact. Its proposal
+also consumed generators during validation, a distinct static defect.
+
+A fresh bounded check corrected only the exact scratch-file grant to
+`Edit(//absolute/path/normalize_topics.py)`, covering the requested and resolved
+aliases. Claude's [permission rules](https://code.claude.com/docs/en/permissions#read-and-edit)
+use Edit rules for built-in writes and `//` for absolute paths. The fresh
+registered worker wrote the artifact once; a fresh Explore reviewer read its
+actual source and found no behavior defects. CLI exit was 0 with no permission
+denial. Normal hooks/settings stayed unchanged; no bypass or broad Edit/Write
+grant was used. The original denied packet remains intact.
+
+The outer worker's 22 assertions and the coordinator's independent 14 literal
+checks passed on the same artifact. These overlapping sets are reported
+separately; no commands or tests ran inside the native Claude session. This
+proves bounded scratch delegation/artifact behavior, with same-host process
+independence. Full mode execution, mobile delegation, red-green, generated-recipe
+cycle and persistence remain unrun.
+
+All 54 plugin file fingerprints and both user-settings hashes matched before
+and after. The [RC validation receipt](rc-validation.md) binds the actual plugin
+bytes, raw packet and remaining gaps. Historical observations above retain
+their original revisions. Record final-head checks and independent review in
+the RC PR before publication/acceptance; this receipt binds the initial check
+head and tested plugin fingerprints.

@@ -31,7 +31,9 @@ from authored guidance and gaps.
 |---|---|
 | Merged integration | Historical 120 framework tests and seven checks PASS on the reviewed tree; independent Astra High CLEAN. These are not fresh RC results |
 | Host observations | Historical Claude cold load/project recipe/generator and Codex manual planning/discovery passes retain their original revisions |
-| Fresh RC host probes | **UNRUN pending recorded results**; must bind actual candidate bytes and host version. No future head or pass is assumed |
+| Initial RC static validation/review | `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests and seven checks PASS; independent Astra High CLEAN. Use the RC PR for final-head checks/review; no future SHA or verdict is assumed |
+| Fresh RC host previews | Claude 2.1.290 native session-local load / actual `claude-opus-5-5`; Codex 0.160.1 manual fallback, actual served model unconfirmed. Each 16 cases/15 routes/87 exact numbered steps; original eleven fixture domain/proof matches. Supplemental Android language limitation and displayed checklist fallback retained |
+| Bounded synthetic delegation | Fresh registered Claude worker wrote one scratch function; fresh Explore reviewer read actual source, no behavior defects. 22 outer-worker assertions and 14 independent coordinator checks PASS separately on the same artifact. Initial ineffective permission rule/denial retained as setup failure; no platform automatic-review rejection. No full mode/mobile/red-green/persistence proof |
 | Approved generated-recipe cycle | Guide body applied; fresh 12 Android/eight iOS tests and five local journey passes. Failures/fallback retained; final iOS boot-state preservation unresolved, revised guide native invocation unrun. No full clean-cycle PASS |
 | Swift native slice | NetNewsWire five methods/seven invocations PASS, zero failures/skips on historical Xcode 26.4.1/iOS 26.4.1. Approved startup created retained default feed/account containers; not rerun on Xcode 27 |
 | Kotlin native slice | Historical nine SearchViewModel unit tests PASS; new strict Espresso core/idling 3.7 round: five non-image UI methods PASS in one instrumentation attempt on Android 16/SDK 36, empty minor field. Original Espresso 3.5 five failures preserved; changed APK is a distinct run |
@@ -52,7 +54,7 @@ The owner plan includes functional leaves that are still **unshipped**:
 these planned leaves are not silently reclassified as approved deferred work.
 
 Four-domain feature-task completeness and native Swift/Kotlin red-green/driven
-paths remain incomplete. Complete mode routing, native delegation, todo
+paths remain incomplete. Full mode execution, delegated mobile implementation, native todo
 integration and multi-turn/compaction persistence remain unproven. Fresh revised
 guide invocation and a clean applied cycle remain unproven. Cross-host reviews
 retain their historical scope; same-host independent review supplies process
@@ -61,11 +63,15 @@ gaps, but correctness of reporting remains required.
 
 ## Candidate validation record
 
-Fresh static checks, host receipts and independent final-head review must be
-recorded against the actual RC. Historical 119/120 framework counts and native
-results cannot be promoted to fresh candidate checks. Until those receipts are
-attached, this section records **pending coordinator validation**, with fresh
-host probes **UNRUN**. Use the [host-loading methods](host-loading.md) and run:
+The [RC validation receipt](rc-validation.md) records fresh host observations,
+plugin fingerprint binding and initial-candidate static checks/review. Historical
+119/120 framework counts and native results remain distinct. Host probes began
+with an uncommitted RC manifest; their 54-file fingerprints identify the tested
+plugin bytes, rather than the recorded base SHA alone. Record final-head checks
+and independent Astra High review in the RC PR before publication/acceptance;
+this receipt records the initial check head and tested plugin fingerprints.
+No future head or final pass is assumed. Use the
+[host-loading methods](host-loading.md) and run:
 
 ```sh
 ./scripts/check-plugin.sh

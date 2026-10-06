@@ -20,12 +20,13 @@ The RC does not establish first-release readiness or create a tag/release.
 | WP3 integrated proof lane | [PR #5](https://github.com/hugues-vnsgn/huguesStack/pull/5), [validation](wp3-validation.md), [source receipts](wp3-source-receipts.json) | Merged `89e7125490a659a77381a3c12336abc56bb58dda`; tree `280f42f14603f9e0b89b3a049ca8a3e831d43d88` equals tested/reviewed integration `cdc44dc`. 119 framework tests and package/upstream/strict metadata/shell/whitespace checks passed; Fable High CLEAN after fixes |
 | Verification continuation and review policy | [PR #6](https://github.com/hugues-vnsgn/huguesStack/pull/6), [head-bound receipt](https://github.com/hugues-vnsgn/huguesStack/blob/b2d75a0085429d25827f663ed99fd1f872707be0/docs/verification-continuation.md), [review policy](https://github.com/hugues-vnsgn/huguesStack/blob/b2d75a0085429d25827f663ed99fd1f872707be0/plugin/skills/hugues-mode/references/pr-review-policy.md) | Merged as `831eee9419c076b90abbfd76106a55c951100180`. Original head `b2d75a0085429d25827f663ed99fd1f872707be0`: 120 framework tests and checks passed; independent Astra High final-head review CLEAN. Original receipt remains a distinct pre-integration snapshot |
 | WP6 combined documentation integration | [PR #7](https://github.com/hugues-vnsgn/huguesStack/pull/7) | Merged main `94560c43bd4a5a062177870188f60a7ebafb5028`, tree `1525d353d7928e39f53f8f0025931e4e2f9f320e` identical to tested/reviewed `c4966f2e0a3038303bebb232e04ed2297508feed`. Historical 120 framework tests and seven checks PASS; independent Astra High final-head CLEAN |
-| Fresh RC host probes | [RC notes](RELEASE-0.1.0.md), [host methods](host-loading.md) | UNRUN pending recorded results; no historical pass binds candidate bytes or a future head |
+| Initial RC static checks/review | [RC notes](RELEASE-0.1.0.md), [validation receipt](rc-validation.md) | `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests/seven checks PASS; independent Astra High CLEAN. Use the RC PR for final-head checks/review; no future SHA or verdict is assumed |
+| Fresh RC host probes | [validation receipt](rc-validation.md), [host methods](host-loading.md) | Claude 2.1.290 native session-local load and Codex 0.160.1 manual fallback: each 16 read-only cases/15 routes/87 exact steps; original eleven fixture domain/proof matches. Supplemental domain limit retained. 54 plugin fingerprints unchanged. Fresh bounded scratch delegation/artifact review PASS; 22 outer-worker assertions and 14 independent coordinator checks PASS, recorded separately. Initial setup denial retained |
 | Deferred additions | [PR #2](https://github.com/hugues-vnsgn/huguesStack/pull/2), [plan](PLAN.md) | Open draft at `4f032119f887407885a5e90851633d1887cc57cc`; consumer feature maps and CLI-first verification remain post-first-release work |
 
 Historical Opus/Fable reviews remain evidence for their stated revisions. New PR
 reviews use independent GPT-6 Astra High. Static review proves neither host
-routing nor native app behavior. The integration counts above are historical; fresh RC checks and review must
+routing nor native app behavior. The merged integration counts above are historical; fresh RC checks and review must
 bind the actual candidate. Main's merge receipt is `2026-10-05-pr6-pr7-merge`,
 with both original PR heads retained as ancestors of the integrated tree.
 
@@ -165,11 +166,12 @@ reduced 0.1.0 functional scope requires an owner decision; this RC does not
 silently approve that reduction.
 
 Native Swift/Kotlin feature or bug tasks with red-green and driven paths,
-four-domain feature-task completeness, full mode routing/delegation/persistence,
+four-domain feature-task completeness, full mode execution/delegated mobile implementation/persistence,
 fresh revised-guide invocation and a clean generated cycle remain incomplete.
 Historical cross-host reviews retain their exact scope; new same-host reviews
-cannot supply fresh cross-host workflow proof. Fresh RC host results remain
-UNRUN pending their receipts. The revised [plan](PLAN.md) allows labelled gap
+cannot supply fresh cross-host workflow proof. Fresh RC host previews and bounded
+scratch delegation are recorded in the [receipt](rc-validation.md); they leave
+full execution unrun. The revised [plan](PLAN.md) allows labelled gap
 reasons at the owner's checkpoint, without converting them to support.
 No merge, tag or release is established by this RC. Deadline remains
 **9 October 2026, end of day GMT+7**.

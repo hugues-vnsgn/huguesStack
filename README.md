@@ -23,8 +23,11 @@ Start with the short [workflow guide](docs/WORKFLOW.md) and
 [support matrix](docs/support.md). Use `/hugues-stack:hugues-mode` in Claude Code,
 or the documented Codex manual project-skill/direct-read fallback in
 [host loading](docs/host-loading.md); native Codex installation/invocation remains
-unverified. Fresh RC host probes are UNRUN pending their recorded results. Give it a
-goal and a way to check it. For example:
+unverified. Fresh RC read-only previews matched 16 cases across all fourteen
+playbooks and `interrogate` in both hosts, with displayed checklists. The
+[RC validation receipt](docs/rc-validation.md) records the domain limits and
+bounded synthetic delegation pass, including its initial setup failure.
+Give it a goal and a way to check it. For example:
 
 ```text
 The discount boundary is wrong in shared code. Fix it once and show me it passing on Android and iOS.
