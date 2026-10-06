@@ -14,9 +14,16 @@ that no surrounding system needs integration. At least two structurally distinct
 viable packages precede synthesis. Each begins with caller usage and derives its
 types, signatures and module map from that usage.
 
-Arena declares its rubric before fan-out and keeps it out of candidate prompts.
-A fresh judge sees completed candidate files under neutral path labels. The
-coordinator reads and scores every candidate concurrently with that judge, then
+Arena declares its rubric before fan-out and gives candidates sanitized briefs
+and grounding in verified fresh contexts. Codex spawns explicitly use
+`fork_turns: 'none'` when exposed, while omitting model and reasoning overrides
+to inherit the parent. Prompt omissions alone do not isolate a forked conversation;
+a missing fresh-context capability blocks the affected phase.
+A fresh judge sees completed candidate files under neutral path labels, with
+runner identities, self-scores and coordinator preferences excluded from its
+context and supplied evidence. A read-only judge returns its report for private
+coordinator persistence; a report-only write needs an explicitly restricted path.
+The coordinator reads and scores every candidate concurrently with that judge, then
 resolves disagreement against the artifacts. The synthesis record names its
 base, every graft's source, rejected ideas, dropouts and actual verification.
 Convergence may establish generic arena consensus; architect still needs two
@@ -27,8 +34,11 @@ The host changes replace Cursor model rules, fixed vendor defaults and Task API
 parameters with the package's native host adapter. Fresh same-host runners and
 judges inherit the parent unless the owner chose an accepted role model. This
 establishes process independence only. Candidates own separate local paths;
-judges read finished artifacts; the coordinator owns the synthesis. Assigned
-workers perform their scope directly. Implementation starts with a fresh worker
+judges read finished artifacts; the coordinator owns the design choices and
+design synthesis, including direct hand-grafting. Executable consumer grafts go
+to a fresh scoped implementation worker under existing authority. The coordinator
+inspects the actual diff before verifying the resulting synthesis. Assigned workers
+perform their scope directly. Architect implementation starts with a fresh worker
 briefed by the coordinator after synthesis and any requested checkpoint.
 
 Mobile additions carry Swift/iOS, Kotlin/Android, KMP and CMP ownership, lifecycle,

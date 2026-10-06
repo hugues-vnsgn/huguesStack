@@ -44,10 +44,15 @@ def workflow_errors(architect, arena):
         ('rubric-private', section(arena, 'A'), ('3-6 concrete gradeable criteria', 'Candidates only see the task', 'omit it from every candidate prompt')),
         ('isolated-paths', section(arena, 'A'), ('own authorized git worktree', 'absolute local task directory', 'separate synthesis path')),
         ('native-default', section(arena, 'A'), ('fresh same-host native agent', '`inherit-parent`', 'omit model and reasoning overrides', 'mark the seat blocked')),
+        ('candidate-brief-isolation', section(arena, 'A'), ('sanitized candidate brief', 'coordinator conversation', 'rubric-bearing records', 'shared grounding')),
+        ('candidate-context-isolation', section(arena, 'B'), ('fresh context containing only the sanitized candidate brief', "`fork_turns: 'none'`", 'omit model and reasoning overrides', 'Verify the actual spawn capability', 'Fan out blocked', 'cannot establish isolation')),
         ('fan-out', section(arena, 'B'), ('concurrently', 'same task', 'artifact and a short rationale', 'dropout', 'separate explicit authority')),
         ('blind-judge', section(arena, 'C'), ('After all Phase B candidate writers finish', 'fresh read-only native judge', 'neutral path labels', 'without runner identities or parent preference', 'in parallel', 'not with the candidates themselves', 'Cross-judge blocked')),
+        ('judge-context-isolation', section(arena, 'C'), ('fresh context containing only the sanitized judge brief', "`fork_turns: 'none'`", 'omit model and reasoning overrides', 'coordinator conversation', 'Inspect the actual spawn capability', 'cannot establish isolation', 'never claim blind judging')),
+        ('judge-report-scope', section(arena, 'C'), ('returns its report to the coordinator for private persistence', 'no writes', 'report-only exception', 'exact isolated report path', 'no consumer writes')),
         ('pick', section(arena, 'D'), ('Read every candidate end to end', 'criterion by criterion', 'resolve the disputed criteria against the actual artifacts', 'counting votes or averaging scores cannot replace judgment', 'cross-judge\'s verdict')),
         ('graft', section(arena, 'E'), ('Walk each losing candidate once more', 'Fold each graft in by hand', 'from which candidate', 'rejected and why')),
+        ('graft-owner-scope', section(arena, 'E'), ('For a design package, the coordinator owns the design synthesis', 'For an executable consumer artifact', 'briefs a fresh scoped implementation worker', 'coordinator retains the design choices', 'Inspect the actual diff', 'before Phase F', 'no additional authority')),
         ('convergence-divergence', section(arena, 'E'), ('converge on the same shape', 'No graft is needed', 'wildly diverge', 'Reframe and re-run', 'Architect must first satisfy')),
         ('actual-verify', section(arena, 'F'), ('actual synthesized artifact', 'original task and rubric', 'caller usage with types and signatures', 'every affected target', 'candidate test result', 'actual artifact identity')),
         ('verify-return', section(arena, 'F'), ('Phase A was wrong (re-frame and re-run)', 'go back to Phase E', 'required proof is observed')),
@@ -77,10 +82,23 @@ class RetainedDesignTests(unittest.TestCase):
             ('architect', 'coordinator briefs a fresh implementation worker', 'reuse the candidate worker', 'fresh-implementation'),
             ('architect', 'Return to Phase B and re-run arena', 'patch the old sketch', 'scrap'),
             ('arena', 'omit it from every candidate prompt', 'send rubric to every candidate', 'rubric-private'),
+            ('arena', 'sanitized candidate brief', 'full coordinator brief', 'candidate-brief-isolation'),
+            ('arena', 'rubric-bearing records', 'ordinary records', 'candidate-brief-isolation'),
+            ('arena', 'fresh context containing only the sanitized candidate brief', 'candidate inherits coordinator conversation', 'candidate-context-isolation'),
+            ('arena', 'fresh context containing only the sanitized judge brief', 'judge inherits coordinator conversation', 'judge-context-isolation'),
+            ('arena', "`fork_turns: 'none'`", "`fork_turns: 'all'`", 'candidate-context-isolation'),
+            ('arena', "`fork_turns: 'none'`", "`fork_turns: 'all'`", 'judge-context-isolation'),
+            ('arena', 'cannot establish isolation', 'claims isolation without checking', 'candidate-context-isolation'),
+            ('arena', 'cannot establish isolation', 'claims isolation without checking', 'judge-context-isolation'),
+            ('arena', 'returns its report to the coordinator for private persistence', 'writes into the consumer tree', 'judge-report-scope'),
+            ('arena', 'report-only exception', 'unrestricted write access', 'judge-report-scope'),
             ('arena', 'After all Phase B candidate writers finish', 'While candidates are writing', 'blind-judge'),
             ('arena', 'without runner identities or parent preference', 'with model identities and parent preference', 'blind-judge'),
             ('arena', 'resolve the disputed criteria against the actual artifacts', 'average the scores', 'pick'),
             ('arena', 'Walk each losing candidate once more', 'skip losing candidates', 'graft'),
+            ('arena', 'For a design package, the coordinator owns the design synthesis', 'worker picks the design', 'graft-owner-scope'),
+            ('arena', 'briefs a fresh scoped implementation worker', 'edits executable consumer code directly', 'graft-owner-scope'),
+            ('arena', 'Inspect the actual diff', 'trust the graft worker summary', 'graft-owner-scope'),
             ('arena', 'Reframe and re-run', 'average divergent shapes', 'convergence-divergence'),
             ('arena', 'actual synthesized artifact', 'ungrafted base', 'actual-verify'),
             ('arena', 'go back to Phase E', 'accept the known failure', 'verify-return'),
@@ -93,6 +111,14 @@ class RetainedDesignTests(unittest.TestCase):
                 self.assertIn(error, workflow_errors(values['architect'], values['arena']))
         swapped = self.arena.replace('## Phase D: Pick a base', '## Phase Z: Pick a base')
         self.assertIn('arena phase order', workflow_errors(self.architect, swapped))
+
+    def test_isolation_contracts_cannot_move_out_of_launch_phases(self):
+        # A frame or Outputs disclaimer cannot guard a context-inheriting spawn.
+        for phase, label in (('B', 'candidate-context-isolation'), ('C', 'judge-context-isolation')):
+            with self.subTest(phase=phase):
+                moved = self.arena.replace(section(self.arena, phase), '\n')
+                moved += '\n' + section(self.arena, phase)
+                self.assertIn(label, workflow_errors(self.architect, moved))
 
     def test_real_grounding_dependency_is_present(self):
         # Deliberately fails on an unstacked design checkout: no fake dependency fallback.

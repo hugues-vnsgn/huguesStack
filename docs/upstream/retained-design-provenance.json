@@ -81,7 +81,7 @@
       "blob_sha": "e50356e2f97608dbb48d9c1cd75af6d70b3f7059",
       "sha256": "e3a1f6c49a08b7e0b92134e53300d146f1f22ba83386d2019926e736df421851",
       "mode": "100644",
-      "destination_sha256": "f03cd5d0b70a64ca66c7aa22e2dd9724c3bca62ebab9ee537cff4f349755ac5e",
+      "destination_sha256": "8b39d619ce8a576d15ed6811e900aaea76c9e678f60246574b0209a227e0d308",
       "retained_contracts": [
         "Frame \u2192 Fan out \u2192 Cross-judge \u2192 Pick \u2192 Graft \u2192 Verify",
         "Common candidate task excludes 3-6 criterion scoring rubric; isolated candidate outputs",
@@ -94,7 +94,10 @@
         "Replace Cursor rule paths, fixed multi-vendor aliases and Task background API with actual native host adapter and inherit-parent.",
         "Add same-host local path ownership, explicit consumer/execution/publication authority and no recursive worker delegation.",
         "Make rubric isolation, blind post-writer judging, minimum candidate and missing-agent branches explicit.",
-        "Verify actual synthesis with mobile target proof where executable; preserve blocked results."
+        "Verify actual synthesis with mobile target proof where executable; preserve blocked results.",
+        "Require sanitized candidate/judge briefs and evidence plus verified fresh contexts; use explicit Codex fork_turns: 'none' where exposed, omit model/reasoning overrides, and block the affected phase when context isolation is unavailable.",
+        "A no-write judge returns its report for private coordinator persistence; a supported report-only write requires an explicit isolated-path exception and prohibits consumer writes.",
+        "Retain coordinator-owned design choices and direct design hand-grafting; delegate executable consumer grafts to a fresh scoped worker under existing authority, then inspect its actual diff before synthesis verification."
       ]
     }
   ]
