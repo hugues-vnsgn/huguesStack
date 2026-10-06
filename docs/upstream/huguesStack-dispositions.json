@@ -675,12 +675,12 @@
       "size": 5675,
       "sha256": "741901140ee382ebf93263a7ed03c6ee3719e578416d81afcd195876fa16c496",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pstack design workflow with native same-host runners, mobile contracts and explicit authority; see retained-design-provenance.json.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/architect/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -702,13 +702,13 @@
       "blob_sha": "f8503c9595b289c607ff5088f82b21197edf94ec",
       "size": 3009,
       "sha256": "d0e639e4cc588ec865f930d3a4111faad60987ae36925917e319d7ceca7c69ce",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain byte-verbatim design reference from pstack 0.15.9.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/architect/references/design-red-flags.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -730,13 +730,13 @@
       "blob_sha": "a10f77f59510c532cd909faaf3bfeee5ffbfd588",
       "size": 3050,
       "sha256": "0cedfccdc7b47fc881febd5a8293eecbc542c20f8df825639904a8102d2eb5d3",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain byte-verbatim design reference from pstack 0.15.9.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/architect/references/rationale-template.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -750,12 +750,12 @@
       "size": 3087,
       "sha256": "983bf2820cc14ed8ecab6e448e1033e5cfe6031967d0a9287b48c7fa9c33d925",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pstack design workflow with native same-host runners, mobile contracts and explicit authority; see retained-design-provenance.json.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/architect/references/runner-prompt.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -769,12 +769,12 @@
       "size": 4973,
       "sha256": "e3a1f6c49a08b7e0b92134e53300d146f1f22ba83386d2019926e736df421851",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pstack design workflow with native same-host runners, mobile contracts and explicit authority; see retained-design-provenance.json.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/arena/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
