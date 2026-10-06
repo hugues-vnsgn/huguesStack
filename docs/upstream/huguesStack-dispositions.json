@@ -956,12 +956,12 @@
       "size": 3077,
       "sha256": "d31805589c7f6a63a6db6c9fadebbd79fb9660682cf1654e9b2e5e1e7cd30bc0",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/how/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -975,12 +975,12 @@
       "size": 3085,
       "sha256": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/how/references/explainer-prompt.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -994,12 +994,12 @@
       "size": 2684,
       "sha256": "a3b44a6e5bb16a6d4d1cac19db8ed5322ffd5f5f5d45baca4e73990ca096f8be",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/how/references/explorer-prompt.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2774,12 +2774,12 @@
       "size": 10360,
       "sha256": "2a852ec8680920109d2b56538b027c52867896a597250ac5d18a13e0b42e5b06",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/SKILL.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2792,13 +2792,13 @@
       "blob_sha": "3732bf6881b60d1337fa3498574452a85d33ba30",
       "size": 7749,
       "sha256": "fcc0f559c072832c869a5ada72434b4849320a637ae63c09e8ee14f7ad787059",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/epistemics.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2811,13 +2811,13 @@
       "blob_sha": "3b56af44c589833508f4605cfdd4432b39a16739",
       "size": 6985,
       "sha256": "6892956a7ab0b5ee6c4babaf4f793703abe89b350ea7cb9463b4a56eea1c8266",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/investigator-prompt.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2831,12 +2831,12 @@
       "size": 1363,
       "sha256": "9ae9dcb9d09111c9facc68510331c5aba4aed9b1b057314ff1fc0e166ad3993a",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/source-playbook.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2850,12 +2850,12 @@
       "size": 3489,
       "sha256": "8c14aa382f0de40829b2668d43e3f54814480bb93a486c9282ada4003f6b9dbd",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/code-archaeology.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2869,12 +2869,12 @@
       "size": 6994,
       "sha256": "236ede7aab6454662a992db088a5393537a5233a4c26719c93188f9e174488f6",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/databricks.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Defer",
@@ -2887,13 +2887,13 @@
       "blob_sha": "d8363b1c1d1c7eadb15d47abd83bf70537c39620",
       "size": 5323,
       "sha256": "ebe9c07bac28e47757ee7f16fb93b0c01d427a08c501957d047f395a2f37b7e7",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/datadog.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Defer",
@@ -2906,13 +2906,13 @@
       "blob_sha": "450d6e52f25b1b41f741cb3e9c93e1c74ef858b4",
       "size": 1973,
       "sha256": "a899470f05f86029630a13a2696491cc708ca7b56a6e822a69ff6e954d6ff8cf",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/incident-postmortem.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2925,13 +2925,13 @@
       "blob_sha": "899c643c078f322afe6ae0ef78a007f8ffd356c1",
       "size": 2996,
       "sha256": "01304e7f1badfcfb78babbb0edcadeb3cc8dd3f713793420cdff24ba190f907c",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/linear.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Defer",
@@ -2944,13 +2944,13 @@
       "blob_sha": "d16230a4105fd1dacf870da0950a38faeb9381e6",
       "size": 2853,
       "sha256": "3bcfa695c49dfad4ac036d5d7181c12585f55ac04f1936198d16ab75a2788997",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/notion.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Defer",
@@ -2963,13 +2963,13 @@
       "blob_sha": "2b7cf6f3098ee868547dc4e69efacfe9c255246b",
       "size": 4947,
       "sha256": "6f292bc4fb1548e956f95e1900b9481abf5134254419f1cd9edec95428c82d73",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/sentry.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Defer",
@@ -2982,13 +2982,13 @@
       "blob_sha": "863a527d60e4e055e680834ef8098ea04273a1ae",
       "size": 3105,
       "sha256": "58fee61d024b3700b407e7acbed367944720ff05adfddb6954d36c88368f3ba7",
-      "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "disposition": "port verbatim",
+      "reason": "Retain pinned research reference verbatim; use conditional host/schema and authority rules from the source-playbook index.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/sources/slack.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Defer",
@@ -3002,12 +3002,12 @@
       "size": 7984,
       "sha256": "733a3e9cf897b1aca56aaddeae01a3832e4bfed024c2f602db2d1bf807d7a73b",
       "disposition": "port with adaptation",
-      "reason": "Retain this Layer 1 responsibility with source-grounded mobile/host contracts; delivery beyond WP2 remains planned.",
+      "reason": "Retain pinned research contract with native host and current-authority adaptation.",
       "release_target": "0.1.0",
       "destinations": [
         "plugin/skills/why/references/synthesizer-prompt.md"
       ],
-      "implementation_state": "planned",
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
