@@ -136,17 +136,22 @@ def host_binding_errors(root):
     # RC1 packet cannot cover them, and bounded observations cannot promote
     # the full workflow/mobile acceptance cell.
     rows = [tuple(part.strip() for part in row.strip('|').split('|'))
-            for row in support.splitlines() if row.startswith('| RC2')]
+            for row in support.splitlines()
+            if row.startswith(('| RC2', '| Historical RC2'))]
     by_cell = {row[0]: row[1:] for row in rows if len(row) == 3}
     if len(by_cell) != len(rows):
         errors.append('RC2 unique evidence cells')
-    full = by_cell.get('RC2 full eight-workflow adherence/mobile execution', ())
-    if (len(full) != 2 or full[0] != 'blocked' or
-            'remain unrun' not in full[1] or 'native Swift/Kotlin/KMP/CMP' not in full[1]):
-        errors.append('RC2 full execution unrun')
+    full = by_cell.get('RC2 full eight-workflow adherence', ())
+    if (len(full) != 2 or full[0] != 'blocked' or not all(item in full[1] for item in
+            ('Bounded native Swift and Kotlin work is now observed',
+             'full eight-workflow adherence', 'native todo integration',
+             'four-domain task completeness remain unproven'))):
+        errors.append('RC2 full workflow acceptance blocked')
     observed_cells = {'RC2 host loading and route previews',
                       'RC2 bounded retained workflow observations',
-                      'RC2 static recipe/cold pickup'}
+                      'Historical RC2 static recipe/cold pickup',
+                      'RC2 native Swift S1 feature', 'RC2 native Kotlin K1 feature logic',
+                      'RC2 native project recipe discovery'}
     actual_observed = {row[0] for row in rows if len(row) == 3 and row[1] == 'observed-pass'}
     optional_observed = {'RC2 repaired lane previews'}
     if not observed_cells <= actual_observed <= observed_cells | optional_observed:
@@ -163,7 +168,7 @@ def host_binding_errors(root):
             '(rc2-host-validation.md#bounded-workflow-observations)' not in bounded[1] or
             'runtime unrun' not in bounded[1]):
         errors.append('RC2 bounded workflow receipt binding')
-    pickup = by_cell.get('RC2 static recipe/cold pickup', ())
+    pickup = by_cell.get('Historical RC2 static recipe/cold pickup', ())
     if (len(pickup) != 2 or pickup[0] != 'observed-pass' or
             '(rc2-host-validation.md#bounded-workflow-observations)' not in pickup[1] or
             not all(item in pickup[1] for item in
@@ -180,13 +185,21 @@ def host_binding_errors(root):
     if (RC2_HOST not in binding or RC2_LANE not in binding or RC1 in binding or
             '79 plugin files' not in binding or 'distinct snapshots' not in binding):
         errors.append('separate RC2 revision binding')
-    if not all(item in host_receipt for item in
-               ('## Bounded workflow observations', '## Lane-evidence probes',
-                'no full six-case fixture PASS is claimed',
-                'Native Codex recipe invocation and a mobile recipe cycle remain',
-                'actual pause, compaction, resumed GREEN and persistent native todos',
-                'Full adherence of all eight retained workflows',
-                'consumer implementation/build/drive under RC2', 'remain unrun')):
+    historical = ' '.join(section(host_receipt, 'Bounded workflow observations').split())
+    gaps = ' '.join(section(host_receipt, 'Remaining acceptance gaps').split())
+    if (not all(item in historical for item in
+                ('Native Codex recipe invocation and a mobile recipe cycle remain unproven',
+                 'The fixture lacks an app, native toolchain and device',
+                 'In that initial synthetic snapshot',
+                 'actual pause, compaction, resumed GREEN and persistent native todos remain unrun')) or
+            not all(item in gaps for item in
+                ('Full adherence of all eight retained workflows',
+                 'complete maintenance/source-wave/live/cleanup cycle remain unproven',
+                 'Later S1 Swift RED/GREEN/native assertion phases and K1 Kotlin unit/build work',
+                 '(rc2-native-feature-proof.md)', 'K1 device/recipe/maintenance proof',
+                 'full four-domain task coverage', 'compaction/native persistent todos',
+                 'full clean generated-recipe cycle remain unproven')) or
+            'no full six-case fixture PASS is claimed' not in host_receipt):
         errors.append('RC2 receipt acceptance limits')
     repaired = by_cell.get('RC2 repaired lane previews')
     if repaired is not None:
@@ -194,16 +207,118 @@ def host_binding_errors(root):
         # earlier strict failures. Require its own scoped receipt and limits;
         # it supplies no full-workflow/native-mobile acceptance evidence.
         if ('(rc2-host-validation.md#repaired-schema-probes)' not in repaired[1] or
-                'full workflow' not in repaired[1].lower() or
-                not any(limit in repaired[1].lower() for limit in ('unproven', 'unrun'))):
+                not any(limit in repaired[1].lower() for limit in
+                        ('no clean-head invocation or full workflow adherence claim',
+                         'full workflow and native mobile execution unproven'))):
             errors.append('RC2 repaired preview scope')
-        repaired_receipt = section(host_receipt, 'Repaired schema probes')
+        repaired_receipt = ' '.join(section(host_receipt, 'Repaired schema probes').split())
         if (not re.search(r'\b[0-9a-f]{40}\b', repaired_receipt) or
                 RC1 in repaired_receipt or
                 'six' not in repaired_receipt.lower() or
-                'full workflow' not in repaired_receipt.lower() or
-                not any(limit in repaired_receipt.lower() for limit in ('unproven', 'unrun'))):
+                not any(limit in repaired_receipt.lower() for limit in
+                        ('full workflow adherence remains unproven; no consumer execution occurred',
+                         'full workflow and native mobile execution remain unproven'))):
             errors.append('RC2 repaired preview receipt binding')
+    errors.extend(native_binding_errors(root, by_cell))
+    return errors
+
+
+def native_binding_errors(root, by_cell):
+    """Check current cells against their own bounded native receipt, not old runs."""
+    errors = []
+    support_contracts = {
+        'RC2 native Swift S1 feature': ('observed-pass', 'S1 bounded native proof', (
+            'Seven-case RED: two passes/five intended missing-command failures',
+            'actual pause/fresh pickup', 'separate production change',
+            '12 method identities/14 invocations', 'zero fail/skip',
+            'UIKit/synthetic delegate selector dispatch only', '(rc2-native-feature-proof.md)')),
+        'RC2 S1 complete maintenance/clean cycle': ('blocked', 'S1 clean cycle blocked', (
+            'Source/live checkpoint coverage 4/4', 'cleanup proved',
+            'Original simulator boot-state restoration unsupported',
+            'original data continuity unproven', 'content changed during approved startup',
+            'No full clean-cycle PASS')),
+        'RC2 native Kotlin K1 feature logic': ('observed-pass', 'K1 bounded logic proof', (
+            '15-case RED with three intended failures', 'actual pause/fresh pickup',
+            'separate ViewModel normalization fix, 15/15 GREEN',
+            'one retained compile failure and one corrected retry', '(rc2-native-feature-proof.md)')),
+        'RC2 K1 native UI/recipe/maintenance': ('blocked', 'K1 live phases unrun', (
+            'Six selectors/four checkpoints have source coverage',
+            'all new native, recipe and maintenance runs unrun', 'blocked readiness',
+            'no task-owned target/package started or unrelated device targeted')),
+        'RC2 native project recipe discovery': ('observed-pass', 'native recipe fallback only', (
+            'Both hosts actually read full S1/K1 recipe Markdown',
+            'Claude catalog omitted these recipes',
+            'Codex native discovery is self-reported without raw catalog proof',
+            'Direct read establishes fallback only',
+            '(rc2-native-feature-proof.md#recipe-discovery-and-preservation)')),
+    }
+    for cell, (state, error, required) in support_contracts.items():
+        row = by_cell.get(cell, ())
+        if len(row) != 2 or row[0] != state or not all(item in row[1] for item in required):
+            errors.append(error)
+
+    receipt_path = root / 'docs/rc2-native-feature-proof.md'
+    if not receipt_path.is_file():
+        return errors + ['native receipt missing']
+    receipt = receipt_path.read_text()
+    rows = [tuple(part.strip() for part in line.strip('|').split('|'))
+            for line in receipt.splitlines() if line.startswith('| ')]
+    by_target = {row[0]: ' '.join(' '.join(row[1:]).split())
+                 for row in rows if len(row) == 3}
+    native_contracts = {
+        'Codex-coordinated S1, Swift/UIKit, NetNewsWire Debug arm64 on Xcode 27/iOS 26.4.1 simulator': (
+            'S1 RED pickup receipt', ('seven cases, two passes/five literal missing',
+            'UIKeyCommand', 'Test-only pause checkpoint', 'fresh checkpoint-only pickup',
+            'before separate production work', 'Actual pause/pickup',
+            'no compaction or native persistent-todo proof')),
+        'Codex-coordinated K1, Kotlin/Compose, Now in Android search ViewModel/unit target': (
+            'K1 RED GREEN receipt', ('RED: 15 cases, three intended failures',
+            'Test-only pause checkpoint', 'fresh pickup', 'Separate ViewModel trim fix: 15/15 GREEN',
+            'zero errors/skips', 'Feature logic with screen fakes',
+            'no Room persistence/full-app proof')),
+        'S1 guarded Shift-Return behavior': ('S1 bounded native receipt', (
+            'positive result count and selection above one',
+            '12 method identities/14 invocations, zero failures/skips',
+            'Native UIKit bar and synthetic delegate', 'UIApplication.sendAction',
+            'no physical hardware keyboard or full article Find journey')),
+        'S1 generated recipe phase': ('S1 bounded recipe receipt', (
+            '12 method identities/14 invocations, zero failures/skips',
+            'four native rendered bar PNGs independently inspected',
+            'Same bounded assertion surface', 'counts not added as unique tests')),
+        'S1 maintenance phase': ('S1 clean cycle receipt blocked', (
+            'Complete 4/4 source and live checkpoints',
+            '12 method identities/14 invocations, zero failures/skips',
+            'Overall maintenance remains blocked by original boot-state restoration',
+            'no full clean-cycle PASS')),
+        'K1 offline demo Debug UI-test APK': ('K1 built artifact is not live proof', (
+            'Initial missing compile API failure retained', 'one retry built the APK',
+            'BUILT, with no installation or driven result')),
+        'K1 native UI, recipe and maintenance': ('K1 live receipt unrun', (
+            'Six selectors/four checkpoint images covered in source',
+            'all new live phases BLOCKED/UNRUN', 'failed empty-inventory readiness',
+            'No task device/package created or unrelated device targeted')),
+    }
+    for target, (error, required) in native_contracts.items():
+        if not all(item in by_target.get(target, '') for item in required):
+            errors.append(error)
+
+    preservation = ' '.join(section(receipt, 'Recipe discovery and preservation').split())
+    if not all(item in preservation for item in (
+            'probes prove the direct-read fallback, with no native-loader success claim',
+            'Original old-container continuity remains UNPROVEN',
+            'Identity preservation does not mean unchanged content',
+            'Safe restoration to the original Shutdown state remains unsupported',
+            'residue prevents a full clean-cycle claim',
+            'global Claude settings hash changed', 'attribution remains UNPROVEN',
+            'No all-global-settings- unchanged claim is supported')):
+        errors.append('native preservation limits')
+    current = ' '.join(section(receipt, 'Public artifact identities').split())
+    if not all(item in current for item in (
+            'Historical Swift five-method/seven-invocation and Kotlin nine-unit/five-UI slices remain historical',
+            'they supply no K1 new UI proof', 'Full eight-workflow adherence',
+            'four-domain feature completeness', 'native Codex install/invocation',
+            'compaction and general persistence remain unproven')):
+        errors.append('historical native slices cannot prove current coverage')
     return errors
 
 
@@ -325,10 +440,10 @@ class RetainedIntegration(unittest.TestCase):
         path = self.root / 'docs/support.md'
         text = path.read_text()
         row = next(line for line in text.splitlines()
-                   if line.startswith('| RC2 full eight-workflow adherence/mobile execution |'))
+                   if line.startswith('| RC2 full eight-workflow adherence |'))
         path.write_text(text.replace(row, row.replace('| blocked |', '| observed-pass |')))
         errors = host_binding_errors(self.root)
-        self.assertIn('RC2 full execution unrun', errors)
+        self.assertIn('RC2 full workflow acceptance blocked', errors)
         self.assertIn('RC2 bounded observation scope', errors)
 
     def test_RC2_observations_require_separate_revision_bound_receipt(self):
@@ -360,6 +475,121 @@ class RetainedIntegration(unittest.TestCase):
         path.write_text(original.replace(row, row.replace('| observed-fail |', '| observed-pass |')))
         self.assertIn('RC2 strict lane failures retained', host_binding_errors(self.root))
 
+    def assert_boundary_mutation(self, document, old, new, error):
+        path = self.root / 'docs' / document
+        original = path.read_text()
+        self.assertIn(old, original)
+        self.assertNotEqual(old, new)
+        try:
+            path.write_text(original.replace(old, new, 1))
+            self.assertIn(error, host_binding_errors(self.root))
+        finally:
+            path.write_text(original)
+
+    def test_current_native_observations_require_their_own_receipt(self):
+        (self.root / 'docs/rc2-native-feature-proof.md').unlink()
+        self.assertIn('native receipt missing', host_binding_errors(self.root))
+
+    def test_completed_native_RED_GREEN_and_pickup_cannot_be_erased_as_unrun(self):
+        for document, old, new, error in (
+                ('support.md', 'actual pause/fresh pickup', 'pause/pickup unrun',
+                 'S1 bounded native proof'),
+                ('rc2-native-feature-proof.md', 'Actual pause/pickup, with no compaction',
+                 'Pause/pickup unrun, with no compaction', 'S1 RED pickup receipt'),
+                ('rc2-native-feature-proof.md', 'Separate ViewModel trim fix: 15/15 GREEN',
+                 'ViewModel fix and GREEN unrun', 'K1 RED GREEN receipt'),
+                ('rc2-host-validation.md',
+                 'Later S1 Swift RED/GREEN/native assertion phases and K1 Kotlin unit/build work',
+                 'All native Swift and Kotlin work remains unrun', 'RC2 receipt acceptance limits')):
+            with self.subTest(document=document, evidence=old):
+                self.assert_boundary_mutation(document, old, new, error)
+
+    def test_S1_bounded_dispatch_cannot_promote_full_native_journey(self):
+        for document, old, new, error in (
+                ('support.md', 'UIKit/synthetic delegate selector dispatch only',
+                 'Full native hardware keyboard and article Find journey proved', 'S1 bounded native proof'),
+                ('rc2-native-feature-proof.md',
+                 'no physical hardware keyboard or full article Find journey',
+                 'physical hardware keyboard and full article Find journey passed',
+                 'S1 bounded native receipt'),
+                ('rc2-native-feature-proof.md',
+                 'Same bounded assertion surface; separate phase, counts not added as unique tests',
+                 'Full app coverage; separate phase, counts added as unique tests',
+                 'S1 bounded recipe receipt')):
+            with self.subTest(document=document, evidence=old):
+                self.assert_boundary_mutation(document, old, new, error)
+
+    def test_S1_live_checkpoints_cannot_promote_maintenance_clean_cycle(self):
+        for document, old, new, error in (
+                ('support.md', '| RC2 S1 complete maintenance/clean cycle | blocked |',
+                 '| RC2 S1 complete maintenance/clean cycle | observed-pass |', 'S1 clean cycle blocked'),
+                ('support.md', 'Original simulator boot-state restoration unsupported',
+                 'Original simulator boot-state restoration proved', 'S1 clean cycle blocked'),
+                ('rc2-native-feature-proof.md',
+                 'Overall maintenance remains blocked by original boot-state restoration; no full clean-cycle PASS',
+                 'Overall maintenance and full clean-cycle PASS; unrelated K1 work remains unproven',
+                 'S1 clean cycle receipt blocked'),
+                ('rc2-native-feature-proof.md', 'Complete 4/4 source and live checkpoints',
+                 'Complete 4/4 source checkpoints only', 'S1 clean cycle receipt blocked'),
+                ('rc2-native-feature-proof.md', 'Identity preservation does not mean\nunchanged content',
+                 'Identity preservation proves unchanged content', 'native preservation limits'),
+                ('rc2-native-feature-proof.md', 'Original old-container\ncontinuity remains UNPROVEN',
+                 'Original old-container continuity proved', 'native preservation limits')):
+            with self.subTest(document=document, evidence=old):
+                self.assert_boundary_mutation(document, old, new, error)
+
+    def test_K1_source_coverage_build_and_historical_UI_cannot_promote_live_phases(self):
+        for document, old, new, error in (
+                ('support.md', '| RC2 K1 native UI/recipe/maintenance | blocked |',
+                 '| RC2 K1 native UI/recipe/maintenance | observed-pass |', 'K1 live phases unrun'),
+                ('support.md', 'all new native, recipe and maintenance runs unrun',
+                 'all new native, recipe and maintenance runs passed', 'K1 live phases unrun'),
+                ('rc2-native-feature-proof.md', 'all new live phases BLOCKED/UNRUN',
+                 'all new live phases PASS; unrelated compaction remains unproven', 'K1 live receipt unrun'),
+                ('rc2-native-feature-proof.md', 'BUILT, with no installation or driven result',
+                 'BUILT, installed and driven successfully', 'K1 built artifact is not live proof'),
+                ('rc2-native-feature-proof.md', 'they supply no K1 new UI proof',
+                 'they establish K1 new UI proof', 'historical native slices cannot prove current coverage')):
+            with self.subTest(document=document, evidence=old):
+                self.assert_boundary_mutation(document, old, new, error)
+
+    def test_historical_recipe_and_cold_pickup_limits_stay_in_their_snapshot(self):
+        self.assert_boundary_mutation('support.md',
+            '| Historical RC2 static recipe/cold pickup |', '| RC2 static recipe/cold pickup |',
+            'RC2 static recipe pickup limits')
+        self.assert_boundary_mutation('rc2-host-validation.md',
+            'In that initial synthetic snapshot', 'In the current native packet',
+            'RC2 receipt acceptance limits')
+        path = self.root / 'docs/rc2-host-validation.md'
+        original = path.read_text()
+        historical = section(original, 'Bounded workflow observations')
+        limit = 'actual pause, compaction, resumed GREEN and persistent native todos\nremain unrun'
+        self.assertIn(limit, historical)
+        # The same words elsewhere cannot supply this snapshot's missing boundary.
+        path.write_text(original.replace(limit, 'full native persistence proved', 1) + '\n' + limit + '\n')
+        self.assertIn('RC2 receipt acceptance limits', host_binding_errors(self.root))
+
+    def test_recipe_direct_reads_and_settings_disclosure_cannot_be_promoted(self):
+        for document, old, new, error in (
+                ('support.md', 'Direct read establishes fallback only',
+                 'Direct read proves native loader invocation', 'native recipe fallback only'),
+                ('rc2-native-feature-proof.md',
+                 'These probes prove the direct-read fallback, with no native-loader success claim',
+                 'These probes prove native-loader success', 'native preservation limits'),
+                ('rc2-native-feature-proof.md', 'A global Claude settings hash changed',
+                 'All global settings hashes matched', 'native preservation limits')):
+            with self.subTest(document=document, evidence=old):
+                self.assert_boundary_mutation(document, old, new, error)
+
+    def test_unrelated_unproven_marker_cannot_supply_full_workflow_boundary(self):
+        self.assert_boundary_mutation('support.md',
+            'four-domain task completeness remain unproven',
+            'four-domain task completeness passed; unrelated design work remains unproven',
+            'RC2 full workflow acceptance blocked')
+        path = self.root / 'docs/support.md'
+        path.write_text(path.read_text() + '\n| RC2 universal native acceptance | observed-pass | unrelated scope unproven |\n')
+        self.assertIn('RC2 bounded observation scope', host_binding_errors(self.root))
+
     def test_later_bounded_previews_need_their_own_receipt_and_preserve_full_gate(self):
         support = self.root / 'docs/support.md'
         receipt = self.root / 'docs/rc2-host-validation.md'
@@ -382,6 +612,10 @@ class RetainedIntegration(unittest.TestCase):
         receipt.write_text(receipt_text + scoped)
         self.assertEqual(host_binding_errors(self.root), [])
         receipt.write_text(receipt_text + scoped.replace('a' * 40, RC1))
+        self.assertIn('RC2 repaired preview receipt binding', host_binding_errors(self.root))
+        receipt.write_text(receipt_text + scoped.replace(
+            'Full workflow and native mobile execution remain unproven',
+            'Full workflow and native mobile execution passed; unrelated design remains unproven'))
         self.assertIn('RC2 repaired preview receipt binding', host_binding_errors(self.root))
         receipt.write_text(receipt_text + scoped)
         support.write_text(support_text + '\n' + row.replace('#repaired-schema-probes', ''))
