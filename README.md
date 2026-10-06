@@ -15,7 +15,10 @@ package now ships 35 skills; read [retained integration](docs/retained-integrati
 for direct playbook handoffs and source receipts. WP3 adds a project-local verification generator, jev Drive guidance and a durable
 Markdown evidence outline. Version **`0.1.0-rc.2`** is a prerelease candidate
 for review, not an accepted 0.1.0 release. See the [RC notes](docs/RELEASE-0.1.0.md)
-for current evidence and gaps; no tag or release has been created.
+for current evidence and gaps. The owner selected combined draft
+[PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13), based on main;
+the later local documentation candidate is unpublished. No tag or release has
+been created.
 
 New PR reviews use independent GPT-6 Astra reviewers with High effort. Read the
 [PR review policy](plugin/skills/hugues-mode/references/pr-review-policy.md) before
@@ -29,7 +32,11 @@ or the documented Codex manual project-skill/direct-read fallback in
 unverified. Historical RC1 read-only previews matched 16 cases across all fourteen
 playbooks and `interrogate` in both hosts, with displayed checklists, on
 `21a82942019292f7212ff1185e9ef187ac96e86d` plugin bytes. RC2 changes those
-bodies and adds eight tools; its 79 plugin files have no fresh host probe. The
+bodies and adds eight tools. Later repaired planning previews passed six unique
+cases and 36 copied steps per host; all 79 tested plugin fingerprints now match
+committed `68cb710`. This is byte binding, with no clean-head invocation claim.
+See [RC2 host validation](docs/rc2-host-validation.md) and the bounded
+[Swift/Kotlin feature proof](docs/rc2-native-feature-proof.md). The
 [RC validation receipt](docs/rc-validation.md) records the domain limits and
 bounded synthetic delegation pass, including its initial setup failure.
 Give it a goal and a way to check it. For example:

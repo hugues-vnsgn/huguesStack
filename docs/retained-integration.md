@@ -2,8 +2,10 @@
 
 `0.1.0-rc.2` combines the eight owner-approved retained tools with the existing
 mobile mode. This is a separate unmerged proposal based on main
-`94560c43bd4a5a062177870188f60a7ebafb5028`. PR #8's RC1 and draft PR #2's
-deferred feature maps/CLI-first changes remain separate. No merge, tag or release
+`94560c43bd4a5a062177870188f60a7ebafb5028`. The owner selected combined
+[PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13); the later local
+candidate is unpublished. PR #8's RC1 and draft PR #2's deferred feature
+maps/CLI-first changes remain separate. No merge, tag or release
 is established. Target remains 9 October 2026, end of day GMT+7.
 
 ## Reviewed package inputs
@@ -78,9 +80,11 @@ changed mode/playbooks and 79 plugin files subsequently received fresh native
 Claude loading and manual Codex previews at `e2ff899`. The [RC2 receipt](rc2-host-validation.md)
 records sixteen route cases/87 exact steps per host, the unsupported-language
 gap, bounded synthetic workflows and later six-case lane-evidence observations.
-Full eight-workflow adherence and native mobile execution remain unrun. Native todo behavior, four-domain feature completeness,
-Swift/Kotlin red-green paths, full mode/persistence and the clean generated-recipe
-cycle remain incomplete. Historical failures, native results and target limits
+Later [S1/K1 native proof](rc2-native-feature-proof.md) establishes bounded
+Swift RED/GREEN/native assertion phases and Kotlin RED/GREEN/unit/build evidence.
+Full eight-workflow adherence, Kotlin device proof, native todo behavior,
+four-domain feature completeness, compaction/general persistence and the clean
+generated-recipe cycle remain incomplete. Historical failures, native results and target limits
 remain in [support](support.md) and the [evidence index](evidence-index.md).
 
 The later [repaired schema probes](rc2-host-validation.md#repaired-schema-probes)
@@ -88,5 +92,23 @@ passed six unique cases and 36 copied steps per host, with actual scoped source
 reads. They used corrected uncommitted plugin bytes and a revised prompt schema;
 all 79 plugin fingerprints remained unchanged during the probes. This establishes
 bounded planning previews. Full workflow adherence remains unproven. Final
-committed-byte binding, exact-head checks and independent review remain separate
-RC2 draft evidence.
+committed-byte binding now matches all 79 files at `68cb710`, tree
+`41dcde6fbe6330aec21ec6570fe70b107ba69da9`. That clean routing candidate passed
+194 framework tests/seven checks and independent same-host Astra High review.
+These receipts cover that head; the later documentation candidate needs its own
+exact-head checks/review. Fresh host probes for it are UNRUN at this writing.
+
+## Delivery path
+
+Read-only remote state on 6 October: combined PR #13 is OPEN/DRAFT on main at
+`e2ff899f226184e6109029e5bdb3ac19838b80e4`. The owner chose this combined path.
+The later local routing/documentation candidate has not updated that remote.
+Publication remains blocked pending direct owner authorization; no push, merge,
+close, tag or release is established here. Every future landed PR requires an
+independent GPT-6 Astra High review of its final exact head.
+
+The alternative stack remains PR #8 → #9 → #10 → #11 → #12: #8 is based on
+main, with each following draft based on its predecessor. PR #13 is the combined
+main-based proposal, rather than another step in that stack. Preserve #8–#12
+and deferred draft #2 while selecting one delivery path; accepting both paths
+requires a separate integration decision.

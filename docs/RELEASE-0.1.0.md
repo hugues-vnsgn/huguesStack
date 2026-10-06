@@ -1,7 +1,8 @@
 # 0.1.0 release candidate
 
 **Candidate: `0.1.0-rc.2`, 6 October 2026.** This is prerelease metadata and
-review documentation for a separate draft RC PR based on merged main
+review documentation for owner-selected combined draft
+[PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13), based on merged main
 `94560c43bd4a5a062177870188f60a7ebafb5028`. It does not create or approve a merge,
 0.1.0 tag, GitHub release or first-release readiness. Target remains
 **9 October 2026, end of day GMT+7**.
@@ -40,9 +41,13 @@ from authored guidance and gaps.
 | Swift native slice | NetNewsWire five methods/seven invocations PASS, zero failures/skips on historical Xcode 26.4.1/iOS 26.4.1. Approved startup created retained default feed/account containers; not rerun on Xcode 27 |
 | Kotlin native slice | Historical nine SearchViewModel unit tests PASS; new strict Espresso core/idling 3.7 round: five non-image UI methods PASS in one instrumentation attempt on Android 16/SDK 36, empty minor field. Original Espresso 3.5 five failures preserved; changed APK is a distinct run |
 | Kotlin preparation | 21 artifact rows/25 components/15 core edges and offline APK build; 159 local mocked guard/resolver fixtures, distinct from framework and native assertion counts |
+| RC2 routing repair | `68cb710`: 194 framework tests/seven checks PASS, independent same-host Astra High CLEAN; all 79 repaired-probe plugin hashes bind to committed bytes. Six unique planning cases/36 steps per host; no clean-head invocation claim |
+| RC2 S1 Swift feature | Actual seven-case RED/pause/fresh pickup, separate guarded Shift-Return change. GREEN/recipe/maintenance each 12 methods/14 invocations, zero fail/skip, four inspected native bar images, Xcode 27/iOS 26.4.1. Synthetic delegate/selector dispatch; cleanup/continuity limits prevent full clean-cycle acceptance |
+| RC2 K1 Kotlin feature | Actual 15-case RED with three intended failures; pause/fresh pickup and separate normalization fix, 15/15 unit GREEN. Offline UI-test APK built after a retained compile failure and corrected retry. Six new native selectors/four checkpoints and recipe/maintenance all blocked/unrun |
 
-Native tests in this table exercise existing tests. They do not establish new
-Swift/Kotlin features, bug fixes or feature red-green proof. Local shared UI
+Historical native slices exercise existing tests. The later
+[RC2 feature receipt](rc2-native-feature-proof.md) records the separate S1/K1
+RED/GREEN work and its bounded surfaces. Local shared UI
 journeys and the single historical Android Jev label judgment have bounded
 scope; iOS Jev remains blocked by the consumer's tool policy. No new external
 judgment, consumer run or consumer edit occurs in this documentation package.
@@ -55,12 +60,15 @@ The owner approved eight retained leaves for 0.1.0 on 6 October 2026:
 static-tested, with direct playbook handoffs in RC2. The same approval defers
 `swarm`, `show-me-your-work` and `setup-huguesstack` to 0.2. Feature maps,
 CLI-first verification and Layer 2 retain their existing deferred scope.
-Native execution and adherence of the eight workflows remain unrun.
+Bounded native Swift execution and Kotlin logic/build proof are observed; full
+adherence of the eight workflows remains unproven.
 
-Four-domain feature-task completeness and native Swift/Kotlin red-green/driven
-paths remain incomplete. Full mode execution, delegated mobile implementation, native todo
-integration and multi-turn/compaction persistence remain unproven. Fresh revised
-guide invocation and a clean applied cycle remain unproven. Cross-host reviews
+Kotlin device proof and four-domain feature-task completeness remain incomplete.
+Actual pause/checkpoint-only pickup and resumed GREEN are observed; full mode
+execution, native todo integration and compaction/general persistence remain
+unproven. S1 recipe assertions passed, with original data continuity and
+simulator boot-state restoration unresolved. A full clean applied cycle remains
+unproven; the historical shared-guide invocation gap is separate. Cross-host reviews
 retain their historical scope; same-host independent review supplies process
 independence only. The owner's personal-workflow checkpoint may retain labelled
 gaps, but correctness of reporting remains required.
@@ -73,11 +81,14 @@ plugin fingerprint binding and historical RC1 initial-candidate static checks/re
 with an uncommitted RC manifest; their 54-file fingerprints identify the tested
 RC1 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d`, rather
 than the recorded base SHA alone. RC2 has 79 plugin files and changed mode and
-playbooks; no fresh RC2 host probe, delegation or eight-workflow adherence is
-established. Record RC2 exact-head checks
-and independent Astra High review in the RC PR before publication/acceptance;
-this receipt records the initial check head and tested plugin fingerprints.
-No future head or final pass is assumed. Use the
+playbooks. The [RC2 host receipt](rc2-host-validation.md) records fresh bounded
+loading, planning and synthetic observations plus repaired-probe byte binding
+to `68cb710`. That routing head passed 194 framework tests/seven checks and
+independent Astra High review. The later documentation candidate remains local
+and unpublished; its exact-head checks, independent Astra High review and any
+fresh host probes are UNRUN at this writing. Publication is blocked pending
+direct owner authorization. [Delivery alternatives](retained-integration.md#delivery-path)
+remain separate. No future head or final pass is assumed. Use the
 [host-loading methods](host-loading.md) and run:
 
 ```sh

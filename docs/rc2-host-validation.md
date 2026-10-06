@@ -7,7 +7,8 @@ through that packet. Later lane-evidence probes used revised plugin bytes
 at committed `dba645fa3adc024487c1137486a81b31e12ec832`; repaired schema probes
 then used uncommitted corrected bytes. These are distinct snapshots;
 checks on one do not validate subsequent edits. No consumer app was edited or
-executed in either continuation. No merge, tag or release is established.
+executed in those host/lane continuations. Later [native feature proof](rc2-native-feature-proof.md)
+is a separate authorized consumer packet. No merge, tag or release is established.
 Target remains **9 October 2026, end of day GMT+7**.
 
 ## Original RC2 loading and routing
@@ -55,7 +56,7 @@ invocation and an actual source read passed; Codex used a direct Markdown
 fallback. Native Codex recipe invocation and a mobile recipe cycle remain
 unproven. The fixture lacks an app, native toolchain and device.
 
-A separate fresh read-only Codex session recovered actual Git state and reopened
+In that initial synthetic snapshot, a separate fresh read-only Codex session recovered actual Git state and reopened
 a six-test/two-failure RED checkpoint without a prior transcript or resume flag.
 The outer coordinator verified source/log hashes. This proves bounded cold
 pickup; actual pause, compaction, resumed GREEN and persistent native todos
@@ -142,23 +143,39 @@ Probe HEAD remained `dba645fa3adc024487c1137486a81b31e12ec832`, with uncommitted
 corrected plugin bytes. The 79-file fingerprint map has SHA-256
 `ef3a077823f42ea2490bced4f5fe1bf13618fd8b15c11ba96ea87d8bdf222b1a` and was unchanged
 before/after both probes. These observations do not validate the committed
-`dba645f` body or establish a clean-head run. Bind any later committed plugin
-bytes through all 79 fingerprints; record its exact-head checks and fresh review
-separately in the RC2 draft.
+`dba645f` body or establish a clean-head run. The subsequent 79-file binding
+now matches committed `68cb710`, as recorded below.
 
 The private lane-evidence packet preserves raw events, parsed replies, actual
 read receipts, complete-suite checker outputs and before/after bindings. It also
 retains the initial review, accepted findings, regression RED and repaired GREEN.
 The initial **178 tests/seven checks PASS** above remains a separate snapshot;
-final source/test checks and final-head review are pending here.
+later final source/test checks and review are recorded in the next section.
+
+## Committed routing binding
+
+The local routing candidate `68cb710e709260317cb7023c84394abc9cc537f6`, tree
+`41dcde6fbe6330aec21ec6570fe70b107ba69da9`, passed **194 framework tests and
+all seven checks**, clean before and after. Independent fresh same-host GPT-6
+Astra High review was CLEAN on that exact head/tree. Accepted requested review
+settings establish no external serving-model attestation or model diversity.
+
+All 79 repaired-probe plugin fingerprints match both working and committed
+bytes at that head; map SHA-256 remains
+`ef3a077823f42ea2490bced4f5fe1bf13618fd8b15c11ba96ea87d8bdf222b1a`.
+The probes ran on dirty corrected bytes at `dba645f`; subsequent byte equality
+establishes no clean-head invocation. The later release-documentation candidate
+has separate exact-head checks/review and fresh host probes UNRUN at this writing.
 
 ## Remaining acceptance gaps
 
 Full adherence of all eight retained workflows, complex `how`, executable design
 branches, `why`'s full source workflow, recurring-mistake enforcement by `correct`
 and a complete maintenance/source-wave/live/cleanup cycle remain unproven.
-Native Swift/Kotlin/KMP/CMP consumer implementation/build/drive under RC2, full
-mode persistence and a clean generated-recipe cycle remain unrun. Historical
+Later S1 Swift RED/GREEN/native assertion phases and K1 Kotlin unit/build work
+are observed in the [native feature receipt](rc2-native-feature-proof.md). K1
+device/recipe/maintenance proof, full four-domain task coverage, compaction/native
+persistent todos and a full clean generated-recipe cycle remain unproven. Historical
 mobile results retain their separate scope in [support](support.md) and the
 [evidence index](evidence-index.md). None of these observations establishes
 stable-release readiness or grants new consumer execution authority.

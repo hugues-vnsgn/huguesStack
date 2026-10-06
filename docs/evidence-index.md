@@ -5,8 +5,9 @@ candidate **`0.1.0-rc.2`**. [Support](support.md) summarizes cells;
 [WORKFLOW](WORKFLOW.md) explains how to start a task. Raw consumer reports,
 screenshots, device identifiers, credentials and machine paths stay private.
 Receipt identifiers and hashes below allow the owner to check retained private
-packets; those bytes are not public downloads. Native results are historical
-observations reopened for documentation, not reruns on this RC.
+packets; those bytes are not public downloads. Historical native slices below
+remain distinct from the later [RC2 native feature proof](rc2-native-feature-proof.md).
+This documentation update runs no consumer command.
 PRs #6 and #7 are merged into main `94560c43bd4a5a062177870188f60a7ebafb5028`.
 The RC does not establish first-release readiness or create a tag/release.
 
@@ -24,8 +25,11 @@ The RC does not establish first-release readiness or create a tag/release.
 | Historical RC1 host probes | [validation receipt](rc-validation.md), [host methods](host-loading.md) | Claude 2.1.290 native session-local load and Codex 0.160.1 manual fallback: each 16 read-only cases/15 routes/87 exact steps; original eleven fixture domain/proof matches. Supplemental domain limit retained. 54 plugin fingerprints unchanged, bound to `21a82942019292f7212ff1185e9ef187ac96e86d` plugin bytes; no RC2 coverage. Fresh bounded scratch delegation/artifact review PASS; 22 outer-worker assertions and 14 independent coordinator checks PASS, recorded separately. Initial setup denial retained |
 | Retained foundation/research/design/verification | [PR #9](https://github.com/hugues-vnsgn/huguesStack/pull/9), [PR #10](https://github.com/hugues-vnsgn/huguesStack/pull/10), [PR #11](https://github.com/hugues-vnsgn/huguesStack/pull/11), [PR #12](https://github.com/hugues-vnsgn/huguesStack/pull/12), [integration](retained-integration.md) | Separate open drafts; reviewed heads and source receipts remain distinct from the unmerged combined RC2 proposal. Verification head `f126656d2718084de8292cda0cb40b81333e4d6e`: 152 framework tests/seven checks PASS; independent Astra High CLEAN, with no host execution claim |
 | RC2 host continuation | [RC2 receipt](rc2-host-validation.md), [host methods](host-loading.md) | `e2ff899`: Claude native session-local load and Codex manual project skills; each 16 routes/87 steps. Both original replies inferred unsupported Kotlin. Bounded synthetic RED/GREEN, design, static recipe loading and cold read-only pickup are recorded with separate limits. Private manifest `d4d6195bcb59d26db8db2fd88038de62b44fbdf570829f0b3d9cbb082ba3c898` |
-| RC2 lane-evidence revision | [RC2 receipt](rc2-host-validation.md#lane-evidence-probes), [fixture](../tests/fixtures/rc2-lane-evidence.json) | `dba645fa3adc024487c1137486a81b31e12ec832`: 178 framework tests/seven checks PASS, clean before/after. Six cases per host/variant and 36 copied steps each; candidate semantic language/lane observations supported, all initial strict fixture comparisons FAIL. Adjudication accepted checker false positives and required target-component evidence/declaration anchors; raw failures remain. Independent final-head review pending; no general compliance claim |
-| RC2 repaired lane previews | [Repaired schema receipt](rc2-host-validation.md#repaired-schema-probes) | Each host passed six unique cases and 36 copied steps. Probe HEAD remained `dba645fa3adc024487c1137486a81b31e12ec832` with uncommitted corrected plugin bytes; 79-file map `ef3a077823f42ea2490bced4f5fe1bf13618fd8b15c11ba96ea87d8bdf222b1a` unchanged before/after. Revised prompt protocol; planning-only, full workflow unproven. Final committed-byte binding/checks/review remain separate |
+| RC2 lane-evidence revision | [RC2 receipt](rc2-host-validation.md#lane-evidence-probes), [fixture](../tests/fixtures/rc2-lane-evidence.json) | `dba645fa3adc024487c1137486a81b31e12ec832`: 178 framework tests/seven checks PASS, clean before/after. Six cases per host/variant and 36 copied steps each; candidate semantic language/lane observations supported, all initial strict fixture comparisons FAIL. Adjudication accepted checker false positives and required target-component evidence/declaration anchors; raw failures remain. Independent review was pending at that initial snapshot; later routing-head review is separate. No general compliance claim |
+| RC2 repaired lane previews | [Repaired schema receipt](rc2-host-validation.md#repaired-schema-probes) | Each host passed six unique cases/36 copied steps with corrected uncommitted bytes at `dba645f`. All 79 hashes subsequently match committed `68cb710`; map `ef3a077823f42ea2490bced4f5fe1bf13618fd8b15c11ba96ea87d8bdf222b1a`. Revised prompt protocol; planning-only, no clean-head invocation/full workflow claim |
+| RC2 routing candidate checks/review | [Final routing binding](rc2-host-validation.md#committed-routing-binding) | `68cb710e709260317cb7023c84394abc9cc537f6`, tree `41dcde6fbe6330aec21ec6570fe70b107ba69da9`: 194 framework tests/seven checks PASS, clean before/after; independent same-host Astra High CLEAN. Later documentation heads and fresh probes require separate receipts |
+| RC2 S1/K1 feature continuation | [Native feature proof](rc2-native-feature-proof.md) | S1 actual RED/pause/pickup/GREEN, recipe and maintenance assertion phases observed; original continuity/boot-state gaps prevent full clean-cycle acceptance. K1 actual RED/pause/pickup/unit GREEN and built APK; all new device/recipe/maintenance runs blocked |
+| Selected combined RC2 delivery | [PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13), [integration](retained-integration.md#delivery-path) | Remote observed OPEN/DRAFT on main at `e2ff899`; later local candidate unpublished. PRs #8–#12 remain open drafts as the alternative stack; no close/merge is implied |
 | Deferred additions | [PR #2](https://github.com/hugues-vnsgn/huguesStack/pull/2), [plan](PLAN.md) | Open draft at `4f032119f887407885a5e90851633d1887cc57cc`; consumer feature maps and CLI-first verification remain post-first-release work |
 
 Historical Opus/Fable reviews remain evidence for their stated revisions. New PR
@@ -169,11 +173,13 @@ static-tested, with direct playbook handoffs in RC2. The same approval defers
 `swarm`, `show-me-your-work` and `setup-huguesstack` to 0.2. Feature maps,
 CLI-first verification and Layer 2 retain their existing deferred scope.
 Bounded synthetic observations cover portions of five retained tools; full
-eight-workflow adherence and native consumer execution under RC2 remain unrun.
+eight-workflow adherence remains unproven. Later [native feature proof](rc2-native-feature-proof.md)
+adds bounded Swift execution and Kotlin logic/build evidence.
 
-Native Swift/Kotlin feature or bug tasks with red-green and driven paths,
-four-domain feature-task completeness, full mode execution/delegated mobile implementation/persistence,
-fresh revised-guide invocation and a clean generated cycle remain incomplete.
+Native Swift and Kotlin RED/GREEN tasks and actual checkpoint-only pickup are
+observed. Kotlin device proof, four-domain task completeness, full mode execution,
+compaction/native persistent todos and a clean generated cycle remain incomplete.
+S1 recipe assertions passed; the historical shared-guide cycle keeps its own gaps.
 Historical cross-host reviews retain their exact scope; new same-host reviews
 cannot supply fresh cross-host workflow proof. Historical RC1 host previews and bounded scratch delegation are recorded in the
 [receipt](rc-validation.md), bound to its 54 files at `21a82942019292f7212ff1185e9ef187ac96e86d`.
