@@ -20,6 +20,8 @@ PREFIX = 'pstack/'
 ROOT = Path(__file__).resolve().parents[1]
 DISPOSITIONS = {'port verbatim', 'port with adaptation', 'ignore with reason', 'pending'}
 STATES = {'present', 'planned', 'deferred', 'external', 'not planned', 'pending'}
+RETAINED_SKILLS = {'how', 'why', 'architect', 'arena', 'tdd', 'blast-radius',
+                   'maintain-verification-skill', 'correct'}
 
 
 def require(condition, message):
@@ -270,6 +272,102 @@ def render_csv(ledger):
     return stream.getvalue().encode()
 
 
+def check_retained_provenance(ledger, source, root):
+    """Bind every shipped retained leaf and reference to its pinned source receipt."""
+    root = root.resolve()
+    pinned = {row['path']: row for row in source['files']}
+    rows = {row['path']: row for row in ledger['items']}
+    seen_sources, seen_destinations = set(), set()
+    header_keys = {'repository', 'revision', 'upstream_version', 'package', 'files'}
+    file_keys = {'source', 'destination', 'disposition', 'blob_sha', 'sha256', 'mode',
+                 'destination_sha256', 'retained_contracts', 'deviations'}
+
+    def package_file(path):
+        require(path.is_file() and not path.is_symlink()
+                and path.resolve().is_relative_to(root), f'unsafe retained file: {path}')
+        require(not any(parent.is_symlink() for parent in path.parents if parent != root),
+                f'unsafe retained file ancestor: {path}')
+        return path
+
+    for path in sorted((root / 'docs/upstream').glob('retained-*-provenance.json')):
+        package_file(path)
+        receipt = load(path)
+        require(isinstance(receipt, dict) and set(receipt) == header_keys,
+                'malformed retained receipt header')
+        package = receipt['package']
+        require(isinstance(package, str) and re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', package)
+                and path.name == f'retained-{package}-provenance.json',
+                'retained receipt package does not match filename')
+        require(receipt['repository'] == source['repository'] == REPOSITORY
+                and receipt['revision'] == source['revision']
+                and receipt['upstream_version'] == source['version'],
+                'retained receipt does not match pin')
+        require(isinstance(receipt['files'], list) and receipt['files'],
+                'retained receipt needs files')
+        for entry in receipt['files']:
+            require(isinstance(entry, dict) and set(entry) == file_keys,
+                    'malformed retained file receipt')
+            name = safe_path(entry['source'])
+            destination = destination_path(entry['destination'])
+            parts = PurePosixPath(name).parts
+            require(len(parts) >= 4 and parts[1] == 'skills' and parts[2] in RETAINED_SKILLS,
+                    'retained receipt source is outside retained families')
+            require(destination.startswith(f'plugin/skills/{parts[2]}/'),
+                    'retained receipt destination is outside its family')
+            require(name not in seen_sources and destination not in seen_destinations,
+                    'duplicate retained receipt source or destination')
+            seen_sources.add(name)
+            seen_destinations.add(destination)
+            expected, row = pinned.get(name), rows.get(name)
+            require(expected is not None and row is not None,
+                    'retained receipt source missing from snapshot or ledger')
+            require(all(entry[key] == expected[key] == row[key]
+                        for key in ('blob_sha', 'sha256', 'mode')),
+                    'retained receipt fingerprint/mode differs from pin or ledger')
+            require(entry['disposition'] in {'adapted', 'verbatim'},
+                    'invalid retained receipt disposition')
+            require(row['implementation_state'] == 'present'
+                    and destination in row['destinations']
+                    and row['disposition'] == {'adapted': 'port with adaptation',
+                                               'verbatim': 'port verbatim'}[entry['disposition']],
+                    'retained receipt does not match present ledger destination/disposition')
+            for key in ('retained_contracts', 'deviations'):
+                require(isinstance(entry[key], list)
+                        and all(isinstance(value, str) and value.strip() for value in entry[key]),
+                        f'malformed retained receipt {key}')
+            require(entry['retained_contracts'], 'retained receipt needs contract evidence')
+            sha(entry['destination_sha256'], 64)
+            target = package_file(root / destination)
+            body = target.read_bytes()
+            require(hashlib.sha256(body).hexdigest() == entry['destination_sha256'],
+                    f'retained destination bytes differ: {destination}')
+            if entry['disposition'] == 'verbatim':
+                require(oid('blob', body) == expected['blob_sha']
+                        and hashlib.sha256(body).hexdigest() == expected['sha256'],
+                        f'retained verbatim destination differs: {destination}')
+
+    shipped = set()
+    for family in sorted(RETAINED_SKILLS):
+        directory = root / 'plugin/skills' / family
+        require(not directory.is_symlink(), f'unsafe retained family: {family}')
+        if directory.exists():
+            require(directory.is_dir(), f'retained family is not a directory: {family}')
+            for path in directory.rglob('*'):
+                require(not path.is_symlink(), f'unsafe retained path: {path}')
+                if path.is_file():
+                    package_file(path)
+                    shipped.add(path.relative_to(root).as_posix())
+    require(shipped == seen_destinations,
+            'retained receipt coverage missing for shipped leaf/reference files')
+    for row in ledger['items']:
+        parts = PurePosixPath(row['path']).parts
+        if (len(parts) >= 4 and parts[1] == 'skills' and parts[2] in RETAINED_SKILLS
+                and row['implementation_state'] == 'present'):
+            require(row['path'] in seen_sources and len(row['destinations']) == 1
+                    and row['destinations'][0] in seen_destinations,
+                    'retained receipt coverage missing for present ledger row')
+
+
 def check_destinations(ledger, source, root):
     for row in ledger['items']:
         if row['implementation_state'] != 'present':
@@ -310,6 +408,8 @@ def check_destinations(ledger, source, root):
                 and generator['disposition'] == 'port with adaptation'
                 and set(generator['destinations']).issubset(receipt.get('destinations', [])),
                 'WP3 receipt does not match reconciled ledger')
+
+    check_retained_provenance(ledger, source, root)
 
 
 def render_delta(before, after, ledger=None):

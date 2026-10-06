@@ -16,6 +16,7 @@ class PackageChecks(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.repo = Path(self.temp.name) / 'package'
         shutil.copytree(ROOT, self.repo, ignore=shutil.ignore_patterns('.git', '__pycache__', 'planning'))
+        self.mode_body = (self.repo / 'plugin/skills/hugues-mode/SKILL.md').read_text().split('---\n', 2)[2]
 
     def run_check(self):
         return subprocess.run(['sh', str(CHECKER), str(self.repo)], text=True, capture_output=True)
@@ -33,7 +34,8 @@ class PackageChecks(unittest.TestCase):
         file.write_text(json.dumps(data))
 
     def skill(self, text):
-        (self.repo / 'plugin/skills/hugues-mode/SKILL.md').write_text(text)
+        # Mutate loader metadata without removing real headings linked by other skills.
+        (self.repo / 'plugin/skills/hugues-mode/SKILL.md').write_text(text + self.mode_body)
 
     def test_valid_package_and_cwd_independence(self):
         result = subprocess.run(['sh', str(self.repo / 'scripts/check-plugin.sh')], cwd=self.temp.name, text=True, capture_output=True)

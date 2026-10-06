@@ -9,9 +9,16 @@ WP5 upstream sync and **WP6 workflow/evidence documentation**.
 `hugues-mode` selects one of fourteen playbooks, copies its steps into a todo list and names
 the mobile proof required. The package includes a fresh-task worker,
 `interrogate` review guidance and the 24 verbatim upstream principles.
-WP3 adds a project-local verification generator, jev Drive guidance and a durable
-Markdown evidence outline. Version `0.1.0-dev.3` is a development version;
-first-release readiness remains unproven.
+The eight approved retained tools add research, design, regression proof, downstream
+safety checks, bounded recipe maintenance and recurring-mistake enforcement. The
+package now ships 35 skills; read [retained integration](docs/retained-integration.md)
+for direct playbook handoffs and source receipts. WP3 adds a project-local verification generator, jev Drive guidance and a durable
+Markdown evidence outline. Version **`0.1.0-rc.2`** is a prerelease candidate
+for review, not an accepted 0.1.0 release. See the [RC notes](docs/RELEASE-0.1.0.md)
+for current evidence and gaps. The owner selected combined draft
+[PR #13](https://github.com/hugues-vnsgn/huguesStack/pull/13), based on main;
+the later local documentation candidate is unpublished. No tag or release has
+been created.
 
 New PR reviews use independent GPT-6 Astra reviewers with High effort. Read the
 [PR review policy](plugin/skills/hugues-mode/references/pr-review-policy.md) before
@@ -22,8 +29,17 @@ Start with the short [workflow guide](docs/WORKFLOW.md) and
 [support matrix](docs/support.md). Use `/hugues-stack:hugues-mode` in Claude Code,
 or the documented Codex manual project-skill/direct-read fallback in
 [host loading](docs/host-loading.md); native Codex installation/invocation remains
-unverified. Give it a
-goal and a way to check it. For example:
+unverified. Historical RC1 read-only previews matched 16 cases across all fourteen
+playbooks and `interrogate` in both hosts, with displayed checklists, on
+`21a82942019292f7212ff1185e9ef187ac96e86d` plugin bytes. RC2 changes those
+bodies and adds eight tools. Later repaired planning previews passed six unique
+cases and 36 copied steps per host; all 79 tested plugin fingerprints now match
+committed `68cb710`. This is byte binding, with no clean-head invocation claim.
+See [RC2 host validation](docs/rc2-host-validation.md) and the bounded
+[Swift/Kotlin feature proof](docs/rc2-native-feature-proof.md). The
+[RC validation receipt](docs/rc-validation.md) records the domain limits and
+bounded synthetic delegation pass, including its initial setup failure.
+Give it a goal and a way to check it. For example:
 
 ```text
 The discount boundary is wrong in shared code. Fix it once and show me it passing on Android and iOS.

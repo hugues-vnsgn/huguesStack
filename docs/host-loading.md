@@ -62,7 +62,8 @@ normal hook and execution policy for implementation or command-running sessions;
 these probes supply no authority to disable those controls. Record argv, settings
 sources, tool availability and actual invocation response separately from the
 candidate's content. See [verification continuation](verification-continuation.md)
-for the full-cycle gap.
+for that historical full-cycle gap and the [current evidence index](evidence-index.md)
+for the later applied cycle and its remaining limits.
 
 ## Codex
 
@@ -82,7 +83,8 @@ The output listed `` Marketplace `hugues-stack` `` at
 marketplace after the manifest's `name`, rather than the config key `hs`.
 This records the reviewer's observation; the override was not rerun here.
 
-**Codex native install and `$hugues-mode` invocation** is **blocked** by WP1 scope.
+**Codex native install and `$hugues-mode` invocation** remains **unrun**.
+The historical WP1 probe was blocked by its scope.
 `codex plugin add` installs globally and was not run.
 
 Use a disposable project skill fallback only when the coordinator authorizes
@@ -94,7 +96,7 @@ Label this result **manual project skill**. No global installation was performed
 Keep temporary symlinks outside the plugin repository: its static checker rejects
 repository symlinks. Record the actual scratch setup with the run evidence.
 
-A manual probe does not demonstrate the marketplace entry, plugin namespacing,
+A WP1 manual probe does not demonstrate the marketplace entry, plugin namespacing,
 mode persistence, routing, delegation or mobile execution. Those checks have
 separate cells in [support](support.md).
 
@@ -170,3 +172,91 @@ runtime checks; see the [review audit](reviews/wp2-claude-review.md).
 See [WP1 validation](wp1-validation.md) for historical evidence and incomplete
 initial probe attempts, and [WP2 validation](wp2-validation.md) for current
 acceptance boundaries.
+
+## Historical RC1 probes
+
+The historical `0.1.0-rc.1` read-only previews completed on 6 October 2026. Claude Code
+2.1.290 directly loaded the session-local plugin; its event stream confirms
+`claude-opus-5-5`. Codex 0.160.1 used a disposable manual project-skill symlink
+and direct reads. It inherited configured `gpt-6.1-sol` without an override;
+the actual served model is not exposed in the retained stream. No native Codex
+installation or invocation is established.
+
+Each preview matched 16 route/file decisions across all fourteen playbooks plus
+`interrogate`, and 87 numbered steps exactly. The original eleven fixture
+domain/proof decisions matched. The supplemental Android Gradle-only prompt
+established no implementation language: Codex left it unresolved, while Claude
+inferred Kotlin without repository evidence. Both hosts lacked native todo tools
+and used displayed checklists. These are planning observations, not full mode
+execution or proof of every supplemental domain choice.
+
+Initial read-only sandbox attempts failed with Claude `authentication_failed`
+and Codex runtime `Operation not permitted`. The same scoped CLI probes then
+completed under authorized escalation for existing authentication/runtime access.
+Both failures remain retained; no installation, global settings change or
+permission bypass occurred. Route probes restricted tools and disabled hooks
+per invocation. Their isolation grants no implementation authority.
+
+A separate initial synthetic Claude session kept normal hook policy and launched the
+registered `hugues-stack:hugues-agent` and a fresh native Explore reviewer.
+Parented events show mode/principle reads. Claude denied the one exact scratch
+Write despite the explicit one-path `allowedTools` setting: the authorized
+probe lacked an effective matching grant and its noninteractive session had no
+approval surface. This was a probe setup/runtime permission limit, not withheld
+owner authority or a platform automatic approval review rejection. The target
+stayed absent; this attempt executed no behavioral assertions. The reviewer's
+static assessment of an unwritten proposal accepted no artifact. Its proposal
+also consumed generators during validation, a distinct static defect.
+
+A fresh bounded check corrected only the exact scratch-file grant to
+`Edit(//absolute/path/normalize_topics.py)`, covering the requested and resolved
+aliases. Claude's [permission rules](https://code.claude.com/docs/en/permissions#read-and-edit)
+use Edit rules for built-in writes and `//` for absolute paths. The fresh
+registered worker wrote the artifact once; a fresh Explore reviewer read its
+actual source and found no behavior defects. CLI exit was 0 with no permission
+denial. Normal hooks/settings stayed unchanged; no bypass or broad Edit/Write
+grant was used. The original denied packet remains intact.
+
+The outer worker's 22 assertions and the coordinator's independent 14 literal
+checks passed on the same artifact. These overlapping sets are reported
+separately; no commands or tests ran inside the native Claude session. This
+proves bounded scratch delegation/artifact behavior, with same-host process
+independence. Full mode execution, mobile delegation, red-green, generated-recipe
+cycle and persistence remain unrun.
+
+All 54 plugin file fingerprints and both user-settings hashes matched before
+and after on exact RC1 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d`.
+The RC2 package has 79 plugin files and changed mode/playbook bodies. These
+RC1 probes cover only their original revision. The [RC validation receipt](rc-validation.md)
+binds that historical packet; later [RC2 host observations](rc2-host-validation.md)
+record native Claude loading, manual Codex previews, bounded synthetic work and
+fresh lane-evidence probes. Full eight-workflow adherence and mobile execution
+remain unrun. Record final-head checks and independent review separately in the
+RC draft before acceptance.
+
+## RC2 loading and lane-evidence probes
+
+Fresh RC2 sessions used Claude Code 2.1.290's session-local native plugin loader
+and Codex 0.160.1's disposable manual project-skill path. At `e2ff899`, each
+matched sixteen route/file choices and 87 numbered steps; Claude registered all
+35 skills and the custom worker. Codex separately discovered the marketplace
+entry without installing it. Native Codex installation and namespaced invocation
+remain unrun. These previews exposed no native todo tool.
+
+Both original RC2 replies inferred Kotlin from an Android/Gradle-only request.
+The revised [lane evidence rule](../plugin/skills/hugues-mode/references/mobile-lanes.md#lane-evidence)
+separates platform, language, framework/shared ownership and affected target.
+Six fresh cases on baseline and candidate bytes used the same structured prompt,
+with scoped fixture-source reads where permitted. Each host copied all 36
+`build-doctor` steps exactly. Candidate language/lane observations and strict
+comparison mismatches are recorded separately in the [RC2 receipt](rc2-host-validation.md#lane-evidence-probes).
+A formatted response and static contract checks do not establish general model
+compliance or authorize consumer execution.
+
+Fresh repaired schema probes on corrected, uncommitted plugin bytes each passed
+six unique cases and 36 copied steps. The prompt added a target-component/evidence
+schema and canonical lane format; fixture expectations and declaration metadata
+were withheld. The [repaired receipt](rc2-host-validation.md#repaired-schema-probes)
+binds all 79 plugin fingerprints and actual fixture reads. These planning-only
+results used a different protocol from the initial probes. Full workflow
+adherence, native mobile execution and general host reliability remain unproven.

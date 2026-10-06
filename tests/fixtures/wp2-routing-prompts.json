@@ -3,7 +3,7 @@
   "cases": [
     {
       "id": "ios-badge-bug",
-      "prompt": "The article list jumps when the unread badge updates. Repro on the iOS simulator first, then fix and verify.",
+      "prompt": "The Swift article list jumps when the unread badge updates. Repro on the iOS simulator first, then fix and verify.",
       "expected_route": "bug-fix",
       "expected_file": "playbooks/bug-fix.md",
       "expected_domain": "Swift/iOS",
@@ -15,7 +15,7 @@
     },
     {
       "id": "android-action-feature",
-      "prompt": "Add a mark older as read action to the topic screen. Prove it on the Pixel emulator and keep the unit tests green.",
+      "prompt": "Add a mark older as read action to the Kotlin Android topic screen. Prove it on the Pixel emulator and keep the unit tests green.",
       "expected_route": "feature",
       "expected_file": "playbooks/feature.md",
       "expected_domain": "Kotlin/Android",
@@ -27,7 +27,7 @@
     },
     {
       "id": "kmp-boundary-bug",
-      "prompt": "The discount boundary is wrong in shared code. Fix it once and show me it passing on Android and iOS.",
+      "prompt": "The discount boundary is wrong in KMP shared code. Fix it once and show me it passing on Android and iOS.",
       "expected_route": "kmp-bridge-change",
       "expected_file": "playbooks/kmp-bridge-change.md",
       "expected_domain": "KMP shared logic",
@@ -89,7 +89,7 @@
     },
     {
       "id": "resume-ios-fix",
-      "prompt": "Resume the iOS badge bug fix from yesterday's handoff.",
+      "prompt": "Resume the Swift iOS badge bug fix from yesterday's handoff.",
       "expected_route": "session-pickup",
       "expected_file": "playbooks/session-pickup.md",
       "expected_domain": "Swift/iOS",
@@ -101,7 +101,7 @@
     },
     {
       "id": "explain-ios-no-changes",
-      "prompt": "Why does the iOS article list jump when the unread badge updates? Explain only, change nothing.",
+      "prompt": "Why does the Swift iOS article list jump when the unread badge updates? Explain only, change nothing.",
       "expected_route": "investigation",
       "expected_file": "playbooks/investigation.md",
       "expected_domain": "Swift/iOS",

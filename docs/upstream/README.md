@@ -25,6 +25,18 @@ Deferred and omitted responsibilities remain visible with reasons. In
 particular, benchmark wiring, feature maps, automatic workflows and Layer 2
 helpers are deferred; mobile native/test/UI proof requirements stay intact.
 
+## Retained 0.1.0 tools
+
+The owner approved eight retained families on 6 October 2026. All eight are now
+authored and static-tested: `how`, `why`, `architect`, `arena`, `tdd`,
+`blast-radius`, `maintain-verification-skill` and `correct`. Their source and
+destination fingerprints remain in the research, design and verification receipts
+linked from [retained integration](../retained-integration.md). The current ledger
+marks their 25 files present. Only `swarm`, `show-me-your-work` and
+`setup-huguesstack` are newly approved deferrals to 0.2. The pin, historical
+snapshots and private owner originals remain unchanged. Static accounting proves
+no native host execution of the eight workflows.
+
 ## Reproduce offline
 
 Python 3.9+ and Git are sufficient. No dependency install or upstream code

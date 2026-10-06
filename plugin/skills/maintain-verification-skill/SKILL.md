@@ -1,0 +1,30 @@
+---
+name: maintain-verification-skill
+description: "Audit an existing bounded mobile verification recipe against source and one coordinator-owned live session; report clean, changed or blocked."
+disable-model-invocation: true
+source: pstack/skills/maintain-verification-skill/SKILL.md
+---
+
+# Maintain a verification skill
+
+Keep a project-local recipe from [create-verification-skill](../create-verification-skill/SKILL.md) honest as the app changes. This adaptation covers its existing agreed journey and every named checkpoint and target. Feature-map generation and whole-app traversal remain owner-deferred. Read this file directly; native discovery is a separate host observation.
+
+## Outcomes and edit scope
+
+Report exactly one outcome:
+
+- `clean`: every in-scope checkpoint and target got source and live coverage; no correction worth shipping. No branch or PR.
+- `changed`: proven documentation or owned harness corrections are ready, with exact local diff and re-proof. Open at most one PR only when the owner's current authority covers publication; otherwise report it as prepared locally and publication unrun.
+- `blocked`: coverage could not finish or a proven correction could not be prepared safely. Name the missing prerequisite and coverage. Missing execution authority is blocked, never clean.
+
+Edit only the target verification skill's own directory, including its SKILL.md and owned helper scripts. Preserve user work. Report a product regression without editing product code or changing the expected description to hide it. Keep concise coverage/drift/outcome notes in private scratch evidence outside the repositories; do not commit run notes.
+
+## Steps
+
+0. Locate the consumer-local verification skill and read it in full. Honor its canonical layout and host copies as described by the generator. Several ambiguous candidates require a target choice; none means stop and point to the generator. Record the exact existing journey, expected checkpoints, domains, targets, permitted commands and writable directory under [mode authority](../hugues-mode/SKILL.md#authority). Read [mobile lanes](../hugues-mode/references/mobile-lanes.md) and the [evidence guide](../hugues-mode/references/evidence-guide.md).
+1. Check recipe hygiene. Resolve every owned pointer and helper, checkpoint, target and host-copy relationship against the actual files. Repair missing, duplicate, stale or dead entries within edit scope. Preserve the bounded journey; a newly discovered out-of-scope user path is a cited follow-up, not permission to create a feature map or expand traversal.
+2. Run a source wave. Give one fresh read-only source reader each distinct in-scope recipe/checkpoint group, concurrently when supported. Read [host notes](../hugues-mode/references/host-notes.md) and the complete agent wrapper; use the actual host adapter with absolute mode and skills paths. Each reader returns user-visible behavior, source entry points with citations, likely drift or none and one concise live recipe. Readers never edit files or drive the app. If delegation is unavailable or prohibited, report the source-wave gap and blocked outcome; complete permitted direct source reading without claiming the wave ran.
+3. Reconcile every returned group against the bounded checkpoint/target list. Merge overlapping recipes into as few app states as practical. Spot-check cited drift rather than repeating every clean investigation. Sweep recent churn for changes to the agreed journey, requiring a concrete source path before declaring drift. Record source coverage and every unresolved gap.
+4. Perform the live pass even when source looks clean. The coordinator owns all driving, serially, with one live mobile session at a time under the recipe's Launch model. Keep one long-lived instance for each target while its recipes run; source readers never drive. Exercise every in-scope checkpoint on every required target. Doctor before first drive and after every failed or surprising drive. If the process is healthy but UI state is wedged, reset to a known state or relaunch within authority before further driving. Preserve evidence at its named location before cleanup and check that it remains readable afterward. Clean residue from every failed iteration, including a stuck or exited session; for a shared instance, clean owned residue without destroying the instance. For doctor failure caused by recipe drift, repair only the recipe or owned helper and retry once; restart only the state that repair invalidated. If that retry fails, report blocked. Record `verified-unreachable` only with the concrete auth, entitlement, OS or external-state prerequisite and attempted route; a missing prerequisite in the recipe is doc drift, and unreachable remains excluded from successful runtime coverage. Read [jev Drive](../hugues-mode/references/jev-drive.md) before screen actions; missing permitted tools or transmission authority retains a named blocker.
+5. Triage each finding. Fix wrong user-POV instructions as doc drift. Fix an owned helper that cannot drive working behavior as a harness gap; each helper must be executable with an exact invocation in the skill body. Re-drive every harness correction live before treating it as proven. Report broken product behavior as a product gap outside this edit scope. Preserve failed attempts and per-target evidence, including skips, retries and wrong-target results.
+6. Re-read every changed file and confirm corrections against source and the live re-proofs. Run final teardown only after the last drive, including all harness re-proofs. Nothing owned by the run outlives its usefulness; keep any unsafe or unauthorized teardown as a recorded handoff and blocker. Reopen evidence after teardown and inspect its logs, reports and screenshots. Choose clean, changed or blocked honestly; incomplete required coverage is blocked. For changed, prepare one bounded correction diff and at most one authorized PR. For clean or blocked, no PR. Report source/live coverage, unreachable prerequisites and attempted routes, product gaps, drift, outcome, evidence location and unrun publication.
