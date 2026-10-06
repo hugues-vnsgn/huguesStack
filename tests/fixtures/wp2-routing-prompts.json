@@ -89,7 +89,7 @@
     },
     {
       "id": "resume-ios-fix",
-      "prompt": "Resume the iOS badge bug fix from yesterday's handoff.",
+      "prompt": "Resume the Swift iOS badge bug fix from yesterday's handoff.",
       "expected_route": "session-pickup",
       "expected_file": "playbooks/session-pickup.md",
       "expected_domain": "Swift/iOS",
@@ -101,7 +101,7 @@
     },
     {
       "id": "explain-ios-no-changes",
-      "prompt": "Why does the iOS article list jump when the unread badge updates? Explain only, change nothing.",
+      "prompt": "Why does the Swift iOS article list jump when the unread badge updates? Explain only, change nothing.",
       "expected_route": "investigation",
       "expected_file": "playbooks/investigation.md",
       "expected_domain": "Swift/iOS",

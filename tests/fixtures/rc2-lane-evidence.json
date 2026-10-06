@@ -1,5 +1,5 @@
 {
-  "purpose": "Inputs and independent expected answers for read-only live host probes. Unit tests validate the observation checker and static guidance only; no simulated host execution. Expected answers must be withheld from the host. Source-read receipts must come from its actual tool trace, not self-report.",
+  "purpose": "Inputs and independent expected answers for read-only live host probes. Unit tests validate the observation checker and static guidance only; no simulated host execution. Withhold expected, target_context and source_language_declarations from hosts. Source-read receipts must come from actual tool traces, not self-report. The checker accepts normalized canonical lanes; language_basis separately records request-derived versus source evidence. Target components preserve partial knowledge independently; a source pathname alone is not a configured module, source set or scheme.",
   "cases": [
     {
       "id": "android-gradle-only",
@@ -11,8 +11,21 @@
         "implementation_language": null,
         "language_basis": "unresolved",
         "framework_or_shared_ownership": null,
-        "affected_target": null,
+        "affected_target": {
+          "requested_destination": "Pixel emulator",
+          "module": null,
+          "source_set": null,
+          "scheme": null,
+          "variant": null,
+          "device_instance": null
+        },
         "lane": null
+      },
+      "target_context": {
+        "requested_destination": {
+          "reference": "request",
+          "anchor": "Pixel emulator"
+        }
       }
     },
     {
@@ -25,8 +38,21 @@
         "implementation_language": null,
         "language_basis": "unresolved",
         "framework_or_shared_ownership": null,
-        "affected_target": null,
+        "affected_target": {
+          "requested_destination": "iPhone simulator",
+          "module": null,
+          "source_set": null,
+          "scheme": null,
+          "variant": null,
+          "device_instance": null
+        },
         "lane": null
+      },
+      "target_context": {
+        "requested_destination": {
+          "reference": "request",
+          "anchor": "iPhone simulator"
+        }
       }
     },
     {
@@ -42,8 +68,22 @@
         "implementation_language": "Java",
         "language_basis": "source",
         "framework_or_shared_ownership": null,
-        "affected_target": null,
+        "affected_target": {
+          "requested_destination": null,
+          "module": null,
+          "source_set": null,
+          "scheme": null,
+          "variant": null,
+          "device_instance": null
+        },
         "lane": null
+      },
+      "target_context": {},
+      "source_language_declarations": {
+        "app/src/main/java/example/MainActivity.java": {
+          "span": "public class MainActivity { public String label() { return \"demo\"; } }",
+          "anchor": "public class MainActivity"
+        }
       }
     },
     {
@@ -56,9 +96,17 @@
         "implementation_language": "Kotlin",
         "language_basis": "request",
         "framework_or_shared_ownership": null,
-        "affected_target": null,
+        "affected_target": {
+          "requested_destination": null,
+          "module": null,
+          "source_set": null,
+          "scheme": null,
+          "variant": null,
+          "device_instance": null
+        },
         "lane": "Kotlin/Android"
-      }
+      },
+      "target_context": {}
     },
     {
       "id": "scoped-kotlin-source",
@@ -72,8 +120,22 @@
         "implementation_language": "Kotlin",
         "language_basis": "source",
         "framework_or_shared_ownership": null,
-        "affected_target": null,
+        "affected_target": {
+          "requested_destination": null,
+          "module": null,
+          "source_set": null,
+          "scheme": null,
+          "variant": null,
+          "device_instance": null
+        },
         "lane": "Kotlin/Android"
+      },
+      "target_context": {},
+      "source_language_declarations": {
+        "app/src/main/kotlin/example/Label.kt": {
+          "span": "class Label { fun text(): String = \"demo\" }",
+          "anchor": "fun text(): String"
+        }
       }
     },
     {
@@ -88,8 +150,22 @@
         "implementation_language": "Swift",
         "language_basis": "source",
         "framework_or_shared_ownership": null,
-        "affected_target": null,
+        "affected_target": {
+          "requested_destination": null,
+          "module": null,
+          "source_set": null,
+          "scheme": null,
+          "variant": null,
+          "device_instance": null
+        },
         "lane": "Swift/iOS"
+      },
+      "target_context": {},
+      "source_language_declarations": {
+        "App/Label.swift": {
+          "span": "struct Label { var text: String { \"demo\" } }",
+          "anchor": "struct Label { var text: String"
+        }
       }
     }
   ]

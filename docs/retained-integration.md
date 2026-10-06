@@ -74,9 +74,19 @@ separate RC2 draft record before publication; no future SHA or verdict is assume
 The [RC1 receipt](rc-validation.md) retains 54 fingerprints bound only to the
 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d`. Its two-host
 16-case/87-step previews and bounded scratch delegation are historical. RC2's
-changed mode/playbooks, metadata and 79 plugin files have no fresh host probe.
-Native loading, eight-workflow adherence and mobile execution remain unrun for
-this integration. Native todo behavior, four-domain feature completeness,
+changed mode/playbooks and 79 plugin files subsequently received fresh native
+Claude loading and manual Codex previews at `e2ff899`. The [RC2 receipt](rc2-host-validation.md)
+records sixteen route cases/87 exact steps per host, the unsupported-language
+gap, bounded synthetic workflows and later six-case lane-evidence observations.
+Full eight-workflow adherence and native mobile execution remain unrun. Native todo behavior, four-domain feature completeness,
 Swift/Kotlin red-green paths, full mode/persistence and the clean generated-recipe
 cycle remain incomplete. Historical failures, native results and target limits
 remain in [support](support.md) and the [evidence index](evidence-index.md).
+
+The later [repaired schema probes](rc2-host-validation.md#repaired-schema-probes)
+passed six unique cases and 36 copied steps per host, with actual scoped source
+reads. They used corrected uncommitted plugin bytes and a revised prompt schema;
+all 79 plugin fingerprints remained unchanged during the probes. This establishes
+bounded planning previews. Full workflow adherence remains unproven. Final
+committed-byte binding, exact-head checks and independent review remain separate
+RC2 draft evidence.

@@ -16,7 +16,11 @@ assertion. A successful same-artifact retry retains its flaky outcome.
 |---|---|---|
 | Historical RC1 package, 27 skills and local contracts | static-tested | Initial RC1 `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests and seven checks PASS; independent Astra High CLEAN. This row binds the historical initial RC1 head and covers no RC2 edit. Historical merged-main receipt remains separate |
 | RC2 retained tools and wiring | static-tested | 35 shipped skills / 79 plugin files. Eight authored retained leaves have separately reviewed static package receipts; [integration](retained-integration.md) binds those heads. Record new exact-head integration checks/review in the separate RC2 draft; no future head or verdict is assumed |
-| RC2 loading and eight-workflow adherence | blocked | Unrun. Historical 54-file RC1 probes and 16-case/87-step previews do not cover changed RC2 bytes; no new native host or mobile proof |
+| RC2 host loading and route previews | observed-pass | At `e2ff899`, Claude native session-local loading registered 35 skills and the worker; Codex used manual project skills and separately discovered the uninstalled marketplace. Each host matched 16 routes and 87 steps. Both inferred unsupported Kotlin in the Android/Gradle-only case; [RC2 receipt](rc2-host-validation.md) separates the gap |
+| RC2 lane evidence | observed-fail | At `dba645f` plugin bytes, both candidate hosts made supported language/lane choices across six scoped cases and copied 36 steps exactly. Initial historical snapshot: all four baseline/candidate strict fixture comparisons FAIL on target formatting and/or lane fields. Adjudication accepted checker false positives and required target-component evidence/declaration anchors; raw failures remain. No full fixture PASS for that snapshot. [Receipt](rc2-host-validation.md#lane-evidence-probes) |
+| RC2 repaired lane previews | observed-pass | Each host passed six unique cases and 36 copied steps using uncommitted corrected plugin bytes, planning-only. Full workflow adherence remains unproven; no consumer execution. [Receipt](rc2-host-validation.md#repaired-schema-probes) |
+| RC2 bounded retained workflow observations | observed-pass | Native Claude simple `how`, separate test-before-fix `tdd`, narrow `blast-radius`: six tests, two intended RED failures before production, six GREEN passes; fourteen overlapping outer checks. Managed Codex design-only `architect`/`arena` guardrails observed; synthesis inspected, runtime unrun. [Limits](rc2-host-validation.md#bounded-workflow-observations) |
+| RC2 full eight-workflow adherence/mobile execution | blocked | Full adherence, native todo integration and native Swift/Kotlin/KMP/CMP implementation/build/drive on RC2 remain unrun |
 | Upstream inventory | static-tested | pstack 0.15.9; 161 responsibilities reconciled; delta 3 added / 18 changed / 0 removed. [Sync procedure](upstream/README.md); exact upstream benchmark link remains deferred |
 | Claude historical cold load | observed-pass | WP1 fresh-session probe on its historical body |
 | Claude project recipe invocation | observed-pass | Read-only native Skill invocation passed; two earlier unknown-skill probes retained |
@@ -26,10 +30,11 @@ assertion. A successful same-artifact retry retains its flaky outcome.
 | Codex native install/invocation | blocked | Unrun; global installation outside recorded probe authority |
 | Codex historical RC1 read-only routing | observed-pass | Codex 0.160.1 manual project-skill/direct-read fallback: 16 cases/15 routes, 87 exact numbered steps; original eleven fixture domain/proof decisions matched. Android-only implementation language correctly unresolved. Actual served model unconfirmed; no native install claim |
 | Historical RC1 plugin/settings preservation | observed-pass | All 54 plugin fingerprints and both user-settings hashes unchanged before/after; exact RC1 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d` match. [Receipt and binding limits](rc-validation.md) |
-| Native todo integration | blocked | Both RC preview sessions lacked native todo tools and displayed checklists; native todo behavior unrun |
+| Native todo integration | blocked | CLI previews lacked native todo tools and displayed checklists. Managed design adapter exposed a plan tool but did not preload every design phase; full native todo adherence remains unproven |
 | Claude historical RC1 synthetic delegation/artifact review | observed-pass | Fresh registered `hugues-stack:hugues-agent` wrote one scratch function; fresh native Explore reviewer read actual source and found no behavior defects. Parented mode/principle/target reads retained; same-host process independence only. Initial ineffective Write rule/denial retained as setup failure, not a platform automatic-review rejection |
 | Historical RC1 synthetic artifact behavior | observed-pass | Same artifact: 22 outer-worker assertions PASS and 14 independent coordinator literal checks PASS. Separate overlapping sets, not 36 unique tests or additions to 120 framework tests. No native-session commands/tests ran. [Binding and limits](rc-validation.md) |
-| Full mode execution/multi-turn persistence | authored | End-to-end execution unrun; ephemeral/no-session-persistence previews establish no durable resume |
+| RC2 static recipe/cold pickup | observed-pass | Native Claude generated and freshly loaded a static Kotlin recipe; Codex read its Markdown directly. Fresh read-only Codex pickup reopened actual Git state and preserved two RED failures, with outer hash checks. No mobile cycle, actual pause/compaction or resumed GREEN. [Receipt](rc2-host-validation.md#bounded-workflow-observations) |
+| Full mode execution/multi-turn persistence | authored | End-to-end execution unrun; bounded read-only cold pickup establishes no durable resume or native persistent todo |
 | Applied generated-recipe cycle | blocked | Later approved guide body applied; 12 Android/eight iOS tests and five local journeys passed with retained failed attempts/fallback. Final iOS boot-state preservation unresolved; revised guide native invocation unrun. No full clean-cycle pass |
 | Historical KMP shared navigation/header task | observed-pass | Android/iOS logic and native callers observed on bounded artifacts; older 11-test snapshot remains distinct from later 12-test reports |
 | Historical CMP journey/header task | observed-pass | Android and two iOS runtime journeys, normal/enlarged text within recorded scope; successful attempts followed retained failures. Native Android enlarged text/forced ellipsis unrun; iOS bottom-tab clipping remains outside header scope |
@@ -60,7 +65,9 @@ The owner approved eight retained leaves for 0.1.0 on 6 October 2026:
 static-tested, with direct playbook handoffs in RC2. The same approval defers
 `swarm`, `show-me-your-work` and `setup-huguesstack` to 0.2. Feature maps,
 CLI-first verification and Layer 2 retain their existing deferred scope.
-Native execution and adherence of the eight workflows remain unrun.
+Bounded synthetic observations cover parts of `how`, `tdd`, `blast-radius`,
+`architect` and `arena`; they do not establish full adherence of any eight-tool
+workflow set. Native consumer execution under RC2 remains unrun.
 
 Four-domain feature-task coverage, native Swift/Kotlin red-green work, complete
 mode execution/delegated mobile implementation/persistence and a full clean generated cycle remain

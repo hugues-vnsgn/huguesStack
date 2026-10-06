@@ -227,9 +227,36 @@ cycle and persistence remain unrun.
 All 54 plugin file fingerprints and both user-settings hashes matched before
 and after on exact RC1 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d`.
 The RC2 package has 79 plugin files and changed mode/playbook bodies. These
-probes establish no fresh RC2 loading, routing, delegation or eight-workflow
-adherence; those checks remain unrun. The [RC validation receipt](rc-validation.md) binds the actual plugin
-bytes, raw packet and remaining gaps. Historical observations above retain
-their original revisions. Record final-head checks and independent review in
-the RC PR before publication/acceptance; this receipt binds the initial check
-head and tested plugin fingerprints.
+RC1 probes cover only their original revision. The [RC validation receipt](rc-validation.md)
+binds that historical packet; later [RC2 host observations](rc2-host-validation.md)
+record native Claude loading, manual Codex previews, bounded synthetic work and
+fresh lane-evidence probes. Full eight-workflow adherence and mobile execution
+remain unrun. Record final-head checks and independent review separately in the
+RC draft before acceptance.
+
+## RC2 loading and lane-evidence probes
+
+Fresh RC2 sessions used Claude Code 2.1.290's session-local native plugin loader
+and Codex 0.160.1's disposable manual project-skill path. At `e2ff899`, each
+matched sixteen route/file choices and 87 numbered steps; Claude registered all
+35 skills and the custom worker. Codex separately discovered the marketplace
+entry without installing it. Native Codex installation and namespaced invocation
+remain unrun. These previews exposed no native todo tool.
+
+Both original RC2 replies inferred Kotlin from an Android/Gradle-only request.
+The revised [lane evidence rule](../plugin/skills/hugues-mode/references/mobile-lanes.md#lane-evidence)
+separates platform, language, framework/shared ownership and affected target.
+Six fresh cases on baseline and candidate bytes used the same structured prompt,
+with scoped fixture-source reads where permitted. Each host copied all 36
+`build-doctor` steps exactly. Candidate language/lane observations and strict
+comparison mismatches are recorded separately in the [RC2 receipt](rc2-host-validation.md#lane-evidence-probes).
+A formatted response and static contract checks do not establish general model
+compliance or authorize consumer execution.
+
+Fresh repaired schema probes on corrected, uncommitted plugin bytes each passed
+six unique cases and 36 copied steps. The prompt added a target-component/evidence
+schema and canonical lane format; fixture expectations and declaration metadata
+were withheld. The [repaired receipt](rc2-host-validation.md#repaired-schema-probes)
+binds all 79 plugin fingerprints and actual fixture reads. These planning-only
+results used a different protocol from the initial probes. Full workflow
+adherence, native mobile execution and general host reliability remain unproven.

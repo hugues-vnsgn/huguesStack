@@ -18,6 +18,8 @@ RETAINED = {'how', 'why', 'architect', 'arena', 'tdd', 'blast-radius',
             'maintain-verification-skill', 'correct'}
 DEFERRED = {'swarm', 'show-me-your-work', 'setup-huguesstack'}
 RC1 = '21a82942019292f7212ff1185e9ef187ac96e86d'
+RC2_HOST = 'e2ff899f226184e6109029e5bdb3ac19838b80e4'
+RC2_LANE = 'dba645fa3adc024487c1137486a81b31e12ec832'
 # These contracts relate call sites to shipped tools, not tool-body wording.
 CALLS = {
     ('investigation', 1): {'how', 'why'},
@@ -130,10 +132,78 @@ def host_binding_errors(root):
     if 'no RC2 loading, routing, delegation' not in intro:
         errors.append('RC2 coverage boundary')
     support = (root / 'docs/support.md').read_text()
-    rows = [row for row in support.splitlines() if row.startswith('| RC2')]
-    loading = [row for row in rows if 'loading and eight-workflow' in row]
-    if len(loading) != 1 or '| blocked | Unrun.' not in loading[0] or '| observed-pass |' in '\n'.join(rows):
-        errors.append('RC2 execution unrun')
+    # New observations have their own revision-bound receipt. The historical
+    # RC1 packet cannot cover them, and bounded observations cannot promote
+    # the full workflow/mobile acceptance cell.
+    rows = [tuple(part.strip() for part in row.strip('|').split('|'))
+            for row in support.splitlines() if row.startswith('| RC2')]
+    by_cell = {row[0]: row[1:] for row in rows if len(row) == 3}
+    if len(by_cell) != len(rows):
+        errors.append('RC2 unique evidence cells')
+    full = by_cell.get('RC2 full eight-workflow adherence/mobile execution', ())
+    if (len(full) != 2 or full[0] != 'blocked' or
+            'remain unrun' not in full[1] or 'native Swift/Kotlin/KMP/CMP' not in full[1]):
+        errors.append('RC2 full execution unrun')
+    observed_cells = {'RC2 host loading and route previews',
+                      'RC2 bounded retained workflow observations',
+                      'RC2 static recipe/cold pickup'}
+    actual_observed = {row[0] for row in rows if len(row) == 3 and row[1] == 'observed-pass'}
+    optional_observed = {'RC2 repaired lane previews'}
+    if not observed_cells <= actual_observed <= observed_cells | optional_observed:
+        errors.append('RC2 bounded observation scope')
+    loading = by_cell.get('RC2 host loading and route previews', ())
+    if (len(loading) != 2 or loading[0] != 'observed-pass' or
+            f'`{RC2_HOST[:7]}`' not in loading[1] or
+            '(rc2-host-validation.md)' not in loading[1] or
+            not all(item in loading[1] for item in ('35 skills', '16 routes', '87 steps',
+                                                   'unsupported Kotlin'))):
+        errors.append('RC2 loading receipt binding')
+    bounded = by_cell.get('RC2 bounded retained workflow observations', ())
+    if (len(bounded) != 2 or bounded[0] != 'observed-pass' or
+            '(rc2-host-validation.md#bounded-workflow-observations)' not in bounded[1] or
+            'runtime unrun' not in bounded[1]):
+        errors.append('RC2 bounded workflow receipt binding')
+    pickup = by_cell.get('RC2 static recipe/cold pickup', ())
+    if (len(pickup) != 2 or pickup[0] != 'observed-pass' or
+            '(rc2-host-validation.md#bounded-workflow-observations)' not in pickup[1] or
+            not all(item in pickup[1] for item in
+                    ('static Kotlin recipe', 'read-only Codex pickup',
+                     'No mobile cycle, actual pause/compaction or resumed GREEN'))):
+        errors.append('RC2 static recipe pickup limits')
+    lane = by_cell.get('RC2 lane evidence', ())
+    if (len(lane) != 2 or lane[0] != 'observed-fail' or
+            f'`{RC2_LANE[:7]}`' not in lane[1] or
+            'strict fixture comparisons FAIL' not in lane[1] or 'No full fixture PASS' not in lane[1]):
+        errors.append('RC2 strict lane failures retained')
+    host_receipt = (root / 'docs/rc2-host-validation.md').read_text()
+    binding = host_receipt.split('## Original RC2 loading and routing', 1)[0]
+    if (RC2_HOST not in binding or RC2_LANE not in binding or RC1 in binding or
+            '79 plugin files' not in binding or 'distinct snapshots' not in binding):
+        errors.append('separate RC2 revision binding')
+    if not all(item in host_receipt for item in
+               ('## Bounded workflow observations', '## Lane-evidence probes',
+                'no full six-case fixture PASS is claimed',
+                'Native Codex recipe invocation and a mobile recipe cycle remain',
+                'actual pause, compaction, resumed GREEN and persistent native todos',
+                'Full adherence of all eight retained workflows',
+                'consumer implementation/build/drive under RC2', 'remain unrun')):
+        errors.append('RC2 receipt acceptance limits')
+    repaired = by_cell.get('RC2 repaired lane previews')
+    if repaired is not None:
+        # A later small sample can pass independently without rewriting the
+        # earlier strict failures. Require its own scoped receipt and limits;
+        # it supplies no full-workflow/native-mobile acceptance evidence.
+        if ('(rc2-host-validation.md#repaired-schema-probes)' not in repaired[1] or
+                'full workflow' not in repaired[1].lower() or
+                not any(limit in repaired[1].lower() for limit in ('unproven', 'unrun'))):
+            errors.append('RC2 repaired preview scope')
+        repaired_receipt = section(host_receipt, 'Repaired schema probes')
+        if (not re.search(r'\b[0-9a-f]{40}\b', repaired_receipt) or
+                RC1 in repaired_receipt or
+                'six' not in repaired_receipt.lower() or
+                'full workflow' not in repaired_receipt.lower() or
+                not any(limit in repaired_receipt.lower() for limit in ('unproven', 'unrun'))):
+            errors.append('RC2 repaired preview receipt binding')
     return errors
 
 
@@ -250,11 +320,74 @@ class RetainedIntegration(unittest.TestCase):
         path = self.root / 'docs/rc-validation.md'
         path.write_text(path.read_text().replace(RC1, 'f126656d2718084de8292cda0cb40b81333e4d6e'))
         self.assertIn('historical RC1 fingerprint binding', host_binding_errors(self.root))
+
+    def test_full_workflow_mobile_cell_cannot_be_promoted_by_bounded_observations(self):
         path = self.root / 'docs/support.md'
         text = path.read_text()
-        row = next(line for line in text.splitlines() if line.startswith('| RC2 loading'))
-        path.write_text(text.replace(row, row.replace('| blocked | Unrun.', '| observed-pass | PASS.')))
-        self.assertIn('RC2 execution unrun', host_binding_errors(self.root))
+        row = next(line for line in text.splitlines()
+                   if line.startswith('| RC2 full eight-workflow adherence/mobile execution |'))
+        path.write_text(text.replace(row, row.replace('| blocked |', '| observed-pass |')))
+        errors = host_binding_errors(self.root)
+        self.assertIn('RC2 full execution unrun', errors)
+        self.assertIn('RC2 bounded observation scope', errors)
+
+    def test_RC2_observations_require_separate_revision_bound_receipt(self):
+        path = self.root / 'docs/rc2-host-validation.md'
+        original = path.read_text()
+        for revision in (RC2_HOST, RC2_LANE):
+            with self.subTest(revision=revision):
+                path.write_text(original.replace(revision, RC1))
+                self.assertIn('separate RC2 revision binding', host_binding_errors(self.root))
+        path.write_text(original)
+        path = self.root / 'docs/support.md'
+        original = path.read_text()
+        for old, new, error in (
+                (f'`{RC2_HOST[:7]}`', f'`{RC1[:7]}`', 'RC2 loading receipt binding'),
+                ('(rc2-host-validation.md)', '(rc-validation.md)', 'RC2 loading receipt binding'),
+                ('(rc2-host-validation.md#bounded-workflow-observations)',
+                 '(rc-validation.md)', 'RC2 bounded workflow receipt binding'),
+                ('No mobile cycle, actual pause/compaction or resumed GREEN',
+                 'Mobile cycle and resumed GREEN passed', 'RC2 static recipe pickup limits')):
+            with self.subTest(binding=old):
+                self.assertIn(old, original)
+                path.write_text(original.replace(old, new))
+                self.assertIn(error, host_binding_errors(self.root))
+
+    def test_semantic_lane_observations_cannot_hide_strict_fixture_failures(self):
+        path = self.root / 'docs/support.md'
+        original = path.read_text()
+        row = next(line for line in original.splitlines() if line.startswith('| RC2 lane evidence |'))
+        path.write_text(original.replace(row, row.replace('| observed-fail |', '| observed-pass |')))
+        self.assertIn('RC2 strict lane failures retained', host_binding_errors(self.root))
+
+    def test_later_bounded_previews_need_their_own_receipt_and_preserve_full_gate(self):
+        support = self.root / 'docs/support.md'
+        receipt = self.root / 'docs/rc2-host-validation.md'
+        support_text = support.read_text()
+        receipt_text = receipt.read_text()
+        # Isolate the optional cell whether or not a later packet is present.
+        support_text = '\n'.join(line for line in support_text.splitlines()
+                                 if not line.startswith('| RC2 repaired lane previews |'))
+        receipt_text = re.sub(r'^## Repaired schema probes\s*\n.*?(?=^## |\Z)', '',
+                              receipt_text, flags=re.M | re.S)
+        row = ('| RC2 repaired lane previews | observed-pass | Six scoped read-only cases. '
+               '[Receipt](rc2-host-validation.md#repaired-schema-probes); '
+               'full workflow and native mobile execution unproven |\n')
+        support.write_text(support_text + '\n' + row)
+        receipt.write_text(receipt_text)
+        self.assertIn('RC2 repaired preview receipt binding', host_binding_errors(self.root))
+        scoped = ('\n## Repaired schema probes\n\n'
+                  'Six scoped cases bind revision `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`. '
+                  'Full workflow and native mobile execution remain unproven.\n')
+        receipt.write_text(receipt_text + scoped)
+        self.assertEqual(host_binding_errors(self.root), [])
+        receipt.write_text(receipt_text + scoped.replace('a' * 40, RC1))
+        self.assertIn('RC2 repaired preview receipt binding', host_binding_errors(self.root))
+        receipt.write_text(receipt_text + scoped)
+        support.write_text(support_text + '\n' + row.replace('#repaired-schema-probes', ''))
+        self.assertIn('RC2 repaired preview scope', host_binding_errors(self.root))
+        support.write_text(support_text + '\n' + row.replace('execution unproven', 'execution passed'))
+        self.assertIn('RC2 repaired preview scope', host_binding_errors(self.root))
 
 
 if __name__ == '__main__':
