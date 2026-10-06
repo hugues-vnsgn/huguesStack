@@ -1,6 +1,6 @@
 # Support evidence
 
-Status snapshot: **6 October 2026**, prerelease candidate **`0.1.0-rc.1`**.
+Status snapshot: **6 October 2026**, prerelease candidate **`0.1.0-rc.2`**.
 This candidate is for a separate draft RC review; no merge, tag or release is
 established. The [evidence index](evidence-index.md) records historical revisions,
 receipts, failed attempts and limits. Read [WORKFLOW](WORKFLOW.md) to start a task
@@ -14,19 +14,21 @@ assertion. A successful same-artifact retry retains its flaky outcome.
 
 | Cell | State | Evidence and limits |
 |---|---|---|
-| Package, 27 skills and local contracts | static-tested | Initial RC `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests and seven checks PASS; independent Astra High CLEAN. Use the RC PR for final-head checks/review; this row binds the initial head. Historical merged-main receipt remains separate |
+| Historical RC1 package, 27 skills and local contracts | static-tested | Initial RC1 `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests and seven checks PASS; independent Astra High CLEAN. This row binds the historical initial RC1 head and covers no RC2 edit. Historical merged-main receipt remains separate |
+| RC2 retained tools and wiring | static-tested | 35 shipped skills / 79 plugin files. Eight authored retained leaves have separately reviewed static package receipts; [integration](retained-integration.md) binds those heads. Record new exact-head integration checks/review in the separate RC2 draft; no future head or verdict is assumed |
+| RC2 loading and eight-workflow adherence | blocked | Unrun. Historical 54-file RC1 probes and 16-case/87-step previews do not cover changed RC2 bytes; no new native host or mobile proof |
 | Upstream inventory | static-tested | pstack 0.15.9; 161 responsibilities reconciled; delta 3 added / 18 changed / 0 removed. [Sync procedure](upstream/README.md); exact upstream benchmark link remains deferred |
 | Claude historical cold load | observed-pass | WP1 fresh-session probe on its historical body |
 | Claude project recipe invocation | observed-pass | Read-only native Skill invocation passed; two earlier unknown-skill probes retained |
 | Claude verification generator invocation | observed-pass | Complete private candidate authored; this invocation wrote no consumer guide or ran a cycle |
-| Claude RC read-only routing | observed-pass | Claude Code 2.1.290 / actual `claude-opus-5-5`: session-local native plugin load, 16 cases/15 routes (fourteen playbooks plus `interrogate`), 87 exact numbered steps. Original eleven fixture domain/proof decisions matched; supplemental Android-only language inference was over-specific. No execution proof |
+| Claude historical RC1 read-only routing | observed-pass | Claude Code 2.1.290 / actual `claude-opus-5-5`: session-local native plugin load, 16 cases/15 routes (fourteen playbooks plus `interrogate`), 87 exact numbered steps. Original eleven fixture domain/proof decisions matched; supplemental Android-only language inference was over-specific. No execution proof |
 | Codex marketplace discovery/manual path | observed-pass | Historical discovery without installation, manual project-skill probes and direct-read fallback; WP2 planning preview: 11 routes/61 steps on its recorded head |
 | Codex native install/invocation | blocked | Unrun; global installation outside recorded probe authority |
-| Codex RC read-only routing | observed-pass | Codex 0.160.1 manual project-skill/direct-read fallback: 16 cases/15 routes, 87 exact numbered steps; original eleven fixture domain/proof decisions matched. Android-only implementation language correctly unresolved. Actual served model unconfirmed; no native install claim |
-| Fresh RC plugin/settings preservation | observed-pass | All 54 plugin fingerprints and both user-settings hashes unchanged before/after; candidate plugin bytes match. [Receipt and binding limits](rc-validation.md) |
+| Codex historical RC1 read-only routing | observed-pass | Codex 0.160.1 manual project-skill/direct-read fallback: 16 cases/15 routes, 87 exact numbered steps; original eleven fixture domain/proof decisions matched. Android-only implementation language correctly unresolved. Actual served model unconfirmed; no native install claim |
+| Historical RC1 plugin/settings preservation | observed-pass | All 54 plugin fingerprints and both user-settings hashes unchanged before/after; exact RC1 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d` match. [Receipt and binding limits](rc-validation.md) |
 | Native todo integration | blocked | Both RC preview sessions lacked native todo tools and displayed checklists; native todo behavior unrun |
-| Claude synthetic delegation/artifact review | observed-pass | Fresh registered `hugues-stack:hugues-agent` wrote one scratch function; fresh native Explore reviewer read actual source and found no behavior defects. Parented mode/principle/target reads retained; same-host process independence only. Initial ineffective Write rule/denial retained as setup failure, not a platform automatic-review rejection |
-| Synthetic artifact behavior | observed-pass | Same artifact: 22 outer-worker assertions PASS and 14 independent coordinator literal checks PASS. Separate overlapping sets, not 36 unique tests or additions to 120 framework tests. No native-session commands/tests ran. [Binding and limits](rc-validation.md) |
+| Claude historical RC1 synthetic delegation/artifact review | observed-pass | Fresh registered `hugues-stack:hugues-agent` wrote one scratch function; fresh native Explore reviewer read actual source and found no behavior defects. Parented mode/principle/target reads retained; same-host process independence only. Initial ineffective Write rule/denial retained as setup failure, not a platform automatic-review rejection |
+| Historical RC1 synthetic artifact behavior | observed-pass | Same artifact: 22 outer-worker assertions PASS and 14 independent coordinator literal checks PASS. Separate overlapping sets, not 36 unique tests or additions to 120 framework tests. No native-session commands/tests ran. [Binding and limits](rc-validation.md) |
 | Full mode execution/multi-turn persistence | authored | End-to-end execution unrun; ephemeral/no-session-persistence previews establish no durable resume |
 | Applied generated-recipe cycle | blocked | Later approved guide body applied; 12 Android/eight iOS tests and five local journeys passed with retained failed attempts/fallback. Final iOS boot-state preservation unresolved; revised guide native invocation unrun. No full clean-cycle pass |
 | Historical KMP shared navigation/header task | observed-pass | Android/iOS logic and native callers observed on bounded artifacts; older 11-test snapshot remains distinct from later 12-test reports |
@@ -52,12 +54,13 @@ use independent **GPT-6 Astra High**, with actual final-head evidence. Read the
 [PR review policy](../plugin/skills/hugues-mode/references/pr-review-policy.md).
 Same-host review provides process independence, not cross-host proof.
 
-The planned `how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`, `swarm`,
-`maintain-verification-skill`, `show-me-your-work`, `correct` and
-`setup-huguesstack` leaves remain **unshipped**. They are planned 0.1.0 scope,
-not already-approved deferred work. The owner must decide whether to accept a
-reduced functional scope. The actual 27 skills/fourteen playbooks do not fill
-that gap.
+The owner approved eight retained leaves for 0.1.0 on 6 October 2026:
+`how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`,
+`maintain-verification-skill` and `correct`. All eight are authored and
+static-tested, with direct playbook handoffs in RC2. The same approval defers
+`swarm`, `show-me-your-work` and `setup-huguesstack` to 0.2. Feature maps,
+CLI-first verification and Layer 2 retain their existing deferred scope.
+Native execution and adherence of the eight workflows remain unrun.
 
 Four-domain feature-task coverage, native Swift/Kotlin red-green work, complete
 mode execution/delegated mobile implementation/persistence and a full clean generated cycle remain

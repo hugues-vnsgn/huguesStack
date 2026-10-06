@@ -9,8 +9,11 @@ WP5 upstream sync and **WP6 workflow/evidence documentation**.
 `hugues-mode` selects one of fourteen playbooks, copies its steps into a todo list and names
 the mobile proof required. The package includes a fresh-task worker,
 `interrogate` review guidance and the 24 verbatim upstream principles.
-WP3 adds a project-local verification generator, jev Drive guidance and a durable
-Markdown evidence outline. Version **`0.1.0-rc.1`** is a prerelease candidate
+The eight approved retained tools add research, design, regression proof, downstream
+safety checks, bounded recipe maintenance and recurring-mistake enforcement. The
+package now ships 35 skills; read [retained integration](docs/retained-integration.md)
+for direct playbook handoffs and source receipts. WP3 adds a project-local verification generator, jev Drive guidance and a durable
+Markdown evidence outline. Version **`0.1.0-rc.2`** is a prerelease candidate
 for review, not an accepted 0.1.0 release. See the [RC notes](docs/RELEASE-0.1.0.md)
 for current evidence and gaps; no tag or release has been created.
 
@@ -23,8 +26,10 @@ Start with the short [workflow guide](docs/WORKFLOW.md) and
 [support matrix](docs/support.md). Use `/hugues-stack:hugues-mode` in Claude Code,
 or the documented Codex manual project-skill/direct-read fallback in
 [host loading](docs/host-loading.md); native Codex installation/invocation remains
-unverified. Fresh RC read-only previews matched 16 cases across all fourteen
-playbooks and `interrogate` in both hosts, with displayed checklists. The
+unverified. Historical RC1 read-only previews matched 16 cases across all fourteen
+playbooks and `interrogate` in both hosts, with displayed checklists, on
+`21a82942019292f7212ff1185e9ef187ac96e86d` plugin bytes. RC2 changes those
+bodies and adds eight tools; its 79 plugin files have no fresh host probe. The
 [RC validation receipt](docs/rc-validation.md) records the domain limits and
 bounded synthetic delegation pass, including its initial setup failure.
 Give it a goal and a way to check it. For example:

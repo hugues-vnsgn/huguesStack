@@ -2,7 +2,7 @@
 
 Read this guide in under five minutes. For current results and prerequisites,
 open [support](support.md); for their receipts, open the
-[evidence index](evidence-index.md). The package is the `0.1.0-rc.1` prerelease candidate. Read the
+[evidence index](evidence-index.md). The package is the `0.1.0-rc.2` prerelease candidate. Read the
 [RC notes](RELEASE-0.1.0.md) for current evidence and remaining gaps.
 
 ## Give the host a goal and a check
@@ -26,12 +26,22 @@ and prove the native caller on Android and iOS. Report blocked targets separatel
 
 To inspect the proposed work first, request **route preview**. The mode reads a
 playbook and displays its steps, domain and required proof, then stops before
-delegation or consumer commands. A preview proves planning behavior only.
+delegation or consumer commands. A preview proves planning behavior only. The retained 16-case/87-step host
+previews tested historical RC1 bytes; the changed RC2 playbooks and 79 plugin
+files have no fresh loading or workflow-adherence observation.
 
 ## Follow the selected playbook
 
 Check that the selected route and todo list match your request. The coordinator
 investigates and delegates each implementation or fix round to a fresh worker.
+Read the selected shipped tool in full before use. The playbooks link directly
+to research and design tools. Bug routes preserve a cheap regression RED before
+a fresh production worker, or an explicit impractical-seam reason alongside the
+original runtime failure. For an existing bounded proof recipe, the coordinator
+uses `maintain-verification-skill` for its source wave and live pass; new recipes
+use the generator. Recurring mistake classes use `correct` once repeated evidence
+exists. These handoffs retain consumer authority and target proof obligations.
+
 Give that worker its assigned paths, current instructions, preservation rules
 and completion check. Keep consumer work in its own repository.
 

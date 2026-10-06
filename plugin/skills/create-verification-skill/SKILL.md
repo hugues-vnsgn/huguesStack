@@ -9,6 +9,8 @@ source: pstack/skills/create-verification-skill/SKILL.md
 
 source: Adapted from pstack 0.15.5 at `2eb7ed4613cfc8f098dfe464a23680ea44d84c5e`, `pstack/skills/create-verification-skill/SKILL.md`; input receipt and differences are recorded in this package's WP3 source receipts.
 
+For an audit or repair of an existing bounded recipe, read [maintain-verification-skill](../maintain-verification-skill/SKILL.md) in full and hand off to its steps, preserving the existing journey and clean/changed/blocked outcomes. Use this generator for a new agreed recipe.
+
 Write the next agent's executable verification recipe in the consumer repository. Keep consumer code, selectors, scripts and private evidence outside this plugin.
 
 ## Steps

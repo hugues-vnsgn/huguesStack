@@ -173,9 +173,9 @@ See [WP1 validation](wp1-validation.md) for historical evidence and incomplete
 initial probe attempts, and [WP2 validation](wp2-validation.md) for current
 acceptance boundaries.
 
-## Current RC probes
+## Historical RC1 probes
 
-Fresh `0.1.0-rc.1` read-only previews completed on 6 October 2026. Claude Code
+The historical `0.1.0-rc.1` read-only previews completed on 6 October 2026. Claude Code
 2.1.290 directly loaded the session-local plugin; its event stream confirms
 `claude-opus-5-5`. Codex 0.160.1 used a disposable manual project-skill symlink
 and direct reads. It inherited configured `gpt-6.1-sol` without an override;
@@ -225,7 +225,10 @@ independence. Full mode execution, mobile delegation, red-green, generated-recip
 cycle and persistence remain unrun.
 
 All 54 plugin file fingerprints and both user-settings hashes matched before
-and after. The [RC validation receipt](rc-validation.md) binds the actual plugin
+and after on exact RC1 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d`.
+The RC2 package has 79 plugin files and changed mode/playbook bodies. These
+probes establish no fresh RC2 loading, routing, delegation or eight-workflow
+adherence; those checks remain unrun. The [RC validation receipt](rc-validation.md) binds the actual plugin
 bytes, raw packet and remaining gaps. Historical observations above retain
 their original revisions. Record final-head checks and independent review in
 the RC PR before publication/acceptance; this receipt binds the initial check

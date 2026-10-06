@@ -1,5 +1,11 @@
 # RC validation receipt
 
+Historical RC1 receipt: its 54 plugin-file fingerprints bind the plugin bytes at
+`21a82942019292f7212ff1185e9ef187ac96e86d`. The changed 79-file RC2 package
+has no fresh host probe; this receipt supplies no RC2 loading, routing, delegation
+or eight-workflow adherence result. See [retained integration](retained-integration.md)
+for the separately reviewed proposal and static-check boundaries.
+
 Recorded **6 October 2026** for **`0.1.0-rc.1`**. This receipt covers read-only
 host previews and bounded synthetic scratch delegation/artifact behavior. It does not establish
 first-release readiness. Record final-head checks and independent **GPT-6 Astra

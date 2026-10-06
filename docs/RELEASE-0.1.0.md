@@ -1,6 +1,6 @@
 # 0.1.0 release candidate
 
-**Candidate: `0.1.0-rc.1`, 6 October 2026.** This is prerelease metadata and
+**Candidate: `0.1.0-rc.2`, 6 October 2026.** This is prerelease metadata and
 review documentation for a separate draft RC PR based on merged main
 `94560c43bd4a5a062177870188f60a7ebafb5028`. It does not create or approve a merge,
 0.1.0 tag, GitHub release or first-release readiness. Target remains
@@ -8,8 +8,10 @@ review documentation for a separate draft RC PR based on merged main
 
 ## What is included
 
-Layer 1 contains 27 skills: `hugues-mode`, `interrogate`,
-`create-verification-skill` and 24 verbatim pstack principles. The router includes
+Layer 1 contains 35 skills: `hugues-mode`, `interrogate`,
+`create-verification-skill`, eight approved retained tools and 24 verbatim pstack
+principles. [Retained integration](retained-integration.md) records their
+playbook handoffs and separately reviewed package heads. The router includes
 fourteen playbooks; `hugues-agent` supplies the fresh-worker guidance. Package
 and upstream-check scripts, workflow documentation and the responsibility ledger
 are included. Consumer app source stays outside the plugin. MIT attribution and
@@ -31,9 +33,9 @@ from authored guidance and gaps.
 |---|---|
 | Merged integration | Historical 120 framework tests and seven checks PASS on the reviewed tree; independent Astra High CLEAN. These are not fresh RC results |
 | Host observations | Historical Claude cold load/project recipe/generator and Codex manual planning/discovery passes retain their original revisions |
-| Initial RC static validation/review | `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests and seven checks PASS; independent Astra High CLEAN. Use the RC PR for final-head checks/review; no future SHA or verdict is assumed |
-| Fresh RC host previews | Claude 2.1.290 native session-local load / actual `claude-opus-5-5`; Codex 0.160.1 manual fallback, actual served model unconfirmed. Each 16 cases/15 routes/87 exact numbered steps; original eleven fixture domain/proof matches. Supplemental Android language limitation and displayed checklist fallback retained |
-| Bounded synthetic delegation | Fresh registered Claude worker wrote one scratch function; fresh Explore reviewer read actual source, no behavior defects. 22 outer-worker assertions and 14 independent coordinator checks PASS separately on the same artifact. Initial ineffective permission rule/denial retained as setup failure; no platform automatic-review rejection. No full mode/mobile/red-green/persistence proof |
+| Historical RC1 initial static validation/review | `5af676e7486291fbfac1fb81263c2aecec629476`: fresh 120 framework tests and seven checks PASS; independent Astra High CLEAN. This is historical RC1 evidence, not RC2 validation |
+| Historical RC1 host previews | Claude 2.1.290 native session-local load / actual `claude-opus-5-5`; Codex 0.160.1 manual fallback, actual served model unconfirmed. Each 16 cases/15 routes/87 exact numbered steps; original eleven fixture domain/proof matches. Supplemental Android language limitation and displayed checklist fallback retained |
+| Historical RC1 bounded synthetic delegation | Fresh registered Claude worker wrote one scratch function; fresh Explore reviewer read actual source, no behavior defects. 22 outer-worker assertions and 14 independent coordinator checks PASS separately on the same artifact. Initial ineffective permission rule/denial retained as setup failure; no platform automatic-review rejection. No full mode/mobile/red-green/persistence proof |
 | Approved generated-recipe cycle | Guide body applied; fresh 12 Android/eight iOS tests and five local journey passes. Failures/fallback retained; final iOS boot-state preservation unresolved, revised guide native invocation unrun. No full clean-cycle PASS |
 | Swift native slice | NetNewsWire five methods/seven invocations PASS, zero failures/skips on historical Xcode 26.4.1/iOS 26.4.1. Approved startup created retained default feed/account containers; not rerun on Xcode 27 |
 | Kotlin native slice | Historical nine SearchViewModel unit tests PASS; new strict Espresso core/idling 3.7 round: five non-image UI methods PASS in one instrumentation attempt on Android 16/SDK 36, empty minor field. Original Espresso 3.5 five failures preserved; changed APK is a distinct run |
@@ -47,11 +49,13 @@ judgment, consumer run or consumer edit occurs in this documentation package.
 
 ## Decisions and remaining gaps
 
-The owner plan includes functional leaves that are still **unshipped**:
-`how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`, `swarm`,
-`maintain-verification-skill`, `show-me-your-work`, `correct` and
-`setup-huguesstack`. Accepting a reduced 0.1.0 scope requires an owner decision;
-these planned leaves are not silently reclassified as approved deferred work.
+The owner approved eight retained leaves for 0.1.0 on 6 October 2026:
+`how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`,
+`maintain-verification-skill` and `correct`. All eight are authored and
+static-tested, with direct playbook handoffs in RC2. The same approval defers
+`swarm`, `show-me-your-work` and `setup-huguesstack` to 0.2. Feature maps,
+CLI-first verification and Layer 2 retain their existing deferred scope.
+Native execution and adherence of the eight workflows remain unrun.
 
 Four-domain feature-task completeness and native Swift/Kotlin red-green/driven
 paths remain incomplete. Full mode execution, delegated mobile implementation, native todo
@@ -63,11 +67,14 @@ gaps, but correctness of reporting remains required.
 
 ## Candidate validation record
 
-The [RC validation receipt](rc-validation.md) records fresh host observations,
-plugin fingerprint binding and initial-candidate static checks/review. Historical
+The [RC validation receipt](rc-validation.md) records historical RC1 host observations,
+plugin fingerprint binding and historical RC1 initial-candidate static checks/review. Historical
 119/120 framework counts and native results remain distinct. Host probes began
 with an uncommitted RC manifest; their 54-file fingerprints identify the tested
-plugin bytes, rather than the recorded base SHA alone. Record final-head checks
+RC1 plugin bytes at `21a82942019292f7212ff1185e9ef187ac96e86d`, rather
+than the recorded base SHA alone. RC2 has 79 plugin files and changed mode and
+playbooks; no fresh RC2 host probe, delegation or eight-workflow adherence is
+established. Record RC2 exact-head checks
 and independent Astra High review in the RC PR before publication/acceptance;
 this receipt records the initial check head and tested plugin fingerprints.
 No future head or final pass is assumed. Use the

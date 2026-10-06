@@ -12,9 +12,9 @@ Use this mode across turns until the user opts out. After compaction, re-read th
 ## Steps
 
 1. Read the request and current project instructions. State the outcome, consumer repository, authorized scope and whether this is execution or a read-only route preview. Select the mobile domain and proof surface from [mobile lanes](references/mobile-lanes.md) before implementation. Use read-only discovery or one focused question when the domain is unknown. Record an unresolved lane instead of guessing.
-2. Match the request against the routing precedence and table below. Read the matched playbook in full. For a direct review, read [interrogate](../interrogate/SKILL.md) and use its numbered steps.
+2. Match the request against the routing precedence and table below. Read the matched playbook in full. For a direct review, read [interrogate](../interrogate/SKILL.md) and use its numbered steps. For a big or wide diff, also read [blast-radius](../blast-radius/SKILL.md) in full to plan the downstream safety analysis; execute that analysis only in step 4. A preview reads and plans only.
 3. Copy the matched file's numbered `## Steps` into the host todo list verbatim, before task-specific todos. Preserve every step. Mark an inapplicable step with `skip: <reason>`. If the host has no todo tool, show the same numbered checklist in the response and disclose that limit. A read-only route preview ends here, after showing route, domain, proof surface and the copied steps. It authorizes no delegate, edit, build, device drive or consumer command.
-4. Execute the chosen playbook within the authority recorded in step 1. Read the principles that change a decision and follow [host notes](references/host-notes.md) before delegating. Fresh scoped subagents implement each new work round. A scoped worker performs its assignment directly as described below.
+4. Execute the chosen playbook within the authority recorded in step 1. Read the principles that change a decision and follow [host notes](references/host-notes.md) before delegating. For a big or wide diff, execute the selected blast-radius analysis only here, within the review's read-only or explicitly authorized check scope. Fresh scoped subagents implement each new work round. A scoped worker performs its assignment directly as described below.
 5. Independently inspect the resulting diff and actual artifacts, and run the applicable proof checks. Report observed results with the host, domain, target and remaining gaps. Cite only principles read this session and say which choice they changed.
 
 ## Routing precedence
@@ -98,9 +98,20 @@ When executing as an assigned scoped worker, read this mode and relevant princip
 
 ## Available guidance
 
-This package ships this mode, the 14 playbooks, `interrogate`, [create-verification-skill](../create-verification-skill/SKILL.md), `hugues-agent` and the 24 principles below. Read the verification generator when the task calls for a project-local mobile proof recipe; its path and execution authority remain consumer-local. Read shipped Markdown files directly when a host cannot invoke a skill by name. Use project-native build and test tools already available, and disclose missing host tools or optional owner skills.
+This package ships 35 skills: this mode, `interrogate`, [create-verification-skill](../create-verification-skill/SKILL.md), the eight retained tools below and the 24 principles. It also ships 14 playbooks and `hugues-agent`. Read each selected tool in full from its shipped path before use; disabled model invocation requires direct Markdown reading, not a Skill-tool call. Use the existing host adapter and consumer-native build/test tools, preserving current authority and capability gaps.
 
-The planned `how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`, `swarm`, verification-skill maintenance, `show-me-your-work`, `correct` and `setup-huguesstack` leaves remain unshipped. Their mentions in upstream material are guidance, not mandatory missing invocations. Use the corresponding investigation, design, review or proof steps in the matched playbook and report the gap. Deferred performance, unattended-work and cleanup workflows remain outside this package. Consumer feature maps and CLI-first verification policy remain post-first-release backlog items.
+| Tool | Read when |
+|---|---|
+| [how](../how/SKILL.md) | Explaining mechanics or grounding a subsystem |
+| [why](../why/SKILL.md) | Explaining motivation or regression history |
+| [architect](../architect/SKILL.md) | Designing types, signatures or boundaries before implementation |
+| [arena](../arena/SKILL.md) | Comparing isolated candidates and verifying their synthesis |
+| [tdd](../tdd/SKILL.md) | Establishing a cheap failing-before regression and passing-after proof |
+| [blast-radius](../blast-radius/SKILL.md) | Checking unexpected downstream effects of a wide change |
+| [maintain-verification-skill](../maintain-verification-skill/SKILL.md) | Auditing or repairing an existing bounded project proof recipe |
+| [correct](../correct/SKILL.md) | Enforcing recurring agent-mistake classes backed by repeated evidence |
+
+The owner approved these eight for 0.1.0 and deferred `swarm`, `show-me-your-work` and `setup-huguesstack` to 0.2. Performance, unattended-work and cleanup workflows remain deferred. Consumer feature maps and CLI-first verification remain post-first-release work; Layer 2 stays outside this package. Owner writing, unslop and mobile specialty skills remain optional external prerequisites with disclosed gaps when absent.
 
 ## Principles
 
