@@ -11,9 +11,9 @@ Use this mode across turns until the user opts out. After compaction, re-read th
 
 ## Steps
 
-1. Read the request and current project instructions. State the outcome, consumer repository, authorized scope and whether this is execution or a read-only route preview. Select the mobile domain and proof surface from [mobile lanes](references/mobile-lanes.md) before implementation. Use read-only discovery or one focused question when the domain is unknown. Record an unresolved lane instead of guessing.
+1. Read the request and current project instructions. State the outcome, consumer repository, authorized scope and whether this is execution or a read-only route preview. Read [lane evidence](references/mobile-lanes.md#lane-evidence) and record platform, implementation language, framework or shared ownership, and affected target separately. Cite the explicit request or source actually read for each known value; mark the rest unresolved. Select the mobile domain and proof surface from that record. Complete this step only when every field has evidence or an unresolved label, with any execution prerequisite recorded.
 2. Match the request against the routing precedence and table below. Read the matched playbook in full. For a direct review, read [interrogate](../interrogate/SKILL.md) and use its numbered steps. For a big or wide diff, also read [blast-radius](../blast-radius/SKILL.md) in full to plan the downstream safety analysis; execute that analysis only in step 4. A preview reads and plans only.
-3. Copy the matched file's numbered `## Steps` into the host todo list verbatim, before task-specific todos. Preserve every step. Mark an inapplicable step with `skip: <reason>`. If the host has no todo tool, show the same numbered checklist in the response and disclose that limit. A read-only route preview ends here, after showing route, domain, proof surface and the copied steps. It authorizes no delegate, edit, build, device drive or consumer command.
+3. Copy the matched file's numbered `## Steps` into the host todo list verbatim, before task-specific todos. Preserve every step. Mark an inapplicable step with `skip: <reason>`. If the host has no todo tool, show the same numbered checklist in the response and disclose that limit. A read-only route preview ends here, after showing route, domain, proof surface, the lane evidence record including unresolved fields, and the copied steps. It authorizes no delegate, edit, build, device drive or consumer command.
 4. Execute the chosen playbook within the authority recorded in step 1. Read the principles that change a decision and follow [host notes](references/host-notes.md) before delegating. For a big or wide diff, execute the selected blast-radius analysis only here, within the review's read-only or explicitly authorized check scope. Fresh scoped subagents implement each new work round. A scoped worker performs its assignment directly as described below.
 5. Independently inspect the resulting diff and actual artifacts, and run the applicable proof checks. Report observed results with the host, domain, target and remaining gaps. Cite only principles read this session and say which choice they changed.
 
@@ -58,13 +58,13 @@ Apply the first matching route in this order. Explicit action intent takes prece
 
 ## Routing examples
 
-These examples are authored acceptance cases, not observed consumer proof. Prefix each request with `/hugues-stack:hugues-mode` in Claude Code or `$hugues-mode` in Codex.
+These examples are authored acceptance cases, not observed consumer proof. Their language labels are request-derived; execution still requires repository verification under lane evidence. Prefix each request with `/hugues-stack:hugues-mode` in Claude Code or `$hugues-mode` in Codex.
 
 | Request | Route | Domain and proof |
 |---|---|---|
-| `the article list jumps when the unread badge updates. repro on the iOS 26 simulator first, then fix and verify.` | bug-fix | Swift/iOS; simulator build, relevant XCTest and reproduced user path |
-| `add a "mark older as read" action to the topic screen. prove it on the Pixel emulator and keep the unit tests green.` | feature | Kotlin/Android; target unit tests, app build and emulator user path |
-| `the discount boundary is wrong in shared code. fix it once and show me it passing on Android and iOS.` | kmp-bridge-change | KMP shared logic; common tests and native callers on Android and iOS |
+| `the Swift article list jumps when the unread badge updates. repro on the iOS 26 simulator first, then fix and verify.` | bug-fix | Swift/iOS; simulator build, relevant XCTest and reproduced user path |
+| `add a "mark older as read" action to the Kotlin Android topic screen. prove it on the Pixel emulator and keep the unit tests green.` | feature | Kotlin/Android; target unit tests, app build and emulator user path |
+| `the discount boundary is wrong in KMP shared code. fix it once and show me it passing on Android and iOS.` | kmp-bridge-change | KMP shared logic; common tests and native callers on Android and iOS |
 | `Review this diff from the other host. no nitpicks, only behavior regressions.` | interrogate | Review; read-only exact diff, host independence label and adjudicated findings |
 | `refactor the Swift article-list controller without changing behavior.` | refactoring | Swift/iOS; affected XCTest and existing simulator user path |
 | `prototype a Compose Multiplatform article-card layout to decide the interaction.` | prototype | CMP shared UI; disposable sketch and both target observations when authorized |

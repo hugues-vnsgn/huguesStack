@@ -1,0 +1,96 @@
+{
+  "purpose": "Inputs and independent expected answers for read-only live host probes. Unit tests validate the observation checker and static guidance only; no simulated host execution. Expected answers must be withheld from the host. Source-read receipts must come from its actual tool trace, not self-report.",
+  "cases": [
+    {
+      "id": "android-gradle-only",
+      "prompt": "Read-only route preview: diagnose this Android Gradle build failure for a Pixel emulator. No repository is selected. Do not read a consumer repository, delegate, edit, build or run a device.",
+      "files": {},
+      "expected": {
+        "route": "build-doctor",
+        "platform": "Android",
+        "implementation_language": null,
+        "language_basis": "unresolved",
+        "framework_or_shared_ownership": null,
+        "affected_target": null,
+        "lane": null
+      }
+    },
+    {
+      "id": "ios-xcode-only",
+      "prompt": "Read-only route preview: diagnose this iOS Xcode build failure on an iPhone simulator. No repository is selected. Do not read a consumer repository, delegate, edit, build or run a device.",
+      "files": {},
+      "expected": {
+        "route": "build-doctor",
+        "platform": "iOS",
+        "implementation_language": null,
+        "language_basis": "unresolved",
+        "framework_or_shared_ownership": null,
+        "affected_target": null,
+        "lane": null
+      }
+    },
+    {
+      "id": "gradle-kotlin-dsl-java",
+      "prompt": "Read-only route preview: diagnose an Android Gradle build failure. Read only build.gradle.kts and app/src/main/java/example/MainActivity.java in the provided disposable fixture. No delegates, edits, builds or device runs.",
+      "files": {
+        "build.gradle.kts": "plugins { id(\"com.android.application\") }\n",
+        "app/src/main/java/example/MainActivity.java": "package example;\npublic class MainActivity { public String label() { return \"demo\"; } }\n"
+      },
+      "expected": {
+        "route": "build-doctor",
+        "platform": "Android",
+        "implementation_language": "Java",
+        "language_basis": "source",
+        "framework_or_shared_ownership": null,
+        "affected_target": null,
+        "lane": null
+      }
+    },
+    {
+      "id": "explicit-kotlin-request",
+      "prompt": "Read-only route preview: diagnose this Kotlin Android Gradle build failure. No repository is selected. Do not read a consumer repository, delegate, edit, build or run a device.",
+      "files": {},
+      "expected": {
+        "route": "build-doctor",
+        "platform": "Android",
+        "implementation_language": "Kotlin",
+        "language_basis": "request",
+        "framework_or_shared_ownership": null,
+        "affected_target": null,
+        "lane": "Kotlin/Android"
+      }
+    },
+    {
+      "id": "scoped-kotlin-source",
+      "prompt": "Read-only route preview: diagnose an Android Gradle build failure. Read only app/src/main/kotlin/example/Label.kt in the provided disposable fixture. No delegates, edits, builds or device runs.",
+      "files": {
+        "app/src/main/kotlin/example/Label.kt": "package example\nclass Label { fun text(): String = \"demo\" }\n"
+      },
+      "expected": {
+        "route": "build-doctor",
+        "platform": "Android",
+        "implementation_language": "Kotlin",
+        "language_basis": "source",
+        "framework_or_shared_ownership": null,
+        "affected_target": null,
+        "lane": "Kotlin/Android"
+      }
+    },
+    {
+      "id": "scoped-swift-source",
+      "prompt": "Read-only route preview: diagnose an iOS Xcode build failure. Read only App/Label.swift in the provided disposable fixture. No delegates, edits, builds or device runs.",
+      "files": {
+        "App/Label.swift": "struct Label { var text: String { \"demo\" } }\n"
+      },
+      "expected": {
+        "route": "build-doctor",
+        "platform": "iOS",
+        "implementation_language": "Swift",
+        "language_basis": "source",
+        "framework_or_shared_ownership": null,
+        "affected_target": null,
+        "lane": "Swift/iOS"
+      }
+    }
+  ]
+}

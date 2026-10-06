@@ -12,6 +12,23 @@ Read the consumer's AGENTS.md and build configuration before selecting argv. Ide
 
 Keep SDK/JDK selection process-local when authorized. Missing tools, licenses, signing, credentials or system changes are blockers to name, not implied repair authority. Serialize simulator and emulator runs when local resource contention would mix evidence. Allocate, boot, install or stop a runtime only within the owner's scope; retained artifacts must survive cleanup.
 
+## Lane evidence
+
+Before selecting a lane, record each dimension separately. Use `unresolved` for missing evidence. Cite an explicit phrase in the current request or a path and relevant declaration from source actually read. A filename, historical app selection or routing example is discovery context, not a source observation.
+
+| Dimension | Record and evidence |
+| --- | --- |
+| Platform | Android, iOS or every affected platform, with the request phrase or repository target declaration. |
+| Implementation language | The language of the affected app or shared code, with its explicit request phrase or source declaration. Keep build-script language separate. |
+| Framework or shared ownership | The affected UI framework, native bridge, common source set or native-only ownership, with scoped source and configuration evidence. Keep this unresolved when only platform or language is known. |
+| Affected target | The actual module/source set, scheme/variant and requested proof destination. Record each unknown component; a device family does not identify a scheme, variant or device instance. |
+
+For a read-only preview, an explicit language in the request supports a **request-derived** language and provisional lane. Verify it against the affected repository source **before execution**. Scoped source evidence takes precedence over generic examples or an unverified request assumption; report any conflict. Inspect the affected source sets and callers before asserting shared ownership. A Kotlin file alone does not establish KMP or CMP, and a Swift file alone does not establish SwiftUI.
+
+Android, Gradle or Pixel establish platform/toolchain context only; keep implementation language unresolved until supported. iOS or Xcode likewise supply no Swift evidence. `build.gradle.kts` establishes the **build-script DSL**; a Java app can use that file. Read the affected app or shared source to establish its language. For example, an Android/Gradle-only preview records Android with unresolved language, ownership and target. A read Java declaration supports Java even when the build file uses Kotlin DSL; do not relabel it Kotlin to fit this package's native lane table.
+
+Select an action route from intent even while evidence is missing: a toolchain diagnosis still goes to `build-doctor`. Keep generic obligations, including repository discovery, authorized build/test evidence, actual target and changed-path proof. An unresolved implementation language selects no language-specific lane or test runner. A known language outside the lane table records that support gap and uses repository-supported proof after discovery; it gains no Kotlin/Android or Swift/iOS support claim. Record these prerequisites in the preview and resolve them before consumer implementation or checks; authorized read-only diagnosis can continue.
+
 ## Required lanes
 
 | Domain | Build and tests | Behavior proof | Relevant installed owner skills |
