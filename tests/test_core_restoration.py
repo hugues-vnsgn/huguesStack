@@ -29,6 +29,26 @@ def bodies(root=ROOT):
 
 
 class DevelopmentBehavior(unittest.TestCase):
+    def test_current_documents_keep_full_inventory_and_deadline(self):
+        original = {p: (ROOT / p).read_text() for p in ['docs/PLAN.md', 'docs/upstream/README.md']}
+        self.assertEqual(core.current_document_errors(original), [])
+        for path in original:
+            with self.subTest(path=path):
+                changed = dict(original)
+                changed[path] = changed[path].replace('all 50 top-level skills', '47 top-level skills')
+                self.assertTrue(core.current_document_errors(changed))
+        changed = dict(original)
+        changed['docs/PLAN.md'] = changed['docs/PLAN.md'].replace('9 October, GMT+7', '10 October, UTC')
+        self.assertTrue(core.current_document_errors(changed))
+
+    def test_reflect_digest_fallback_does_not_grant_history_access(self):
+        reflect = (ROOT / 'plugin/core/pstack/skills/reflect/SKILL.md').read_text()
+        self.assertIn('If no path resolves, write a tight digest of the session and pass that instead.', reflect)
+        host = (ROOT / core.ADAPTERS[0]).read_text()
+        self.assertIn('Reflect retains the pinned current-session digest fallback', host)
+        self.assertIn('automate-me history mining remains blocked', host)
+        self.assertIn('A digest grants no access to personal\nhistory', host)
+
     def test_mobile_extensions_retain_core_and_implementation_arena_in_phase(self):
         names = ['kmp-bridge-change', 'cmp-two-target-change']
         original = {name: (ROOT / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
@@ -309,6 +329,20 @@ class EffectiveWiring(unittest.TestCase):
         self.mutate_json('docs/upstream/core-restoration.json', lambda d:
             d['adapter_sha256'].update({core.ADAPTERS[0]: hashlib.sha256(path.read_bytes()).hexdigest()}))
         self.rejected('adapter behavior differs')
+
+    def test_rehashed_adapter_cannot_block_reflect_session_digest(self):
+        path = self.root / core.ADAPTERS[0]
+        path.write_text(path.read_text().replace(
+            'Reflect retains the pinned current-session digest fallback',
+            'Reflect is blocked without a transcript file'))
+        self.mutate_json('docs/upstream/core-restoration.json', lambda d:
+            d['adapter_sha256'].update({core.ADAPTERS[0]: hashlib.sha256(path.read_bytes()).hexdigest()}))
+        self.rejected('adapter behavior differs')
+
+    def test_current_plan_cannot_reintroduce_inactive_core_definitions(self):
+        path = self.root / 'docs/PLAN.md'
+        path.write_text(path.read_text() + '\nKeep three excluded families inactive.\n')
+        self.rejected('current documentation differs')
 
     def test_unreviewed_override_inventory(self):
         self.mutate_json('docs/upstream/core-restoration.json', lambda d: d['effective_overrides'].append('inherit-all-models'))

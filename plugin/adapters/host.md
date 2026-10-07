@@ -37,8 +37,14 @@ Translate Cursor skill placement to the consumer's established `.agents/skills`
 or `.claude/skills` convention. Preserve existing personal-mode categories and
 user edits; global placement or configuration needs explicit scope. Use only the
 active workspace's supplied transcript paths, never unrelated project history.
-When no authorized transcript source is available, report the mining phase blocked;
+Without an authorized transcript source, automate-me history mining remains blocked;
 do not fabricate preferences or claim personal-mode execution from a routing check.
+Reflect retains the pinned current-session digest fallback when no transcript path
+resolves. Use only the authorized conversation already available to the coordinator;
+label the digest's source and coverage limits. A digest grants no access to personal
+history and no permission to apply Reflect's proposed edits. Preserve Recall's
+explicit state-capsule shortcut; do not pretend a digest proves a transcript audit
+for show-me-your-work or supplies automate-me's repeated historical evidence.
 TypeScript paths remain `**/*.ts` and `**/*.tsx`; apply its registered guidance
 when reading or editing those files and load principle-type-system-discipline first.
 The original path metadata is preserved in the loader. If a host ignores it,

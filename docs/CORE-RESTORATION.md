@@ -26,7 +26,7 @@ Bun bootstrap can install dependencies and is never run by package checks. Use a
 
 ## Local validation and remaining prerequisites
 
-The complete Python suite passes (248 tests), including preserved release contracts, complete-inventory and cross-skill/worker regressions, and development mutations/helpers. Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
+The complete Python suite passes (252 tests), including preserved release contracts, complete-inventory and cross-skill/worker regressions, and development mutations/helpers. Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
 
 The dependency-free Bun checks pass: 11 Store tests and 29 watch-PR policy/GitHub-adapter tests. Three orch CLI cases are explicitly filtered from the Store run; the full helper suite remains blocked by missing commander 14.0.0, and TypeScript checking by missing bun-types. The initial full Bun attempt reached the upstream frozen-lock installer and failed; it created only an empty node_modules/.cache directory, with no dependency package files. That task-owned empty cache was removed. Subsequent checks exclude that bootstrap path. No dependency installation is claimed, and no missing prerequisite is replaced with a stub.
 

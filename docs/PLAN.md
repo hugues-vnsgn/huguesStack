@@ -7,7 +7,7 @@ Release 0.1.0 remains unchanged. Restore pstack 0.15.9 at `e43c7ee26e0038c6c1fa8
 1. Preserve all 161 source files and Git modes in an immutable core.
 2. Activate core workflows through native loaders and explicit host/mobile adapters. Preserve role defaults, panel counts, mandatory arena, trails and large/unmatched fallback.
 3. Restore feature-map generation and whole-map maintenance. A bounded mobile journey is an opt-in extension with a limited verdict.
-4. Restore all 23 core playbook routes and helper/dependency contracts. Keep unrelated automate-me, make-bot-ui, TypeScript and Benny families inactive.
+4. Register all 50 top-level skills, both upstream agents and specialized/general-purpose worker dispatch. Restore all 23 core playbook routes and helper/dependency contracts, including recall → automate-me and TypeScript guidance. Platform specialization belongs in adapters. Registration does not authorize personal transcript processing, bot/webhook/service execution, installation or persistent setup. Benny remains a separate nested service bundle.
 5. Check actual inventory, ordered behavior contracts, effective wiring and bounded overrides. Preserve released regression coverage.
 6. Run applicable offline checks, obtain independent Astra High review, fix/re-review and prepare verified local commits and a PR-ready summary.
 

@@ -147,7 +147,10 @@ def adapter_errors(texts):
                      'All 50 top-level skills are registered',
                      'preserve `generalPurpose`', 'Do not replace these workers with `hugues-agent`',
                      'Registration grants no permission to process personal transcripts',
-                     'TypeScript paths remain `**/*.ts` and `**/*.tsx`'],
+                     'TypeScript paths remain `**/*.ts` and `**/*.tsx`',
+                     'automate-me history mining remains blocked',
+                     'Reflect retains the pinned current-session digest fallback',
+                     'Preserve Recall\'s\nexplicit state-capsule shortcut'],
         ADAPTERS[1]: ['Intent before domain', 'Large, cross-cutting, unmatched',
                      'First select\nthe core action playbook',
                      'they never replace core todos or implementation gates',
@@ -165,6 +168,20 @@ def adapter_errors(texts):
         for marker in markers:
             if marker.casefold() not in texts[path].casefold():
                 errors.append(path + ': lost override boundary: ' + marker)
+    return errors
+
+
+def current_document_errors(texts):
+    errors = []
+    plan = texts['docs/PLAN.md']
+    guide = texts['docs/upstream/README.md'].split('# Upstream sync', 1)[0]
+    for name, text in [('docs/PLAN.md', plan), ('docs/upstream/README.md', guide)]:
+        if not all(marker in text for marker in ['all 50 top-level skills', 'both upstream agents']):
+            errors.append(name + ': incomplete current inventory')
+        if re.search(r'(?:47|three excluded|families inactive)', text, re.I):
+            errors.append(name + ': stale current exclusions')
+    if '9 October, GMT+7' not in plan:
+        errors.append('docs/PLAN.md: changed original deadline')
     return errors
 
 
@@ -276,6 +293,9 @@ def check(root=ROOT):
     require(not behavior_errors(bodies), 'core behavior contracts differ: ' + ', '.join(behavior_errors(bodies)))
     texts = {path: (root / path).read_text() for path in ADAPTERS}
     require(not adapter_errors(texts), 'adapter behavior differs: ' + '; '.join(adapter_errors(texts)))
+    documents = {p: (root / p).read_text() for p in ['docs/PLAN.md', 'docs/upstream/README.md']}
+    require(not current_document_errors(documents),
+            'current documentation differs: ' + '; '.join(current_document_errors(documents)))
     mobile_routes = {name: (root / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
                      for name in ['kmp-bridge-change', 'cmp-two-target-change']}
     require(not mobile_route_errors(mobile_routes),
