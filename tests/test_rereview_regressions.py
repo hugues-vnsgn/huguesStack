@@ -85,8 +85,15 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
         self.assertEqual(read.returncode, 2)
 
     def test_unresolved_bundled_shell_shape_holds(self):
-        result = self.translate('cat ' + self.source + ' && echo done')
-        self.assertEqual(result.returncode, 2)
+        for text in ['cat ' + self.source + ' && echo done',
+                     'git show origin/main:' + self.source + ';',
+                     'git show origin/main:' + self.source + '|cat',
+                     'git show origin/main:' + self.source + ';id',
+                     'cat ' + self.source + ' `printf extra`',
+                     'cat ' + self.source + ' && echo `date`']:
+            with self.subTest(text=text):
+                result = self.translate(text)
+                self.assertEqual(result.returncode, 2, result.stdout)
 
     def test_mobile_authored_template_exists_in_current_payload(self):
         path = self.plugin / 'skills/create-verification-skill/references/project-skill-template.md'
