@@ -56,7 +56,8 @@ ADAPTERS = ['plugin/adapters/host.md', 'plugin/adapters/mobile.md',
             'plugin/policies/astra-pr-review.md']
 RUNTIME_ASSETS = ['plugin/adapters/host-tools.md', 'plugin/adapters/host_tools.py',
                   'plugin/adapters/runtime/__init__.py', 'plugin/adapters/runtime/payload.py',
-                  'plugin/adapters/runtime/payload.json', 'plugin/adapters/runtime/activity.py']
+                  'plugin/adapters/runtime/payload.json', 'plugin/adapters/runtime/activity.py',
+                  'plugin/adapters/runtime/json_input.py']
 OVERRIDES = ['native-host-tools', 'project-local-model-rule', 'authority-boundaries',
              'mobile-routing-and-proof', 'fresh-regression-worker',
              'arena-context-isolation', 'bounded-mobile-opt-in', 'astra-high-pr-panel']
@@ -154,14 +155,15 @@ def adapter_errors(texts):
                      'automate-me history mining remains blocked',
                      'Reflect retains the pinned current-session digest fallback',
                      'Preserve Recall\'s\nexplicit state-capsule shortcut'],
-        ADAPTERS[1]: ['Intent before domain', 'Large, cross-cutting, unmatched',
+        ADAPTERS[1]: ['For all other work, follow the pinned core unchanged', 'For mobile bug fixes',
+                     'For mobile arena work', 'Intent before domain', 'Large, cross-cutting, unmatched',
                      'First select\nthe core action playbook',
                      'they never replace core todos or implementation gates',
                      'observe RED against unfixed production', 'separate\nfresh production worker',
                      'same\nregression', 'Keep the rubric', 'block blind judging',
                      'top 3–5', 'Maintenance covers the whole map',
                      'cannot replace or satisfy the core', 'One target does not prove'],
-        ADAPTERS[2]: ['two fresh independent GPT-Astra reviewers at High effort',
+        ADAPTERS[2]: ['does not activate this profile', 'two fresh independent GPT-Astra reviewers at High effort',
                      'exact final candidate commit', 'explicit project addition',
                      'Generic interrogate keeps its pinned three-family defaults',
                      'report the required review blocked', 'fresh review of the new exact head',
@@ -227,7 +229,7 @@ def check(root=ROOT):
     for row in snapshot['files']:
         path = core / row['path']
         body = path.read_bytes()
-        mode = '100755' if stat.S_IMODE(path.stat().st_mode) & 0o111 else '100644'
+        mode = '100' + format(stat.S_IMODE(path.stat().st_mode), '03o')
         require(mode == row['mode'] and upstream.oid('blob', body) == row['blob_sha']
                 and hashlib.sha256(body).hexdigest() == row['sha256']
                 and len(body) == row['size'], 'pinned core bytes/mode differ: ' + row['path'])

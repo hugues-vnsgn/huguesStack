@@ -11,17 +11,17 @@
       "blob_sha": "cd22fff659f14822ad2f485f711a355b6da0668d",
       "sha256": "d31805589c7f6a63a6db6c9fadebbd79fb9660682cf1654e9b2e5e1e7cd30bc0",
       "mode": "100644",
-      "destination_sha256": "5373febdbe16752475625ab7caf85982889ba3fb5e6516aa35086ba997be6f72",
+      "destination_sha256": "31fd232ec8f469734706be690e2433f5e91f868fbd37afd117d7da81b7b2c922",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native entrypoint loads explicit host/mobile adapters and the named Astra PR policy before the byte-exact pinned workflow; role defaults are preserved."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
       "source": "pstack/skills/how/references/explainer-prompt.md",
-      "destination": "plugin/skills/how/references/explainer-prompt.md",
+      "destination": "plugin/core/pstack/skills/how/references/explainer-prompt.md",
       "disposition": "verbatim",
       "blob_sha": "3a36fb6736c5b74ac2774350841e332a019dec94",
       "sha256": "ddb89cebefc24e2b54517a331aedfe045b6971e101f45c71b8cef4cccff45bff",
@@ -34,7 +34,7 @@
     },
     {
       "source": "pstack/skills/how/references/explorer-prompt.md",
-      "destination": "plugin/skills/how/references/explorer-prompt.md",
+      "destination": "plugin/core/pstack/skills/how/references/explorer-prompt.md",
       "disposition": "verbatim",
       "blob_sha": "9b4b0594bfd779015616e9d280369aba939583b4",
       "sha256": "a3b44a6e5bb16a6d4d1cac19db8ed5322ffd5f5f5d45baca4e73990ca096f8be",
@@ -52,17 +52,17 @@
       "blob_sha": "daac2c734a8f8fe43d30663054d694066f2b41ec",
       "sha256": "2a852ec8680920109d2b56538b027c52867896a597250ac5d18a13e0b42e5b06",
       "mode": "100644",
-      "destination_sha256": "a8e77972f467d7a355dbde2097f06f43d4b6ded9149078d800806e1f4fe32d13",
+      "destination_sha256": "247d50e29b1cf17225776c5ff43d5ce710cb60d672c3b79d852fbb48c9244bd3",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native entrypoint loads explicit host/mobile adapters and the named Astra PR policy before the byte-exact pinned workflow; role defaults are preserved."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
       "source": "pstack/skills/why/references/epistemics.md",
-      "destination": "plugin/skills/why/references/epistemics.md",
+      "destination": "plugin/core/pstack/skills/why/references/epistemics.md",
       "disposition": "verbatim",
       "blob_sha": "3732bf6881b60d1337fa3498574452a85d33ba30",
       "sha256": "fcc0f559c072832c869a5ada72434b4849320a637ae63c09e8ee14f7ad787059",
@@ -75,7 +75,7 @@
     },
     {
       "source": "pstack/skills/why/references/investigator-prompt.md",
-      "destination": "plugin/skills/why/references/investigator-prompt.md",
+      "destination": "plugin/core/pstack/skills/why/references/investigator-prompt.md",
       "disposition": "verbatim",
       "blob_sha": "3b56af44c589833508f4605cfdd4432b39a16739",
       "sha256": "6892956a7ab0b5ee6c4babaf4f793703abe89b350ea7cb9463b4a56eea1c8266",
@@ -88,7 +88,7 @@
     },
     {
       "source": "pstack/skills/why/references/source-playbook.md",
-      "destination": "plugin/skills/why/references/source-playbook.md",
+      "destination": "plugin/core/pstack/skills/why/references/source-playbook.md",
       "disposition": "verbatim",
       "blob_sha": "aa3d877cd539763ff05e266ae0a02dd811441e2b",
       "sha256": "9ae9dcb9d09111c9facc68510331c5aba4aed9b1b057314ff1fc0e166ad3993a",
@@ -101,7 +101,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/code-archaeology.md",
-      "destination": "plugin/skills/why/references/sources/code-archaeology.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/code-archaeology.md",
       "disposition": "verbatim",
       "blob_sha": "32d5f97f8d2d3974c668f5f0392737b7e8e25afd",
       "sha256": "8c14aa382f0de40829b2668d43e3f54814480bb93a486c9282ada4003f6b9dbd",
@@ -114,7 +114,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/databricks.md",
-      "destination": "plugin/skills/why/references/sources/databricks.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/databricks.md",
       "disposition": "verbatim",
       "blob_sha": "2770763ff5d0d1ad004abcc9a0138c9537ad1978",
       "sha256": "236ede7aab6454662a992db088a5393537a5233a4c26719c93188f9e174488f6",
@@ -127,7 +127,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/datadog.md",
-      "destination": "plugin/skills/why/references/sources/datadog.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/datadog.md",
       "disposition": "verbatim",
       "blob_sha": "d8363b1c1d1c7eadb15d47abd83bf70537c39620",
       "sha256": "ebe9c07bac28e47757ee7f16fb93b0c01d427a08c501957d047f395a2f37b7e7",
@@ -140,7 +140,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/incident-postmortem.md",
-      "destination": "plugin/skills/why/references/sources/incident-postmortem.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/incident-postmortem.md",
       "disposition": "verbatim",
       "blob_sha": "450d6e52f25b1b41f741cb3e9c93e1c74ef858b4",
       "sha256": "a899470f05f86029630a13a2696491cc708ca7b56a6e822a69ff6e954d6ff8cf",
@@ -153,7 +153,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/linear.md",
-      "destination": "plugin/skills/why/references/sources/linear.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/linear.md",
       "disposition": "verbatim",
       "blob_sha": "899c643c078f322afe6ae0ef78a007f8ffd356c1",
       "sha256": "01304e7f1badfcfb78babbb0edcadeb3cc8dd3f713793420cdff24ba190f907c",
@@ -166,7 +166,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/notion.md",
-      "destination": "plugin/skills/why/references/sources/notion.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/notion.md",
       "disposition": "verbatim",
       "blob_sha": "d16230a4105fd1dacf870da0950a38faeb9381e6",
       "sha256": "3bcfa695c49dfad4ac036d5d7181c12585f55ac04f1936198d16ab75a2788997",
@@ -179,7 +179,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/sentry.md",
-      "destination": "plugin/skills/why/references/sources/sentry.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/sentry.md",
       "disposition": "verbatim",
       "blob_sha": "2b7cf6f3098ee868547dc4e69efacfe9c255246b",
       "sha256": "6f292bc4fb1548e956f95e1900b9481abf5134254419f1cd9edec95428c82d73",
@@ -192,7 +192,7 @@
     },
     {
       "source": "pstack/skills/why/references/sources/slack.md",
-      "destination": "plugin/skills/why/references/sources/slack.md",
+      "destination": "plugin/core/pstack/skills/why/references/sources/slack.md",
       "disposition": "verbatim",
       "blob_sha": "863a527d60e4e055e680834ef8098ea04273a1ae",
       "sha256": "58fee61d024b3700b407e7acbed367944720ff05adfddb6954d36c88368f3ba7",
@@ -205,7 +205,7 @@
     },
     {
       "source": "pstack/skills/why/references/synthesizer-prompt.md",
-      "destination": "plugin/skills/why/references/synthesizer-prompt.md",
+      "destination": "plugin/core/pstack/skills/why/references/synthesizer-prompt.md",
       "disposition": "verbatim",
       "blob_sha": "9707dfcc2fc57ea126484a433c5cd9ee4d400ef3",
       "sha256": "733a3e9cf897b1aca56aaddeae01a3832e4bfed024c2f602db2d1bf807d7a73b",

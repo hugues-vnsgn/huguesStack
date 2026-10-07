@@ -1,6 +1,6 @@
 """Conservative local audit of owner-selected Claude Code and Codex sources."""
 from datetime import datetime, timezone
-import json
+from .json_input import load_json
 import os
 from pathlib import Path
 import re
@@ -26,23 +26,23 @@ SIMPLE_FLAGS = {
 PATH_TOOLS = {'Read', 'Write', 'Edit'}
 
 
-def strings(value, decode_arguments=True):
+def text_strings(value, decode_arguments=True):
     if isinstance(value, dict):
         for key, child in value.items():
             if decode_arguments and key == 'arguments' and isinstance(child, str):
                 try:
-                    child = json.loads(child)
+                    child = load_json(child)
                 except ValueError as exc:
                     raise ValueError('unreadable encoded function arguments') from exc
-            yield from strings(child, decode_arguments)
+            yield from text_strings(child, decode_arguments)
     elif isinstance(value, list):
         for child in value:
-            yield from strings(child, decode_arguments)
+            yield from text_strings(child, decode_arguments)
     elif isinstance(value, str):
         yield value
 
 
-def contexts(value, keys=PATH_KEYS):
+def context_paths(value, keys=PATH_KEYS):
     if isinstance(value, dict):
         for key, child in value.items():
             if key in keys:
@@ -51,11 +51,16 @@ def contexts(value, keys=PATH_KEYS):
                 if child:
                     yield child
             if key == 'arguments' and isinstance(child, str):
-                child = json.loads(child)
-            yield from contexts(child, keys)
+                child = load_json(child)
+            yield from context_paths(child, keys)
     elif isinstance(value, list):
         for child in value:
-            yield from contexts(child, keys)
+            yield from context_paths(child, keys)
+
+
+def resolve_operation_path(path, directory):
+    target = Path(path)
+    return str((target if target.is_absolute() else Path(directory) / target).resolve())
 
 
 def shell_paths(command):
@@ -167,11 +172,11 @@ def hint_paths(value, inherited=None):
         for key, child in value.items():
             if key == 'arguments' and isinstance(child, str):
                 try:
-                    child = json.loads(child)
+                    child = load_json(child)
                 except ValueError:
                     pass
             if key in PATH_KEYS and isinstance(child, str) and child and (Path(child).is_absolute() or cwd):
-                yield str((Path(child) if Path(child).is_absolute() else Path(cwd) / child).resolve())
+                yield resolve_operation_path(child, cwd)
             yield from hint_paths(child, cwd)
     elif isinstance(value, list):
         for child in value:
@@ -179,7 +184,7 @@ def hint_paths(value, inherited=None):
     elif isinstance(value, str):
         for path in re.findall(r'^\*\*\* (?:Add File|Update File|Delete File|Move to): (.+)$', value, re.M):
             if Path(path).is_absolute() or inherited:
-                yield str((Path(path) if Path(path).is_absolute() else Path(inherited) / path).resolve())
+                yield resolve_operation_path(path, inherited)
 
 
 def local_context(value, inherited):
@@ -192,7 +197,7 @@ def local_context(value, inherited):
             raise ValueError('invalid operation working directory')
         if not Path(path).is_absolute() and not result:
             raise ValueError('relative working directory lacks parent context')
-        result = str((Path(path) if Path(path).is_absolute() else Path(result) / path).resolve())
+        result = resolve_operation_path(path, result)
     return result
 
 
@@ -242,7 +247,7 @@ def operation_paths(value, inherited=None):
     if kind == 'function_call':
         if not isinstance(value.get('arguments'), str):
             raise ValueError('function call lacks encoded arguments')
-        args = json.loads(value['arguments'])
+        args = load_json(value['arguments'])
         if not isinstance(args, dict):
             raise ValueError('function arguments must decode to an object')
     elif kind == 'tool_use':
@@ -288,10 +293,10 @@ def operation_paths(value, inherited=None):
     for path in paths:
         if not Path(path).is_absolute() and not cwd:
             raise ValueError('relative operation path lacks working-directory context')
-        yield str((Path(path) if Path(path).is_absolute() else Path(cwd) / path).resolve())
+        yield resolve_operation_path(path, cwd)
 
 
-def touches(value, worktree, decode_arguments=True):
+def mentions_worktree(value, worktree, decode_arguments=True):
     variants = {str(worktree)}
     # macOS Git canonicalizes /tmp and /var to /private/...; native records may
     # retain those system aliases. Do not miss activity because of spelling.
@@ -299,8 +304,32 @@ def touches(value, worktree, decode_arguments=True):
         canonical = str(Path(alias).resolve())
         if str(worktree).startswith(canonical + '/'):
             variants.add(alias + str(worktree)[len(canonical):])
-    patterns = [re.compile(re.escape(path) + r'(?=$|[/\s\"\'`,;:)\]}])') for path in variants]
-    return any(pattern.search(text) for text in strings(value, decode_arguments) for pattern in patterns)
+    patterns = [re.compile('(' + re.escape(path) + r')(?=$|[/\s\"\'`,;:)\]}.?!<>])', re.IGNORECASE)
+                for path in variants]
+    for text in text_strings(value, decode_arguments):
+        for pattern, path in zip(patterns, variants):
+            for match in pattern.finditer(text):
+                if match[1] == path:
+                    return True
+                try:
+                    if Path(match[1]).samefile(worktree):
+                        return True
+                except FileNotFoundError:
+                    pass
+    return False
+
+
+def contains_worktree(scope, worktree):
+    """Parent scopes use filesystem identity when letter case differs."""
+    for ancestor in (worktree, *worktree.parents):
+        if scope == ancestor:
+            return True
+        try:
+            if scope.samefile(ancestor):
+                return True
+        except FileNotFoundError:
+            continue
+    return False
 
 
 def timestamp(record, fallback):
@@ -430,7 +459,7 @@ def records(provider, path, body, mtime):
     for line in body.splitlines():
         if not line.strip():
             continue
-        row = json.loads(line)
+        row = load_json(line)
         if not isinstance(row, dict):
             raise ValueError('transcript record is not an object')
         kind = row.get('type')
@@ -507,10 +536,14 @@ def selected_files(source):
                 if (Path(directory) / name).is_symlink():
                     raise ValueError('symlink in selected transcript root')
             files.extend(Path(directory) / name for name in names)
+        if not files:
+            raise ValueError('selected source contains no transcript files')
         return sorted(files)
     if not isinstance(source['files'], list) or not all(isinstance(p, str) for p in source['files']):
         raise ValueError('source files must be an explicit absolute list')
     files = [Path(p) for p in source['files']]
+    if not files:
+        raise ValueError('selected source contains no transcript files')
     if any(not p.is_absolute() for p in files):
         raise ValueError('source files must be absolute')
     return files
@@ -557,6 +590,9 @@ def scan(manifest, worktrees, now):
                     report['error'] = str(exc)
                     unavailable = True
                     continue
+                if not body.strip():
+                    report['error'] = 'selected transcript contains no records'
+                    unavailable = True
                 cwd = None
                 for line in body.splitlines():
                     if not line.strip():
@@ -564,7 +600,7 @@ def scan(manifest, worktrees, now):
                     row, basis = line, 'validated-record'
                     try:
                         row, ts, origin = next(records(source['provider'], path, line, mtime))
-                        list(strings(row))
+                        list(text_strings(row))
                         next_cwd = cwd
                         if source['provider'] == 'claude' and row.get('cwd'):
                             next_cwd = row['cwd']
@@ -573,7 +609,7 @@ def scan(manifest, worktrees, now):
                         if next_cwd and (not isinstance(next_cwd, str) or not Path(next_cwd).is_absolute()):
                             raise ValueError('invalid session working directory')
                         normalized = list(operation_paths(row, next_cwd))
-                        for location in contexts(row):
+                        for location in context_paths(row):
                             if Path(location).is_absolute():
                                 normalized.append(str(Path(location).resolve()))
                         cwd = next_cwd
@@ -582,7 +618,7 @@ def scan(manifest, worktrees, now):
                         unavailable = True
                         if isinstance(row, str):
                             try:
-                                row = json.loads(row)
+                                row = load_json(row)
                             except ValueError:
                                 pass
                         try:
@@ -592,9 +628,9 @@ def scan(manifest, worktrees, now):
                         cwd = None  # Never inherit uncertain context across an opaque record.
                         ts, origin, basis = mtime, 'file-mtime-unparsed-conservative', 'unparsed-path-hint'
                     for wt in worktrees:
-                        hit = (touches(row, wt, basis == 'validated-record') or touches(normalized, wt) or
-                               any(wt.is_relative_to(Path(p)) for p in normalized) or
-                               bool(cwd and touches({'cwd': str(Path(cwd).resolve())}, wt)))
+                        hit = (mentions_worktree(row, wt, basis == 'validated-record') or mentions_worktree(normalized, wt) or
+                               any(contains_worktree(Path(p), wt) for p in normalized) or
+                               bool(cwd and mentions_worktree({'cwd': str(Path(cwd).resolve())}, wt)))
                         if hit:
                             activity[str(wt)].append({'provider': source['provider'], 'source': str(path),
                                                      'timestamp': ts, 'timestamp_basis': origin,
@@ -621,12 +657,12 @@ def classify(dirty, pr, merged, coverage, recent):
         return 'hold-open-pr'
     if not coverage:
         return 'hold-activity-unavailable'
+    if pr == 'UNKNOWN' or merged is None or dirty == 'unavailable':
+        return 'hold-metadata-unavailable'
     if recent:
         return 'verify-recent-chat'
     if dirty != 'clean':
         return 'review-scratch' if dirty.startswith('scratch:') else 'hold-metadata-unavailable'
-    if pr == 'UNKNOWN' or merged is None:
-        return 'hold-metadata-unavailable'
     return 'verify-active-pinned' if merged or pr == 'MERGED' else 'review'
 
 
@@ -641,20 +677,26 @@ def audit(repo, source_path, pr_path=None, base='refs/remotes/origin/main'):
             trees.append((Path(fields['worktree']), fields.get('branch', '').removeprefix('refs/heads/')))
     paths = [p for p, _ in trees]
     try:
-        manifest = json.loads(source_path.read_text())
+        manifest = load_json(source_path.read_text())
         if not isinstance(manifest, dict) or set(manifest) != {'schema_version', 'coverage', 'sources'} or manifest['schema_version'] != 1:
             raise ValueError('invalid source manifest')
         hits, reports, complete = scan(manifest, paths, datetime.now(timezone.utc).timestamp())
     except (ValueError, OSError, TypeError, UnicodeError) as exc:
         hits, reports, complete = {str(p): [] for p in paths}, [{'coverage': 'unavailable', 'error': str(exc)}], False
     prs = {}
+    pr_error = 'PR snapshot not supplied'
     if pr_path:
         try:
-            snapshot = json.loads(pr_path.read_text())
-            if snapshot['coverage'] == 'complete' and isinstance(snapshot['states'], dict):
-                prs = snapshot['states']
-        except (ValueError, OSError, KeyError, TypeError):
-            pass
+            snapshot = load_json(pr_path.read_text())
+            if (not isinstance(snapshot, dict) or set(snapshot) != {'coverage', 'states'}
+                    or snapshot['coverage'] != 'complete' or not isinstance(snapshot['states'], dict)
+                    or any(not isinstance(state, str) or state not in {'OPEN', 'CLOSED', 'MERGED', 'NONE'}
+                           for state in snapshot['states'].values())):
+                raise ValueError('invalid or incomplete PR snapshot')
+            prs = snapshot['states']
+            pr_error = None
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            pr_error = str(exc)
     rows = []
     for index, (wt, branch) in enumerate(trees):
         status = git(wt, 'status', '--porcelain=v1', '-z', '--untracked-files=all')
@@ -675,6 +717,11 @@ def audit(repo, source_path, pr_path=None, base='refs/remotes/origin/main'):
                      'evidence': evidence, 'bucket': 'hold-main-worktree' if index == 0 else
                      classify(dirty, pr, merged, complete, recent),
                      'active_pinned_gate': 'required-separately', 'deletion_authorized': False})
+    metadata_complete = pr_error is None and all(
+        row['pr'] != 'UNKNOWN' and row['merged_into_local_base'] is not None
+        and row['dirty'] != 'unavailable' for row in rows)
     return {'schema_version': 1, 'coverage': 'complete' if complete else 'unavailable',
+            'metadata_coverage': 'complete' if metadata_complete else 'unavailable',
+            'pr_snapshot_error': pr_error,
             'sources': reports, 'local_base': base, 'base_freshness': 'not-fetched',
             'network_used': False, 'deletion_performed': False, 'worktrees': rows}

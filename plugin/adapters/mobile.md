@@ -3,6 +3,13 @@
 Read this with the host adapter before executing pinned core guidance. It adds
 mobile proof and consumer boundaries without replacing the core workflow.
 
+## Applicability
+
+Apply this adapter only to an explicitly selected mobile task (Swift/iOS,
+Kotlin/Android, KMP or CMP). For all other work, follow the pinned core unchanged.
+The regression-worker and arena-isolation additions below apply only to that
+mobile scope; loading this document alone does not activate them.
+
 ## Intent before domain
 
 Choose lifecycle or action intent first: pause, pickup, verification maintenance,
@@ -34,14 +41,14 @@ the other. Record revision, actual command/exit, target and surviving artifacts.
 Use available Swift/iOS, Kotlin/Android, KMP and CMP expertise by name when needed;
 do not copy a consumer app into this plugin.
 
-For bug fixes, assign a fresh scoped regression-test worker before the production
+For mobile bug fixes, assign a fresh scoped regression-test worker before the production
 worker. Independently observe RED against unfixed production, then give a separate
 fresh production worker the failing regression and observe GREEN on that same
 regression. Preserve the core TDD impractical-test exception with a concrete
 reason and real surface proof. For shared changes, cover affected Android and iOS
 surfaces. Missing proof is blocked or inconclusive, never a pass.
 
-For arena, give candidates fresh contexts containing only the sanitized candidate
+For mobile arena work, give candidates fresh contexts containing only the sanitized candidate
 brief and isolated write paths. Keep the rubric and parent preference out. After
 candidates finish, give the fresh read-only judge only neutral artifacts and the
 rubric. Inspect actual isolation capability. If unavailable, block blind judging;

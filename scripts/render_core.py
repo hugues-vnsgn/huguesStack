@@ -29,11 +29,10 @@ Before work, read in full and in this order:
 
 1. [Host adapter](../../adapters/host.md).
 2. [Mobile adapter](../../adapters/mobile.md).
-3. [Project PR policy](../../policies/astra-pr-review.md).
-4. [Pinned {leaf} core](../../core/{row['source']}).
+3. [Pinned {leaf} core](../../core/{row['source']}).
 
 Execute that core contract, applying only the named adapter translations and
-explicit project policy. Read its phase-required references in full. Do not
+the consumer project’s explicit policy. Read its phase-required references in full. Do not
 substitute this loader for the workflow. Report blocked gates and actual proof.
 '''
 
@@ -57,8 +56,7 @@ The separate active/pinned-chat gate is required; the helper never deletes.
     return f'''# {name}
 
 Read [host adapter](../../../adapters/host.md),
-[mobile adapter](../../../adapters/mobile.md),
-[project PR policy](../../../policies/astra-pr-review.md), then the
+[mobile adapter](../../../adapters/mobile.md), then the
 [pinned {name} playbook](../../../core/{row['source']}) in full.
 Copy its ordered todos verbatim before execution. Keep skips with their reasons.
 The pinned source owns the steps; the adapters translate host mechanics and add
@@ -75,7 +73,6 @@ source: pstack/agents/poteto-agent.md
 # Native worker
 
 Read [host adapter](../adapters/host.md), [mobile adapter](../adapters/mobile.md),
-[project PR policy](../policies/astra-pr-review.md),
 [pinned worker](../core/pstack/agents/poteto-agent.md), and
 [hugues-mode](../skills/hugues-mode/SKILL.md) in full before work.
 Use the coordinator-supplied absolute mode, skills, core and adapter paths.
@@ -96,7 +93,7 @@ source: pstack/agents/comment-sicko.md
 # Native Comment Sicko
 
 Read [host adapter](../adapters/host.md), [mobile adapter](../adapters/mobile.md),
-[project PR policy](../policies/astra-pr-review.md), and the complete
+and the complete
 [pinned Comment Sicko agent](../core/pstack/agents/comment-sicko.md) before work.
 Use coordinator-supplied absolute wrapper, core and adapter paths and the exact
 scoped files or diff. Execute that specialized agent's rules in full, preserving

@@ -194,28 +194,28 @@
     },
     {
       "source": "pstack/skills/interrogate/references/code-quality-review.md",
-      "destination": "plugin/skills/interrogate/references/code-quality-review.md",
+      "destination": "plugin/core/pstack/skills/interrogate/references/code-quality-review.md",
       "disposition": "verbatim",
       "blob_sha": "16581250d81044c7e80fe234c4970a3f7b7fc98a",
       "sha256": "79162fda183eafd40d51661fbb5e151c7ba250f89e506ba17f5bd135dcbd50a8"
     },
     {
       "source": "pstack/skills/interrogate/references/lead-judgment.md",
-      "destination": "plugin/skills/interrogate/references/lead-judgment.md",
+      "destination": "plugin/core/pstack/skills/interrogate/references/lead-judgment.md",
       "disposition": "verbatim",
       "blob_sha": "5ce526097fdd3dfeaf4cd3b126a3f486c3ee36ae",
       "sha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361"
     },
     {
       "source": "pstack/skills/interrogate/references/reviewer-prompt.md",
-      "destination": "plugin/skills/interrogate/references/reviewer-prompt.md",
+      "destination": "plugin/core/pstack/skills/interrogate/references/reviewer-prompt.md",
       "disposition": "verbatim",
       "blob_sha": "13a252b2c3cd18522d4c8dc39a7030477037b249",
       "sha256": "e0598e254792b56de39bb16b1e6db559b03a522fdc54b98f942d254090920ae6"
     },
     {
       "source": "pstack/skills/interrogate/references/rubric.md",
-      "destination": "plugin/skills/interrogate/references/rubric.md",
+      "destination": "plugin/core/pstack/skills/interrogate/references/rubric.md",
       "disposition": "verbatim",
       "blob_sha": "2d92f1b83e13be03fb10f20cba12639a1406a2da",
       "sha256": "a85aa801abbaf14434f00579440abc0d8e2723227ba8bf57de7cca8d6e7d2f25"

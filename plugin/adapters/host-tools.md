@@ -17,7 +17,8 @@ python3 "<plugin>/adapters/host_tools.py" bind > "<program>/plugin-binding.json"
 ```
 
 The binding records pstack's approved revision, the shipped 161-file hash/mode
-manifest, installation path and effective adapter hashes. Record the plugin's
+manifest, installation path and every non-core plugin file’s hash and full permission mode.
+Extra core files also block the binding. Record the plugin's
 Git commit separately when the installation has one. At every required tick,
 reread bundled files through the same saved binding:
 
@@ -39,8 +40,9 @@ python3 "<plugin>/adapters/host_tools.py" plan-check --binding "<program>/plugin
 
 The latter replaces `node pstack/skills/poteto-mode/scripts/check-plan.mjs <plan.md>`.
 It runs the unchanged installed Node helper with an absolute consumer plan path
-and preserves its exit code/diagnostics. Translation changes only executable
-bundled operands; inspect the resulting plan and use those commands during each
+and preserves its exit code/diagnostics. Translation resolves executable bundled operands and plain pinned paths
+to the installed payload; plain paths are references, and executable rereads must
+still use `read-workflow` with the saved binding; inspect the resulting plan and use those commands during each
 tick. Any binding, hash, mode or required-file drift blocks rereading/validation.
 Reconcile changed payloads with the operator; never silently rebind a live program.
 These commands do not arm loops or start implementation.
@@ -81,8 +83,8 @@ relevant supported-host chats and sibling trees; a successful scan cannot establ
 assertion. Mark either level `partial` when coverage is uncertain. No sources,
 partial coverage, unreadable/missing/changed files, symlinks, unsupported envelopes
 or malformed records produce unavailable coverage and a hold (exit 2). A complete
-empty set of files in an existing authorized root differs from an unavailable
-root. Valid complete sources with no recent evidence report that limited result.
+empty root, empty file list, or empty/whitespace-only transcript also holds.
+Duplicate JSON keys and JSON nesting over 64 levels hold instead of hiding records. Valid complete sources with no recent evidence report that limited result.
 
 Supported inputs are Claude JSONL user/assistant records and string summaries
 and Codex JSONL session/turn/response records including JSON-encoded function
@@ -137,6 +139,9 @@ Optional PR input is a local owner-supplied snapshot, for example
 `{"coverage":"complete","states":{"branch-name":"NONE"}}`. States are
 `OPEN`, `CLOSED`, `MERGED` or `NONE`; omitted/unknown PR or merge state holds. A
 snapshot's freshness and completeness must be checked separately before pruning.
+Missing, unreadable, invalid or incomplete PR metadata returns exit 2 even when
+activity coverage is complete; `metadata_coverage` and `pr_snapshot_error` explain
+that result. Unknown PR/merge state holds scratch candidates as well.
 The report retains source paths and timestamps, never transcript bodies. Size
 and disk measurements remain the separate core `df`/local disk inspection steps.
 

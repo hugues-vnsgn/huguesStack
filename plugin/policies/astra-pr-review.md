@@ -2,6 +2,9 @@
 
 This owner-selected profile applies to PR-bound changes in huguesStack. It is an
 explicit project addition to pstack 0.15.9, not an upstream default.
+It is activated by this repository's AGENTS.md. Installing huguesStack in another
+project does not activate this profile. Consumer projects use their own policy
+and the pinned core defaults unless their owner explicitly opts into this one.
 
 Before publication, obtain two fresh independent GPT-Astra reviewers at High effort
 against the exact final candidate commit. Give both seats the same intent, diff,

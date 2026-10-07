@@ -27,7 +27,7 @@ Functional entrypoints load host adapter → mobile adapter → Astra PR policy 
 
 Give the consumer path/revision, authorized actions and observable result. Intent precedes language: lifecycle, authoring, review, investigation and verification retain their routes. Native implementation uses core playbooks; KMP/CMP use named extensions. Large/cross-cutting/unmatched work uses figure-it-out; standing programs use Orchestrate. Mobile proof becomes a phase of that designed workflow.
 
-The coordinator reads the selected public bridge and full core, copies ordered todos, grounds/designs, delegates fresh rounds and independently checks actual artifacts. Feature work with multiple valid shapes requires arena. Candidates get sanitized fresh contexts and isolated write paths; the judge gets neutral artifacts/rubric after writers finish. Missing isolation blocks blind judging.
+The coordinator reads the selected public bridge and full core, copies ordered todos, grounds/designs, delegates fresh rounds and independently checks actual artifacts. Feature work with multiple valid shapes requires arena. For mobile arena work, candidates get sanitized fresh contexts and isolated write paths; the judge gets neutral artifacts/rubric after writers finish. Missing isolation blocks blind judging.
 
 ## Configure roles explicitly
 
@@ -41,7 +41,7 @@ Generic interrogate keeps its pinned Claude/GPT/Grok panel or configured list, s
 
 Establish language, native/shared ownership and target from source and the request. Preserve unknowns; Gradle syntax alone does not establish language. Record plugin/consumer revisions, target/runner, actual commands/exits and surviving artifacts. A build is not behavior proof; skipped tests and wrong targets do not pass.
 
-Bug work uses a fresh regression worker and independently observed RED against unfixed production, then a separate production worker and GREEN on the same regression. The core practical-test exception retains a concrete reason and closest useful verification. Shared changes need both affected targets.
+Mobile bug work uses a fresh regression worker and independently observed RED against unfixed production, then a separate production worker and GREEN on the same regression. The core practical-test exception retains a concrete reason and closest useful verification. Shared changes need both affected targets.
 
 Generation interviews the repository and writes launch/doctor/drive/evidence/cleanup/helpers. It seeds features/README.md and the top 3–5 user-facing feature files, then proves one mapped feature end to end. Translate the Cursor example layout to the existing `.claude/skills` or `.agents/skills` convention. Preserve user edits. An unexecuted recipe remains a draft.
 

@@ -14,16 +14,17 @@
   ],
   "adapter_sha256": {
     "plugin/adapters/host.md": "ead0385e6925d39e68621608a78ddb6086b81a97a3569b1ce11860d7b44430af",
-    "plugin/adapters/mobile.md": "85732c7638c567279664012635050901c815071486fc67bd3047a5ecf99eb690",
-    "plugin/policies/astra-pr-review.md": "3cd4340616cdfbb3257ff6a7abc93157ce936340ce5d913251ab4f302231d5d5"
+    "plugin/adapters/mobile.md": "0b44b3d4bc3cfe660cdc12c2f4ccf879fcd2b1224084cd0007716e4b8e7171a8",
+    "plugin/policies/astra-pr-review.md": "c2964ee2aaf3e3be6faff10e2af9415458ae05d5b279fde9b716d03e687171fe"
   },
   "evidence_boundary": "Static source, behavior-contract and wiring checks are development evidence. Released host/mobile observations do not attest to the restored development workflows.",
   "runtime_sha256": {
-    "plugin/adapters/host-tools.md": "d91c9236a56b367a069e7f45ad6d57200ce9846e0d081061794d5f9c1cd858ea",
-    "plugin/adapters/host_tools.py": "9be78e051f34718a6203c3f4d59ea077144ab19f98331f919cd58a39d4d65bdb",
+    "plugin/adapters/host-tools.md": "537d048896c56d4e5bd7e9cbe4781c2aa140f4d3c9a4e88cd2012785f09feaa9",
+    "plugin/adapters/host_tools.py": "90b384dd2e94a80614760848d0475b8e06875edef1340f3c202511739e46aee2",
     "plugin/adapters/runtime/__init__.py": "277b071e8e40f0aabb4007e0ae389824708b2bdd5259075623998749da582807",
-    "plugin/adapters/runtime/payload.py": "809e970de95bb448b492b3d580e881a39031bc216dd5ab8f7e28bb315253573a",
+    "plugin/adapters/runtime/payload.py": "43eb9e8fc4314aaa81da57be5004f7dff1ca34228ed383fb1176aa61be6eb559",
     "plugin/adapters/runtime/payload.json": "c42187f44123ed5a6dbdb6bce2f270218c60e515bcec262ebe7315a70d76b364",
-    "plugin/adapters/runtime/activity.py": "14f2fe5d3a45bac7df5943be88f915874428f6b1877e1b5b0b7a72307be07f7a"
+    "plugin/adapters/runtime/activity.py": "38903a092d66d4d1367f990cd597b2869634bf512bf862fa35d26ae5ec61b2b6",
+    "plugin/adapters/runtime/json_input.py": "d162867227d23f2c56b0e391977450ddfb81e1311394646947325581651c5423"
   }
 }

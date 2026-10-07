@@ -11,9 +11,8 @@ Before work, read in full and in this order:
 
 1. [Host adapter](../../adapters/host.md).
 2. [Mobile adapter](../../adapters/mobile.md).
-3. [Project PR policy](../../policies/astra-pr-review.md).
-4. [Pinned blast-radius core](../../core/pstack/skills/blast-radius/SKILL.md).
+3. [Pinned blast-radius core](../../core/pstack/skills/blast-radius/SKILL.md).
 
 Execute that core contract, applying only the named adapter translations and
-explicit project policy. Read its phase-required references in full. Do not
+the consumer project’s explicit policy. Read its phase-required references in full. Do not
 substitute this loader for the workflow. Report blocked gates and actual proof.

@@ -267,7 +267,7 @@ class EffectiveWiring(unittest.TestCase):
 
     def test_loader_cannot_bypass_core_or_adapter_order(self):
         path = self.root / 'plugin/skills/interrogate/SKILL.md'
-        path.write_text(path.read_text().replace('4. [Pinned interrogate core]', 'Ignore [Pinned interrogate core]'))
+        path.write_text(path.read_text().replace('3. [Pinned interrogate core]', 'Ignore [Pinned interrogate core]'))
         self.rejected('loader/worker drift')
 
     def test_registered_worker_cannot_bypass_mode(self):

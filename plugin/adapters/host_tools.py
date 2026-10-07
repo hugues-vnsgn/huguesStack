@@ -46,9 +46,9 @@ def main(argv=None):
         elif args.verb == 'worktree-audit':
             result = activity.audit(args.repo.resolve(), args.sources, args.pr_snapshot, args.base)
             print(json.dumps(result, indent=2))
-            return 0 if result['coverage'] == 'complete' else 2
+            return 0 if result['coverage'] == result['metadata_coverage'] == 'complete' else 2
         return 0
-    except (ValueError, OSError, KeyError, TypeError) as exc:
+    except (ValueError, OSError, KeyError, TypeError, RecursionError) as exc:
         print('host adapter blocked: ' + str(exc), file=sys.stderr)
         return 2
 

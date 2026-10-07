@@ -240,11 +240,11 @@ class SyntheticActivity(unittest.TestCase):
         self.assertEqual({r['provider'] for r in hits[str(self.wt)]}, {'claude', 'codex'})
         self.assertEqual(sum(r['files_scanned'] for r in reports), 2)
 
-    def test_empty_existing_root_differs_from_missing_root(self):
+    def test_empty_and_missing_roots_both_hold(self):
         root = self.area / 'empty'
         root.mkdir()
         manifest = {'coverage': 'complete', 'sources': [{'provider': 'claude', 'root': str(root), 'authorization': 'synthetic', 'coverage': 'complete'}]}
-        self.assertTrue(activity.scan(manifest, [self.wt], self.now)[2])
+        self.assertFalse(activity.scan(manifest, [self.wt], self.now)[2])
         root.rmdir()
         self.assertFalse(activity.scan(manifest, [self.wt], self.now)[2])
 
@@ -349,7 +349,7 @@ class SyntheticActivity(unittest.TestCase):
         root.mkdir()
         supported = {'provider': 'claude', 'root': str(root), 'authorization': 'synthetic', 'coverage': 'complete'}
         with patch.object(activity, 'read_selected', side_effect=AssertionError('empty root has no file reads')):
-            self.assertTrue(activity.scan({'coverage': 'complete', 'sources': [ignored, supported]}, [self.wt], self.now)[2])
+            self.assertFalse(activity.scan({'coverage': 'complete', 'sources': [ignored, supported]}, [self.wt], self.now)[2])
 
     def test_nested_progress_and_unknown_claude_blocks_hold(self):
         nested = self.claude(type='progress', data={'type': 'agent_progress', 'message': self.claude()})
@@ -649,14 +649,14 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
                 self.assertFalse(report['deletion_performed'])
                 self.assertTrue(self.wt.exists())
 
-    def test_cli_complete_empty_activity_still_requires_pinned_gate(self):
+    def test_cli_empty_activity_holds_before_pinned_gate(self):
         root = self.area / 'empty transcripts'
         root.mkdir()
         result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'claude', 'root': str(root), 'authorization': 'synthetic empty root', 'coverage': 'complete'}]})
-        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.returncode, 2)
         row = next(r for r in report['worktrees'] if r['worktree'] == str(self.wt))
-        self.assertEqual(row['activity'], 'no-recent-evidence')
-        self.assertEqual(row['bucket'], 'verify-active-pinned')
+        self.assertEqual(row['activity'], 'unavailable')
+        self.assertEqual(row['bucket'], 'hold-activity-unavailable')
         self.assertEqual(row['active_pinned_gate'], 'required-separately')
         self.assertFalse(row['deletion_authorized'])
 
@@ -693,6 +693,7 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
     def test_cli_untracked_scratch_and_tracked_wip_are_retained(self):
         root = self.area / 'empty transcripts'
         root.mkdir()
+        (root / 'old.jsonl').write_text(json.dumps({'type': 'summary', 'summary': 'old unrelated fixture', 'timestamp': '2020-01-01T00:00:00Z'}) + '\n')
         manifest = {'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'claude', 'root': str(root), 'authorization': 'synthetic', 'coverage': 'complete'}]}
         (self.wt / 'scratch.txt').write_text('untracked')
         _, report = self.audit(manifest)
@@ -710,6 +711,7 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
         root = self.area / 'empty supported history'
         root.mkdir()
+        (root / 'old.jsonl').write_text(json.dumps({'type': 'event_msg', 'timestamp': '2020-01-01T00:00:00Z', 'payload': {'type': 'agent_message', 'message': 'old unrelated fixture'}}) + '\n')
         supported = {'provider': 'codex', 'root': str(root), 'authorization': 'synthetic', 'coverage': 'complete'}
         result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [ignored, supported]})
         self.assertEqual(result.returncode, 0)

@@ -7,7 +7,7 @@ source: pstack/agents/comment-sicko.md
 # Native Comment Sicko
 
 Read [host adapter](../adapters/host.md), [mobile adapter](../adapters/mobile.md),
-[project PR policy](../policies/astra-pr-review.md), and the complete
+and the complete
 [pinned Comment Sicko agent](../core/pstack/agents/comment-sicko.md) before work.
 Use coordinator-supplied absolute wrapper, core and adapter paths and the exact
 scoped files or diff. Execute that specialized agent's rules in full, preserving

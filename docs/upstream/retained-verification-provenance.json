@@ -11,12 +11,12 @@
       "blob_sha": "ca6f24c963001d9d518db2936dfe3d12f29b4e94",
       "sha256": "eeb868e2dfebee528d730a67d7b17498fac4bb85dec2e38bc5c5176aca4d5d2f",
       "mode": "100644",
-      "destination_sha256": "6399fd82db2f6f90018c1960c64007f9aed56dbc014f7b0ecc54d7a77194ffb4",
+      "destination_sha256": "f338d7f32d18cf78c3fcc5cb55ea242d132c29405e2b6d629584bd2304f523c4",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native entrypoint loads explicit host/mobile adapters and the named Astra PR policy before the byte-exact pinned workflow; role defaults are preserved."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
@@ -26,12 +26,12 @@
       "blob_sha": "1713b283d477530be64e925ede2bdbe5ce2d6e31",
       "sha256": "5f02db9101ccf26c20254718f0fcd5c2c7ac5d4292b0e0923d0944ac47237aff",
       "mode": "100644",
-      "destination_sha256": "9b9bc8ea9ae2005593fd6dd61e3bacf6053e9fcba69df81bc24b4e7493ecb7aa",
+      "destination_sha256": "c9f28967513a34e032a65cf20f8c06904d86d5b0454dd491ddba2fde0a3cacb8",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native entrypoint loads explicit host/mobile adapters and the named Astra PR policy before the byte-exact pinned workflow; role defaults are preserved."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
@@ -41,12 +41,12 @@
       "blob_sha": "a2680b91fead45a0b4963d8c367a854956bea59d",
       "sha256": "515c0eaa054b3f6be1b1fb06f2c2f173c80fddb58bbcac57576f89c479bc68e8",
       "mode": "100644",
-      "destination_sha256": "5ad25da2efd96934a92c57f429cbb5802a3daafc4536297b25d67b78afd8a208",
+      "destination_sha256": "122ff09ae83859a5978d7d322082207ee7e4336215dada298be9fbbb551ac4bd",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native entrypoint loads explicit host/mobile adapters and the named Astra PR policy before the byte-exact pinned workflow; role defaults are preserved."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
@@ -56,12 +56,12 @@
       "blob_sha": "c09f486e32935a154dd98daa13aa8187856600fe",
       "sha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904",
       "mode": "100644",
-      "destination_sha256": "a0a9c9fccaaff9bd605e86e5796d99012363503be6b5f37158f5e8ffde208df5",
+      "destination_sha256": "018f0f7e0c060f417e50f28ceb92c3edf5629aec001944363eca450f5b6679c2",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native entrypoint loads explicit host/mobile adapters and the named Astra PR policy before the byte-exact pinned workflow; role defaults are preserved."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     }
   ]

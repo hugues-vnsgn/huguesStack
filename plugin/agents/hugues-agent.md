@@ -7,7 +7,6 @@ source: pstack/agents/poteto-agent.md
 # Native worker
 
 Read [host adapter](../adapters/host.md), [mobile adapter](../adapters/mobile.md),
-[project PR policy](../policies/astra-pr-review.md),
 [pinned worker](../core/pstack/agents/poteto-agent.md), and
 [hugues-mode](../skills/hugues-mode/SKILL.md) in full before work.
 Use the coordinator-supplied absolute mode, skills, core and adapter paths.
