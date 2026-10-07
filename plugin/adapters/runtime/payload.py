@@ -105,8 +105,11 @@ def translate(root, binding, text):
             return command(root, binding, 'read-workflow', words[0])
         if len(words) == 3 and words[:2] == ['git', 'show']:
             revision, separator, source = words[2].partition(':')
-            if separator and revision == 'origin/main' and source in known:
-                return command(root, binding, 'read-workflow', source)
+            if separator and revision == 'origin/main':
+                if source in known:
+                    return command(root, binding, 'read-workflow', source)
+                if any(re.match(re.escape(path) + r'(?![\w./-])', source) for path in known):
+                    raise ValueError('unsupported bundled command; use a standalone guarded read')
             return value
         if len(words) == 2 and words[0] == 'cat' and words[1] in known:
             return command(root, binding, 'read-workflow', words[1])
@@ -124,8 +127,11 @@ def translate(root, binding, text):
     result = []
     for line in text.splitlines(keepends=True):
         if '`' in line:
-            result.append(re.sub(r'(?<!`)`([^`\n]+)`(?!`)',
-                                 lambda match: '`' + fragment(match[1]) + '`', line))
+            inline = r'(?<!`)`([^`\n]+)`(?!`)'
+            surrounding = re.sub(inline, '', line).strip()
+            if fragment(surrounding) != surrounding:
+                raise ValueError('mixed bundled command and inline syntax; use a standalone guarded read')
+            result.append(re.sub(inline, lambda match: '`' + fragment(match[1]) + '`', line))
         else:
             content = line.strip()
             translated = fragment(content)
