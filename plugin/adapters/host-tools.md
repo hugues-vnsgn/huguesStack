@@ -98,23 +98,32 @@ and string output. Reasoning permits only reviewed plaintext summary/content
 blocks; encrypted reasoning holds. Textual agent/user events require string
 content and no opaque attachments. Other events, web-search responses, Claude
 system/history/queue records and redacted thinking have no reviewed content
-schema and hold. Envelope/message metadata also uses bounded fields and types;
+schema and hold. Unsupported records/files keep coverage unavailable while
+independent later records/files can retain activity hints. Those hints are
+labeled as validated records or unparsed path hints, never as deletion safety.
+Opaque records invalidate inherited relative context until a reviewed context
+resets it. Envelope/message metadata also uses bounded fields and types;
 unknown metadata, including unreviewed usage structures, holds. Other formats hold.
 The scan is conservative: exact worktree paths,
 child paths and session working directories count as activity even in quoted
 messages. Encoded function arguments are decoded; relative path operations need
 session or tool working-directory context. Each operation retains its own context;
 relative tool working directories resolve against their enclosing session.
+Codex operation-local directories never replace persistent session/turn context.
 Session/turn contexts need an absolute working directory and reviewed string
 metadata fields; unknown context fields or opaque metadata hold. Operations without a
 resolvable working directory or absolute operation path hold.
-Simple shell operands and native patch
+Simple shell operands and bounded native patch
 file headers resolve relative to that context, including sibling worktrees and
 parent-directory scopes and sequential `git -C` directory changes. Shell support is deliberately bounded to cat, ls, head,
 tail, wc, stat, rg, grep, git status, pwd, readlink and realpath with literal
-operands. Compound commands, expansions, arbitrary programs and unknown tool
+operands and a finite option allowlist. Unknown options, command paths outside
+the reviewed bare/system forms and preprocessors hold. Compound commands,
+expansions, arbitrary programs and unknown tool
 operations hold coverage for inspection; the adapter never executes transcript
-commands. Sed, find and other embedded programs hold. Claude file operations support
+commands. Patch envelopes, operation headers, moves and hunk/body lines must
+fit the bounded grammar; unknown directives or unconsumed content hold.
+Sed, find and other embedded programs hold. Claude file operations support
 Read/Write/Edit with required `file_path` and tool-specific fields; unknown fields
 or wrong types hold. Glob/Grep/MultiEdit and unknown file tools hold for inspection.
 Missing/malformed

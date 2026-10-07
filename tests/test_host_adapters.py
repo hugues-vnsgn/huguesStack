@@ -492,6 +492,91 @@ class SyntheticActivity(unittest.TestCase):
             self.assertTrue(complete)
             self.assertTrue(hits[str(self.other)])
 
+    def test_patch_grammar_holds_unconsumed_directives_and_retains_known_paths(self):
+        target = '../' + self.other.name + '/README.md'
+        invalid = [
+            '*** Add File: harmless\n*** UnsupportedOperation: ' + target,
+            '*** Update File: ' + target + '\n@@\n-old\n+new\n*** UnsupportedOperation: elsewhere',
+            '*** Add File: ' + target + '\nunprefixed content',
+            '*** Delete File: ' + target + '\n+unexpected body',
+            '*** Update File: ' + target + '\n@@',
+            '*** Move to: ' + target,
+            '*** Update File: ' + target + '\n*** Move to: moved\n*** Move to: duplicate\n@@\n-old\n+new']
+        for body in invalid:
+            row = self.codex(payload={'type': 'custom_tool_call', 'name': 'apply_patch', 'cwd': str(self.wt), 'input': '*** Begin Patch\n' + body + '\n*** End Patch'})
+            self.assertFalse(self.scan('codex', [row])[2])
+        row['payload']['input'] = '*** Begin Patch\n*** Update File: ' + target + '\n@@\n-old\n+new\n*** UnsupportedOperation: elsewhere\n*** End Patch'
+        hits, _, complete = self.scan('codex', [row])
+        self.assertFalse(complete)
+        self.assertEqual(hits[str(self.other)][0]['evidence_basis'], 'unparsed-path-hint')
+        for body in ['*** Add File: ' + target + '\n+fixture',
+                     '*** Delete File: ' + target,
+                     '*** Update File: ' + target + '\n*** Move to: renamed\n@@\n-old\n+new\n*** End of File']:
+            row['payload']['input'] = '*** Begin Patch\n' + body + '\n*** End Patch'
+            self.assertTrue(self.scan('codex', [row])[2])
+
+    def test_codex_operation_cwd_never_changes_persistent_session_context(self):
+        meta = {'type': 'session_meta', 'timestamp': self.stamp, 'payload': {'cwd': str(self.wt)}}
+        call = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': shlex.join(['cat', '../' + self.other.name + '/README.md'])})})
+        operations = [
+            self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'cwd': str(self.area / 'tools/deep'), 'arguments': json.dumps({'cmd': 'pwd'})}),
+            self.codex(payload={'type': 'function_call_output', 'call_id': 'fixture', 'cwd': str(self.area / 'tools/deep'), 'output': 'plain'})]
+        hits, _, complete = self.scan('codex', [meta, *operations, call])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+        turn = {'type': 'turn_context', 'timestamp': self.stamp, 'payload': {'cwd': str(self.other)}}
+        plain = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md'})})
+        hits, _, complete = self.scan('codex', [meta, turn, *operations, plain])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+
+    def test_unknown_before_valid_and_mixed_blocks_retain_hints_under_hold(self):
+        unknown = {'type': 'unknown', 'timestamp': self.stamp}
+        valid = self.claude(cwd=str(self.other))
+        for rows in [[unknown, valid], [valid, unknown]]:
+            hits, reports, complete = self.scan('claude', rows)
+            self.assertFalse(complete)
+            self.assertEqual(reports[0]['coverage'], 'unavailable')
+            self.assertTrue(hits[str(self.other)])
+            self.assertEqual(hits[str(self.other)][0]['evidence_basis'], 'validated-record')
+        mixed = self.claude(message={'content': [{'type': 'text', 'text': str(self.other)}, {'type': 'unknown'}]})
+        hits, _, complete = self.scan('claude', [mixed])
+        self.assertFalse(complete)
+        self.assertEqual(hits[str(self.other)][0]['evidence_basis'], 'unparsed-path-hint')
+
+    def test_unavailable_file_does_not_suppress_other_authorized_file_hints(self):
+        missing, valid = self.area / 'missing.jsonl', self.area / 'valid.jsonl'
+        valid.write_text(json.dumps(self.claude(cwd=str(self.other))) + '\n')
+        manifest = {'coverage': 'complete', 'sources': [{'provider': 'claude', 'files': [str(missing), str(valid)], 'authorization': 'synthetic', 'coverage': 'complete'}]}
+        hits, reports, complete = activity.scan(manifest, [self.other], self.now)
+        self.assertFalse(complete)
+        self.assertEqual(reports[0]['files_scanned'], 1)
+        self.assertTrue(hits[str(self.other)])
+
+    def test_opaque_record_invalidates_relative_context_until_reviewed_context_resets(self):
+        meta = {'type': 'session_meta', 'timestamp': self.stamp, 'payload': {'cwd': str(self.wt)}}
+        unknown = {'type': 'event_msg', 'payload': {'type': 'unknown'}}
+        call = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': shlex.join(['cat', '../' + self.other.name + '/README.md'])})})
+        hits, _, complete = self.scan('codex', [meta, unknown, call])
+        self.assertFalse(complete)
+        self.assertFalse(hits[str(self.other)])
+        hits, _, complete = self.scan('codex', [meta, unknown, meta, call])
+        self.assertFalse(complete)
+        self.assertEqual(hits[str(self.other)][0]['evidence_basis'], 'validated-record')
+
+    def test_literal_shell_forms_hold_opaque_options_and_nonstandard_program_paths(self):
+        for cmd in ['rg --pre arbitrary-script token README.md', 'rg --pre=arbitrary-script token README.md',
+                    '/unreviewed/bin/cat README.md', 'head --unknown README.md', 'head -n bad README.md']:
+            row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
+            self.assertFalse(self.scan('codex', [row])[2])
+        for cmd in [shlex.join(['/bin/cat', '--', '../' + self.other.name + '/README.md']),
+                    shlex.join(['head', '-n', '2', '../' + self.other.name + '/README.md']),
+                    shlex.join(['rg', '-n', 'token', '../' + self.other.name + '/README.md'])]:
+            row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
+            hits, _, complete = self.scan('codex', [row])
+            self.assertTrue(complete)
+            self.assertTrue(hits[str(self.other)])
+
 
 
     def test_no_recent_evidence_is_distinct_from_unavailable(self):
@@ -710,3 +795,24 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
             result, report = self.audit(manifest)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(report['worktrees'][1]['bucket'], 'verify-recent-chat')
+
+    def test_cli_session_scope_and_partial_patch_hints_never_promote_coverage(self):
+        stamp = datetime.now(timezone.utc).isoformat()
+        path = self.area / 'scope-and-patch.jsonl'
+        manifest = {'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'codex', 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]}
+        meta = {'type': 'session_meta', 'timestamp': stamp, 'payload': {'cwd': str(self.consumer)}}
+        unrelated = {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'cwd': str(self.area / 'tools/deep'), 'arguments': json.dumps({'cmd': 'pwd'})}}
+        call = {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': shlex.join(['cat', '../' + self.wt.name + '/README.md'])})}}
+        path.write_text('\n'.join(json.dumps(row) for row in [meta, unrelated, call]) + '\n')
+        result, report = self.audit(manifest)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(report['worktrees'][1]['bucket'], 'verify-recent-chat')
+        patch = {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'custom_tool_call', 'name': 'apply_patch', 'cwd': str(self.consumer), 'input': '*** Begin Patch\n*** Add File: ../' + self.wt.name + '/fixture.txt\n+fixture\n*** UnsupportedOperation: elsewhere\n*** End Patch'}}
+        valid = {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call_output', 'call_id': 'fixture', 'output': str(self.wt)}}
+        path.write_text('\n'.join(json.dumps(row) for row in [patch, valid]) + '\n')
+        result, report = self.audit(manifest)
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertEqual(report['coverage'], 'unavailable')
+        self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
+        self.assertEqual({row['evidence_basis'] for row in report['worktrees'][1]['evidence']}, {'unparsed-path-hint', 'validated-record'})
+        self.assertFalse(report['worktrees'][1]['deletion_authorized'])

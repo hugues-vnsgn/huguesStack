@@ -13,21 +13,31 @@ PATH_KEYS = {'cwd', 'workdir', 'file_path', 'path', 'absolute_path', 'directory'
 RECENT_SECONDS = 4 * 86400
 SIMPLE_COMMANDS = {'cat', 'ls', 'head', 'tail', 'wc', 'stat', 'rg', 'grep',
                    'git', 'pwd', 'readlink', 'realpath'}
+SIMPLE_FLAGS = {
+    'cat': {'-n', '-b', '-s', '-v', '-E', '-T', '-u'},
+    'ls': {'-a', '-A', '-l', '-h', '-d', '-R', '-1', '-F', '-p', '-t', '-r', '-S', '-la', '-al', '-lh'},
+    'head': {'-n', '-c'}, 'tail': {'-n', '-c', '-f'},
+    'wc': {'-c', '-l', '-w', '-m'}, 'stat': set(),
+    'rg': {'-n', '-i', '-l', '-q', '-v', '-c', '-w', '-F', '--line-number', '--files', '--hidden', '--no-ignore'},
+    'grep': {'-n', '-i', '-l', '-L', '-q', '-v', '-c', '-s', '-r', '-R', '-w', '-x', '-F', '-E', '-G'},
+    'git': {'--short', '-s', '--branch', '-b', '--porcelain', '--porcelain=v1', '--porcelain=v2'},
+    'pwd': {'-L', '-P'}, 'readlink': {'-f', '-e', '-m'}, 'realpath': {'-e', '-m', '-s'},
+}
 PATH_TOOLS = {'Read', 'Write', 'Edit'}
 
 
-def strings(value):
+def strings(value, decode_arguments=True):
     if isinstance(value, dict):
         for key, child in value.items():
-            if key == 'arguments' and isinstance(child, str):
+            if decode_arguments and key == 'arguments' and isinstance(child, str):
                 try:
                     child = json.loads(child)
                 except ValueError as exc:
                     raise ValueError('unreadable encoded function arguments') from exc
-            yield from strings(child)
+            yield from strings(child, decode_arguments)
     elif isinstance(value, list):
         for child in value:
-            yield from strings(child)
+            yield from strings(child, decode_arguments)
     elif isinstance(value, str):
         yield value
 
@@ -56,16 +66,19 @@ def shell_paths(command):
     if any(char in command for char in '$`*?[]{};|&<>\n\r'):
         raise ValueError('unsupported shell expansion or compound command')
     tokens = shlex.split(command)
-    if not tokens or Path(tokens[0]).name not in SIMPLE_COMMANDS:
+    program = Path(tokens[0]).name if tokens else None
+    if (program not in SIMPLE_COMMANDS or tokens[0] not in
+            {program, '/bin/' + program, '/usr/bin/' + program}):
         raise ValueError('unsupported shell program; activity coverage unavailable')
     paths = []
     directory = Path('.')
     index = 1
     git_subcommand = None
+    operands_only = False
     while index < len(tokens):
         token = tokens[index]
         index += 1
-        if Path(tokens[0]).name == 'git' and (token == '-C' or token.startswith('-C')):
+        if not operands_only and program == 'git' and (token == '-C' or token.startswith('-C')):
             if token == '-C':
                 if index >= len(tokens):
                     raise ValueError('git -C lacks a directory')
@@ -78,15 +91,17 @@ def shell_paths(command):
             directory = Path(target) if Path(target).is_absolute() else directory / target
             paths.append(str(directory))
             continue
-        if token.startswith('-'):
-            if token.startswith('-C') and len(token) > 2:
-                token = token[2:]
-            elif '=' in token:
-                token = token.split('=', 1)[1]
-            elif '/' in token:
-                raise ValueError('unsupported attached shell path option')
-            else:
-                continue
+        if not operands_only and token == '--':
+            operands_only = True
+            continue
+        if not operands_only and token.startswith('-'):
+            if token not in SIMPLE_FLAGS[program]:
+                raise ValueError('unsupported shell option; activity coverage unavailable')
+            if program in {'head', 'tail'} and token in {'-n', '-c'}:
+                if index >= len(tokens) or not tokens[index].isdigit():
+                    raise ValueError('unsupported shell count option')
+                index += 1
+            continue
         if token.startswith('~'):
             raise ValueError('unsupported shell home expansion')
         if token:
@@ -101,12 +116,70 @@ def shell_paths(command):
 
 
 def patch_paths(text):
-    if not isinstance(text, str) or not text.startswith('*** Begin Patch\n') or not text.rstrip().endswith('*** End Patch'):
+    if not isinstance(text, str):
         raise ValueError('unsupported patch envelope')
-    paths = re.findall(r'^\*\*\* (?:Add File|Update File|Delete File|Move to): (.+)$', text, re.M)
+    lines = text.splitlines()
+    if not lines or lines[0] != '*** Begin Patch' or lines[-1] != '*** End Patch':
+        raise ValueError('unsupported patch envelope')
+    paths, mode, hunk, body, moved, eof = [], None, False, False, False, False
+    for line in lines[1:-1]:
+        match = re.fullmatch(r'\*\*\* (Add File|Update File|Delete File): (.+)', line)
+        if match:
+            if mode == 'Update File' and (not hunk or not body):
+                raise ValueError('patch update lacks a supported hunk')
+            mode, path = match.groups()
+            if not path.strip():
+                raise ValueError('patch operation lacks a path')
+            paths.append(path)
+            hunk = body = moved = eof = False
+        elif line.startswith('*** Move to: '):
+            if mode != 'Update File' or hunk or moved or not line[13:].strip():
+                raise ValueError('unsupported patch move directive')
+            paths.append(line[13:])
+            moved = True
+        elif mode == 'Update File' and (line == '@@' or line.startswith('@@ ')):
+            if eof or hunk and not body:
+                raise ValueError('patch hunk follows end-of-file marker')
+            hunk = True
+            body = False
+        elif mode == 'Update File' and line == '*** End of File' and hunk and body and not eof:
+            eof = True
+        elif mode == 'Add File' and line.startswith('+'):
+            continue
+        elif mode == 'Update File' and hunk and not eof and line.startswith((' ', '+', '-')):
+            body = True
+        else:
+            raise ValueError('unknown or malformed patch directive/content')
     if not paths:
         raise ValueError('patch has no operation paths')
+    if mode == 'Update File' and (not hunk or not body):
+        raise ValueError('patch update lacks a supported hunk')
     return paths
+
+
+def hint_paths(value, inherited=None):
+    """Conservative path hints only; never evidence of complete parsing."""
+    if isinstance(value, dict):
+        try:
+            cwd = local_context(value, inherited)
+        except ValueError:
+            cwd = None
+        for key, child in value.items():
+            if key == 'arguments' and isinstance(child, str):
+                try:
+                    child = json.loads(child)
+                except ValueError:
+                    pass
+            if key in PATH_KEYS and isinstance(child, str) and child and (Path(child).is_absolute() or cwd):
+                yield str((Path(child) if Path(child).is_absolute() else Path(cwd) / child).resolve())
+            yield from hint_paths(child, cwd)
+    elif isinstance(value, list):
+        for child in value:
+            yield from hint_paths(child, inherited)
+    elif isinstance(value, str):
+        for path in re.findall(r'^\*\*\* (?:Add File|Update File|Delete File|Move to): (.+)$', value, re.M):
+            if Path(path).is_absolute() or inherited:
+                yield str((Path(path) if Path(path).is_absolute() else Path(inherited) / path).resolve())
 
 
 def local_context(value, inherited):
@@ -218,7 +291,7 @@ def operation_paths(value, inherited=None):
         yield str((Path(path) if Path(path).is_absolute() else Path(cwd) / path).resolve())
 
 
-def touches(value, worktree):
+def touches(value, worktree, decode_arguments=True):
     variants = {str(worktree)}
     # macOS Git canonicalizes /tmp and /var to /private/...; native records may
     # retain those system aliases. Do not miss activity because of spelling.
@@ -227,7 +300,7 @@ def touches(value, worktree):
         if str(worktree).startswith(canonical + '/'):
             variants.add(alias + str(worktree)[len(canonical):])
     patterns = [re.compile(re.escape(path) + r'(?=$|[/\s\"\'`,;:)\]}])') for path in variants]
-    return any(pattern.search(text) for text in strings(value) for pattern in patterns)
+    return any(pattern.search(text) for text in strings(value, decode_arguments) for pattern in patterns)
 
 
 def timestamp(record, fallback):
@@ -476,33 +549,59 @@ def scan(manifest, worktrees, now):
         try:
             files = selected_files(source)
             supported_sources += 1
+            unavailable = False
             for path in files:
-                body, mtime = read_selected(path)
+                try:
+                    body, mtime = read_selected(path)
+                except (ValueError, OSError, UnicodeError) as exc:
+                    report['error'] = str(exc)
+                    unavailable = True
+                    continue
                 cwd = None
-                for row, ts, origin in records(source['provider'], path, body, mtime):
-                    # Decode tool arguments even if the record has no direct path.
-                    list(strings(row))
-                    if row.get('cwd'):
-                        cwd = row['cwd']
-                    payload = row.get('payload', {})
-                    if isinstance(payload, dict) and payload.get('cwd'):
-                        cwd = payload['cwd']
-                    if cwd and (not isinstance(cwd, str) or not Path(cwd).is_absolute()):
-                        raise ValueError('invalid session working directory')
-                    normalized = list(operation_paths(row, cwd))
-                    for location in contexts(row):
-                        if Path(location).is_absolute():
-                            normalized.append(str(Path(location).resolve()))
+                for line in body.splitlines():
+                    if not line.strip():
+                        continue
+                    row, basis = line, 'validated-record'
+                    try:
+                        row, ts, origin = next(records(source['provider'], path, line, mtime))
+                        list(strings(row))
+                        next_cwd = cwd
+                        if source['provider'] == 'claude' and row.get('cwd'):
+                            next_cwd = row['cwd']
+                        if source['provider'] == 'codex' and row['type'] in {'session_meta', 'turn_context'}:
+                            next_cwd = row['payload']['cwd']
+                        if next_cwd and (not isinstance(next_cwd, str) or not Path(next_cwd).is_absolute()):
+                            raise ValueError('invalid session working directory')
+                        normalized = list(operation_paths(row, next_cwd))
+                        for location in contexts(row):
+                            if Path(location).is_absolute():
+                                normalized.append(str(Path(location).resolve()))
+                        cwd = next_cwd
+                    except (ValueError, OSError, TypeError, KeyError, UnicodeError) as exc:
+                        report['error'] = str(exc)
+                        unavailable = True
+                        if isinstance(row, str):
+                            try:
+                                row = json.loads(row)
+                            except ValueError:
+                                pass
+                        try:
+                            normalized = list(hint_paths(row, cwd))
+                        except (ValueError, OSError, TypeError):
+                            normalized = []
+                        cwd = None  # Never inherit uncertain context across an opaque record.
+                        ts, origin, basis = mtime, 'file-mtime-unparsed-conservative', 'unparsed-path-hint'
                     for wt in worktrees:
-                        hit = (touches(row, wt) or touches(normalized, wt) or
+                        hit = (touches(row, wt, basis == 'validated-record') or touches(normalized, wt) or
                                any(wt.is_relative_to(Path(p)) for p in normalized) or
                                bool(cwd and touches({'cwd': str(Path(cwd).resolve())}, wt)))
                         if hit:
                             activity[str(wt)].append({'provider': source['provider'], 'source': str(path),
                                                      'timestamp': ts, 'timestamp_basis': origin,
-                                                     'recent': now - ts <= RECENT_SECONDS})
+                                                     'recent': now - ts <= RECENT_SECONDS, 'evidence_basis': basis})
                 report['files_scanned'] += 1
-            report['coverage'] = 'complete' if source.get('coverage') == 'complete' else 'partial'
+            if not unavailable:
+                report['coverage'] = 'complete' if source.get('coverage') == 'complete' else 'partial'
         except (ValueError, OSError, TypeError, KeyError, UnicodeError) as exc:
             report['error'] = str(exc)
         complete = complete and report['coverage'] == 'complete'
