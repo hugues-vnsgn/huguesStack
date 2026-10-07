@@ -92,6 +92,11 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
                      'git show origin/main:' + self.source + '; id',
                      'git show origin/main:' + self.source + '| cat',
                      'node pstack/skills/poteto-mode/scripts/check-plan.mjs; true',
+                     'git show HEAD:README.md;cat<' + self.source,
+                     'cat pstack/skills/"swarm"/SKILL.md;id',
+                     *['node pstack/skills/poteto-mode/scripts/check-plan.mjs ' + operand
+                       for operand in ['plan.md;id', 'plan.md|cat', 'plan.md>out',
+                                       '"$PLAN"', '*.md', '~/plan.md']],
                      'cat ' + self.source + ' `printf extra`',
                      'cat ' + self.source + ' && echo `date`']:
             with self.subTest(text=text):
