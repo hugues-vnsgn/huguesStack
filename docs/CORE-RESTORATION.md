@@ -26,8 +26,10 @@ Bun bootstrap can install dependencies and is never run by package checks. Use a
 
 ## Local validation and remaining prerequisites
 
-The complete Python suite passes (231 tests), including preserved release contracts and development mutations/helpers. Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
+The complete Python suite passes (238 tests), including preserved release contracts and development mutations/helpers. Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
 
 The dependency-free Bun checks pass: 11 Store tests and 29 watch-PR policy/GitHub-adapter tests. Three orch CLI cases are explicitly filtered from the Store run; the full helper suite remains blocked by missing commander 14.0.0, and TypeScript checking by missing bun-types. The initial full Bun attempt reached the upstream frozen-lock installer and failed; no node_modules directory was produced. Subsequent checks exclude that bootstrap path. No dependency installation is claimed, and no missing prerequisite is replaced with a stub.
 
 Raw Git whitespace checking reports four pre-existing upstream warnings (three README trailing spaces and automate-me's final blank line). The source remains byte-exact. The bounded whitespace checker requires precisely those four locations/messages after source verification and rejects every additional warning.
+
+The native Comment Sicko wrapper loads its complete pinned rules for no-comments. KMP/CMP extensions compose the selected core action procedure and require implementation arena within step 3 when Feature has multiple valid shapes; design-only arena cannot satisfy that gate. Both wiring failures have phase-local mutation regressions.

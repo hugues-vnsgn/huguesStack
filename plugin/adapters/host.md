@@ -8,8 +8,9 @@ can block execution. It cannot turn an omitted gate into success.
 ## Loading and routing
 
 The active registry is [core-bindings.json](../core-bindings.json).
-`poteto-mode` maps to `hugues-mode`, `poteto-agent` to `hugues-agent`, and
-`setup-pstack` to `setup-huguesstack`. Every other active skill retains its name.
+`poteto-mode` maps to `hugues-mode`, `poteto-agent` to `hugues-agent`,
+`Comment Sicko` to `hugues-comment-sicko`, and `setup-pstack` to
+`setup-huguesstack`. Every other active skill retains its name.
 Load the registered entrypoint before executing a referenced skill. Read its
 pinned source in full, including every reference required by the current phase.
 Resolve source-relative references from that source file's directory. Resolve
@@ -38,6 +39,13 @@ to the public mode, plugin skills directory, pinned core and all three adapters,
 the exact base/head, writable scope, success predicate and evidence destination.
 Read the mode and applicable principle leaves in full before work. If the host
 cannot preserve required context isolation or parallelism, mark that phase blocked.
+
+The no-comments Task role `Comment Sicko` uses the registered
+`hugues-comment-sicko` agent in Claude Code. Codex prepends that specialized
+wrapper and reads the complete pinned comment-sicko agent before the fresh worker
+acts. Do not substitute a generic worker without those rules. Preserve its exact
+comment exceptions, scope fence, MUST KILL proof and no application-code edits;
+the no-comments coordinator retains rejection, one rerun and failure rules.
 
 The pinned per-role defaults remain defaults. A panel launches one worker per
 configured entry, including each auto or inherit-parent alias. List length sets

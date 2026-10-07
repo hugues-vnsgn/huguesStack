@@ -7,10 +7,15 @@ mobile proof and consumer boundaries without replacing the core workflow.
 
 Choose lifecycle or action intent first: pause, pickup, verification maintenance,
 verification-skill authoring, review, investigation, prototype, then implementation.
-A language or target keyword alone is not implementation authority. Native Swift
-or Kotlin implementation uses the selected core playbook. Shared KMP boundary
-implementation uses [kmp-bridge-change](../skills/hugues-mode/playbooks/kmp-bridge-change.md);
-CMP rendering implementation uses [cmp-two-target-change](../skills/hugues-mode/playbooks/cmp-two-target-change.md).
+A language or target keyword alone is not implementation authority. First select
+the core action playbook and retain its complete procedure. Native Swift or Kotlin
+implementation uses that playbook. Shared KMP boundary implementation adds
+[kmp-bridge-change](../skills/hugues-mode/playbooks/kmp-bridge-change.md);
+CMP rendering implementation adds [cmp-two-target-change](../skills/hugues-mode/playbooks/cmp-two-target-change.md).
+These extensions compose target requirements into the selected core phases;
+they never replace core todos or implementation gates. Feature work with multiple
+valid shapes completes the mandatory implementation arena before target proof,
+even when no function boundary changes. Design-only arena does not satisfy it.
 Build/toolchain diagnosis uses [build-doctor](../skills/hugues-mode/playbooks/build-doctor.md).
 Existing-recipe proof uses [mobile-proof](../skills/hugues-mode/playbooks/mobile-proof.md).
 These four are explicit extension routes. Large, cross-cutting, unmatched and

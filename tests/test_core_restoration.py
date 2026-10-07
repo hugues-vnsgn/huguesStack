@@ -29,6 +29,22 @@ def bodies(root=ROOT):
 
 
 class DevelopmentBehavior(unittest.TestCase):
+    def test_mobile_extensions_retain_core_and_implementation_arena_in_phase(self):
+        names = ['kmp-bridge-change', 'cmp-two-target-change']
+        original = {name: (ROOT / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
+                    for name in names}
+        self.assertEqual(core.mobile_route_errors(original), [])
+        for name in names:
+            old = release_root() / f'plugin/skills/hugues-mode/playbooks/{name}.md'
+            self.assertIn(name + '-implementation-arena', core.mobile_route_errors({name: old.read_text()}))
+            for marker in ['selected core action playbook', 'complete the implementation arena',
+                           'Mandatory: no skip-with-reason escape', '[arena](../../arena/SKILL.md) in full',
+                           'even within one function']:
+                with self.subTest(route=name, marker=marker):
+                    data = dict(original)
+                    data[name] = data[name].replace(marker, 'optional') + '\n**Reply:** ' + marker
+                    self.assertTrue(core.mobile_route_errors(data))
+
     def test_whitespace_exception_is_bounded_to_actual_upstream_diagnostics(self):
         report = '\n'.join(f'{p}:{n}: {reason}' for p, n, reason in sorted(check_whitespace.EXPECTED))
         check_whitespace.validate(report)
@@ -178,6 +194,36 @@ class EffectiveWiring(unittest.TestCase):
         path = self.root / 'plugin/agents/hugues-agent.md'
         path.write_text(path.read_text().replace('[hugues-mode]', '[skip-mode]'))
         self.rejected('loader/worker drift')
+
+    def test_missing_comment_sicko_registration_is_a_core_dependency_failure(self):
+        self.mutate_json('plugin/.claude-plugin/plugin.json',
+                         lambda d: d.update(agents=['./agents/hugues-agent.md']))
+        self.rejected('manifest wiring')
+
+    def test_comment_sicko_cannot_bind_to_generic_worker_source(self):
+        self.mutate_json('plugin/core-bindings.json', lambda d:
+            d['agents']['Comment Sicko'].update(source='pstack/agents/poteto-agent.md'))
+        self.rejected('specialized agent binding')
+
+    def test_comment_sicko_wrapper_must_load_specialized_rules(self):
+        path = self.root / 'plugin/agents/hugues-comment-sicko.md'
+        path.write_text(path.read_text().replace('agents/comment-sicko.md', 'agents/poteto-agent.md'))
+        self.rejected('loader/worker drift')
+
+    def test_removed_comment_sicko_wrapper(self):
+        (self.root / 'plugin/agents/hugues-comment-sicko.md').unlink()
+        self.rejected('registered agent inventory')
+
+    def test_active_mobile_route_cannot_omit_implementation_arena(self):
+        path = self.root / 'plugin/skills/hugues-mode/playbooks/cmp-two-target-change.md'
+        path.write_text(path.read_text().replace('Mandatory: no skip-with-reason escape', 'Optional'))
+        self.rejected('mobile core gates differ')
+
+    def test_active_mobile_route_cannot_replace_selected_core_procedure(self):
+        path = self.root / 'plugin/skills/hugues-mode/playbooks/kmp-bridge-change.md'
+        path.write_text(path.read_text().replace('Do not execute this extension in place of the core procedure',
+                                                'Execute this extension in place of the core procedure'))
+        self.rejected('mobile core gates differ')
 
     def test_playbook_cannot_point_to_different_core(self):
         path = self.root / 'plugin/skills/hugues-mode/playbooks/feature.md'

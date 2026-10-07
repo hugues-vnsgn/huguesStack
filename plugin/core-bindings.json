@@ -343,5 +343,15 @@
     "plugin/adapters/host.md",
     "plugin/adapters/mobile.md",
     "plugin/policies/astra-pr-review.md"
-  ]
+  ],
+  "agents": {
+    "poteto-agent": {
+      "source": "pstack/agents/poteto-agent.md",
+      "entrypoint": "plugin/agents/hugues-agent.md"
+    },
+    "Comment Sicko": {
+      "source": "pstack/agents/comment-sicko.md",
+      "entrypoint": "plugin/agents/hugues-comment-sicko.md"
+    }
+  }
 }

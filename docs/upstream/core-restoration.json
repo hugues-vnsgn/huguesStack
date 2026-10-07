@@ -13,8 +13,8 @@
     "astra-high-pr-panel"
   ],
   "adapter_sha256": {
-    "plugin/adapters/host.md": "f9aed453dfe22bebac189e265fadd5fb69ce9cdd834a8d377a30604a1f66499f",
-    "plugin/adapters/mobile.md": "06385dc72789563331f87052637888954c99e8a9c6e2369087e376ad299fb93b",
+    "plugin/adapters/host.md": "d6ec829197ebc4fe49d6c92535d1249e5fa11f2d19ad9c4b41aa6f55e42aeee2",
+    "plugin/adapters/mobile.md": "85732c7638c567279664012635050901c815071486fc67bd3047a5ecf99eb690",
     "plugin/policies/astra-pr-review.md": "3cd4340616cdfbb3257ff6a7abc93157ce936340ce5d913251ab4f302231d5d5"
   },
   "evidence_boundary": "Static source, behavior-contract and wiring checks are development evidence. Released host/mobile observations do not attest to the restored development workflows."

@@ -66,6 +66,25 @@ coordinator independently verifies. Background execution is a host capability,
 not a promise; disclose when the native host lacks it.
 '''
 
+COMMENT_WORKER = '''---
+name: hugues-comment-sicko
+description: Native Comment Sicko role for pinned no-comments; load its complete specialized rules before the scoped comment pass.
+source: pstack/agents/comment-sicko.md
+---
+
+# Native Comment Sicko
+
+Read [host adapter](../adapters/host.md), [mobile adapter](../adapters/mobile.md),
+[project PR policy](../policies/astra-pr-review.md), and the complete
+[pinned Comment Sicko agent](../core/pstack/agents/comment-sicko.md) before work.
+Use coordinator-supplied absolute wrapper, core and adapter paths and the exact
+scoped files or diff. Execute that specialized agent's rules in full, preserving
+comment exceptions, scope, evidence and MUST KILL criteria. Never edit application
+code or broaden scope. The no-comments coordinator adjudicates the actual report
+and comment diff, preserving its rejection/rerun/stop rules. Missing specialized
+instructions blocks the role; a generic worker without them cannot satisfy it.
+'''
+
 
 def outputs(root=ROOT):
     binding = json.loads((root / 'plugin/core-bindings.json').read_text())
@@ -76,6 +95,7 @@ def outputs(root=ROOT):
     for name, row in binding['playbooks'].items():
         result[row['entrypoint']] = playbook_loader(name, row)
     result['plugin/agents/hugues-agent.md'] = WORKER
+    result['plugin/agents/hugues-comment-sicko.md'] = COMMENT_WORKER
     return result
 
 

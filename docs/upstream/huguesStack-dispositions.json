@@ -105,11 +105,11 @@
       "blob_sha": "9a688b8c5b5734ee80f782d4616a78c4c59b0946",
       "size": 2230,
       "sha256": "c0fd0383008da45fc78cfac17b9007d62c42f87ad1c8d5c2fb658b1fd01f7c82",
-      "disposition": "port verbatim",
-      "reason": "Pinned workflow contract is preserved in plugin/core and activated through checked entrypoints or core references/helpers; host/mobile/project policy translations are explicit. Source presence does not establish runtime support.",
+      "disposition": "port with adaptation",
+      "reason": "Pinned specialized no-comments role is activated through the registered native Comment Sicko wrapper and explicit host mapping.",
       "release_target": "unreleased-core-restoration",
       "destinations": [
-        "plugin/core/pstack/agents/comment-sicko.md"
+        "plugin/agents/hugues-comment-sicko.md"
       ],
       "implementation_state": "present",
       "category": "agent",
