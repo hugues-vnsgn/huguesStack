@@ -13,7 +13,8 @@ import unittest
 
 from test_wp2_contract import MODE, PLAYBOOKS, routes, section, steps
 
-ROOT = Path(__file__).resolve().parents[1]
+from release_snapshot import release_root
+ROOT = release_root()
 RETAINED = {'how', 'why', 'architect', 'arena', 'tdd', 'blast-radius',
             'maintain-verification-skill', 'correct'}
 DEFERRED = {'swarm', 'show-me-your-work', 'setup-huguesstack'}

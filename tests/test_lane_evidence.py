@@ -17,7 +17,8 @@ import unittest
 
 from test_wp2_contract import MODE, section, steps
 
-ROOT = Path(__file__).resolve().parents[1]
+from release_snapshot import release_root
+ROOT = release_root()
 FIXTURE = ROOT / 'tests/fixtures/rc2-lane-evidence.json'
 TARGET_COMPONENTS = ('requested_destination', 'module', 'source_set', 'scheme',
                      'variant', 'device_instance')

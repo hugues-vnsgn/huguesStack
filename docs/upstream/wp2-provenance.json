@@ -291,12 +291,5 @@
       "sha256": "ab40de7163c1c6e274f46ee559b2e53ef45673703f601f13f4931c199e6fb90f"
     }
   ],
-  "deferred_links": [
-    {
-      "source": "plugin/skills/principle-explain-the-number/SKILL.md",
-      "target": "../benchmark-checklist/SKILL.md",
-      "source_sha256": "5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c",
-      "reason": "benchmark-checklist is deferred to 0.2 by current plan"
-    }
-  ]
+  "deferred_links": []
 }

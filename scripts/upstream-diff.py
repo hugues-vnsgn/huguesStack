@@ -202,7 +202,8 @@ def decision(row, allow_pending):
     require(allow_pending or row['disposition'] != 'pending', 'untriaged responsibility')
     require(isinstance(row['reason'], str) and row['reason'].strip(), 'missing triage reason')
     require(row['implementation_state'] in STATES, 'invalid implementation state')
-    require(row['release_target'] in {'0.1.0', '0.2', 'not planned', 'pending'}, 'invalid release target')
+    require(row['release_target'] in {'0.1.0', '0.2', 'not planned', 'pending',
+                                    'unreleased-core-restoration'}, 'invalid release target')
     require(allow_pending or (row['implementation_state'] != 'pending' and row['release_target'] != 'pending'),
             'incomplete triage decision')
     require(isinstance(row['destinations'], list) and all(isinstance(p, str) and p for p in row['destinations']), 'invalid destinations')

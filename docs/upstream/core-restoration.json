@@ -1,0 +1,21 @@
+{
+  "revision": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a",
+  "release_preserved": "v0.1.0 at cc65cdd09c87510d3a71b273b8dbed906243f3e3",
+  "base_commit": "8f9e9fb63b4d2351b20e247762abc74ed2e50b2e",
+  "effective_overrides": [
+    "native-host-tools",
+    "project-local-model-rule",
+    "authority-boundaries",
+    "mobile-routing-and-proof",
+    "fresh-regression-worker",
+    "arena-context-isolation",
+    "bounded-mobile-opt-in",
+    "astra-high-pr-panel"
+  ],
+  "adapter_sha256": {
+    "plugin/adapters/host.md": "f9aed453dfe22bebac189e265fadd5fb69ce9cdd834a8d377a30604a1f66499f",
+    "plugin/adapters/mobile.md": "06385dc72789563331f87052637888954c99e8a9c6e2369087e376ad299fb93b",
+    "plugin/policies/astra-pr-review.md": "3cd4340616cdfbb3257ff6a7abc93157ce936340ce5d913251ab4f302231d5d5"
+  },
+  "evidence_boundary": "Static source, behavior-contract and wiring checks are development evidence. Released host/mobile observations do not attest to the restored development workflows."
+}

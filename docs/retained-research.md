@@ -1,3 +1,5 @@
+> Historical 0.1.0 implementation record. Its rewritten workflows and deferrals are superseded on the unreleased restoration branch. Read the [development guide](DEVELOPER-GUIDE.md) for current source contracts and evidence limits.
+
 # Retained research skills
 
 This package retains `how` and `why` from pstack 0.15.9 at

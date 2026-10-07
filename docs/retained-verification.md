@@ -1,3 +1,5 @@
+> Historical 0.1.0 implementation record. Its rewritten workflows and deferrals are superseded on the unreleased restoration branch. Read the [development guide](DEVELOPER-GUIDE.md) for current source contracts and evidence limits.
+
 # Retained verification skills
 
 The four leaves adapt pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a` from `https://github.com/cursor/plugins`. The [provenance receipt](upstream/retained-verification-provenance.json) binds each source blob and SHA-256 to its adapted destination hash, retained contracts and deviations. The upstream ledger records all four as present adaptations. TDD and correct were planned as verbatim; their mobile and standalone-authority changes require the corrected disposition.

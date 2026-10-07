@@ -14,10 +14,8 @@
         "plugin/skills/create-verification-skill/references/project-skill-template.md"
       ],
       "adaptations": [
-        "Replace Cursor loader with project .claude/skills and .agents/skills; preserve user files and disclose loader gaps.",
-        "Keep one agreed journey; defer upstream feature-map phase as required by current plan.",
-        "Compose installed jev skills and repository-permitted fallbacks; separate authored recipe from per-target executed proof.",
-        "Keep consumer artifacts private and external; omit implicit repair/install/cleanup/publication authority."
+        "The original 0.15.5 generator blob is also the pinned 0.15.9 blob. Its complete feature-map and proof contract is now loaded byte-for-byte from plugin/core.",
+        "Host layout and mobile proof are explicit adapters. The former one-journey restriction is superseded; bounded diagnosis is opt-in and cannot satisfy whole-map maintenance."
       ]
     },
     {

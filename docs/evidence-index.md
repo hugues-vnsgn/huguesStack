@@ -1,3 +1,5 @@
+> These receipts describe the released 0.1.0 bytes and their recorded revisions. They do not validate the restored development core; see [current validation](CORE-RESTORATION.md).
+
 # Evidence index
 
 This is the documentation snapshot on **6 October 2026** for package

@@ -1,3 +1,7 @@
+## Unreleased core restoration
+
+The approved pin remains pstack 0.15.9. All 161 source files are preserved byte-for-byte in `plugin/core/pstack`, including Git executable modes. Active entrypoints load 47 top-level skills and all 23 core playbooks plus four mobile routes. The three excluded leaf families and Benny stay inactive. See [restoration contracts](../CORE-RESTORATION.md). Run `python3 scripts/check_core.py` as well as the checks below. Historical delta counts remain unchanged; current ledger dispositions now describe the restoration, not the released 0.1.0 subset. A later version upgrade is a separate review.
+
 # Upstream sync
 
 WP5 pins [cursor/plugins pstack 0.15.9](https://github.com/cursor/plugins/tree/e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a/pstack)

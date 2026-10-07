@@ -1,52 +1,16 @@
-# huguesStack implementation plan
+# Current implementation plan
 
-Public requirements summary of the owner's revised 4 October 2026 plan. The exact source documents remain preserved locally, with SHA-256 provenance. This summary omits personal machine inventories and historical consumer-project research.
+The owner's 4 October source documents remain preserved in their original task folder and private planning snapshot. This public working plan records the subsequently approved pinned-core restoration. The original calendar ends **9 October, GMT+7**; no new deadline is introduced.
 
-## Product and boundaries
+Release 0.1.0 remains unchanged. Restore pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. A later upstream version is a separate upgrade. Approval supersedes previous deferrals only where needed for core parity.
 
-Build a standalone, mobile-first adaptation of pstack for Claude Code and Codex. Native Swift/iOS, native Kotlin/Android, Kotlin Multiplatform shared logic, and Compose Multiplatform shared UI are first-class domains. Consumer applications remain separate projects.
+1. Preserve all 161 source files and Git modes in an immutable core.
+2. Activate core workflows through native loaders and explicit host/mobile adapters. Preserve role defaults, panel counts, mandatory arena, trails and large/unmatched fallback.
+3. Restore feature-map generation and whole-map maintenance. A bounded mobile journey is an opt-in extension with a limited verdict.
+4. Restore all 23 core playbook routes and helper/dependency contracts. Keep unrelated automate-me, make-bot-ui, TypeScript and Benny families inactive.
+5. Check actual inventory, ordered behavior contracts, effective wiring and bounded overrides. Preserve released regression coverage.
+6. Run applicable offline checks, obtain independent Astra High review, fix/re-review and prepare verified local commits and a PR-ready summary.
 
-Layer 1 is the entire 0.1.0 release candidate: skills, playbooks, principles, one agent definition, two small scripts, and documentation. Layer 2 is the deferred hstack-alpha managed-worker runtime. Its earlier evidence does not establish Layer 1 support. The inaccessible mobile-stack prototype ZIP and its reported 44-test baseline are superseded; this implementation does not depend on them.
+The owner's Astra High PR panel is a named project policy. Generic interrogate keeps its pinned three-family defaults or configured list. Missing models/tools/cloud/loop capabilities block dependent gates; checks are not weakened to compensate.
 
-Target completion remains end of day **9 October 2026, GMT+7**. The revised plan assigns five working blocks, 5 to 9 October. Deadline alone establishes no readiness claim.
-
-## Method
-
-The owner supplies a goal and a way to check it. `hugues-mode` selects a playbook and copies its steps into the host's todo list. The coordinator investigates, designs, delegates implementation to a fresh subagent each round, and verifies independently. Same-host fresh-agent review provides process independence; cross-host review establishes a distinct reviewing host; claim model independence only when actual confirmed models differ. Each completed package gets a separate draft pull request with independent GPT-6 Astra High review, fixes, tests and final-head re-review, following the owner's 5 October preference. Historical Claude review receipts remain unchanged. Do not merge automatically.
-
-Claude Code is the primary host; Codex is smoke-tested. Default model roles inherit the parent. Use the shipped retained tools and the owner's existing mobile specialty and authoring skills, disclosing absent external prerequisites. Compose jev-ios-bridge for device screen checks when available.
-
-## Work packages
-
-| Package | Deliverable | Acceptance |
-|---|---|---|
-| WP1 package and loaders | Repository, marketplace/plugin manifests, validator, cold-load evidence | Host states observed or honestly labelled; regression tests reject invalid packages |
-| WP2 mode and playbooks | `hugues-mode`, ten adapted playbooks, four mobile playbooks, 24 principles, `hugues-agent` | Routing prompts open expected steps; principles attributed |
-| WP3 proof lane | `mobile-proof`, `build-doctor`, jev wiring, project-local verification skill | One driven feature and durable evidence artifacts |
-| WP4 consumer tasks | Swift, Kotlin and KMP/CMP tasks outside this repository | Red-then-green task evidence on the claimed targets |
-| WP5 upstream sync | Pin, delta, sync script, re-pinned responsibility ledger | Reproduce 3 added / 18 changed / 0 removed files from the earlier pin |
-| WP6 docs and release | Workflow guide, support matrix, README and accepted 0.1.0 tag | Owner can start a task and see every remaining gap |
-
-WP1 is the first implementation package. Its loader probe does not claim WP2 routing or mobile workflow support. Consumer execution and edits require clear authorization; the current repository implementation does not grant it. Tool installation, global settings changes, automatic cleanup, and unattended work are outside this package.
-
-## Planned upstream baseline
-
-Upstream: [cursor/plugins pstack](https://github.com/cursor/plugins/tree/e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a/pstack), version 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. WP5 independently verified 161 files and the 21-file delta (3 added / 18 changed / 0 removed) from version 0.15.5 at `2eb7ed4613cfc8f098dfe464a23680ea44d84c5e`. The [sync procedure](upstream/README.md) and current retained-source checks bind that inventory; weekly triage remains a separate authorized read procedure. Forked skills retain upstream `source:` paths. Port principles verbatim with MIT attribution. Weekly triage compares blob SHAs; read playbook diffs rather than overwriting adaptations.
-
-Owner approval on **6 October 2026** retains eight upstream leaf families for 0.1.0: `how`, `why`, `architect`, `arena`, `tdd`, `blast-radius`, `maintain-verification-skill` and `correct`, including their source references. Preserve the exact pinned 0.15.9 contracts and record necessary host replacements in per-file provenance receipts. All eight are now authored and static-tested in separate reviewed packages; the RC2 integration wires their shipped paths into the existing playbooks. This is package evidence, not observed native execution of those workflows. It grants no consumer edits or execution. Existing mode, interrogate, create-verification-skill, fresh worker and 24 principles remain in scope. Reference the installed unslop skill where available.
-
-The same approval defers `swarm`, `show-me-your-work` and `setup-huguesstack` (upstream `setup-pstack`) to **0.2**, including their references and scripts. Their ledger rows use `ignore with reason`, `deferred` and empty destinations. Preserve the private owner originals; this public scope decision authorizes no changes to them.
-
-Adapted playbooks: investigation, bug-fix, feature, prototype, refactoring, visual-parity, authoring-a-skill, session-pickup, pause-safely, and opening-a-pr. Mobile additions: build-doctor, mobile-proof, kmp-bridge-change, and cmp-two-target-change.
-
-## Proof and reporting
-
-Per-cell states are authored, static-tested, observed-pass, observed-fail, blocked, or deferred. Run outcomes are pass, fail, flaky, skipped, or incomplete. Keep them separate. A skipped test is never a passed assertion, retry success is reported as flaky, and wrong-target results do not count.
-
-The personal-workflow bar is one observed task per domain or a labelled reason, Claude primary, Codex smoke-tested, with gaps listed rather than silently promoted to support. Authored, blocked and deferred cells do not block the owner's 0.1.0 checkpoint; reporting must remain correct. Swift proof includes relevant XCTest, a simulator build and one driven user path. Kotlin proof includes relevant tests, demoDebug assembly and an emulator user path. KMP proof includes common tests and a native caller on each target; CMP proof includes Android and iOS screens plus semantics or text scaling. One cross-host review must have adjudicated findings.
-
-Keep run evidence outside the repo. Record plugin Git SHA, host version, consumer repo and SHA, target/device identity, each command as argv with exit code, and artifact paths. Keep raw test and device artifacts. List evidence limitations in support.md.
-
-## Deferred work
-
-Layer 2 retains work ledgers, leases, cancellation, worker accounting, managed isolation and unattended authority contracts. Parsers, evidence schemas and deterministic archives are dropped from Layer 1. Performance, benchmark wiring, eval, reflect, teach, recall, figure-it-out, no-comments, technical-writing, bro, multi-phase plans and automatic workflows are deferred. Automate-me, make-bot-ui and Benny are not planned. Store submission, physical-device performance certification, system SDK/JDK changes and full upstream parity are non-goals.
+This package contains no consumer apps, executes no consumer tasks, installs no tools, changes no credentials or system settings and publishes nothing remotely. Existing observations remain bound to their original revisions. See [current contracts](CORE-RESTORATION.md) and [guide](DEVELOPER-GUIDE.md).
