@@ -89,6 +89,9 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
                      'git show origin/main:' + self.source + ';',
                      'git show origin/main:' + self.source + '|cat',
                      'git show origin/main:' + self.source + ';id',
+                     'git show origin/main:' + self.source + '; id',
+                     'git show origin/main:' + self.source + '| cat',
+                     'node pstack/skills/poteto-mode/scripts/check-plan.mjs; true',
                      'cat ' + self.source + ' `printf extra`',
                      'cat ' + self.source + ' && echo `date`']:
             with self.subTest(text=text):
