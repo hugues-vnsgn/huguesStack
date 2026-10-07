@@ -87,7 +87,10 @@ root. Valid complete sources with no recent evidence report that limited result.
 Supported inputs are Claude JSONL user/assistant/system/summary/history records
 and Codex JSONL session/turn/response records including JSON-encoded function
 arguments. Claude content blocks are text, tool_use, tool_result, thinking or
-redacted_thinking. Nested progress envelopes and unknown block/tool types hold
+redacted_thinking, with required content fields. Codex messages require a known
+role and a content list of input_text/output_text blocks with
+their required fields. Missing, malformed or unknown blocks hold.
+Nested progress envelopes and unknown block/tool types hold
 coverage for inspection. Codex nonoperative event messages have an explicit type
 allowlist; unknown event formats also hold. Other formats hold.
 The scan is conservative: exact worktree paths,
@@ -95,14 +98,18 @@ child paths and session working directories count as activity even in quoted
 messages. Encoded function arguments are decoded; relative path operations need
 session or tool working-directory context. Each operation retains its own context;
 relative tool working directories resolve against their enclosing session.
+Session/turn contexts need an absolute working directory. Operations without a
+resolvable working directory or absolute operation path hold.
 Simple shell operands and native patch
 file headers resolve relative to that context, including sibling worktrees and
 parent-directory scopes and sequential `git -C` directory changes. Shell support is deliberately bounded to cat, ls, head,
-tail, wc, stat, rg, grep, sed, find, git, pwd, readlink and realpath with literal
+tail, wc, stat, rg, grep, git status, pwd, readlink and realpath with literal
 operands. Compound commands, expansions, arbitrary programs and unknown tool
 operations hold coverage for inspection; the adapter never executes transcript
-commands. File operations support Read/Write/Edit/MultiEdit/Glob/Grep and
-read_file/write_file/list_directory with explicit path fields. Missing/malformed
+commands. Sed, find and other embedded programs hold. Claude file operations support
+Read/Write/Edit with required `file_path` and tool-specific fields; unknown fields
+or wrong types hold. Glob/Grep/MultiEdit and unknown file tools hold for inspection.
+Missing/malformed
 function arguments or tool inputs also hold. This is a conservative operand scan,
 not a prediction of every program's implicit filesystem access or side effects.
 Record timestamps take priority; missing timestamps use file

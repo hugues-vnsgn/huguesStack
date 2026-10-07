@@ -12,9 +12,8 @@ PROVIDERS = {'claude', 'codex'}
 PATH_KEYS = {'cwd', 'workdir', 'file_path', 'path', 'absolute_path', 'directory'}
 RECENT_SECONDS = 4 * 86400
 SIMPLE_COMMANDS = {'cat', 'ls', 'head', 'tail', 'wc', 'stat', 'rg', 'grep',
-                   'sed', 'find', 'git', 'pwd', 'readlink', 'realpath'}
-PATH_TOOLS = {'Read', 'Write', 'Edit', 'MultiEdit', 'Glob', 'Grep',
-              'read_file', 'write_file', 'list_directory'}
+                   'git', 'pwd', 'readlink', 'realpath'}
+PATH_TOOLS = {'Read', 'Write', 'Edit'}
 
 
 def strings(value):
@@ -62,6 +61,7 @@ def shell_paths(command):
     paths = []
     directory = Path('.')
     index = 1
+    git_subcommand = None
     while index < len(tokens):
         token = tokens[index]
         index += 1
@@ -90,7 +90,13 @@ def shell_paths(command):
         if token.startswith('~'):
             raise ValueError('unsupported shell home expansion')
         if token:
+            if Path(tokens[0]).name == 'git' and git_subcommand is None:
+                git_subcommand = token
+                if git_subcommand != 'status':
+                    raise ValueError('unsupported Git program; only literal status operands are scanned')
             paths.append(str(Path(token) if Path(token).is_absolute() else directory / token))
+    if Path(tokens[0]).name == 'git' and git_subcommand is None:
+        raise ValueError('Git command lacks supported subcommand')
     return paths
 
 
@@ -115,6 +121,29 @@ def local_context(value, inherited):
             raise ValueError('relative working directory lacks parent context')
         result = str((Path(path) if Path(path).is_absolute() else Path(result) / path).resolve())
     return result
+
+
+def validate_fields(args, required, optional):
+    if set(args) - set(required) - set(optional) - {'cwd', 'workdir'}:
+        raise ValueError('unknown native tool argument fields')
+    for key, expected in {**required, **optional}.items():
+        if key not in args:
+            if key in required:
+                raise ValueError('missing native tool argument: ' + key)
+            continue
+        value = args[key]
+        if type(value) is not expected:
+            raise ValueError('malformed native tool argument: ' + key)
+        if key in {'file_path', 'command', 'cmd'} and not value.strip():
+            raise ValueError('empty native tool argument: ' + key)
+        if expected is int and value <= 0:
+            raise ValueError('nonpositive native tool argument: ' + key)
+        if expected is list and not all(isinstance(item, str) for item in value):
+            raise ValueError('malformed native tool argument list: ' + key)
+        if key == 'sandbox_permissions' and value not in {'use_default', 'require_escalated'}:
+            raise ValueError('unknown sandbox permission metadata')
+        if key == 'shell' and value not in {'/bin/sh', '/bin/bash', '/bin/zsh', 'sh', 'bash', 'zsh'}:
+            raise ValueError('unsupported shell metadata')
 
 
 def operation_paths(value, inherited=None):
@@ -153,15 +182,34 @@ def operation_paths(value, inherited=None):
             raise ValueError('unsupported custom tool operation')
     cwd = local_context(args, cwd)
     if name in {'Bash', 'exec_command'}:
+        if name == 'Bash':
+            validate_fields(args, {'command': str}, {'timeout': int, 'description': str,
+                            'run_in_background': bool, 'dangerouslyDisableSandbox': bool})
+        else:
+            validate_fields(args, {'cmd': str}, {'yield_time_ms': int, 'max_output_tokens': int,
+                            'sandbox_permissions': str, 'justification': str, 'prefix_rule': list,
+                            'shell': str, 'login': bool, 'tty': bool})
         paths = shell_paths(args.get('command') if name == 'Bash' else args.get('cmd'))
     elif name == 'apply_patch':
+        if set(args) - {'patch', 'input', 'cwd', 'workdir'} or ('patch' in args and 'input' in args):
+            raise ValueError('unknown or ambiguous patch arguments')
         paths = patch_paths(args.get('patch') or args.get('input'))
-    elif name in PATH_TOOLS:
-        paths = list(contexts(args, PATH_KEYS - {'cwd', 'workdir'}))
-        if not paths:
-            raise ValueError('file operation lacks paths')
+    elif kind == 'tool_use' and name in PATH_TOOLS:
+        required = {'file_path': str}
+        optional = {}
+        if name == 'Read':
+            optional = {'offset': int, 'limit': int, 'pages': str}
+        elif name == 'Write':
+            required['content'] = str
+        else:
+            required.update(old_string=str, new_string=str)
+            optional = {'replace_all': bool}
+        validate_fields(args, required, optional)
+        paths = [args['file_path']]
     else:
         raise ValueError('unsupported native operation')
+    if not cwd and not any(Path(path).is_absolute() for path in paths):
+        raise ValueError('native operation lacks absolute working-directory/path context')
     if cwd:
         yield cwd
     for path in paths:
@@ -222,12 +270,39 @@ def records(provider, path, body, mtime):
                     supported = all(isinstance(item, dict) and item.get('type') in
                                     {'text', 'tool_use', 'tool_result', 'thinking', 'redacted_thinking'}
                                     for item in content)
+                    if supported:
+                        for block in content:
+                            block_type = block['type']
+                            if block_type in {'text', 'thinking', 'redacted_thinking'}:
+                                field = {'text': 'text', 'thinking': 'thinking', 'redacted_thinking': 'data'}[block_type]
+                                supported = supported and isinstance(block.get(field), str)
+                            elif block_type == 'tool_result':
+                                supported = (supported and isinstance(block.get('tool_use_id'), str)
+                                             and isinstance(block.get('content'), (str, list)))
         elif provider == 'codex':
             supported = kind in {'session_meta', 'response_item', 'event_msg', 'turn_context'} and isinstance(row.get('payload'), dict)
+            if kind in {'session_meta', 'turn_context'}:
+                directory = row.get('payload', {}).get('cwd')
+                supported = isinstance(directory, str) and Path(directory).is_absolute()
             if kind == 'response_item':
                 supported = isinstance(row.get('payload'), dict) and row['payload'].get('type') in {
                     'message', 'function_call', 'function_call_output', 'reasoning',
                     'custom_tool_call', 'custom_tool_call_output', 'web_search_call'}
+                if supported and row['payload']['type'] == 'message':
+                    content = row['payload'].get('content')
+                    supported = (row['payload'].get('role') in {'user', 'assistant', 'system', 'developer'}
+                                 and isinstance(content, list))
+                    if supported:
+                        for block in content:
+                            if not isinstance(block, dict):
+                                supported = False
+                                break
+                            block_type = block.get('type')
+                            if block_type in {'input_text', 'output_text'}:
+                                valid = isinstance(block.get('text'), str)
+                            else:
+                                valid = False
+                            supported = supported and valid
             if kind == 'event_msg':
                 supported = isinstance(row.get('payload'), dict) and row['payload'].get('type') in {
                     'agent_message', 'agent_reasoning', 'user_message', 'task_started',

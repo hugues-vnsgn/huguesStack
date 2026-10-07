@@ -219,6 +219,9 @@ class SyntheticActivity(unittest.TestCase):
         self.assertFalse(self.scan('codex', [row])[2])
         row = self.claude(cwd=None)
         self.assertFalse(self.scan('claude', [row])[2])
+        for cmd in ['pwd', 'ls', 'cat']:
+            row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd})})
+            self.assertFalse(self.scan('codex', [row])[2])
 
     def test_malformed_encoded_arguments_hold(self):
         row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': '{unfinished'})
@@ -318,7 +321,7 @@ class SyntheticActivity(unittest.TestCase):
             self.assertFalse(self.scan('codex', [row])[2])
 
     def test_shell_parent_directory_and_attached_git_path(self):
-        for cmd in ['find ..', shlex.join(['git', '-C../' + self.other.name, 'status'])]:
+        for cmd in ['ls ..', shlex.join(['git', '-C../' + self.other.name, 'status'])]:
             row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
             hits, _, complete = self.scan('codex', [row])
             self.assertTrue(complete)
@@ -376,6 +379,33 @@ class SyntheticActivity(unittest.TestCase):
         hits, _, complete = self.scan('codex', [row])
         self.assertTrue(complete)
         self.assertTrue(hits[str(self.other)])
+
+    def test_codex_message_blocks_require_supported_content_schema(self):
+        payloads = [
+            {'type': 'message', 'role': 'assistant'},
+            {'type': 'message', 'role': 'assistant', 'content': 'malformed'},
+            {'type': 'message', 'role': 'assistant', 'content': [{'type': 'tool_call', 'path': '../sibling'}]},
+            {'type': 'message', 'role': 'assistant', 'content': [{'type': 'output_text'}]}]
+        meta = {'type': 'session_meta', 'timestamp': self.stamp, 'payload': {'cwd': str(self.wt)}}
+        for payload in payloads:
+            self.assertFalse(self.scan('codex', [meta, self.codex(payload=payload)])[2])
+        row = self.codex(payload={'type': 'message', 'role': 'assistant', 'content': [{'type': 'output_text', 'text': str(self.other)}]})
+        self.assertTrue(self.scan('codex', [meta, row])[2])
+        self.assertFalse(self.scan('codex', [{'type': 'session_meta', 'payload': {}}])[2])
+
+    def test_claude_file_inputs_require_real_tool_fields_and_types(self):
+        cases = [('Read', {'path': str(self.wt)}), ('Read', {'file_path': str(self.wt), 'offset': 'bad'}),
+                 ('Glob', {'path': str(self.wt), 'pattern': 123}), ('Write', {'file_path': str(self.wt), 'content': 123}),
+                 ('Edit', {'file_path': str(self.wt)}), ('Read', {'file_path': str(self.wt), 'extra': 'unknown'})]
+        for name, args in cases:
+            row = self.claude(message={'content': [{'type': 'tool_use', 'name': name, 'input': args}]})
+            self.assertFalse(self.scan('claude', [row])[2])
+        self.assertFalse(self.scan('claude', [self.claude(message={'content': [{'type': 'text'}]})])[2])
+
+    def test_embedded_sed_program_is_opaque_and_holds(self):
+        cmd = shlex.join(['sed', '-n', '1r ../' + self.other.name + '/README.md', 'README.md'])
+        row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
+        self.assertFalse(self.scan('codex', [row])[2])
 
 
 
@@ -535,3 +565,18 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'claude', 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]})
         self.assertEqual(result.returncode, 2)
         self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
+
+    def test_cli_malformed_native_messages_files_and_sed_hold(self):
+        stamp = datetime.now(timezone.utc).isoformat()
+        cases = [
+            ('codex', [{'type': 'session_meta', 'timestamp': stamp, 'payload': {'cwd': str(self.consumer)}},
+                       {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'message', 'role': 'assistant', 'content': [{'type': 'unknown_operation', 'command': 'cat ../sibling/README.md'}]}}]),
+            ('claude', [{'type': 'assistant', 'timestamp': stamp, 'cwd': str(self.consumer), 'message': {'content': [{'type': 'tool_use', 'name': 'Read', 'input': {'path': str(self.consumer)}}]}}]),
+            ('codex', [{'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': shlex.join(['sed', '-n', '1r ../' + self.wt.name + '/README.md', 'README.md']), 'workdir': str(self.consumer)})}}])]
+        path = self.area / 'invalid-native-inputs.jsonl'
+        for provider, rows in cases:
+            path.write_text('\n'.join(json.dumps(row) for row in rows) + '\n')
+            result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': provider, 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]})
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertEqual(report['coverage'], 'unavailable')
+            self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
