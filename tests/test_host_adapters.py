@@ -186,7 +186,7 @@ class SyntheticActivity(unittest.TestCase):
         self.assertEqual(len(hits[str(self.wt)]), 2)
 
     def test_cursor_jsonl_uses_conservative_mtime(self):
-        hits, _, complete = self.scan('cursor', [{'message': {'content': [{'text': str(self.wt / 'README.md')}]}}])
+        hits, _, complete = self.scan('cursor', [{'cwd': str(self.wt), 'message': {'content': [{'type': 'text', 'text': str(self.wt / 'README.md')}]}}])
         self.assertTrue(complete)
         self.assertEqual(hits[str(self.wt)][0]['timestamp_basis'], 'file-mtime-conservative')
 
@@ -235,7 +235,7 @@ class SyntheticActivity(unittest.TestCase):
 
     def test_all_providers_and_nested_subagents_are_scanned(self):
         sources = []
-        for provider, row in [('claude', self.claude()), ('codex', self.codex()), ('cursor', {'role': 'assistant', 'text': str(self.wt)})]:
+        for provider, row in [('claude', self.claude()), ('codex', self.codex()), ('cursor', {'cwd': str(self.wt), 'message': {'content': [{'type': 'text', 'text': str(self.wt)}]}})]:
             root = self.area / provider
             child = root / 'subagents' / 'nested.jsonl'
             child.parent.mkdir(parents=True)
@@ -344,6 +344,22 @@ class SyntheticActivity(unittest.TestCase):
         row = self.claude(message={'content': [{'type': 'tool_use', 'name': 'Read'}]})
         self.assertFalse(self.scan('claude', [row])[2])
 
+    def test_cursor_opaque_json_tool_calls_hold(self):
+        for row in [
+            {'role': 'assistant', 'tool_calls': [{'function': {'name': 'Shell', 'arguments': '{}'}}]},
+            {'message': {'content': [{'type': 'tool_call', 'name': 'Read', 'input': {'file_path': '../sibling/README.md'}}]}},
+            {'message': {'content': [{'type': 'text', 'text': '[Tool call] Read ../sibling'}]}, 'cwd': str(self.wt)}]:
+            self.assertFalse(self.scan('cursor', [row])[2])
+
+    def test_cursor_text_retains_absolute_hints_but_never_complete_coverage(self):
+        path = self.area / 'cursor.txt'
+        path.write_text('assistant:\n[Tool call] Read\nfile_path: ' + str(self.wt / 'README.md'))
+        manifest = {'coverage': 'complete', 'sources': [{'provider': 'cursor', 'files': [str(path)], 'authorization': 'synthetic only', 'coverage': 'complete'}]}
+        hits, reports, complete = activity.scan(manifest, [self.wt], self.now)
+        self.assertTrue(hits[str(self.wt)])
+        self.assertFalse(complete)
+        self.assertIn('opaque Cursor', reports[0]['error'])
+
     def test_no_recent_evidence_is_distinct_from_unavailable(self):
         hits, _, complete = self.scan('claude', [self.claude(cwd=str(self.other))])
         self.assertTrue(complete)
@@ -400,7 +416,7 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         stamp = datetime.now(timezone.utc).isoformat()
         rows = {'claude': {'type': 'assistant', 'timestamp': stamp, 'cwd': str(self.wt), 'message': {'content': []}},
                 'codex': {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md', 'workdir': str(self.wt)})}},
-                'cursor': {'message': {'content': [{'text': str(self.wt / 'README.md')}]}}}
+                'cursor': {'cwd': str(self.wt), 'message': {'content': [{'type': 'text', 'text': str(self.wt / 'README.md')}]}}}
         for provider, record in rows.items():
             with self.subTest(provider=provider):
                 path = self.area / (provider + '.jsonl')
@@ -432,6 +448,7 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         patch_text = '*** Begin Patch\n*** Update File: ../' + self.wt.name + '/README.md\n@@\n-fixture\n+fixture\n*** End Patch'
         cases = [
             ('claude', [{'type': 'assistant', 'timestamp': stamp, 'cwd': str(self.consumer), 'message': {'content': [{'type': 'tool_use', 'name': 'Bash', 'input': {'command': cmd}}]}}]),
+            ('cursor', [{'cwd': str(self.consumer), 'message': {'content': [{'type': 'tool_use', 'name': 'Bash', 'input': {'command': cmd}}]}}]),
             ('codex', [{'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.consumer)})}}]),
             ('codex', [{'type': 'session_meta', 'timestamp': stamp, 'payload': {'cwd': str(self.consumer)}},
                        {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'custom_tool_call', 'name': 'apply_patch', 'input': patch_text}}])]
@@ -456,6 +473,17 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
 
+    def test_cli_cursor_opaque_text_and_tool_json_hold(self):
+        for suffix, body in [
+            ('.txt', 'assistant:\n[Tool call] Read\nfile_path: ../' + self.wt.name + '/README.md'),
+            ('.txt', 'assistant:\n[Tool call] Shell\ncommand: python arbitrary.py'),
+            ('.jsonl', json.dumps({'role': 'assistant', 'tool_calls': [{'function': {'name': 'Shell', 'arguments': json.dumps({'command': 'cat ../sibling/README.md', 'cwd': str(self.consumer)})}}]}))]:
+            path = self.area / ('opaque-cursor' + suffix)
+            path.write_text(body + '\n')
+            result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'cursor', 'files': [str(path)], 'authorization': 'synthetic only', 'coverage': 'complete'}]})
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertEqual(report['coverage'], 'unavailable')
+            self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
     def test_cli_untracked_scratch_and_tracked_wip_are_retained(self):
         root = self.area / 'empty transcripts'
         root.mkdir()

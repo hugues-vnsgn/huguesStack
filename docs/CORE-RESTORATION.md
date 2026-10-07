@@ -26,7 +26,7 @@ Bun bootstrap can install dependencies and is never run by package checks. Use a
 
 ## Local validation and remaining prerequisites
 
-The complete Python suite passes (301 tests): 131 historical release tests, 27 current-checker tests against historical fixtures, 94 development contract/provenance/helper tests and 49 new installed-host adapter tests. See [test accounting](TEST-COVERAGE.md). Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
+The complete Python suite passes (304 tests): 131 historical release tests, 27 current-checker tests against historical fixtures, 94 development contract/provenance/helper tests and 52 new installed-host adapter tests. See [test accounting](TEST-COVERAGE.md). Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
 
 The full upstream helper suite passes: 52 Bun tests across orch and watch-pr, with no failures or skips; strict TypeScript checking passes for watch-pr. The approved scratch-only dependency closure contains commander 14.0.0, bun-types 1.3.14, @types/node 26.1.2 and undici-types 8.3.0, verified against pinned SHA512 integrity. Tests run with network denied and writes limited to scratch runtime files. No lifecycle scripts or broader installation run. The earlier 40 dependency-free passes are a subset of the 52, not additional tests. These checks use local fixtures/fake forge readers and do not prove live forge behavior or whole-project type coverage.
 

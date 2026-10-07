@@ -161,7 +161,7 @@ def records(provider, path, body, mtime):
     if path.suffix == '.txt' and provider == 'cursor':
         if not re.search(r'(?im)^(user:|assistant:|\[Tool (?:call|result)\])', body):
             raise ValueError('unsupported Cursor text envelope')
-        yield {'text': body}, mtime, 'file-mtime-conservative'
+        yield {'text': body, '_activity_coverage_unknown': True}, mtime, 'file-mtime-conservative'
         return
     if path.suffix != '.jsonl':
         raise ValueError('unsupported transcript format')
@@ -185,6 +185,23 @@ def records(provider, path, body, mtime):
                     'custom_tool_call', 'custom_tool_call_output', 'web_search_call'}
         else:
             supported = isinstance(row.get('message'), dict) or row.get('role') in {'user', 'assistant'}
+            message = row.get('message', {})
+            content = message.get('content') if isinstance(message, dict) else None
+            structured = (isinstance(row.get('cwd'), str) and Path(row['cwd']).is_absolute()
+                          and not (set(row) - {'cwd', 'timestamp', 'message', 'role', 'type'})
+                          and not (set(message) - {'content', 'role'})
+                          and isinstance(content, list)
+                          and all(isinstance(item, dict) and item.get('type') in
+                                  {'text', 'tool_use', 'tool_result'} for item in content))
+            def unknown_tool_metadata(value):
+                if isinstance(value, dict):
+                    return (any(key in value for key in ('tool_calls', 'tool_call', 'function_call'))
+                            or any(unknown_tool_metadata(child) for child in value.values()))
+                if isinstance(value, list):
+                    return any(unknown_tool_metadata(child) for child in value)
+                return isinstance(value, str) and bool(re.search(r'\[Tool (?:call|result)\]', value))
+            if not structured or unknown_tool_metadata(row):
+                row['_activity_coverage_unknown'] = True
         if not supported:
             raise ValueError('unsupported ' + provider + ' record envelope')
         ts, origin = timestamp(row, mtime)
@@ -284,6 +301,8 @@ def scan(manifest, worktrees, now):
                             activity[str(wt)].append({'provider': source['provider'], 'source': str(path),
                                                      'timestamp': ts, 'timestamp_basis': origin,
                                                      'recent': now - ts <= RECENT_SECONDS})
+                    if row.get('_activity_coverage_unknown'):
+                        raise ValueError('opaque Cursor text/tool envelope cannot establish complete activity coverage')
                 report['files_scanned'] += 1
             report['coverage'] = 'complete' if source.get('coverage') == 'complete' else 'partial'
         except (ValueError, OSError, TypeError, KeyError, UnicodeError) as exc:

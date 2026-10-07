@@ -81,9 +81,16 @@ root. Valid complete sources with no recent evidence report that limited result.
 
 Supported inputs are Claude JSONL user/assistant/system/progress/summary/history
 records; Codex JSONL session/turn/event/response records including JSON-encoded
-function arguments; and Cursor JSONL message/role records or text transcripts
-with `user:`, `assistant:` or `[Tool call]`/`[Tool result]` envelopes. Other formats
-hold for explicit inspection. The scan is conservative: exact worktree paths,
+function arguments. Cursor complete coverage requires the bounded structured
+JSONL envelope: an absolute `cwd`, optional `timestamp`/`role`/`type`, and `message`
+with optional `role` and a `content` list of typed text/tool_use/tool_result items.
+Recognized tool_use inputs receive the same operation validation as Claude.
+Extra envelope fields and unrecognized tool-call encodings hold for inspection.
+Cursor text with `user:`, `assistant:` or `[Tool call]`/`[Tool result]` markers and
+opaque JSONL messages can supply absolute activity hints, but always report
+unavailable coverage. Their unstructured operations cannot establish no-recent
+evidence, even if the source manifest asserts complete coverage. Other formats
+also hold. The scan is conservative: exact worktree paths,
 child paths and session working directories count as activity even in quoted
 messages. Encoded function arguments are decoded; relative path operations need
 session or tool working-directory context. Simple shell operands and native patch
