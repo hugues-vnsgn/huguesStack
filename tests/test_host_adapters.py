@@ -185,16 +185,7 @@ class SyntheticActivity(unittest.TestCase):
         self.assertTrue(complete)
         self.assertEqual(len(hits[str(self.wt)]), 2)
 
-    def test_cursor_jsonl_uses_conservative_mtime(self):
-        hits, _, complete = self.scan('cursor', [{'cwd': str(self.wt), 'message': {'content': [{'type': 'text', 'text': str(self.wt / 'README.md')}]}}])
-        self.assertTrue(complete)
-        self.assertEqual(hits[str(self.wt)][0]['timestamp_basis'], 'file-mtime-conservative')
 
-    def test_cursor_text_format(self):
-        path = self.area / 'cursor.txt'
-        path.write_text('assistant:\n[Tool call]\nRead ' + str(self.wt / 'README.md'))
-        rows = list(activity.records('cursor', path, path.read_text(), self.now))
-        self.assertTrue(activity.touches(rows[0][0], self.wt))
 
     def test_exact_boundary_excludes_sibling_prefix(self):
         hits, _, complete = self.scan('codex', [self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md', 'workdir': str(self.other)})})])
@@ -233,9 +224,9 @@ class SyntheticActivity(unittest.TestCase):
         row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': '{unfinished'})
         self.assertFalse(self.scan('codex', [row])[2])
 
-    def test_all_providers_and_nested_subagents_are_scanned(self):
+    def test_supported_hosts_and_nested_subagents_are_scanned(self):
         sources = []
-        for provider, row in [('claude', self.claude()), ('codex', self.codex()), ('cursor', {'cwd': str(self.wt), 'message': {'content': [{'type': 'text', 'text': str(self.wt)}]}})]:
+        for provider, row in [('claude', self.claude()), ('codex', self.codex())]:
             root = self.area / provider
             child = root / 'subagents' / 'nested.jsonl'
             child.parent.mkdir(parents=True)
@@ -243,8 +234,8 @@ class SyntheticActivity(unittest.TestCase):
             sources.append({'provider': provider, 'root': str(root), 'authorization': 'synthetic only', 'coverage': 'complete'})
         hits, reports, complete = activity.scan({'coverage': 'complete', 'sources': sources}, [self.wt], self.now)
         self.assertTrue(complete)
-        self.assertEqual({r['provider'] for r in hits[str(self.wt)]}, {'claude', 'codex', 'cursor'})
-        self.assertEqual(sum(r['files_scanned'] for r in reports), 3)
+        self.assertEqual({r['provider'] for r in hits[str(self.wt)]}, {'claude', 'codex'})
+        self.assertEqual(sum(r['files_scanned'] for r in reports), 2)
 
     def test_empty_existing_root_differs_from_missing_root(self):
         root = self.area / 'empty'
@@ -344,21 +335,49 @@ class SyntheticActivity(unittest.TestCase):
         row = self.claude(message={'content': [{'type': 'tool_use', 'name': 'Read'}]})
         self.assertFalse(self.scan('claude', [row])[2])
 
-    def test_cursor_opaque_json_tool_calls_hold(self):
-        for row in [
-            {'role': 'assistant', 'tool_calls': [{'function': {'name': 'Shell', 'arguments': '{}'}}]},
-            {'message': {'content': [{'type': 'tool_call', 'name': 'Read', 'input': {'file_path': '../sibling/README.md'}}]}},
-            {'message': {'content': [{'type': 'text', 'text': '[Tool call] Read ../sibling'}]}, 'cwd': str(self.wt)}]:
-            self.assertFalse(self.scan('cursor', [row])[2])
-
-    def test_cursor_text_retains_absolute_hints_but_never_complete_coverage(self):
-        path = self.area / 'cursor.txt'
-        path.write_text('assistant:\n[Tool call] Read\nfile_path: ' + str(self.wt / 'README.md'))
-        manifest = {'coverage': 'complete', 'sources': [{'provider': 'cursor', 'files': [str(path)], 'authorization': 'synthetic only', 'coverage': 'complete'}]}
-        hits, reports, complete = activity.scan(manifest, [self.wt], self.now)
-        self.assertTrue(hits[str(self.wt)])
+    def test_unsupported_host_is_ignored_without_reading_or_coverage(self):
+        ignored = {'provider': 'cursor', 'root': '/not-authorized/not-read', 'coverage': 'complete'}
+        with patch.object(activity, 'read_selected', side_effect=AssertionError('must not read unsupported host')):
+            hits, reports, complete = activity.scan({'coverage': 'complete', 'sources': [ignored]}, [self.wt], self.now)
         self.assertFalse(complete)
-        self.assertIn('opaque Cursor', reports[0]['error'])
+        self.assertFalse(hits[str(self.wt)])
+        self.assertEqual(reports[0]['coverage'], 'ignored')
+        root = self.area / 'authorized empty host'
+        root.mkdir()
+        supported = {'provider': 'claude', 'root': str(root), 'authorization': 'synthetic', 'coverage': 'complete'}
+        with patch.object(activity, 'read_selected', side_effect=AssertionError('empty root has no file reads')):
+            self.assertTrue(activity.scan({'coverage': 'complete', 'sources': [ignored, supported]}, [self.wt], self.now)[2])
+
+    def test_nested_progress_and_unknown_claude_blocks_hold(self):
+        nested = self.claude(type='progress', data={'type': 'agent_progress', 'message': self.claude()})
+        self.assertFalse(self.scan('claude', [nested])[2])
+        unknown = self.claude(message={'content': [{'type': 'tool_call', 'name': 'Bash', 'input': {'command': 'cat ../sibling/README.md'}}]})
+        self.assertFalse(self.scan('claude', [unknown])[2])
+
+    def test_relative_workdir_and_each_claude_tool_context(self):
+        deep = self.area / 'tools/deep'
+        relative_target = '../../' + self.other.name + '/README.md'
+        meta = {'type': 'session_meta', 'payload': {'cwd': str(self.wt)}, 'timestamp': self.stamp}
+        call = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': shlex.join(['cat', relative_target]), 'workdir': '../tools/deep'})})
+        hits, _, complete = self.scan('codex', [meta, call])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+        row = self.claude(message={'content': [
+            {'type': 'tool_use', 'name': 'Bash', 'input': {'command': shlex.join(['cat', relative_target]), 'cwd': str(deep)}},
+            {'type': 'tool_use', 'name': 'Read', 'input': {'file_path': 'README.md', 'cwd': str(self.wt)}}]})
+        hits, _, complete = self.scan('claude', [row])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+
+    def test_chained_git_directories_use_effective_context(self):
+        deep = self.area / 'tools/deep'
+        cmd = shlex.join(['git', '-C', str(deep), '-C', '../../' + self.other.name, 'status'])
+        row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
+        hits, _, complete = self.scan('codex', [row])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+
+
 
     def test_no_recent_evidence_is_distinct_from_unavailable(self):
         hits, _, complete = self.scan('claude', [self.claude(cwd=str(self.other))])
@@ -415,8 +434,7 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
     def test_cli_each_native_provider_recent_activity(self):
         stamp = datetime.now(timezone.utc).isoformat()
         rows = {'claude': {'type': 'assistant', 'timestamp': stamp, 'cwd': str(self.wt), 'message': {'content': []}},
-                'codex': {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md', 'workdir': str(self.wt)})}},
-                'cursor': {'cwd': str(self.wt), 'message': {'content': [{'type': 'text', 'text': str(self.wt / 'README.md')}]}}}
+                'codex': {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md', 'workdir': str(self.wt)})}}}
         for provider, record in rows.items():
             with self.subTest(provider=provider):
                 path = self.area / (provider + '.jsonl')
@@ -448,7 +466,6 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         patch_text = '*** Begin Patch\n*** Update File: ../' + self.wt.name + '/README.md\n@@\n-fixture\n+fixture\n*** End Patch'
         cases = [
             ('claude', [{'type': 'assistant', 'timestamp': stamp, 'cwd': str(self.consumer), 'message': {'content': [{'type': 'tool_use', 'name': 'Bash', 'input': {'command': cmd}}]}}]),
-            ('cursor', [{'cwd': str(self.consumer), 'message': {'content': [{'type': 'tool_use', 'name': 'Bash', 'input': {'command': cmd}}]}}]),
             ('codex', [{'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.consumer)})}}]),
             ('codex', [{'type': 'session_meta', 'timestamp': stamp, 'payload': {'cwd': str(self.consumer)}},
                        {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'custom_tool_call', 'name': 'apply_patch', 'input': patch_text}}])]
@@ -473,17 +490,6 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
 
-    def test_cli_cursor_opaque_text_and_tool_json_hold(self):
-        for suffix, body in [
-            ('.txt', 'assistant:\n[Tool call] Read\nfile_path: ../' + self.wt.name + '/README.md'),
-            ('.txt', 'assistant:\n[Tool call] Shell\ncommand: python arbitrary.py'),
-            ('.jsonl', json.dumps({'role': 'assistant', 'tool_calls': [{'function': {'name': 'Shell', 'arguments': json.dumps({'command': 'cat ../sibling/README.md', 'cwd': str(self.consumer)})}}]}))]:
-            path = self.area / ('opaque-cursor' + suffix)
-            path.write_text(body + '\n')
-            result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'cursor', 'files': [str(path)], 'authorization': 'synthetic only', 'coverage': 'complete'}]})
-            self.assertEqual(result.returncode, 2, result.stderr)
-            self.assertEqual(report['coverage'], 'unavailable')
-            self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
     def test_cli_untracked_scratch_and_tracked_wip_are_retained(self):
         root = self.area / 'empty transcripts'
         root.mkdir()
@@ -494,3 +500,38 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         (self.wt / 'README.md').write_text('tracked edit')
         _, report = self.audit(manifest)
         self.assertEqual(report['worktrees'][1]['bucket'], 'hold-wip')
+
+    def test_cli_cursor_is_ignored_and_cannot_supply_supported_host_coverage(self):
+        ignored = {'provider': 'cursor', 'files': ['/not-authorized/not-read.jsonl'], 'coverage': 'complete'}
+        result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [ignored]})
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(report['sources'][0]['coverage'], 'ignored')
+        self.assertEqual(report['sources'][0]['files_scanned'], 0)
+        self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
+        root = self.area / 'empty supported history'
+        root.mkdir()
+        supported = {'provider': 'codex', 'root': str(root), 'authorization': 'synthetic', 'coverage': 'complete'}
+        result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [ignored, supported]})
+        self.assertEqual(result.returncode, 0)
+        self.assertFalse(report['worktrees'][1]['evidence'])
+
+    def test_cli_supported_host_contexts_and_nested_progress_hold(self):
+        stamp = datetime.now(timezone.utc).isoformat()
+        deep = self.area / 'tools/deep'
+        relative_target = '../../' + self.wt.name + '/README.md'
+        calls = [
+            {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': shlex.join(['cat', relative_target]), 'workdir': '../tools/deep'})},
+            {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': shlex.join(['git', '-C', str(deep), '-C', '../../' + self.wt.name, 'status']), 'workdir': str(self.consumer)})}]
+        path = self.area / 'context.jsonl'
+        for payload in calls:
+            rows = [{'type': 'session_meta', 'timestamp': stamp, 'payload': {'cwd': str(self.consumer)}},
+                    {'type': 'response_item', 'timestamp': stamp, 'payload': payload}]
+            path.write_text('\n'.join(json.dumps(row) for row in rows) + '\n')
+            result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'codex', 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]})
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(report['worktrees'][1]['bucket'], 'verify-recent-chat')
+        nested = {'type': 'progress', 'timestamp': stamp, 'cwd': str(self.consumer), 'data': {'type': 'agent_progress', 'message': {'message': {'content': [{'type': 'tool_use', 'name': 'Bash', 'input': {'command': shlex.join(['cat', '../' + self.wt.name + '/README.md'])}}]}}}}
+        path.write_text(json.dumps(nested) + '\n')
+        result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'claude', 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]})
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')

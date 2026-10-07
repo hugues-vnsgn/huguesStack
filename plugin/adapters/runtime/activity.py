@@ -1,4 +1,4 @@
-"""Conservative local audit of owner-selected Cursor/Claude/Codex sources."""
+"""Conservative local audit of owner-selected Claude Code and Codex sources."""
 from datetime import datetime, timezone
 import json
 import os
@@ -8,7 +8,7 @@ import shlex
 import stat
 import subprocess
 
-PROVIDERS = {'cursor', 'claude', 'codex'}
+PROVIDERS = {'claude', 'codex'}
 PATH_KEYS = {'cwd', 'workdir', 'file_path', 'path', 'absolute_path', 'directory'}
 RECENT_SECONDS = 4 * 86400
 SIMPLE_COMMANDS = {'cat', 'ls', 'head', 'tail', 'wc', 'stat', 'rg', 'grep',
@@ -60,7 +60,24 @@ def shell_paths(command):
     if not tokens or Path(tokens[0]).name not in SIMPLE_COMMANDS:
         raise ValueError('unsupported shell program; activity coverage unavailable')
     paths = []
-    for token in tokens[1:]:
+    directory = Path('.')
+    index = 1
+    while index < len(tokens):
+        token = tokens[index]
+        index += 1
+        if Path(tokens[0]).name == 'git' and (token == '-C' or token.startswith('-C')):
+            if token == '-C':
+                if index >= len(tokens):
+                    raise ValueError('git -C lacks a directory')
+                target = tokens[index]
+                index += 1
+            else:
+                target = token[2:]
+            if not target or target.startswith('~'):
+                raise ValueError('unsupported git working directory')
+            directory = Path(target) if Path(target).is_absolute() else directory / target
+            paths.append(str(directory))
+            continue
         if token.startswith('-'):
             if token.startswith('-C') and len(token) > 2:
                 token = token[2:]
@@ -73,7 +90,7 @@ def shell_paths(command):
         if token.startswith('~'):
             raise ValueError('unsupported shell home expansion')
         if token:
-            paths.append(token)
+            paths.append(str(Path(token) if Path(token).is_absolute() else directory / token))
     return paths
 
 
@@ -86,43 +103,71 @@ def patch_paths(text):
     return paths
 
 
-def operation_paths(row):
-    """Extract supported native shell/patch operands; never execute them."""
-    payload = row.get('payload', {})
-    if isinstance(payload, dict) and payload.get('type') == 'function_call':
-        if not isinstance(payload.get('name'), str) or 'arguments' not in payload:
-            raise ValueError('function call lacks name or arguments')
-        args = payload['arguments']
-        if not isinstance(args, str):
-            raise ValueError('function arguments must be encoded JSON')
-        args = json.loads(args)
+def local_context(value, inherited):
+    result = inherited
+    for key in ('cwd', 'workdir'):
+        if key not in value or value[key] is None:
+            continue
+        path = value[key]
+        if not isinstance(path, str) or not path:
+            raise ValueError('invalid operation working directory')
+        if not Path(path).is_absolute() and not result:
+            raise ValueError('relative working directory lacks parent context')
+        result = str((Path(path) if Path(path).is_absolute() else Path(result) / path).resolve())
+    return result
+
+
+def operation_paths(value, inherited=None):
+    """Resolve each native operation in its own enclosing context."""
+    if isinstance(value, list):
+        for child in value:
+            yield from operation_paths(child, inherited)
+        return
+    if not isinstance(value, dict):
+        return
+    cwd = local_context(value, inherited)
+    kind = value.get('type')
+    if kind in {'tool_call', 'tool-call'} or any(key in value for key in ('tool_calls', 'function_call')):
+        raise ValueError('unsupported native tool envelope')
+    if kind not in {'function_call', 'custom_tool_call', 'tool_use'}:
+        for child in value.values():
+            yield from operation_paths(child, cwd)
+        return
+    name = value.get('name')
+    if not isinstance(name, str):
+        raise ValueError('tool operation lacks a name')
+    name = name.rsplit('.', 1)[-1]
+    if kind == 'function_call':
+        if not isinstance(value.get('arguments'), str):
+            raise ValueError('function call lacks encoded arguments')
+        args = json.loads(value['arguments'])
         if not isinstance(args, dict):
             raise ValueError('function arguments must decode to an object')
-        name = payload['name'].rsplit('.', 1)[-1]
-        if name == 'exec_command':
-            yield from shell_paths(args.get('cmd'))
-        elif name == 'apply_patch':
-            yield from patch_paths(args.get('patch') or args.get('input'))
-        elif name not in PATH_TOOLS or not list(contexts(args)):
-            raise ValueError('unsupported function operation')
-    elif isinstance(payload, dict) and payload.get('type') == 'custom_tool_call':
-        if payload.get('name') != 'apply_patch':
-            raise ValueError('unsupported custom tool operation')
-        yield from patch_paths(payload.get('input'))
-    message = row.get('message', {})
-    content = message.get('content', []) if isinstance(message, dict) else []
-    for item in content:
-        if not isinstance(item, dict) or item.get('type') != 'tool_use':
-            continue
-        if not isinstance(item.get('name'), str) or not isinstance(item.get('input'), dict):
+    elif kind == 'tool_use':
+        args = value.get('input')
+        if not isinstance(args, dict):
             raise ValueError('malformed Claude tool operation')
-        args = item['input']
-        if item['name'] == 'Bash':
-            yield from shell_paths(args.get('command'))
-        elif item['name'] == 'apply_patch':
-            yield from patch_paths(args.get('patch') or args.get('input'))
-        elif item['name'] not in PATH_TOOLS or not list(contexts(args)):
-            raise ValueError('unsupported Claude operation')
+    else:
+        args = {'input': value.get('input')}
+        if name != 'apply_patch':
+            raise ValueError('unsupported custom tool operation')
+    cwd = local_context(args, cwd)
+    if name in {'Bash', 'exec_command'}:
+        paths = shell_paths(args.get('command') if name == 'Bash' else args.get('cmd'))
+    elif name == 'apply_patch':
+        paths = patch_paths(args.get('patch') or args.get('input'))
+    elif name in PATH_TOOLS:
+        paths = list(contexts(args, PATH_KEYS - {'cwd', 'workdir'}))
+        if not paths:
+            raise ValueError('file operation lacks paths')
+    else:
+        raise ValueError('unsupported native operation')
+    if cwd:
+        yield cwd
+    for path in paths:
+        if not Path(path).is_absolute() and not cwd:
+            raise ValueError('relative operation path lacks working-directory context')
+        yield str((Path(path) if Path(path).is_absolute() else Path(cwd) / path).resolve())
 
 
 def touches(value, worktree):
@@ -158,11 +203,6 @@ def timestamp(record, fallback):
 
 
 def records(provider, path, body, mtime):
-    if path.suffix == '.txt' and provider == 'cursor':
-        if not re.search(r'(?im)^(user:|assistant:|\[Tool (?:call|result)\])', body):
-            raise ValueError('unsupported Cursor text envelope')
-        yield {'text': body, '_activity_coverage_unknown': True}, mtime, 'file-mtime-conservative'
-        return
     if path.suffix != '.jsonl':
         raise ValueError('unsupported transcript format')
     for line in body.splitlines():
@@ -174,34 +214,26 @@ def records(provider, path, body, mtime):
         kind = row.get('type')
         if provider == 'claude':
             supported = kind in {'user', 'assistant', 'system', 'summary',
-                                'progress', 'file-history-snapshot', 'queue-operation'}
+                                'file-history-snapshot', 'queue-operation'}
             if kind in {'user', 'assistant'}:
                 supported = isinstance(row.get('message'), dict) and isinstance(row['message'].get('content'), (str, list))
+                content = row['message'].get('content') if isinstance(row.get('message'), dict) else None
+                if isinstance(content, list):
+                    supported = all(isinstance(item, dict) and item.get('type') in
+                                    {'text', 'tool_use', 'tool_result', 'thinking', 'redacted_thinking'}
+                                    for item in content)
         elif provider == 'codex':
             supported = kind in {'session_meta', 'response_item', 'event_msg', 'turn_context'} and isinstance(row.get('payload'), dict)
             if kind == 'response_item':
                 supported = isinstance(row.get('payload'), dict) and row['payload'].get('type') in {
                     'message', 'function_call', 'function_call_output', 'reasoning',
                     'custom_tool_call', 'custom_tool_call_output', 'web_search_call'}
+            if kind == 'event_msg':
+                supported = isinstance(row.get('payload'), dict) and row['payload'].get('type') in {
+                    'agent_message', 'agent_reasoning', 'user_message', 'task_started',
+                    'task_complete', 'token_count', 'turn_aborted', 'context_compacted'}
         else:
-            supported = isinstance(row.get('message'), dict) or row.get('role') in {'user', 'assistant'}
-            message = row.get('message', {})
-            content = message.get('content') if isinstance(message, dict) else None
-            structured = (isinstance(row.get('cwd'), str) and Path(row['cwd']).is_absolute()
-                          and not (set(row) - {'cwd', 'timestamp', 'message', 'role', 'type'})
-                          and not (set(message) - {'content', 'role'})
-                          and isinstance(content, list)
-                          and all(isinstance(item, dict) and item.get('type') in
-                                  {'text', 'tool_use', 'tool_result'} for item in content))
-            def unknown_tool_metadata(value):
-                if isinstance(value, dict):
-                    return (any(key in value for key in ('tool_calls', 'tool_call', 'function_call'))
-                            or any(unknown_tool_metadata(child) for child in value.values()))
-                if isinstance(value, list):
-                    return any(unknown_tool_metadata(child) for child in value)
-                return isinstance(value, str) and bool(re.search(r'\[Tool (?:call|result)\]', value))
-            if not structured or unknown_tool_metadata(row):
-                row['_activity_coverage_unknown'] = True
+            supported = False
         if not supported:
             raise ValueError('unsupported ' + provider + ' record envelope')
         ts, origin = timestamp(row, mtime)
@@ -260,19 +292,23 @@ def scan(manifest, worktrees, now):
     sources = manifest.get('sources')
     if not isinstance(sources, list) or not sources:
         return activity, [{'coverage': 'unavailable', 'error': 'no authorized transcript sources'}], False
+    supported_sources = 0
     for source in sources:
         report = {'provider': source.get('provider') if isinstance(source, dict) else None,
                   'coverage': 'unavailable', 'files_scanned': 0}
         reports.append(report)
+        if isinstance(source, dict) and source.get('provider') == 'cursor':
+            report.update(coverage='ignored', reason='unsupported host; contributes no Claude/Codex evidence')
+            continue
         try:
             files = selected_files(source)
+            supported_sources += 1
             for path in files:
                 body, mtime = read_selected(path)
                 cwd = None
                 for row, ts, origin in records(source['provider'], path, body, mtime):
                     # Decode tool arguments even if the record has no direct path.
                     list(strings(row))
-                    locations = list(contexts(row)) + list(operation_paths(row))
                     if row.get('cwd'):
                         cwd = row['cwd']
                     payload = row.get('payload', {})
@@ -280,19 +316,10 @@ def scan(manifest, worktrees, now):
                         cwd = payload['cwd']
                     if cwd and (not isinstance(cwd, str) or not Path(cwd).is_absolute()):
                         raise ValueError('invalid session working directory')
-                    directories = list(contexts(row, {'cwd', 'workdir'}))
-                    absolute_dirs = [p for p in directories if Path(p).is_absolute()]
-                    operation_cwd = absolute_dirs[-1] if absolute_dirs else cwd
-                    if any(not Path(p).is_absolute() for p in locations) and not operation_cwd:
-                        raise ValueError('relative operation path has no session context')
-                    function_call = isinstance(payload, dict) and payload.get('type') in {'function_call', 'custom_tool_call'}
-                    message = row.get('message', {})
-                    content = message.get('content', []) if isinstance(message, dict) else []
-                    tool_use = any(isinstance(item, dict) and item.get('type') == 'tool_use' for item in content)
-                    if (function_call or tool_use) and not operation_cwd and not any(Path(p).is_absolute() for p in locations):
-                        raise ValueError('tool operation has no absolute working-directory/path context')
-                    normalized = [str((Path(p) if Path(p).is_absolute() else Path(operation_cwd) / p).resolve())
-                                  for p in locations if Path(p).is_absolute() or operation_cwd]
+                    normalized = list(operation_paths(row, cwd))
+                    for location in contexts(row):
+                        if Path(location).is_absolute():
+                            normalized.append(str(Path(location).resolve()))
                     for wt in worktrees:
                         hit = (touches(row, wt) or touches(normalized, wt) or
                                any(wt.is_relative_to(Path(p)) for p in normalized) or
@@ -301,14 +328,12 @@ def scan(manifest, worktrees, now):
                             activity[str(wt)].append({'provider': source['provider'], 'source': str(path),
                                                      'timestamp': ts, 'timestamp_basis': origin,
                                                      'recent': now - ts <= RECENT_SECONDS})
-                    if row.get('_activity_coverage_unknown'):
-                        raise ValueError('opaque Cursor text/tool envelope cannot establish complete activity coverage')
                 report['files_scanned'] += 1
             report['coverage'] = 'complete' if source.get('coverage') == 'complete' else 'partial'
         except (ValueError, OSError, TypeError, KeyError, UnicodeError) as exc:
             report['error'] = str(exc)
         complete = complete and report['coverage'] == 'complete'
-    return activity, reports, complete
+    return activity, reports, complete and supported_sources > 0
 
 
 def git(repo, *args):

@@ -71,31 +71,33 @@ records. Never discover private history to fill a missing source. For example:
 }
 ```
 
+The supported hosts are Claude Code and Codex. Cursor sources are ignored without
+reading them; they contribute no evidence or coverage for these hosts. A manifest
+containing only ignored sources remains unavailable. Supported sources determine
+coverage independently; no Cursor source is required.
+
 `complete` is the owner's explicit assertion that the supplied set covers all
-relevant hosts/chats and sibling trees; a successful scan cannot establish that
+relevant supported-host chats and sibling trees; a successful scan cannot establish that
 assertion. Mark either level `partial` when coverage is uncertain. No sources,
 partial coverage, unreadable/missing/changed files, symlinks, unsupported envelopes
 or malformed records produce unavailable coverage and a hold (exit 2). A complete
 empty set of files in an existing authorized root differs from an unavailable
 root. Valid complete sources with no recent evidence report that limited result.
 
-Supported inputs are Claude JSONL user/assistant/system/progress/summary/history
-records; Codex JSONL session/turn/event/response records including JSON-encoded
-function arguments. Cursor complete coverage requires the bounded structured
-JSONL envelope: an absolute `cwd`, optional `timestamp`/`role`/`type`, and `message`
-with optional `role` and a `content` list of typed text/tool_use/tool_result items.
-Recognized tool_use inputs receive the same operation validation as Claude.
-Extra envelope fields and unrecognized tool-call encodings hold for inspection.
-Cursor text with `user:`, `assistant:` or `[Tool call]`/`[Tool result]` markers and
-opaque JSONL messages can supply absolute activity hints, but always report
-unavailable coverage. Their unstructured operations cannot establish no-recent
-evidence, even if the source manifest asserts complete coverage. Other formats
-also hold. The scan is conservative: exact worktree paths,
+Supported inputs are Claude JSONL user/assistant/system/summary/history records
+and Codex JSONL session/turn/response records including JSON-encoded function
+arguments. Claude content blocks are text, tool_use, tool_result, thinking or
+redacted_thinking. Nested progress envelopes and unknown block/tool types hold
+coverage for inspection. Codex nonoperative event messages have an explicit type
+allowlist; unknown event formats also hold. Other formats hold.
+The scan is conservative: exact worktree paths,
 child paths and session working directories count as activity even in quoted
 messages. Encoded function arguments are decoded; relative path operations need
-session or tool working-directory context. Simple shell operands and native patch
+session or tool working-directory context. Each operation retains its own context;
+relative tool working directories resolve against their enclosing session.
+Simple shell operands and native patch
 file headers resolve relative to that context, including sibling worktrees and
-parent-directory scopes. Shell support is deliberately bounded to cat, ls, head,
+parent-directory scopes and sequential `git -C` directory changes. Shell support is deliberately bounded to cat, ls, head,
 tail, wc, stat, rg, grep, sed, find, git, pwd, readlink and realpath with literal
 operands. Compound commands, expansions, arbitrary programs and unknown tool
 operations hold coverage for inspection; the adapter never executes transcript
