@@ -4,12 +4,17 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import stat
 import subprocess
 
 PROVIDERS = {'cursor', 'claude', 'codex'}
 PATH_KEYS = {'cwd', 'workdir', 'file_path', 'path', 'absolute_path', 'directory'}
 RECENT_SECONDS = 4 * 86400
+SIMPLE_COMMANDS = {'cat', 'ls', 'head', 'tail', 'wc', 'stat', 'rg', 'grep',
+                   'sed', 'find', 'git', 'pwd', 'readlink', 'realpath'}
+PATH_TOOLS = {'Read', 'Write', 'Edit', 'MultiEdit', 'Glob', 'Grep',
+              'read_file', 'write_file', 'list_directory'}
 
 
 def strings(value):
@@ -42,6 +47,82 @@ def contexts(value, keys=PATH_KEYS):
     elif isinstance(value, list):
         for child in value:
             yield from contexts(child, keys)
+
+
+def shell_paths(command):
+    if not isinstance(command, str) or not command.strip():
+        raise ValueError('missing shell command')
+    # Expansions, compound commands and arbitrary programs cannot be resolved
+    # reliably from a transcript. Hold coverage rather than guess their paths.
+    if any(char in command for char in '$`*?[]{};|&<>\n\r'):
+        raise ValueError('unsupported shell expansion or compound command')
+    tokens = shlex.split(command)
+    if not tokens or Path(tokens[0]).name not in SIMPLE_COMMANDS:
+        raise ValueError('unsupported shell program; activity coverage unavailable')
+    paths = []
+    for token in tokens[1:]:
+        if token.startswith('-'):
+            if token.startswith('-C') and len(token) > 2:
+                token = token[2:]
+            elif '=' in token:
+                token = token.split('=', 1)[1]
+            elif '/' in token:
+                raise ValueError('unsupported attached shell path option')
+            else:
+                continue
+        if token.startswith('~'):
+            raise ValueError('unsupported shell home expansion')
+        if token:
+            paths.append(token)
+    return paths
+
+
+def patch_paths(text):
+    if not isinstance(text, str) or not text.startswith('*** Begin Patch\n') or not text.rstrip().endswith('*** End Patch'):
+        raise ValueError('unsupported patch envelope')
+    paths = re.findall(r'^\*\*\* (?:Add File|Update File|Delete File|Move to): (.+)$', text, re.M)
+    if not paths:
+        raise ValueError('patch has no operation paths')
+    return paths
+
+
+def operation_paths(row):
+    """Extract supported native shell/patch operands; never execute them."""
+    payload = row.get('payload', {})
+    if isinstance(payload, dict) and payload.get('type') == 'function_call':
+        if not isinstance(payload.get('name'), str) or 'arguments' not in payload:
+            raise ValueError('function call lacks name or arguments')
+        args = payload['arguments']
+        if not isinstance(args, str):
+            raise ValueError('function arguments must be encoded JSON')
+        args = json.loads(args)
+        if not isinstance(args, dict):
+            raise ValueError('function arguments must decode to an object')
+        name = payload['name'].rsplit('.', 1)[-1]
+        if name == 'exec_command':
+            yield from shell_paths(args.get('cmd'))
+        elif name == 'apply_patch':
+            yield from patch_paths(args.get('patch') or args.get('input'))
+        elif name not in PATH_TOOLS or not list(contexts(args)):
+            raise ValueError('unsupported function operation')
+    elif isinstance(payload, dict) and payload.get('type') == 'custom_tool_call':
+        if payload.get('name') != 'apply_patch':
+            raise ValueError('unsupported custom tool operation')
+        yield from patch_paths(payload.get('input'))
+    message = row.get('message', {})
+    content = message.get('content', []) if isinstance(message, dict) else []
+    for item in content:
+        if not isinstance(item, dict) or item.get('type') != 'tool_use':
+            continue
+        if not isinstance(item.get('name'), str) or not isinstance(item.get('input'), dict):
+            raise ValueError('malformed Claude tool operation')
+        args = item['input']
+        if item['name'] == 'Bash':
+            yield from shell_paths(args.get('command'))
+        elif item['name'] == 'apply_patch':
+            yield from patch_paths(args.get('patch') or args.get('input'))
+        elif item['name'] not in PATH_TOOLS or not list(contexts(args)):
+            raise ValueError('unsupported Claude operation')
 
 
 def touches(value, worktree):
@@ -111,6 +192,8 @@ def records(provider, path, body, mtime):
 
 
 def selected_files(source):
+    if not isinstance(source, dict):
+        raise ValueError('source entry must be an object')
     if set(source) - {'provider', 'root', 'files', 'authorization', 'coverage'}:
         raise ValueError('unknown source fields')
     if source.get('provider') not in PROVIDERS or not isinstance(source.get('authorization'), str) or not source['authorization'].strip():
@@ -172,7 +255,7 @@ def scan(manifest, worktrees, now):
                 for row, ts, origin in records(source['provider'], path, body, mtime):
                     # Decode tool arguments even if the record has no direct path.
                     list(strings(row))
-                    locations = list(contexts(row))
+                    locations = list(contexts(row)) + list(operation_paths(row))
                     if row.get('cwd'):
                         cwd = row['cwd']
                     payload = row.get('payload', {})
@@ -195,6 +278,7 @@ def scan(manifest, worktrees, now):
                                   for p in locations if Path(p).is_absolute() or operation_cwd]
                     for wt in worktrees:
                         hit = (touches(row, wt) or touches(normalized, wt) or
+                               any(wt.is_relative_to(Path(p)) for p in normalized) or
                                bool(cwd and touches({'cwd': str(Path(cwd).resolve())}, wt)))
                         if hit:
                             activity[str(wt)].append({'provider': source['provider'], 'source': str(path),

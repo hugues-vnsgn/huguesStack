@@ -179,7 +179,7 @@ class SyntheticActivity(unittest.TestCase):
         self.assertTrue(hits[str(self.wt)][0]['recent'])
 
     def test_codex_session_context_relative_operation(self):
-        row = self.codex(payload={'type': 'function_call', 'arguments': json.dumps({'cmd': 'cat README.md'})})
+        row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md'})})
         meta = {'type': 'session_meta', 'timestamp': self.stamp, 'payload': {'cwd': str(self.wt)}}
         hits, _, complete = self.scan('codex', [meta, row])
         self.assertTrue(complete)
@@ -197,7 +197,7 @@ class SyntheticActivity(unittest.TestCase):
         self.assertTrue(activity.touches(rows[0][0], self.wt))
 
     def test_exact_boundary_excludes_sibling_prefix(self):
-        hits, _, complete = self.scan('codex', [self.codex(payload={'type': 'function_call', 'arguments': json.dumps({'workdir': str(self.other)})})])
+        hits, _, complete = self.scan('codex', [self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md', 'workdir': str(self.other)})})])
         self.assertTrue(complete)
         self.assertFalse(hits[str(self.wt)])
         self.assertTrue(hits[str(self.other)])
@@ -224,13 +224,13 @@ class SyntheticActivity(unittest.TestCase):
                 self.assertFalse(self.scan('claude', [row])[2])
 
     def test_relative_operation_without_context_holds(self):
-        row = self.codex(payload={'type': 'function_call', 'arguments': json.dumps({'cmd': 'cat README.md'})})
+        row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md'})})
         self.assertFalse(self.scan('codex', [row])[2])
         row = self.claude(cwd=None)
         self.assertFalse(self.scan('claude', [row])[2])
 
     def test_malformed_encoded_arguments_hold(self):
-        row = self.codex(payload={'type': 'function_call', 'arguments': '{unfinished'})
+        row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': '{unfinished'})
         self.assertFalse(self.scan('codex', [row])[2])
 
     def test_all_providers_and_nested_subagents_are_scanned(self):
@@ -281,7 +281,7 @@ class SyntheticActivity(unittest.TestCase):
         self.wt.mkdir()
         alias = self.area / 'alias'
         alias.symlink_to(self.wt, target_is_directory=True)
-        row = self.codex(payload={'type': 'function_call', 'arguments': json.dumps({'workdir': str(alias)})})
+        row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md', 'workdir': str(alias)})})
         hits, _, complete = self.scan('codex', [row])
         self.assertTrue(complete)
         self.assertTrue(hits[str(self.wt)])
@@ -291,6 +291,58 @@ class SyntheticActivity(unittest.TestCase):
         self.assertTrue(hits[str(self.wt)])
         self.assertFalse(complete)
         self.assertEqual(activity.classify('clean', 'NONE', True, complete, True), 'hold-activity-unavailable')
+
+    def test_codex_shell_relative_sibling_path(self):
+        cmd = shlex.join(['cat', '../' + self.other.name + '/README.md'])
+        row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
+        hits, _, complete = self.scan('codex', [row])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+
+    def test_claude_shell_relative_sibling_path(self):
+        cmd = shlex.join(['cat', '../' + self.other.name + '/README.md'])
+        row = self.claude(message={'content': [{'type': 'tool_use', 'name': 'Bash', 'input': {'command': cmd}}]})
+        hits, _, complete = self.scan('claude', [row])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+
+    def test_native_patch_relative_sibling_path(self):
+        patch_text = '*** Begin Patch\n*** Update File: ../' + self.other.name + '/README.md\n@@\n-old\n+new\n*** End Patch'
+        meta = {'type': 'session_meta', 'timestamp': self.stamp, 'payload': {'cwd': str(self.wt)}}
+        row = {'type': 'response_item', 'timestamp': self.stamp, 'payload': {'type': 'custom_tool_call', 'name': 'apply_patch', 'input': patch_text}}
+        hits, _, complete = self.scan('codex', [meta, row])
+        self.assertTrue(complete)
+        self.assertTrue(hits[str(self.other)])
+
+    def test_missing_or_nonobject_function_arguments_hold_with_session_context(self):
+        meta = {'type': 'session_meta', 'timestamp': self.stamp, 'payload': {'cwd': str(self.wt)}}
+        for payload in [{'type': 'function_call', 'name': 'exec_command'},
+                        {'type': 'function_call', 'name': 'exec_command', 'arguments': '[]'},
+                        {'type': 'function_call', 'name': 'exec_command', 'arguments': '{}'}]:
+            self.assertFalse(self.scan('codex', [meta, self.codex(payload=payload)])[2])
+
+    def test_opaque_shell_commands_hold(self):
+        for cmd in ['cat "$TARGET"', 'cat ../*', 'cat README.md && cat elsewhere', 'python arbitrary.py']:
+            row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
+            self.assertFalse(self.scan('codex', [row])[2])
+
+    def test_shell_parent_directory_and_attached_git_path(self):
+        for cmd in ['find ..', shlex.join(['git', '-C../' + self.other.name, 'status'])]:
+            row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
+            hits, _, complete = self.scan('codex', [row])
+            self.assertTrue(complete)
+            self.assertTrue(hits[str(self.other)])
+
+    def test_malformed_source_members_return_unavailable(self):
+        for entry in [[], None, 'invalid', 3]:
+            manifest = {'coverage': 'complete', 'sources': [entry]}
+            _, reports, complete = activity.scan(manifest, [self.wt], self.now)
+            self.assertFalse(complete)
+            self.assertIn('source entry must be an object', reports[0]['error'])
+
+    def test_missing_claude_tool_input_holds(self):
+        row = self.claude(message={'content': [{'type': 'tool_use', 'name': 'Read'}]})
+        self.assertFalse(self.scan('claude', [row])[2])
 
     def test_no_recent_evidence_is_distinct_from_unavailable(self):
         hits, _, complete = self.scan('claude', [self.claude(cwd=str(self.other))])
@@ -347,7 +399,7 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
     def test_cli_each_native_provider_recent_activity(self):
         stamp = datetime.now(timezone.utc).isoformat()
         rows = {'claude': {'type': 'assistant', 'timestamp': stamp, 'cwd': str(self.wt), 'message': {'content': []}},
-                'codex': {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'arguments': json.dumps({'workdir': str(self.wt)})}},
+                'codex': {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': 'cat README.md', 'workdir': str(self.wt)})}},
                 'cursor': {'message': {'content': [{'text': str(self.wt / 'README.md')}]}}}
         for provider, record in rows.items():
             with self.subTest(provider=provider):
@@ -373,6 +425,36 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         self.assertEqual(row['bucket'], 'verify-active-pinned')
         self.assertEqual(row['active_pinned_gate'], 'required-separately')
         self.assertFalse(row['deletion_authorized'])
+
+    def test_cli_relative_sibling_shell_and_patch_activity(self):
+        stamp = datetime.now(timezone.utc).isoformat()
+        cmd = shlex.join(['cat', '../' + self.wt.name + '/README.md'])
+        patch_text = '*** Begin Patch\n*** Update File: ../' + self.wt.name + '/README.md\n@@\n-fixture\n+fixture\n*** End Patch'
+        cases = [
+            ('claude', [{'type': 'assistant', 'timestamp': stamp, 'cwd': str(self.consumer), 'message': {'content': [{'type': 'tool_use', 'name': 'Bash', 'input': {'command': cmd}}]}}]),
+            ('codex', [{'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.consumer)})}}]),
+            ('codex', [{'type': 'session_meta', 'timestamp': stamp, 'payload': {'cwd': str(self.consumer)}},
+                       {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'custom_tool_call', 'name': 'apply_patch', 'input': patch_text}}])]
+        for provider, records in cases:
+            path = self.area / 'relative.jsonl'
+            path.write_text('\n'.join(json.dumps(row) for row in records) + '\n')
+            result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': provider, 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]})
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(report['worktrees'][1]['bucket'], 'verify-recent-chat')
+            self.assertTrue(self.wt.exists())
+
+    def test_cli_malformed_source_and_function_arguments_hold(self):
+        result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [[]]})
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
+        path = self.area / 'missing-arguments.jsonl'
+        stamp = datetime.now(timezone.utc).isoformat()
+        rows = [{'type': 'session_meta', 'timestamp': stamp, 'payload': {'cwd': str(self.consumer)}},
+                {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': 'function_call', 'name': 'exec_command'}}]
+        path.write_text('\n'.join(json.dumps(row) for row in rows) + '\n')
+        result, report = self.audit({'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'codex', 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]})
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
 
     def test_cli_untracked_scratch_and_tracked_wip_are_retained(self):
         root = self.area / 'empty transcripts'

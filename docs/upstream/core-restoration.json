@@ -19,11 +19,11 @@
   },
   "evidence_boundary": "Static source, behavior-contract and wiring checks are development evidence. Released host/mobile observations do not attest to the restored development workflows.",
   "runtime_sha256": {
-    "plugin/adapters/host-tools.md": "f67de825468964fb458ad3e2c68e273ca6684c8cdbca24366cd19b074e35a9fe",
+    "plugin/adapters/host-tools.md": "1575317a0e4ce49d94ec697abe8f8ced3b04a81abf24545d25a3ffd828d26927",
     "plugin/adapters/host_tools.py": "9be78e051f34718a6203c3f4d59ea077144ab19f98331f919cd58a39d4d65bdb",
     "plugin/adapters/runtime/__init__.py": "277b071e8e40f0aabb4007e0ae389824708b2bdd5259075623998749da582807",
     "plugin/adapters/runtime/payload.py": "809e970de95bb448b492b3d580e881a39031bc216dd5ab8f7e28bb315253573a",
     "plugin/adapters/runtime/payload.json": "c42187f44123ed5a6dbdb6bce2f270218c60e515bcec262ebe7315a70d76b364",
-    "plugin/adapters/runtime/activity.py": "4f60d330001fb3504f81bdbec851453736b90fdfe8bd59b138a0043598f8e8b1"
+    "plugin/adapters/runtime/activity.py": "170b8d6272cfb5f42d925b0ed423b0ff1720bc6dedbc7abd6138c4b6627dd9aa"
   }
 }

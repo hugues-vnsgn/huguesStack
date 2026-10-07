@@ -86,7 +86,17 @@ with `user:`, `assistant:` or `[Tool call]`/`[Tool result]` envelopes. Other for
 hold for explicit inspection. The scan is conservative: exact worktree paths,
 child paths and session working directories count as activity even in quoted
 messages. Encoded function arguments are decoded; relative path operations need
-session context. Record timestamps take priority; missing timestamps use file
+session or tool working-directory context. Simple shell operands and native patch
+file headers resolve relative to that context, including sibling worktrees and
+parent-directory scopes. Shell support is deliberately bounded to cat, ls, head,
+tail, wc, stat, rg, grep, sed, find, git, pwd, readlink and realpath with literal
+operands. Compound commands, expansions, arbitrary programs and unknown tool
+operations hold coverage for inspection; the adapter never executes transcript
+commands. File operations support Read/Write/Edit/MultiEdit/Glob/Grep and
+read_file/write_file/list_directory with explicit path fields. Missing/malformed
+function arguments or tool inputs also hold. This is a conservative operand scan,
+not a prediction of every program's implicit filesystem access or side effects.
+Record timestamps take priority; missing timestamps use file
 mtime conservatively and label that evidence. Recent means within four days.
 This is supported-format synthetic evidence, not attestation of every host version.
 
