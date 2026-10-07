@@ -250,6 +250,107 @@ def timestamp(record, fallback):
     return result, 'record-timestamp'
 
 
+def text_leaves(value, kinds):
+    return isinstance(value, list) and all(
+        isinstance(item, dict) and not (set(item) - {'type', 'text'})
+        and item.get('type') in kinds and isinstance(item.get('text'), str)
+        for item in value)
+
+
+def codex_payload(payload):
+    if not isinstance(payload, dict):
+        return False
+    kind = payload.get('type')
+    if kind == 'message':
+        return (not (set(payload) - {'type', 'id', 'role', 'content', 'phase'})
+                and all(payload.get(key) is None or isinstance(payload[key], str)
+                        for key in ('id', 'phase'))
+                and payload.get('role') in {'user', 'assistant', 'system', 'developer'}
+                and text_leaves(payload.get('content'), {'input_text', 'output_text'}))
+    if kind in {'function_call', 'custom_tool_call'}:
+        # The operation decoder validates tool names, arguments and context.
+        operand = 'arguments' if kind == 'function_call' else 'input'
+        return (not (set(payload) - {'type', 'name', operand, 'id', 'call_id', 'status', 'cwd', 'workdir'})
+                and all(payload.get(key) is None or isinstance(payload[key], str)
+                        for key in ('id', 'call_id', 'status')))
+    if kind in {'function_call_output', 'custom_tool_call_output'}:
+        return (not (set(payload) - {'type', 'call_id', 'output', 'cwd', 'workdir'})
+                and isinstance(payload.get('call_id'), str) and bool(payload['call_id'])
+                and isinstance(payload.get('output'), str))
+    if kind == 'reasoning':
+        return (not (set(payload) - {'type', 'id', 'summary', 'content', 'encrypted_content'})
+                and (payload.get('id') is None or isinstance(payload['id'], str))
+                and text_leaves(payload.get('summary'), {'summary_text'})
+                and (payload.get('content') is None
+                     or text_leaves(payload['content'], {'reasoning_text'}))
+                and payload.get('encrypted_content') is None)
+    return False
+
+
+def codex_event(payload):
+    if not isinstance(payload, dict):
+        return False
+    kind = payload.get('type')
+    field = {'agent_message': 'message', 'agent_reasoning': 'text',
+             'user_message': 'message'}.get(kind)
+    if field is None or not isinstance(payload.get(field), str):
+        return False
+    # Only textual events have reviewed schemas. Images and other event formats
+    # cannot supply complete activity coverage through this bounded adapter.
+    return (not (set(payload) - {'type', field, 'images', 'local_images', 'text_elements'})
+            and all(payload.get(key, []) == []
+                    for key in ('images', 'local_images', 'text_elements')))
+
+
+def codex_context(payload):
+    if not isinstance(payload, dict):
+        return False
+    fields = {'cwd', 'id', 'turn_id', 'timestamp', 'originator', 'cli_version',
+              'model_provider', 'source', 'model', 'effort', 'summary',
+              'approval_policy', 'instructions'}
+    if set(payload) - fields - {'git'}:
+        return False
+    directory = payload.get('cwd')
+    if not isinstance(directory, str) or not Path(directory).is_absolute():
+        return False
+    if any(value is not None and not isinstance(value, str)
+           for key, value in payload.items() if key in fields):
+        return False
+    metadata = payload.get('git')
+    return (metadata is None or isinstance(metadata, dict)
+            and not (set(metadata) - {'branch', 'commit_hash', 'repository_url'})
+            and all(value is None or isinstance(value, str) for value in metadata.values()))
+
+
+def claude_message(message):
+    if not isinstance(message, dict):
+        return False
+    fields = {'id', 'type', 'role', 'model', 'stop_reason', 'stop_sequence'}
+    if set(message) - fields - {'content', 'usage'}:
+        return False
+    if any(value is not None and not isinstance(value, str)
+           for key, value in message.items() if key in fields):
+        return False
+    usage = message.get('usage')
+    if usage is not None:
+        counts = {'input_tokens', 'output_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens'}
+        if (not isinstance(usage, dict) or set(usage) - counts
+                or any(type(value) is not int or value < 0 for value in usage.values())):
+            return False
+    return isinstance(message.get('content'), (str, list))
+
+
+def claude_envelope(row):
+    fields = {'cwd', 'uuid', 'parentUuid', 'userType', 'sessionId', 'version',
+              'gitBranch', 'slug', 'requestId', 'agentId', 'sourceToolAssistantUUID',
+              'sourceToolUseID', 'summary', 'leafUuid'}
+    flags = {'isSidechain', 'isApiErrorMessage', 'isMeta', 'isCompactSummary'}
+    return (not (set(row) - fields - flags - {'type', 'timestamp', 'message'})
+            and all(value is None or isinstance(value, str)
+                    for key, value in row.items() if key in fields)
+            and all(type(value) is bool for key, value in row.items() if key in flags))
+
+
 def records(provider, path, body, mtime):
     if path.suffix != '.jsonl':
         raise ValueError('unsupported transcript format')
@@ -261,62 +362,49 @@ def records(provider, path, body, mtime):
             raise ValueError('transcript record is not an object')
         kind = row.get('type')
         if provider == 'claude':
-            supported = kind in {'user', 'assistant', 'system', 'summary',
-                                'file-history-snapshot', 'queue-operation'}
+            if not claude_envelope(row):
+                raise ValueError('unsupported Claude envelope metadata')
+            supported = (kind == 'summary' and isinstance(row.get('summary'), str)
+                         and not (set(row) - {'type', 'summary', 'timestamp', 'cwd',
+                                            'leafUuid', 'uuid', 'parentUuid'}))
             if kind in {'user', 'assistant'}:
-                supported = isinstance(row.get('message'), dict) and isinstance(row['message'].get('content'), (str, list))
+                supported = claude_message(row.get('message'))
                 content = row['message'].get('content') if isinstance(row.get('message'), dict) else None
-                if isinstance(content, list):
+                if supported and isinstance(content, list):
                     supported = all(isinstance(item, dict) and item.get('type') in
-                                    {'text', 'tool_use', 'tool_result', 'thinking', 'redacted_thinking'}
+                                    {'text', 'tool_use', 'tool_result', 'thinking'}
                                     for item in content)
                     if supported:
                         for block in content:
                             block_type = block['type']
-                            if block_type in {'text', 'thinking', 'redacted_thinking'}:
-                                field = {'text': 'text', 'thinking': 'thinking', 'redacted_thinking': 'data'}[block_type]
-                                supported = supported and isinstance(block.get(field), str)
+                            if block_type == 'text':
+                                supported = supported and text_leaves([block], {'text'})
+                            elif block_type == 'thinking':
+                                supported = (supported and isinstance(block.get('thinking'), str)
+                                             and not (set(block) - {'type', 'thinking', 'signature'})
+                                             and ('signature' not in block or isinstance(block['signature'], str)))
                             elif block_type == 'tool_result':
                                 result = block.get('content')
                                 # Result arrays are bounded to nonoperative text
                                 # leaves. Opaque or nested block schemas hold.
-                                valid_result = isinstance(result, str) or (
-                                    isinstance(result, list) and all(
-                                        isinstance(item, dict)
-                                        and not (set(item) - {'type', 'text'})
-                                        and item.get('type') == 'text'
-                                        and isinstance(item.get('text'), str)
-                                        for item in result))
+                                valid_result = isinstance(result, str) or text_leaves(result, {'text'})
                                 supported = (supported and isinstance(block.get('tool_use_id'), str)
-                                             and valid_result)
+                                             and bool(block['tool_use_id']) and valid_result
+                                             and not (set(block) - {'type', 'tool_use_id', 'content', 'is_error', 'cwd', 'workdir'})
+                                             and ('is_error' not in block or type(block['is_error']) is bool))
+                            elif block_type == 'tool_use':
+                                supported = (supported and not (set(block) - {'type', 'id', 'name', 'input', 'cwd', 'workdir'})
+                                             and ('id' not in block or isinstance(block['id'], str)))
         elif provider == 'codex':
+            if set(row) - {'type', 'timestamp', 'payload'}:
+                raise ValueError('unsupported Codex envelope metadata')
             supported = kind in {'session_meta', 'response_item', 'event_msg', 'turn_context'} and isinstance(row.get('payload'), dict)
             if kind in {'session_meta', 'turn_context'}:
-                directory = row.get('payload', {}).get('cwd')
-                supported = isinstance(directory, str) and Path(directory).is_absolute()
+                supported = codex_context(row.get('payload'))
             if kind == 'response_item':
-                supported = isinstance(row.get('payload'), dict) and row['payload'].get('type') in {
-                    'message', 'function_call', 'function_call_output', 'reasoning',
-                    'custom_tool_call', 'custom_tool_call_output', 'web_search_call'}
-                if supported and row['payload']['type'] == 'message':
-                    content = row['payload'].get('content')
-                    supported = (row['payload'].get('role') in {'user', 'assistant', 'system', 'developer'}
-                                 and isinstance(content, list))
-                    if supported:
-                        for block in content:
-                            if not isinstance(block, dict):
-                                supported = False
-                                break
-                            block_type = block.get('type')
-                            if block_type in {'input_text', 'output_text'}:
-                                valid = isinstance(block.get('text'), str)
-                            else:
-                                valid = False
-                            supported = supported and valid
+                supported = codex_payload(row.get('payload'))
             if kind == 'event_msg':
-                supported = isinstance(row.get('payload'), dict) and row['payload'].get('type') in {
-                    'agent_message', 'agent_reasoning', 'user_message', 'task_started',
-                    'task_complete', 'token_count', 'turn_aborted', 'context_compacted'}
+                supported = codex_event(row.get('payload'))
         else:
             supported = False
         if not supported:

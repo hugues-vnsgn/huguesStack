@@ -428,6 +428,70 @@ class SyntheticActivity(unittest.TestCase):
             self.assertTrue(complete)
             self.assertTrue(hits[str(self.other)])
 
+    def test_codex_outputs_require_identified_string_content(self):
+        for kind in ['function_call_output', 'custom_tool_call_output']:
+            cases = [{'type': kind, 'call_id': 'fixture'},
+                     {'type': kind, 'call_id': 'fixture', 'output': 17},
+                     {'type': kind, 'call_id': 'fixture', 'output': [{'type': 'file_reference', 'path': '../sibling'}]},
+                     {'type': kind, 'output': 'plain'},
+                     {'type': kind, 'call_id': '', 'output': 'plain'},
+                     {'type': kind, 'call_id': 'fixture', 'output': 'plain', 'unknown': '../sibling'}]
+            for payload in cases:
+                with self.subTest(payload=payload):
+                    self.assertFalse(self.scan('codex', [self.codex(payload=payload)])[2])
+
+    def test_codex_string_outputs_preserve_sibling_activity(self):
+        for kind in ['function_call_output', 'custom_tool_call_output']:
+            row = self.codex(payload={'type': kind, 'call_id': 'fixture', 'output': str(self.other)})
+            hits, _, complete = self.scan('codex', [row])
+            self.assertTrue(complete)
+            self.assertTrue(hits[str(self.other)])
+
+    def test_nonoperative_envelopes_require_reviewed_text_schemas(self):
+        for provider, row in [('claude', self.claude(unknown={'type': 'file_reference', 'path': '../sibling'})),
+                              ('codex', self.codex(unknown={'type': 'file_reference', 'path': '../sibling'})),
+                              ('claude', self.claude(message={'content': [], 'usage': {'unknown': '../sibling'}}))]:
+            self.assertFalse(self.scan(provider, [row])[2])
+        for kind in ['system', 'file-history-snapshot', 'queue-operation']:
+            self.assertFalse(self.scan('claude', [self.claude(type=kind)])[2])
+        for row in [self.claude(type='summary', summary=17),
+                    {'type': 'summary', 'summary': 'plain', 'unknown': {'type': 'file_reference', 'path': '../sibling'}},
+                    self.claude(message={'content': [{'type': 'redacted_thinking', 'data': 'opaque'}]}),
+                    self.claude(message={'content': [{'type': 'tool_result', 'tool_use_id': 'fixture', 'content': 'plain', 'is_error': 17}]}),
+                    self.claude(message={'content': [{'type': 'text', 'text': 'plain', 'unknown': '../sibling'}]})]:
+            self.assertFalse(self.scan('claude', [row])[2])
+        for kind in ['session_meta', 'turn_context']:
+            for extra in [{'unknown': {'type': 'file_reference', 'path': '../sibling'}},
+                          {'instructions': [17]}, {'git': {'unknown': '../sibling'}}]:
+                row = {'type': kind, 'payload': dict(extra, cwd=str(self.wt))}
+                self.assertFalse(self.scan('codex', [row])[2])
+        for payload in [{'type': 'reasoning'}, {'type': 'reasoning', 'summary': [17]},
+                        {'type': 'reasoning', 'summary': [{'type': 'summary_text'}]},
+                        {'type': 'reasoning', 'summary': [], 'encrypted_content': 'opaque'},
+                        {'type': 'reasoning', 'summary': [], 'content': [{'type': 'unknown'}]},
+                        {'type': 'web_search_call'}]:
+            self.assertFalse(self.scan('codex', [self.codex(payload=payload)])[2])
+        for payload in [{'type': 'agent_message'}, {'type': 'agent_reasoning', 'text': 17},
+                        {'type': 'user_message', 'message': 'plain', 'images': ['opaque']},
+                        {'type': 'token_count'}, {'type': 'task_started'}]:
+            row = {'type': 'event_msg', 'timestamp': self.stamp, 'payload': payload}
+            self.assertFalse(self.scan('codex', [row])[2])
+
+    def test_reviewed_text_summaries_reasoning_and_events_preserve_evidence(self):
+        row = self.claude(uuid='fixture', isSidechain=False, message={'role': 'assistant', 'content': [{'type': 'text', 'text': str(self.other)}], 'usage': {'input_tokens': 0, 'output_tokens': 1}})
+        self.assertTrue(self.scan('claude', [row])[0][str(self.other)])
+        row = {'type': 'summary', 'timestamp': self.stamp, 'summary': str(self.other)}
+        self.assertTrue(self.scan('claude', [row])[0][str(self.other)])
+        row = self.codex(payload={'type': 'reasoning', 'summary': [{'type': 'summary_text', 'text': str(self.other)}], 'content': [{'type': 'reasoning_text', 'text': 'plain'}], 'encrypted_content': None})
+        self.assertTrue(self.scan('codex', [row])[0][str(self.other)])
+        for payload in [{'type': 'agent_message', 'message': str(self.other)},
+                        {'type': 'agent_reasoning', 'text': str(self.other)},
+                        {'type': 'user_message', 'message': str(self.other), 'images': [], 'local_images': []}]:
+            row = {'type': 'event_msg', 'timestamp': self.stamp, 'payload': payload}
+            hits, _, complete = self.scan('codex', [row])
+            self.assertTrue(complete)
+            self.assertTrue(hits[str(self.other)])
+
 
 
     def test_no_recent_evidence_is_distinct_from_unavailable(self):
@@ -622,3 +686,27 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(report['worktrees'][1]['bucket'], 'verify-recent-chat')
         self.assertFalse(report['worktrees'][1]['deletion_authorized'])
+
+    def test_cli_codex_output_and_nonoperative_schemas_hold_with_valid_text_control(self):
+        stamp = datetime.now(timezone.utc).isoformat()
+        path = self.area / 'tool-outputs.jsonl'
+        manifest = {'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'codex', 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]}
+        cases = [
+            {'type': 'response_item', 'payload': {'type': 'function_call_output', 'call_id': 'fixture'}},
+            {'type': 'response_item', 'payload': {'type': 'custom_tool_call_output', 'call_id': 'fixture', 'output': 17}},
+            {'type': 'response_item', 'payload': {'type': 'function_call_output', 'call_id': 'fixture', 'output': [{'type': 'file_reference', 'path': '../' + self.wt.name}]}},
+            {'type': 'response_item', 'payload': {'type': 'reasoning', 'summary': [], 'encrypted_content': 'opaque'}},
+            {'type': 'event_msg', 'payload': {'type': 'agent_message'}}]
+        for row in cases:
+            path.write_text(json.dumps(dict(row, timestamp=stamp)) + '\n')
+            result, report = self.audit(manifest)
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertEqual(report['coverage'], 'unavailable')
+            self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
+            self.assertFalse(report['worktrees'][1]['deletion_authorized'])
+        for kind in ['function_call_output', 'custom_tool_call_output']:
+            row = {'type': 'response_item', 'timestamp': stamp, 'payload': {'type': kind, 'call_id': 'fixture', 'output': str(self.wt / 'README.md')}}
+            path.write_text(json.dumps(row) + '\n')
+            result, report = self.audit(manifest)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(report['worktrees'][1]['bucket'], 'verify-recent-chat')

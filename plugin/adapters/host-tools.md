@@ -84,23 +84,29 @@ or malformed records produce unavailable coverage and a hold (exit 2). A complet
 empty set of files in an existing authorized root differs from an unavailable
 root. Valid complete sources with no recent evidence report that limited result.
 
-Supported inputs are Claude JSONL user/assistant/system/summary/history records
+Supported inputs are Claude JSONL user/assistant records and string summaries
 and Codex JSONL session/turn/response records including JSON-encoded function
-arguments. Claude content blocks are text, tool_use, tool_result, thinking or
-redacted_thinking, with required content fields. Tool-result content is a string
+arguments. Claude content blocks are text, tool_use, tool_result and plaintext
+thinking, with required content fields. Tool-result content is a string
 or a list of text leaves with only `type` and string `text` fields; nested,
 malformed or opaque result blocks hold coverage. Codex messages require a known
 role and a content list of input_text/output_text blocks with
 their required fields. Missing, malformed or unknown blocks hold.
 Nested progress envelopes and unknown block/tool types hold
-coverage for inspection. Codex nonoperative event messages have an explicit type
-allowlist; unknown event formats also hold. Other formats hold.
+coverage for inspection. Codex tool outputs require a nonempty call identifier
+and string output. Reasoning permits only reviewed plaintext summary/content
+blocks; encrypted reasoning holds. Textual agent/user events require string
+content and no opaque attachments. Other events, web-search responses, Claude
+system/history/queue records and redacted thinking have no reviewed content
+schema and hold. Envelope/message metadata also uses bounded fields and types;
+unknown metadata, including unreviewed usage structures, holds. Other formats hold.
 The scan is conservative: exact worktree paths,
 child paths and session working directories count as activity even in quoted
 messages. Encoded function arguments are decoded; relative path operations need
 session or tool working-directory context. Each operation retains its own context;
 relative tool working directories resolve against their enclosing session.
-Session/turn contexts need an absolute working directory. Operations without a
+Session/turn contexts need an absolute working directory and reviewed string
+metadata fields; unknown context fields or opaque metadata hold. Operations without a
 resolvable working directory or absolute operation path hold.
 Simple shell operands and native patch
 file headers resolve relative to that context, including sibling worktrees and
