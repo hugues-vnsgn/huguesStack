@@ -352,8 +352,7 @@
   },
   "adapters": [
     "plugin/adapters/host.md",
-    "plugin/adapters/mobile.md",
-    "plugin/policies/astra-pr-review.md"
+    "plugin/adapters/mobile.md"
   ],
   "agents": {
     "poteto-agent": {

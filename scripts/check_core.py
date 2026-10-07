@@ -52,8 +52,8 @@ def resolve_skill(binding, name):
 def resolve_worker(binding, role):
     row = binding['worker_roles'][role]
     return resolve_skill(binding, row['skill']), row
-ADAPTERS = ['plugin/adapters/host.md', 'plugin/adapters/mobile.md',
-            'plugin/policies/astra-pr-review.md']
+ADAPTERS = ['plugin/adapters/host.md', 'plugin/adapters/mobile.md']
+PROJECT_POLICY = 'plugin/policies/astra-pr-review.md'
 RUNTIME_ASSETS = ['plugin/adapters/host-tools.md', 'plugin/adapters/host_tools.py',
                   'plugin/adapters/runtime/__init__.py', 'plugin/adapters/runtime/payload.py',
                   'plugin/adapters/runtime/payload.json', 'plugin/adapters/runtime/activity.py',
@@ -163,7 +163,7 @@ def adapter_errors(texts):
                      'same\nregression', 'Keep the rubric', 'block blind judging',
                      'top 3–5', 'Maintenance covers the whole map',
                      'cannot replace or satisfy the core', 'One target does not prove'],
-        ADAPTERS[2]: ['does not activate this profile', 'two fresh independent GPT-Astra reviewers at High effort',
+        PROJECT_POLICY: ['does not activate this profile', 'two fresh independent GPT-Astra reviewers at High effort',
                      'exact final candidate commit', 'explicit project addition',
                      'Generic interrogate keeps its pinned three-family defaults',
                      'report the required review blocked', 'fresh review of the new exact head',
@@ -296,7 +296,7 @@ def check(root=ROOT):
                'poteto-mode', 'tdd']}
     bodies['feature'] = (core / 'pstack/skills/poteto-mode/playbooks/feature.md').read_text()
     require(not behavior_errors(bodies), 'core behavior contracts differ: ' + ', '.join(behavior_errors(bodies)))
-    texts = {path: (root / path).read_text() for path in ADAPTERS}
+    texts = {path: (root / path).read_text() for path in [*ADAPTERS, PROJECT_POLICY]}
     require(not adapter_errors(texts), 'adapter behavior differs: ' + '; '.join(adapter_errors(texts)))
     documents = {p: (root / p).read_text() for p in ['docs/PLAN.md', 'docs/upstream/README.md']}
     require(not current_document_errors(documents),
@@ -309,7 +309,7 @@ def check(root=ROOT):
     require(receipt['revision'] == PIN and receipt['effective_overrides'] == OVERRIDES,
             'unreviewed override inventory')
     require(receipt['adapter_sha256'] == {p: hashlib.sha256((root / p).read_bytes()).hexdigest()
-                                        for p in ADAPTERS}, 'adapter bytes differ from reviewed receipt')
+                                        for p in [*ADAPTERS, PROJECT_POLICY]}, 'adapter bytes differ from reviewed receipt')
     require(receipt['runtime_sha256'] == {p: hashlib.sha256((root / p).read_bytes()).hexdigest()
                                         for p in RUNTIME_ASSETS}, 'runtime adapter bytes differ from reviewed receipt')
     expected_payload = {'schema_version': 1, 'revision': PIN,

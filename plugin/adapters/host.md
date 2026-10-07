@@ -1,7 +1,8 @@
 # Claude Code and Codex host adapter
 
-Read this adapter, the mobile adapter and the project PR policy before the pinned
-core. They translate host mechanisms and limit authority; the core owns workflow
+Read this adapter and the mobile adapter’s applicability section before the pinned
+core. Follow the consumer project’s own PR policy. These adapters translate host
+mechanisms and limit authority; the core owns workflow
 phases, mandatory gates, panel cardinality, fallback and stop rules. A constraint
 can block execution. It cannot turn an omitted gate into success.
 
@@ -70,7 +71,7 @@ round gets a fresh worker. Preserve the core's narrow resume exceptions and the
 scoped-worker direct implementation exception; do not recursively delegate the
 same assignment. A core `poteto-agent` call uses the registered hugues-agent in
 Claude Code; Codex prepends that wrapper to the fresh worker's prompt. Supply absolute paths
-to the public mode, plugin skills directory, pinned core and all three adapters,
+to the public mode, plugin skills directory, pinned core and the host adapter and applicable mobile adapter,
 the exact base/head, writable scope, success predicate and evidence destination.
 Read the mode and applicable principle leaves in full before work. If the host
 cannot preserve required context isolation or parallelism, mark that phase blocked.
@@ -151,5 +152,6 @@ additional style preference, not a source-equivalent replacement.
 
 Opening a PR retains the core's ready-PR and stack/base mechanics. Local commits
 and a PR-ready body can be prepared under local-work authority. Publication waits
-for explicit scope. The project PR policy adds Astra High review; it does not
-change generic interrogate defaults or claim diversity from identical models.
+for explicit scope. Only this huguesStack repository’s AGENTS.md activates its
+Astra High PR profile. Installing the plugin does not impose it on consumers.
+Consumer policies and generic interrogate defaults remain in force.

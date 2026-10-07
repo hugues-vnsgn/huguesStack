@@ -2,13 +2,27 @@
 """Read-only host mechanics. No network, package bootstrap or deletion actions."""
 import argparse
 import json
+import importlib.util
 from pathlib import Path
 import shutil
 import subprocess
 import sys
 
 sys.dont_write_bytecode = True
-from runtime import activity, payload
+def load_runtime_sources():
+    """Load the fixed runtime directly; interpreter caches are not inputs."""
+    directory = Path(__file__).resolve().parent / 'runtime'
+    loaded = {}
+    for name, filename in [('runtime', '__init__.py'), ('runtime.json_input', 'json_input.py'),
+                           ('runtime.activity', 'activity.py'), ('runtime.payload', 'payload.py')]:
+        path = directory / filename
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        exec(compile(path.read_bytes(), str(path), 'exec'), module.__dict__)
+        loaded[name] = module
+    return loaded['runtime.activity'], loaded['runtime.payload']
+
 
 
 def main(argv=None):
@@ -29,6 +43,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     root = Path(__file__).resolve().parents[1]
     try:
+        activity, payload = load_runtime_sources()
         if args.verb == 'bind':
             print(json.dumps(payload.bind(root), indent=2))
             return 0

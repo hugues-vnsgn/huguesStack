@@ -1,5 +1,7 @@
 """Claude review regressions; task-owned synthetic inputs only."""
 import json
+import os
+import py_compile
 from pathlib import Path
 import stat
 import unittest
@@ -12,6 +14,24 @@ from runtime.json_input import load_json
 
 
 class PayloadReview(InstalledFixture, unittest.TestCase):
+    def test_cli_ignores_poisoned_valid_runtime_bytecode(self):
+        for name in ['__init__.py', 'json_input.py', 'activity.py', 'payload.py']:
+            path = self.plugin / 'adapters/runtime' / name
+            body, metadata = path.read_bytes(), path.stat()
+            poison = b'raise RuntimeError\n'
+            self.assertGreaterEqual(len(body), len(poison))
+            path.write_bytes(poison + b' ' * (len(body) - len(poison)))
+            os.utime(path, ns=(metadata.st_atime_ns, metadata.st_mtime_ns))
+            cache = py_compile.compile(str(path), doraise=True,
+                                       invalidation_mode=py_compile.PycInvalidationMode.TIMESTAMP)
+            path.write_bytes(body)
+            os.utime(path, ns=(metadata.st_atime_ns, metadata.st_mtime_ns))
+            self.assertTrue(Path(cache).is_file())
+        result = self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, (self.plugin / 'core/pstack/skills/swarm/SKILL.md').read_text())
+        self.assertEqual(self.run_tool('bind').stdout, self.binding.read_text())
+
     def test_every_effective_adapter_bridge_and_policy_is_bound(self):
         for name in ['adapters/mobile.md', 'policies/astra-pr-review.md',
                      'skills/hugues-mode/SKILL.md',

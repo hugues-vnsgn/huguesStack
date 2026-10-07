@@ -4,7 +4,7 @@ A personal mobile workflow for Claude Code and Codex, based on pstack 0.15.9 at 
 
 This checkout is the **unreleased core restoration**. The 0.1.0 tag and its evidence are preserved. The manifest still carries 0.1.0; that is packaging metadata, not a release or runtime certification of this development branch.
 
-The plugin preserves all 161 upstream source files, registers all 50 top-level skills and 23 core playbooks, and adds four mobile playbooks. Entry loaders read the pinned workflow in full after explicit host/mobile adapters and the owner's Astra High PR policy. All 24 principles remain verbatim. No consumer app lives here.
+The plugin preserves all 161 upstream source files, registers all 50 top-level skills and 23 core playbooks, and adds four mobile playbooks. Entry loaders read the pinned workflow in full after the host adapter and applicable mobile guidance. Consumers retain their own PR policies; this repository activates its Astra High profile through AGENTS.md. All 24 principles remain verbatim. No consumer app lives here.
 
 ```text
 /hugues-mode fix the Swift article list jump; reproduce on the iOS simulator

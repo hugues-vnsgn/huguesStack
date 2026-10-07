@@ -14,7 +14,7 @@ Verify discovery of hugues-mode and use the registered command the host exposes.
 
 For Codex, use an already-authorized native loader when available. Otherwise read `/absolute/path/to/huguesStack/plugin/skills/hugues-mode/SKILL.md` and all required links in full. Label direct reads separately from native discovery. These instructions authorize no host configuration changes or installations.
 
-Functional entrypoints load host adapter → mobile adapter → Astra PR policy → full pinned core. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
+Functional entrypoints load host adapter → mobile applicability → full pinned core. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
 
 ## State a task and follow its route
 

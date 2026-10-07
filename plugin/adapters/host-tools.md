@@ -18,7 +18,9 @@ python3 "<plugin>/adapters/host_tools.py" bind > "<program>/plugin-binding.json"
 
 The binding records pstack's approved revision, the shipped 161-file hash/mode
 manifest, installation path and every non-core plugin file’s hash and full permission mode.
-Extra core files also block the binding. Record the plugin's
+Extra core files also block the binding. The CLI loads its fixed runtime modules
+directly from source; Python bytecode caches are never executed and are excluded
+from the non-core inventory. Record the plugin's
 Git commit separately when the installation has one. At every required tick,
 reread bundled files through the same saved binding:
 

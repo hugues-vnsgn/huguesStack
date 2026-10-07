@@ -126,7 +126,7 @@ class DevelopmentBehavior(unittest.TestCase):
         self.assertIn('architect-two-shapes', core.behavior_errors(data))
 
     def test_adapter_boundaries_independent_of_receipt_hashes(self):
-        original = {p: (ROOT / p).read_text() for p in core.ADAPTERS}
+        original = {p: (ROOT / p).read_text() for p in [*core.ADAPTERS, core.PROJECT_POLICY]}
         self.assertEqual(core.adapter_errors(original), [])
         for path, before, after in [
             (core.ADAPTERS[0], 'never an implicit replacement', 'always an implicit replacement'),
@@ -135,8 +135,8 @@ class DevelopmentBehavior(unittest.TestCase):
             (core.ADAPTERS[1], 'Maintenance covers the whole map', 'Maintenance covers one journey'),
             (core.ADAPTERS[1], 'observe RED against unfixed production', 'observe RED after production changes'),
             (core.ADAPTERS[1], 'block blind judging', 'claim blind judging'),
-            (core.ADAPTERS[2], 'two fresh independent GPT-Astra reviewers at High effort', 'one inherited reviewer'),
-            (core.ADAPTERS[2], 'Generic interrogate keeps its pinned three-family defaults', 'Generic interrogate uses Astra only'),
+            (core.PROJECT_POLICY, 'two fresh independent GPT-Astra reviewers at High effort', 'one inherited reviewer'),
+            (core.PROJECT_POLICY, 'Generic interrogate keeps its pinned three-family defaults', 'Generic interrogate uses Astra only'),
         ]:
             with self.subTest(boundary=before):
                 data = dict(original)
