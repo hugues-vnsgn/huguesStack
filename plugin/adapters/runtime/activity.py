@@ -277,8 +277,18 @@ def records(provider, path, body, mtime):
                                 field = {'text': 'text', 'thinking': 'thinking', 'redacted_thinking': 'data'}[block_type]
                                 supported = supported and isinstance(block.get(field), str)
                             elif block_type == 'tool_result':
+                                result = block.get('content')
+                                # Result arrays are bounded to nonoperative text
+                                # leaves. Opaque or nested block schemas hold.
+                                valid_result = isinstance(result, str) or (
+                                    isinstance(result, list) and all(
+                                        isinstance(item, dict)
+                                        and not (set(item) - {'type', 'text'})
+                                        and item.get('type') == 'text'
+                                        and isinstance(item.get('text'), str)
+                                        for item in result))
                                 supported = (supported and isinstance(block.get('tool_use_id'), str)
-                                             and isinstance(block.get('content'), (str, list)))
+                                             and valid_result)
         elif provider == 'codex':
             supported = kind in {'session_meta', 'response_item', 'event_msg', 'turn_context'} and isinstance(row.get('payload'), dict)
             if kind in {'session_meta', 'turn_context'}:

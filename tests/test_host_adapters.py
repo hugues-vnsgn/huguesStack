@@ -407,6 +407,27 @@ class SyntheticActivity(unittest.TestCase):
         row = self.codex(payload={'type': 'function_call', 'name': 'exec_command', 'arguments': json.dumps({'cmd': cmd, 'workdir': str(self.wt)})})
         self.assertFalse(self.scan('codex', [row])[2])
 
+    def test_claude_nested_tool_results_require_text_leaf_schema(self):
+        cases = [[17], [{'type': 'text'}], [{'type': 'text', 'text': 42}],
+                 [{'type': 'file_reference', 'path': '../sibling/README.md'}],
+                 [{'type': 'image', 'source': {'type': 'base64', 'data': 'synthetic'}}],
+                 [{'type': 'tool_result', 'tool_use_id': 'nested', 'content': []}],
+                 [{'type': 'text', 'text': 'plain', 'unknown': '../sibling'}]]
+        for content in cases:
+            with self.subTest(content=content):
+                row = self.claude(message={'content': [{'type': 'tool_result', 'tool_use_id': 'fixture', 'content': content}]})
+                _, reports, complete = self.scan('claude', [row])
+                self.assertFalse(complete)
+                self.assertEqual(reports[0]['coverage'], 'unavailable')
+                self.assertEqual(activity.classify('clean', 'NONE', True, complete, False), 'hold-activity-unavailable')
+
+    def test_claude_tool_result_strings_and_text_leaves_preserve_evidence(self):
+        for content in [str(self.other), [{'type': 'text', 'text': str(self.other)}]]:
+            row = self.claude(message={'content': [{'type': 'tool_result', 'tool_use_id': 'fixture', 'content': content}]})
+            hits, _, complete = self.scan('claude', [row])
+            self.assertTrue(complete)
+            self.assertTrue(hits[str(self.other)])
+
 
 
     def test_no_recent_evidence_is_distinct_from_unavailable(self):
@@ -580,3 +601,24 @@ class ConsumerAudit(InstalledFixture, unittest.TestCase):
             self.assertEqual(result.returncode, 2, result.stderr)
             self.assertEqual(report['coverage'], 'unavailable')
             self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
+
+    def test_cli_nested_claude_tool_result_schema_holds_and_valid_text_detects_sibling(self):
+        path = self.area / 'nested-tool-result.jsonl'
+        stamp = datetime.now(timezone.utc).isoformat()
+        cases = [[42], [{'type': 'text'}], [{'type': 'unknown', 'path': '../' + self.wt.name}],
+                 [{'type': 'image', 'source': {'data': 'synthetic'}}]]
+        manifest = {'schema_version': 1, 'coverage': 'complete', 'sources': [{'provider': 'claude', 'files': [str(path)], 'authorization': 'synthetic', 'coverage': 'complete'}]}
+        for content in cases:
+            row = {'type': 'user', 'timestamp': stamp, 'cwd': str(self.consumer), 'message': {'content': [{'type': 'tool_result', 'tool_use_id': 'fixture', 'content': content}]}}
+            path.write_text(json.dumps(row) + '\n')
+            result, report = self.audit(manifest)
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertEqual(report['coverage'], 'unavailable')
+            self.assertEqual(report['worktrees'][1]['bucket'], 'hold-activity-unavailable')
+            self.assertFalse(report['worktrees'][1]['deletion_authorized'])
+        row['message']['content'][0]['content'] = [{'type': 'text', 'text': str(self.wt / 'README.md')}]
+        path.write_text(json.dumps(row) + '\n')
+        result, report = self.audit(manifest)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(report['worktrees'][1]['bucket'], 'verify-recent-chat')
+        self.assertFalse(report['worktrees'][1]['deletion_authorized'])

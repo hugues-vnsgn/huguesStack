@@ -87,7 +87,9 @@ root. Valid complete sources with no recent evidence report that limited result.
 Supported inputs are Claude JSONL user/assistant/system/summary/history records
 and Codex JSONL session/turn/response records including JSON-encoded function
 arguments. Claude content blocks are text, tool_use, tool_result, thinking or
-redacted_thinking, with required content fields. Codex messages require a known
+redacted_thinking, with required content fields. Tool-result content is a string
+or a list of text leaves with only `type` and string `text` fields; nested,
+malformed or opaque result blocks hold coverage. Codex messages require a known
 role and a content list of input_text/output_text blocks with
 their required fields. Missing, malformed or unknown blocks hold.
 Nested progress envelopes and unknown block/tool types hold
