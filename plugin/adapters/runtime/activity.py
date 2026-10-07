@@ -306,9 +306,16 @@ def mentions_worktree(value, worktree, decode_arguments=True):
         canonical = str(Path(alias).resolve())
         if str(worktree).startswith(canonical + '/'):
             variants.add(alias + str(worktree)[len(canonical):])
-    home = Path.home()
-    if worktree.is_relative_to(home):
-        variants.add('~/' + worktree.relative_to(home).as_posix())
+    home = Path.home().resolve()
+    canonical = worktree.resolve()
+    for ancestor in (canonical, *canonical.parents):
+        try:
+            if ancestor == home or ancestor.samefile(home):
+                relative = canonical.relative_to(ancestor)
+                variants.add('~' if relative == Path('.') else '~/' + relative.as_posix())
+                break
+        except FileNotFoundError:
+            continue
     patterns = [(re.compile('(' + re.escape(path) + r')(?![\w-])', re.IGNORECASE), path)
                 for path in variants]
     for text in text_strings(value, decode_arguments):

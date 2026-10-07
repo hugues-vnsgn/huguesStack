@@ -18,7 +18,7 @@ sys.dont_write_bytecode = True
 RUNTIME_SHA256 = {
     "__init__.py": "277b071e8e40f0aabb4007e0ae389824708b2bdd5259075623998749da582807",
     "json_input.py": "d162867227d23f2c56b0e391977450ddfb81e1311394646947325581651c5423",
-    "activity.py": "df300f99c24e27ae5ec13cd5833bfb163adf1598197b38176086fc26d15fc87f",
+    "activity.py": "5803f97bcc6270bf6d5b5139a68add48a5bb386e05d2d16bed3044a0a223da93",
     "payload.py": "d269053a556d4aa5c7ff9f9b7b327079e24a815ce75a0412c371b148ad1fb9ac"
 }
 
