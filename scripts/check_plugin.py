@@ -133,7 +133,15 @@ for path in sorted(found):
             fail(f'{path.relative_to(root)}: invalid or duplicate frontmatter field')
             continue
         key, value = pair.groups()
-        if value.startswith('"'):
+        if key == 'paths':
+            try:
+                value = json.loads(value)
+                if not isinstance(value, list) or not value or not all(isinstance(p, str) and p for p in value):
+                    raise ValueError('expected nonempty glob list')
+            except ValueError:
+                fail(f'{path.relative_to(root)}: invalid paths glob list')
+                continue
+        elif value.startswith('"'):
             try:
                 value = json.loads(value)
             except ValueError:
@@ -182,7 +190,9 @@ if receipt_path.exists():
     expected_target = '../benchmark-checklist/SKILL.md'
     expected_sha256 = '5aac99e7ce0bb1b37e2579acf4fe88c32a1456d9d46afd4a57cfe1df9092e89c'
     expected_pin = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
-    if not isinstance(deferred, list) or len(deferred) != 1:
+    if deferred == [] and (root / 'plugin/skills/benchmark-checklist/SKILL.md').is_file():
+        pass  # The approved restoration ships the dependency; no exception remains.
+    elif not isinstance(deferred, list) or len(deferred) != 1:
         fail('WP2 deferred link: expected exactly one bounded receipt')
     else:
         row = deferred[0]
@@ -214,6 +224,21 @@ if receipt_path.exists():
             else:
                 deferred_links.add((expected_source, expected_target))
 
+# A source snapshot is not authored host metadata. Validate its actual immutable
+# bytes and effective loaders before exempting upstream formatting from the
+# authored-document parser. No filename-only vendor exemption is allowed.
+core_validated = False
+if (root / 'plugin/core').exists() or (root / 'plugin/core-bindings.json').exists():
+    try:
+        from check_core import check
+        check(root)
+        core_validated = True
+    except (ValueError, OSError, KeyError, TypeError) as exc:
+        fail('core parity: ' + str(exc))
+    if not core_validated:
+        print('\n'.join(errors), file=sys.stderr)
+        sys.exit(1)
+
 # This small link checker covers authored inline and full/collapsed references.
 def prose(text):
     text = re.sub(r'^(`{3,}|~{3,}).*?^\1[^\n]*$', '', text, flags=re.M | re.S)
@@ -229,6 +254,8 @@ def headings(path):
 for path in sorted(root.rglob('*.md')):
     relative = path.relative_to(root)
     if '.git' in relative.parts or relative.parts[:2] == ('docs', 'planning'):
+        continue
+    if core_validated and relative.parts[:2] == ('plugin', 'core'):
         continue
     text = prose(path.read_text(encoding='utf-8'))
     definitions = dict(re.findall(r'^\s*\[([^\]]+)\]:\s*(\S+)', text, re.M))
@@ -249,6 +276,10 @@ for path in sorted(root.rglob('*.md')):
                 fail(f'{relative}: unsupported link {value}')
             continue
         decoded = unquote(parsed.path)
+        if (core_validated and str(relative) == 'plugin/skills/why/references/synthesizer-prompt.md'
+                and value == 'url' and path.read_bytes() ==
+                (root / 'plugin/core/pstack/skills/why/references/synthesizer-prompt.md').read_bytes()):
+            continue  # Exact pinned citation-template placeholder, not a dependency.
         if decoded.startswith('/') or '\\' in decoded:
             fail(f'{relative}: absolute local link {value}')
             continue

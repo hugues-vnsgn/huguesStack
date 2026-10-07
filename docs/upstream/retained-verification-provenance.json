@@ -11,15 +11,12 @@
       "blob_sha": "ca6f24c963001d9d518db2936dfe3d12f29b4e94",
       "sha256": "eeb868e2dfebee528d730a67d7b17498fac4bb85dec2e38bc5c5176aca4d5d2f",
       "mode": "100644",
-      "destination_sha256": "d74a13a94d7cd67b2affc49a344e5a89b3655f9bf9605e19c81dfd4cc4cad824",
+      "destination_sha256": "f338d7f32d18cf78c3fcc5cb55ea242d132c29405e2b6d629584bd2304f523c4",
       "retained_contracts": [
-        "Explicit request or obvious cheap local-test gate; impractical-seam skip.",
-        "Small focused behavioral regression; observed intended RED before implementation, same GREEN after.",
-        "Preserve assertions, deterministic flaky signal, focused diff, nearby validation and honest fallback evidence."
+        "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Changed planned verbatim disposition to adapted for explicit Swift Testing/XCTest, Kotlin/JUnit and KMP per-target seams.",
-        "Added direct-read host path, consumer authority, target/assertion-report discipline and durable evidence pointers."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
@@ -29,17 +26,12 @@
       "blob_sha": "1713b283d477530be64e925ede2bdbe5ce2d6e31",
       "sha256": "5f02db9101ccf26c20254718f0fcd5c2c7ac5d4292b0e0923d0944ac47237aff",
       "mode": "100644",
-      "destination_sha256": "18ab09b0525d35421dec4e5f8b941094e8272a06aa17021fbf056263c81e9805",
+      "destination_sha256": "c9f28967513a34e032a65cf20f8c06904d86d5b0454dd491ddba2fde0a3cacb8",
       "retained_contracts": [
-        "Unexpected downstream breakage beyond caller search and diff.",
-        "Pinned dependency source, real citations, confirmed and cleared risks.",
-        "One falsifiable safety fact proved by real production code or marked unproven; proof ladder and pre-merge repro.",
-        "Big/wide change uses actual arena dependency, merged findings reverified."
+        "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Replaced web-specific runtime examples with mobile exports, lifecycle and shared/native boundaries.",
-        "Added actual how/why/arena links and host adapter; no model diversity or unavailable dependency success is inferred.",
-        "Runs, publication, optional owner unslop and screen judgment follow current authority and available tools."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
@@ -49,19 +41,12 @@
       "blob_sha": "a2680b91fead45a0b4963d8c367a854956bea59d",
       "sha256": "515c0eaa054b3f6be1b1fb06f2c2f173c80fddb58bbcac57576f89c479bc68e8",
       "mode": "100644",
-      "destination_sha256": "db3d98e99b2b45b9e205bf1be5185d3b9605dc9954789bdd291e4cfcaf7d071f",
+      "destination_sha256": "122ff09ae83859a5978d7d322082207ee7e4336215dada298be9fbbb551ac4bd",
       "retained_contracts": [
-        "Source readers return citations and recipes; only coordinator drives live serially.",
-        "Existing recipe launch model; doctor and UI recovery after failed/surprising drives; one drift-doctor retry.",
-        "Evidence survives cleanup; clean failed residue; explicit unreachable prerequisite and attempted route.",
-        "Bounded own-directory documentation/harness edits; product gaps reported; harness fixes re-driven.",
-        "clean/changed/blocked outcomes; all scoped checkpoints and targets covered; final teardown after re-proofs."
+        "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Feature-map generation and whole-app traversal are owner-deferred. Audit covers every existing bounded journey checkpoint and target, not every application feature.",
-        "Source wave is one reader per existing checkpoint/recipe group, not per feature-map file; missing delegation is blocked.",
-        "Preserve repository canonical host layout and existing mobile Launch model rather than Cursor-specific path.",
-        "Changed outcome can be proven prepared local corrections when publication is unauthorized; at most one PR only within current explicit authority."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     },
     {
@@ -71,17 +56,12 @@
       "blob_sha": "c09f486e32935a154dd98daa13aa8187856600fe",
       "sha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904",
       "mode": "100644",
-      "destination_sha256": "2eaea4e1286c81b31d3dea8794a0ec574e42efe8ca7b32a4ff4bfd5544b51305",
+      "destination_sha256": "018f0f7e0c060f417e50f28ceb92c3edf5629aec001944363eca450f5b6679c2",
       "retained_contracts": [
-        "Recurring mistake classes backed by two occurrences.",
-        "Architecture before types before lint before behavioral tests; docs last.",
-        "Prove enforcement fails on a real past mistake; same local command and CI parity.",
-        "Rule/enforcement table and correction feedback loop; reason, expiry and human approval for exceptions."
+        "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Changed planned verbatim disposition to adapted so standalone invocation obeys consumer edit/execution, commit, CI and human-exception authority.",
-        "Added Swift/Kotlin/KMP enforcement choices, direct-read host path and durable evidence.",
-        "No CI installation, global policy changes or automatically fabricated exception approval; report missing CI parity."
+        "Native entrypoint loads host and mobile-scoped adapters before the pinned workflow; review policy comes from the consumer project."
       ]
     }
   ]

@@ -15,7 +15,9 @@ class PackageChecks(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix='huguesstack-check-')
         self.addCleanup(self.temp.cleanup)
         self.repo = Path(self.temp.name) / 'package'
-        shutil.copytree(ROOT, self.repo, ignore=shutil.ignore_patterns('.git', '__pycache__', 'planning'))
+        from release_snapshot import release_root
+        shutil.copytree(release_root(), self.repo, ignore=shutil.ignore_patterns('.git', '__pycache__', 'planning'))
+        shutil.copytree(ROOT / 'scripts', self.repo / 'scripts', dirs_exist_ok=True)
         self.mode_body = (self.repo / 'plugin/skills/hugues-mode/SKILL.md').read_text().split('---\n', 2)[2]
 
     def run_check(self):

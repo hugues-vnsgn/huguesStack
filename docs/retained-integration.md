@@ -1,3 +1,5 @@
+> Historical 0.1.0 implementation record. Its rewritten workflows and deferrals are superseded on the unreleased restoration branch. Read the [development guide](DEVELOPER-GUIDE.md) for current source contracts and evidence limits.
+
 # Retained tools and RC2 integration
 
 RC2 combined the eight owner-approved retained tools with the existing mobile

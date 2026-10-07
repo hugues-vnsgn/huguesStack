@@ -17,6 +17,7 @@
     "./skills"
   ],
   "agents": [
-    "./agents/hugues-agent.md"
+    "./agents/hugues-agent.md",
+    "./agents/hugues-comment-sicko.md"
   ]
 }

@@ -1,3 +1,5 @@
+> Historical 0.1.0 implementation record. Its rewritten workflows and deferrals are superseded on the unreleased restoration branch. Read the [development guide](DEVELOPER-GUIDE.md) for current source contracts and evidence limits.
+
 # Retained design workflows
 
 `architect` and `arena` retain pstack 0.15.9's design exploration workflow at

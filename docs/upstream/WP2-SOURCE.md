@@ -1,3 +1,5 @@
+> Historical 0.1.0 implementation record. Its rewritten workflows and deferrals are superseded on the unreleased restoration branch. Read the [development guide](../DEVELOPER-GUIDE.md) for current source contracts and evidence limits.
+
 # WP2 source record
 
 WP2 reads pstack 0.15.9 from `cursor/plugins` at commit `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`. Its extracted 161 pstack files matched the pinned Git blob SHA-1 values before adaptation. See [the pinned source](https://github.com/cursor/plugins/tree/e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a/pstack).

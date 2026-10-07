@@ -12,7 +12,8 @@ import subprocess
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
+from release_snapshot import release_root
+ROOT = release_root()
 PIN = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
 MODE = Path('plugin/skills/hugues-mode')
 PLAYBOOKS = {

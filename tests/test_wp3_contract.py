@@ -10,7 +10,8 @@ import subprocess
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
+from release_snapshot import release_root
+ROOT = release_root()
 GENERATOR = Path('plugin/skills/create-verification-skill/SKILL.md')
 
 

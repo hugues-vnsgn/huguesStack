@@ -202,7 +202,8 @@ def decision(row, allow_pending):
     require(allow_pending or row['disposition'] != 'pending', 'untriaged responsibility')
     require(isinstance(row['reason'], str) and row['reason'].strip(), 'missing triage reason')
     require(row['implementation_state'] in STATES, 'invalid implementation state')
-    require(row['release_target'] in {'0.1.0', '0.2', 'not planned', 'pending'}, 'invalid release target')
+    require(row['release_target'] in {'0.1.0', '0.2', 'not planned', 'pending',
+                                    'unreleased-core-restoration'}, 'invalid release target')
     require(allow_pending or (row['implementation_state'] != 'pending' and row['release_target'] != 'pending'),
             'incomplete triage decision')
     require(isinstance(row['destinations'], list) and all(isinstance(p, str) and p for p in row['destinations']), 'invalid destinations')
@@ -312,7 +313,8 @@ def check_retained_provenance(ledger, source, root):
             parts = PurePosixPath(name).parts
             require(len(parts) >= 4 and parts[1] == 'skills' and parts[2] in RETAINED_SKILLS,
                     'retained receipt source is outside retained families')
-            require(destination.startswith(f'plugin/skills/{parts[2]}/'),
+            require(destination.startswith(f'plugin/skills/{parts[2]}/')
+                    or destination == 'plugin/core/' + name,
                     'retained receipt destination is outside its family')
             require(name not in seen_sources and destination not in seen_destinations,
                     'duplicate retained receipt source or destination')
@@ -357,6 +359,9 @@ def check_retained_provenance(ledger, source, root):
                 if path.is_file():
                     package_file(path)
                     shipped.add(path.relative_to(root).as_posix())
+    # Core references use their exact pinned destinations and are byte-checked
+    # above; effective loaders remain covered by the installed-family inventory.
+    shipped.update(name for name in seen_destinations if name.startswith('plugin/core/'))
     require(shipped == seen_destinations,
             'retained receipt coverage missing for shipped leaf/reference files')
     for row in ledger['items']:

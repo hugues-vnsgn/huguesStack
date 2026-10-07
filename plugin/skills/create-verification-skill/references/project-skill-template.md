@@ -1,3 +1,5 @@
+> Retained bounded-mobile extension template. Use only for an explicitly requested one-journey diagnostic. The default generator loads the pinned feature-map example from plugin/core and seeds the top 3–5 features. This template cannot satisfy generation or whole-map maintenance by itself.
+
 # Project verification skill template
 
 Use this structure when writing a consumer-local skill. Replace angle-bracket prompts with facts from the repository; for an unavailable check, write its exact prerequisite and status instead of a guessed command. An incomplete recipe remains authored or blocked. This template is guidance, not an observed run.

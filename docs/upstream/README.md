@@ -1,3 +1,7 @@
+## Unreleased core restoration
+
+The approved pin remains pstack 0.15.9. All 161 source files are preserved byte-for-byte in `plugin/core/pstack`, including Git executable modes. Active entrypoints load all 50 top-level skills, both upstream agents and all 23 core playbooks plus four mobile routes. All three former omissions are registered definitions; transcript, bot/webhook and configuration execution retain their permission boundaries. Benny is a separate nested service bundle. See [restoration contracts](../CORE-RESTORATION.md). Run `python3 scripts/check_core.py` as well as the checks below. Historical delta counts remain unchanged; current ledger dispositions describe the restoration, rather than the released 0.1.0 subset. A later version upgrade is a separate review.
+
 # Upstream sync
 
 WP5 pins [cursor/plugins pstack 0.15.9](https://github.com/cursor/plugins/tree/e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a/pstack)
@@ -21,21 +25,23 @@ Each row distinguishes its decision (`port verbatim`, `port with adaptation`,
 `present` means the named file exists in this repository; it does not claim
 observed host or app behavior. Planned destinations may not exist yet.
 `external` means reference an installed skill, subject to availability.
-Deferred and omitted responsibilities remain visible with reasons. In
-particular, benchmark wiring, feature maps, automatic workflows and Layer 2
-helpers are deferred; mobile native/test/UI proof requirements stay intact.
+Previous deferral decisions remain visible as historical fields. The current
+restoration activates benchmark wiring, feature-map contracts and top-level
+automatic workflow definitions; their runtime prerequisites and authority remain
+separate gates. Layer 2 service execution remains outside this restoration.
 
-## Retained 0.1.0 tools
+## Historical retained 0.1.0 tools
 
 The owner approved eight retained families on 6 October 2026. All eight are now
 authored and static-tested: `how`, `why`, `architect`, `arena`, `tdd`,
 `blast-radius`, `maintain-verification-skill` and `correct`. Their source and
 destination fingerprints remain in the research, design and verification receipts
 linked from [retained integration](../retained-integration.md). The current ledger
-marks their 25 files present. Only `swarm`, `show-me-your-work` and
-`setup-huguesstack` are newly approved deferrals to 0.2. The pin, historical
-snapshots and private owner originals remain unchanged. Static accounting proves
-no native host execution of the eight workflows.
+marked their 25 files present. At that release, `swarm`, `show-me-your-work` and
+`setup-huguesstack` remained deferred to 0.2. The subsequent approved core
+restoration registers those definitions too. The pin, historical snapshots and
+private owner originals remain unchanged. Static accounting proves no native
+host execution of the eight workflows.
 
 ## Reproduce offline
 
@@ -142,4 +148,4 @@ remain byte-for-byte upstream copies, with attribution in the receipts instead
 of altered frontmatter. The checker binds all WP2 receipts and the present WP3
 generator's source fingerprints, adaptation disposition and ledger destinations
 to the complete inventory. It verifies bytes at every present verbatim ledger destination.
-This sync package adds no skills or mobile app code.
+The sync tool itself adds no skills or mobile app code.

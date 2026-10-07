@@ -1,0 +1,18 @@
+---
+name: technical-writing
+description: "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
+source: pstack/skills/technical-writing/SKILL.md
+disable-model-invocation: true
+---
+
+# technical-writing
+
+Before work, read in full and in this order:
+
+1. [Host adapter](../../adapters/host.md).
+2. [Mobile adapter](../../adapters/mobile.md).
+3. [Pinned technical-writing core](../../core/pstack/skills/technical-writing/SKILL.md).
+
+Execute that core contract, applying only the named adapter translations and
+the consumer project’s explicit policy. Read its phase-required references in full. Do not
+substitute this loader for the workflow. Report blocked gates and actual proof.

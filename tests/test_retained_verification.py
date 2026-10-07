@@ -11,7 +11,8 @@ import subprocess
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
+from release_snapshot import release_root
+ROOT = release_root()
 NAMES = ('tdd', 'blast-radius', 'maintain-verification-skill', 'correct')
 RECEIPT = Path('docs/upstream/retained-verification-provenance.json')
 spec = importlib.util.spec_from_file_location('retained_upstream', ROOT / 'scripts/upstream-diff.py')

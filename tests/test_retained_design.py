@@ -5,7 +5,8 @@ from pathlib import Path
 import re
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
+from release_snapshot import release_root
+ROOT = release_root()
 ARCHITECT = 'plugin/skills/architect/SKILL.md'
 ARENA = 'plugin/skills/arena/SKILL.md'
 RECEIPT = 'docs/upstream/retained-design-provenance.json'

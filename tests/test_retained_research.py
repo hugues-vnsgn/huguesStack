@@ -13,7 +13,8 @@ import sys
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parents[1]
+from release_snapshot import release_root
+ROOT = release_root()
 RECEIPT = Path('docs/upstream/retained-research-provenance.json')
 
 

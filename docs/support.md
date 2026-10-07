@@ -1,3 +1,5 @@
+> These receipts describe the released 0.1.0 bytes and their recorded revisions. They do not validate the restored development core; see [current validation](CORE-RESTORATION.md).
+
 # Support evidence
 
 Status snapshot: **6 October 2026**, package version **`0.1.0`**.
