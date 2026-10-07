@@ -96,6 +96,10 @@ def translate(root, binding, text):
     operands = [re.compile(r'(?<![\w./:-])(?:origin/main:)?' + re.escape(source) + r'(?![\w./-])')
                 for source in known | {helper}]
 
+    joined = re.sub(r'\\\r?\n', '', text)
+    if joined != text or '<<' in text:
+        raise ValueError('continued commands and heredocs are not supported in bundled plans')
+
     def fragment(value):
         try:
             words = shlex.split(value)
