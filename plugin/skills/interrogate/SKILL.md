@@ -1,6 +1,6 @@
 ---
 name: interrogate
-description: "Pinned pstack 0.15.9 interrogate workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
 source: pstack/skills/interrogate/SKILL.md
 disable-model-invocation: true
 ---

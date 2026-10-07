@@ -1,6 +1,6 @@
 ---
 name: no-comments
-description: "Pinned pstack 0.15.9 no-comments workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints."
 source: pstack/skills/no-comments/SKILL.md
 disable-model-invocation: true
 ---

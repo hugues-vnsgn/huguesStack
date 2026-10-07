@@ -71,6 +71,6 @@ python3 scripts/check_whitespace.py
 
 Source checks reconstruct the pinned Git snapshot and verify all 161 names/modes/hashes. Development tests cover source, phases/cardinality/fallback, active wiring, bounded overrides and helpers. Frozen release tests cover historical contracts only. Passing static checks cannot attest to unrun host/mobile journeys.
 
-See [restoration scope](CORE-RESTORATION.md) and [historical support](support.md). All upstream responsibilities stay in the ledger, including inactive automate-me, make-bot-ui, typescript-best-practices and Benny. The original deadline remains 9 October GMT+7.
+See [restoration scope](CORE-RESTORATION.md) and [historical support](support.md). All upstream responsibilities stay in the ledger, including all 50 registered top-level skills, both native agent definitions and the separate Benny service source. Registration of automate-me or make-bot-ui grants no authority for personal transcript processing or bot/webhook execution. TypeScript guidance remains available alongside mobile adapters. The original deadline remains 9 October GMT+7.
 
 The native Comment Sicko wrapper loads its complete pinned rules for no-comments. KMP/CMP extensions compose the selected core action procedure and require implementation arena within step 3 when Feature has multiple valid shapes; design-only arena cannot satisfy that gate. Both wiring failures have phase-local mutation regressions.

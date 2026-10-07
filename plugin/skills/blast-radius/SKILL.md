@@ -1,6 +1,6 @@
 ---
 name: blast-radius
-description: "Pinned pstack 0.15.9 blast-radius workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Find what a change could break somewhere else before it ships, beyond the diff, and prove the one fact it's safe because of by running real code instead of writing it up. Use for 'blast radius of X', 'what could this break', or reviewing a small diff you don't trust."
 source: pstack/skills/blast-radius/SKILL.md
 disable-model-invocation: true
 ---

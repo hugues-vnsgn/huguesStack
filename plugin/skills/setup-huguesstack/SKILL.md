@@ -1,6 +1,6 @@
 ---
 name: setup-huguesstack
-description: "Pinned pstack 0.15.9 setup-pstack workflow with explicit Claude Code, Codex and mobile adapters."
+description: Configure which models pstack uses per role and at what reasoning budget. Detects your available models and writes an always-applied rule that overrides the skill defaults. Use for /setup-pstack, "configure pstack models", "pstack budget", or changing pstack's model choices.
 source: pstack/skills/setup-pstack/SKILL.md
 ---
 

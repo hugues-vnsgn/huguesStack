@@ -143,8 +143,9 @@ class EffectiveWiring(unittest.TestCase):
         path.write_text(json.dumps(value))
 
     def test_actual_development_package(self):
-        self.assertEqual(core.check(self.root), {'core_files': 161, 'active_skills': 47,
-                                                'core_playbooks': 23, 'mobile_playbooks': 4})
+        self.assertEqual(core.check(self.root), {'core_files': 161, 'active_skills': 50,
+                                                'core_playbooks': 23, 'mobile_playbooks': 4,
+                                                'core_agents': 2, 'worker_roles': 15})
 
     def test_core_source_and_inventory_drift(self):
         path = self.root / 'plugin/core/pstack/skills/interrogate/SKILL.md'
@@ -179,11 +180,70 @@ class EffectiveWiring(unittest.TestCase):
         (self.root / 'plugin/skills/swarm/SKILL.md').unlink()
         self.rejected('registered skill inventory')
 
-    def test_inactive_skill_cannot_be_registered(self):
-        path = self.root / 'plugin/skills/automate-me/SKILL.md'
+    def test_unpinned_skill_cannot_be_registered(self):
+        path = self.root / 'plugin/skills/unpinned/SKILL.md'
         path.parent.mkdir()
         path.write_text('unapproved capability')
         self.rejected('registered skill inventory')
+
+    def test_full_parity_cannot_reintroduce_exclusions(self):
+        self.mutate_json('plugin/core-bindings.json',
+                         lambda d: d.update(excluded_skills=['automate-me']))
+        self.rejected('binding pin, scope')
+
+    def test_recall_cannot_lose_its_automate_me_handoff(self):
+        self.mutate_json('plugin/core-bindings.json', lambda d: d['skills'].pop('automate-me'))
+        self.rejected('active skill set')
+
+    def test_bot_definition_cannot_be_omitted_on_execution_authority_grounds(self):
+        (self.root / 'plugin/skills/make-bot-ui/SKILL.md').unlink()
+        self.rejected('registered skill inventory')
+
+    def test_typescript_cannot_lose_path_guidance(self):
+        path = self.root / 'plugin/skills/typescript-best-practices/SKILL.md'
+        path.write_text(path.read_text().replace('paths: ["**/*.ts", "**/*.tsx"]', 'paths: ["**/*.swift"]'))
+        self.rejected('loader/worker drift')
+
+    def test_original_skill_trigger_description_is_required(self):
+        path = self.root / 'plugin/skills/automate-me/SKILL.md'
+        path.write_text(path.read_text().replace('turn/capture my preferences', 'unrelated command'))
+        self.rejected('loader/worker drift')
+
+    def test_worker_role_cannot_be_dropped(self):
+        self.mutate_json('plugin/core-bindings.json', lambda d: d['worker_roles'].pop('reflect-synthesizer'))
+        self.rejected('worker role wiring')
+
+    def test_generic_worker_cannot_be_redirected_to_mode_persona(self):
+        self.mutate_json('plugin/core-bindings.json', lambda d:
+            d['worker_roles']['how-explorer'].update(dispatch='hugues-agent'))
+        self.rejected('worker role wiring')
+
+    def test_worker_role_cannot_receive_another_role_prompt(self):
+        self.mutate_json('plugin/core-bindings.json', lambda d:
+            d['worker_roles']['why-synthesizer'].update(prompt='pstack/skills/why/references/investigator-prompt.md'))
+        self.rejected('worker role wiring')
+
+    def test_specialized_role_cannot_escape_its_source(self):
+        self.mutate_json('plugin/core-bindings.json', lambda d:
+            d['worker_roles']['reflect-tooling'].update(prompt='../../outside.md'))
+        self.rejected('worker role wiring')
+
+    def test_cross_skill_and_worker_dispatch_resolves_actual_sources(self):
+        binding = json.loads((self.root / 'plugin/core-bindings.json').read_text())
+        recall = self.root / 'plugin/core' / core.resolve_skill(binding, 'recall')['source']
+        self.assertIn('Turning habits into a durable skill is `automate-me`', recall.read_text())
+        automate = core.resolve_skill(binding, 'automate-me')
+        self.assertTrue((self.root / automate['entrypoint']).is_file())
+        for name in ['poteto-mode', 'setup-pstack', 'typescript-best-practices', 'unslop']:
+            self.assertTrue((self.root / core.resolve_skill(binding, name)['entrypoint']).is_file())
+        for role, template in [('how-explainer', 'explainer-prompt.md'),
+                               ('why-investigator', 'investigator-prompt.md'),
+                               ('reflect-synthesizer', 'synthesizer.md')]:
+            owner, worker = core.resolve_worker(binding, role)
+            self.assertEqual(worker['dispatch'], 'generalPurpose')
+            self.assertTrue(worker['prompt'].endswith(template))
+            self.assertTrue((self.root / 'plugin/core' / worker['prompt']).is_file())
+            self.assertTrue((self.root / owner['entrypoint']).is_file())
 
     def test_loader_cannot_bypass_core_or_adapter_order(self):
         path = self.root / 'plugin/skills/interrogate/SKILL.md'

@@ -133,7 +133,15 @@ for path in sorted(found):
             fail(f'{path.relative_to(root)}: invalid or duplicate frontmatter field')
             continue
         key, value = pair.groups()
-        if value.startswith('"'):
+        if key == 'paths':
+            try:
+                value = json.loads(value)
+                if not isinstance(value, list) or not value or not all(isinstance(p, str) and p for p in value):
+                    raise ValueError('expected nonempty glob list')
+            except ValueError:
+                fail(f'{path.relative_to(root)}: invalid paths glob list')
+                continue
+        elif value.startswith('"'):
             try:
                 value = json.loads(value)
             except ValueError:

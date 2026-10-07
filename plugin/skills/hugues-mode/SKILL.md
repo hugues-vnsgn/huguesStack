@@ -1,6 +1,6 @@
 ---
 name: hugues-mode
-description: "Pinned pstack 0.15.9 poteto-mode workflow with explicit Claude Code, Codex and mobile adapters."
+description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.
 source: pstack/skills/poteto-mode/SKILL.md
 disable-model-invocation: true
 ---

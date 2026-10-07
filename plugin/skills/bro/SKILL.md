@@ -1,6 +1,6 @@
 ---
 name: bro
-description: "Pinned pstack 0.15.9 bro workflow with explicit Claude Code, Codex and mobile adapters."
+description: Restate the last message in plain human language, with no jargon.
 source: pstack/skills/bro/SKILL.md
 disable-model-invocation: true
 ---

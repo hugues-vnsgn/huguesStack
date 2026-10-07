@@ -12,7 +12,7 @@ from render_core import outputs
 ROOT = Path(__file__).resolve().parents[1]
 PIN = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
 TREE = '54dfdd87fd191ddda7fce01dd354d220adaeeacc'
-EXCLUDED = {'automate-me', 'make-bot-ui', 'typescript-best-practices'}
+EXCLUDED = set()
 ALIASES = {'poteto-mode': 'hugues-mode', 'setup-pstack': 'setup-huguesstack'}
 AGENTS = {
     'poteto-agent': {'source': 'pstack/agents/poteto-agent.md',
@@ -20,6 +20,38 @@ AGENTS = {
     'Comment Sicko': {'source': 'pstack/agents/comment-sicko.md',
                       'entrypoint': 'plugin/agents/hugues-comment-sicko.md'},
 }
+WORKER_ROLES = {
+    'how-explorer': ('how', 'generalPurpose', 'references/explorer-prompt.md'),
+    'how-explainer': ('how', 'generalPurpose', 'references/explainer-prompt.md'),
+    'why-investigator': ('why', 'generalPurpose', 'references/investigator-prompt.md'),
+    'why-synthesizer': ('why', 'generalPurpose', 'references/synthesizer-prompt.md'),
+    'reflect-judgment': ('reflect', 'generalPurpose', 'references/judgment-reviewer.md'),
+    'reflect-tooling': ('reflect', 'generalPurpose', 'references/tooling-reviewer.md'),
+    'reflect-divergent': ('reflect', 'generalPurpose', 'references/divergent-reviewer.md'),
+    'reflect-synthesizer': ('reflect', 'generalPurpose', 'references/synthesizer.md'),
+    'interrogate-reviewer': ('interrogate', 'generalPurpose', 'references/reviewer-prompt.md'),
+    'architect-runner': ('architect', 'core', 'references/runner-prompt.md'),
+    'arena-runner': ('arena', 'core', 'SKILL.md'),
+    'arena-cross-judge': ('arena', 'core', 'SKILL.md'),
+    'swarm-worker': ('swarm', 'generalPurpose', 'SKILL.md'),
+    'automate-me-history-miner': ('automate-me', 'core', 'SKILL.md'),
+    'show-me-your-work-auditor': ('show-me-your-work', 'core', 'SKILL.md'),
+}
+
+
+def worker_roles():
+    return {name: {'skill': skill, 'dispatch': dispatch,
+                   'prompt': f'pstack/skills/{skill}/{prompt}'}
+            for name, (skill, dispatch, prompt) in WORKER_ROLES.items()}
+
+
+def resolve_skill(binding, name):
+    return binding['skills'][ALIASES.get(name, name)]
+
+
+def resolve_worker(binding, role):
+    row = binding['worker_roles'][role]
+    return resolve_skill(binding, row['skill']), row
 ADAPTERS = ['plugin/adapters/host.md', 'plugin/adapters/mobile.md',
             'plugin/policies/astra-pr-review.md']
 OVERRIDES = ['native-host-tools', 'project-local-model-rule', 'authority-boundaries',
@@ -111,7 +143,11 @@ def adapter_errors(texts):
                      'mark the seat blocked', 'Do not execute it without installation authority',
                      'ready-PR and stack/base mechanics', 'Supply absolute paths',
                      '`Comment Sicko` to `hugues-comment-sicko`',
-                     'Do not substitute a generic worker without those rules'],
+                     'Do not substitute a generic worker without those rules',
+                     'All 50 top-level skills are registered',
+                     'preserve `generalPurpose`', 'Do not replace these workers with `hugues-agent`',
+                     'Registration grants no permission to process personal transcripts',
+                     'TypeScript paths remain `**/*.ts` and `**/*.tsx`'],
         ADAPTERS[1]: ['Intent before domain', 'Large, cross-cutting, unmatched',
                      'First select\nthe core action playbook',
                      'they never replace core todos or implementation gates',
@@ -177,7 +213,7 @@ def check(root=ROOT):
                 and len(body) == row['size'], 'pinned core bytes/mode differ: ' + row['path'])
     binding = upstream.load(root / 'plugin/core-bindings.json')
     require(set(binding) == {'schema_version', 'revision', 'upstream_version', 'core_directory',
-                            'excluded_skills', 'skills', 'playbooks', 'agents', 'adapters'}, 'unknown binding fields')
+                            'excluded_skills', 'skills', 'playbooks', 'agents', 'worker_roles', 'adapters'}, 'unknown binding fields')
     require(binding['schema_version'] == 1 and binding['revision'] == PIN and
             binding['upstream_version'] == '0.15.9' and binding['core_directory'] == 'plugin/core'
             and binding['excluded_skills'] == sorted(EXCLUDED) and binding['adapters'] == ADAPTERS,
@@ -195,11 +231,27 @@ def check(root=ROOT):
             name = Path(row['path']).stem
             expected_playbooks[name] = {'source': row['path'],
                 'entrypoint': f'plugin/skills/hugues-mode/playbooks/{name}.md'}
-    require(binding['skills'] == expected_skills and len(expected_skills) == 47,
+    require(binding['skills'] == expected_skills and len(expected_skills) == 50,
             'active skill set or source wiring differs')
     require(binding['playbooks'] == expected_playbooks and len(expected_playbooks) == 23,
             'active playbook set or source wiring differs')
     require(binding['agents'] == AGENTS, 'specialized agent binding differs')
+    expected_agents = {row['path'] for row in snapshot['files']
+                       if Path(row['path']).parts[:2] == ('pstack', 'agents')}
+    require({row['source'] for row in binding['agents'].values()} == expected_agents,
+            'upstream agent inventory differs')
+    require(binding['worker_roles'] == worker_roles(), 'core worker role wiring differs')
+    for role in WORKER_ROLES:
+        skill, worker = resolve_worker(binding, role)
+        owner = core / skill['source']
+        prompt = core / worker['prompt']
+        require(prompt.is_file() and prompt.resolve().is_relative_to(owner.parent.resolve()),
+                'worker prompt missing/escaping: ' + role)
+        reference = prompt.relative_to(owner.parent).as_posix()
+        require(reference == 'SKILL.md' or reference in owner.read_text(),
+                'worker prompt not required by core: ' + role)
+        require(worker['dispatch'] != 'generalPurpose' or 'generalPurpose' in owner.read_text(),
+                'worker dispatch differs from core: ' + role)
     manifest = upstream.load(root / 'plugin/.claude-plugin/plugin.json')
     require(manifest['skills'] == ['./skills'] and manifest['agents'] ==
             ['./agents/hugues-agent.md', './agents/hugues-comment-sicko.md'],
@@ -248,7 +300,8 @@ def check(root=ROOT):
             resolved = path.parent / target.split('#')[0]
             require(resolved.resolve().is_relative_to(core.resolve()) and resolved.exists(),
                     f'core dependency missing/escaping: {path.relative_to(core)} -> {target}')
-    return {'core_files': 161, 'active_skills': 47, 'core_playbooks': 23, 'mobile_playbooks': 4}
+    return {'core_files': 161, 'active_skills': 50, 'core_playbooks': 23, 'mobile_playbooks': 4,
+            'core_agents': len(AGENTS), 'worker_roles': len(WORKER_ROLES)}
 
 
 if __name__ == '__main__':

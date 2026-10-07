@@ -1,6 +1,6 @@
 ---
 name: recall
-description: "Pinned pstack 0.15.9 recall workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Reconstruct your recent working context from your own chat history, live state, and the shared record (user reports, prior fixes, incidents), then hand back a tight current-state brief. Use for 'recall my work on X', 'catch me up', 'what have I been working on', 'where did I leave off', before starting or resuming work."
 source: pstack/skills/recall/SKILL.md
 disable-model-invocation: true
 ---

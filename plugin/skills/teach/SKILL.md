@@ -1,6 +1,6 @@
 ---
 name: teach
-description: "Pinned pstack 0.15.9 teach workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Explain a body of work plainly so a person actually understands it. Runs the `how` and `why` skills and weaves what they find into one clear explanation. Use for 'teach me this', 'help me really understand X', 'explain this change or subsystem to me'."
 source: pstack/skills/teach/SKILL.md
 disable-model-invocation: true
 ---

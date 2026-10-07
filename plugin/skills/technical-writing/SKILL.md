@@ -1,6 +1,6 @@
 ---
 name: technical-writing
-description: "Pinned pstack 0.15.9 technical-writing workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Layered technical-writing standard: Diátaxis structure, Google developer style sentences, STE instruction rules, Global English syntax. Use for /technical-writing or when writing or reviewing docs, RFCs, readmes, PR descriptions, or commit messages."
 source: pstack/skills/technical-writing/SKILL.md
 disable-model-invocation: true
 ---

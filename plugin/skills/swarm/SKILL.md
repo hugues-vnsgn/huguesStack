@@ -1,6 +1,6 @@
 ---
 name: swarm
-description: "Pinned pstack 0.15.9 swarm workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Fan out N parallel workers, drain them, and return one report. Use for /swarm, 'swarm this', or parallel coverage, races, gauntlets, and exploration."
 source: pstack/skills/swarm/SKILL.md
 disable-model-invocation: true
 ---

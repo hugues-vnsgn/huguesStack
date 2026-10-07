@@ -12,7 +12,7 @@ All 161 files are in `plugin/core/pstack`. The actual Git-object snapshot binds 
 | Mobile adapter | Intent, target proof and isolation | Semantic boundaries and extension routes/references |
 | Astra PR profile | Two fresh Astra High seats for PR-bound work | Named policy preserving generic interrogate defaults |
 
-The active registry contains 47 of 50 top-level skills: all 24 principles and 23 functional skills. All 23 core playbooks plus four mobile extensions are wired. Automate-me, make-bot-ui, typescript-best-practices and Benny remain inactive. Automate-me is personal workflow automation, not a TypeScript service. Full 50-skill product parity is **not claimed**.
+The active registry contains all 50 top-level skills: 24 principles and 26 functional skills. All 23 core playbooks plus four mobile extensions and both upstream agent definitions are wired. Fifteen specialized prompt/inline worker roles preserve their owning core dispatch; general-purpose research/review workers do not inherit the mode persona. Recall resolves automate-me through its registered loader. Loader descriptions, explicit invocation flags and TypeScript path metadata retain upstream triggers. Registration does not authorize personal transcript processing, bot/webhook execution, external transmission, persistent setup or service installation. Benny remains a separate nested service bundle. Source and active definition parity do not establish runtime parity.
 
 Restored contracts include role defaults/configured panel length, three-family generic review, mandatory feature arena, figure-it-out fallback, swarms with coverage/dropouts, append-only trails, validated setup, writing/no-comments/benchmark dependencies, feature maps/whole-map maintenance, ready-PR stack mechanics and operational helpers. Missing capabilities block phases without deleting gates.
 
@@ -26,7 +26,7 @@ Bun bootstrap can install dependencies and is never run by package checks. Use a
 
 ## Local validation and remaining prerequisites
 
-The complete Python suite passes (238 tests), including preserved release contracts and development mutations/helpers. Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
+The complete Python suite passes (248 tests), including preserved release contracts, complete-inventory and cross-skill/worker regressions, and development mutations/helpers. Source, active wiring, upstream ledger, package links and strict Claude plugin/marketplace validation pass. Decision-log and Node plan-validator behavior are exercised on local scratch artifacts.
 
 The dependency-free Bun checks pass: 11 Store tests and 29 watch-PR policy/GitHub-adapter tests. Three orch CLI cases are explicitly filtered from the Store run; the full helper suite remains blocked by missing commander 14.0.0, and TypeScript checking by missing bun-types. The initial full Bun attempt reached the upstream frozen-lock installer and failed; it created only an empty node_modules/.cache directory, with no dependency package files. That task-owned empty cache was removed. Subsequent checks exclude that bootstrap path. No dependency installation is claimed, and no missing prerequisite is replaced with a stub.
 

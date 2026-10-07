@@ -825,15 +825,25 @@
       "blob_sha": "cd3636e9a53c7c782cf15254204dccfc854086b5",
       "size": 7164,
       "sha256": "1510979b0b71b54284427a19c09918f8b1fdfc168f9b7f9e30098793a5ec88ef",
-      "disposition": "ignore with reason",
-      "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
-      "release_target": "not planned",
-      "destinations": [],
-      "implementation_state": "not planned",
+      "disposition": "port with adaptation",
+      "reason": "Complete pinned core definitions are restored. Public loaders preserve trigger contracts and reference full source; registration does not authorize personal transcript processing, bot integration, external transmission, installation or persistent setup.",
+      "release_target": "unreleased-core-restoration",
+      "destinations": [
+        "plugin/core/pstack/skills/automate-me/SKILL.md",
+        "plugin/skills/automate-me/SKILL.md"
+      ],
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Defer",
         "reason": "Opt-in personalization requires authorized history and a tested host-specific configuration path; not an RC dependency."
+      },
+      "previous_definition_decision": {
+        "disposition": "ignore with reason",
+        "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
+        "release_target": "not planned",
+        "destinations": [],
+        "implementation_state": "not planned"
       }
     },
     {
@@ -1176,15 +1186,25 @@
       "blob_sha": "285df7569758a70e62e9f3596a1f829a5b6ba80e",
       "size": 4649,
       "sha256": "3624c8ef16cf2e48deb2a4049e72c6962a9431c8d6c6af90e7bd7ea0375224ec",
-      "disposition": "ignore with reason",
-      "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
-      "release_target": "not planned",
-      "destinations": [],
-      "implementation_state": "not planned",
+      "disposition": "port with adaptation",
+      "reason": "Complete pinned core definitions are restored. Public loaders preserve trigger contracts and reference full source; registration does not authorize personal transcript processing, bot integration, external transmission, installation or persistent setup.",
+      "release_target": "unreleased-core-restoration",
+      "destinations": [
+        "plugin/core/pstack/skills/make-bot-ui/SKILL.md",
+        "plugin/skills/make-bot-ui/SKILL.md"
+      ],
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Defer",
         "reason": "External bot/webhook UI requires service access, explicit messaging authority and independent security/runtime proof."
+      },
+      "previous_definition_decision": {
+        "disposition": "ignore with reason",
+        "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
+        "release_target": "not planned",
+        "destinations": [],
+        "implementation_state": "not planned"
       }
     },
     {
@@ -1397,7 +1417,7 @@
       "category": "playbook",
       "earlier_proposal": {
         "recommendation": "Adapt",
-        "reason": "Data shape → bounded implementation → feature map/native proof; candidate core. Preserve responsibility through host/native replacements; claimed behavior needs direct proof."
+        "reason": "Data shape \u2192 bounded implementation \u2192 feature map/native proof; candidate core. Preserve responsibility through host/native replacements; claimed behavior needs direct proof."
       }
     },
     {
@@ -2861,15 +2881,25 @@
       "blob_sha": "2c0279d9a5f800192605e47b55cae4e75a17ec27",
       "size": 2684,
       "sha256": "28f9e61710e205f6f3c5476f333483cff0e988f6a5b639e2faad536344b40c5e",
-      "disposition": "ignore with reason",
-      "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
-      "release_target": "not planned",
-      "destinations": [],
-      "implementation_state": "not planned",
+      "disposition": "port with adaptation",
+      "reason": "Complete pinned core definitions are restored. Public loaders preserve trigger contracts and reference full source; registration does not authorize personal transcript processing, bot integration, external transmission, installation or persistent setup.",
+      "release_target": "unreleased-core-restoration",
+      "destinations": [
+        "plugin/core/pstack/skills/typescript-best-practices/SKILL.md",
+        "plugin/skills/typescript-best-practices/SKILL.md"
+      ],
+      "implementation_state": "present",
       "category": "top_level_skill",
       "earlier_proposal": {
         "recommendation": "Adapt",
         "reason": "Translate applicable type discipline to Swift/Kotlin/bridges; keep TypeScript guidance conditional on actual helper or consumer TypeScript."
+      },
+      "previous_definition_decision": {
+        "disposition": "ignore with reason",
+        "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
+        "release_target": "not planned",
+        "destinations": [],
+        "implementation_state": "not planned"
       }
     },
     {
@@ -2878,11 +2908,13 @@
       "blob_sha": "c21d876b71b9c7afa897f2f6d982ead07db8f104",
       "size": 9214,
       "sha256": "faa1362055374452efccac1b629677c61acfb0bcc6c4e3311836b5715638ee18",
-      "disposition": "ignore with reason",
-      "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
-      "release_target": "not planned",
-      "destinations": [],
-      "implementation_state": "not planned",
+      "disposition": "port with adaptation",
+      "reason": "Complete pinned core definitions are restored. Public loaders preserve trigger contracts and reference full source; registration does not authorize personal transcript processing, bot integration, external transmission, installation or persistent setup.",
+      "release_target": "unreleased-core-restoration",
+      "destinations": [
+        "plugin/core/pstack/skills/typescript-best-practices/references/patterns.md"
+      ],
+      "implementation_state": "present",
       "category": "reference",
       "earlier_proposal": {
         "recommendation": "Adapt",
@@ -2891,6 +2923,13 @@
       "previous_decision": {
         "disposition": "ignore with reason",
         "reason": "This service/TypeScript responsibility is outside the selected mobile release scope; no duplicate or automatic integration is shipped.",
+        "release_target": "not planned",
+        "destinations": [],
+        "implementation_state": "not planned"
+      },
+      "previous_definition_decision": {
+        "disposition": "ignore with reason",
+        "reason": "Preserved only in the immutable source inventory; not registered or activated by the approved core restoration. automate-me is personal workflow automation, not a TypeScript service.",
         "release_target": "not planned",
         "destinations": [],
         "implementation_state": "not planned"

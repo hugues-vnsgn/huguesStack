@@ -1,6 +1,6 @@
 ---
 name: benchmark-checklist
-description: "Pinned pstack 0.15.9 benchmark-checklist workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Vet a perf measurement (limiter, tuning, limits, errors, repeatability, relevance, and whether the work happened) before you report or act on it. Use when you run a benchmark or report a speedup or regression you measured."
 source: pstack/skills/benchmark-checklist/SKILL.md
 disable-model-invocation: true
 ---

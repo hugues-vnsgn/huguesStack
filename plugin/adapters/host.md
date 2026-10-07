@@ -23,22 +23,61 @@ selected upstream playbook, read its registered public bridge and its pinned
 source in full. Copy the source's ordered todos verbatim. Keep every skipped todo
 with its reason; do not replace the procedure with the bridge's summary.
 
-The three excluded leaf skills are automate-me, make-bot-ui and
-typescript-best-practices. Their source is preserved for inventory completeness,
-but they are not registered or authorized by this restoration. Benny's service
-bundle is also inactive. Do not invoke inactive source as an installed capability.
+All 50 top-level skills are registered, including automate-me, make-bot-ui and
+typescript-best-practices. Resolve recall's habit-to-skill handoff through the
+registered automate-me loader. Registration grants no permission to process personal transcripts,
+author a personal mode, create bot/webhook integrations, transmit data, request
+credentials, expose a server or install/configure Tailscale. Execute those steps
+only under the user's current explicit scope and the pinned confirmation rules.
+Unavailable tools block their dependent phase without changing its contract.
+Benny is a separate nested service bundle and is not a top-level skill or agent.
+Its source is preserved; service execution still requires its own authority.
+
+Translate Cursor skill placement to the consumer's established `.agents/skills`
+or `.claude/skills` convention. Preserve existing personal-mode categories and
+user edits; global placement or configuration needs explicit scope. Use only the
+active workspace's supplied transcript paths, never unrelated project history.
+When no authorized transcript source is available, report the mining phase blocked;
+do not fabricate preferences or claim personal-mode execution from a routing check.
+TypeScript paths remain `**/*.ts` and `**/*.tsx`; apply its registered guidance
+when reading or editing those files and load principle-type-system-discipline first.
+The original path metadata is preserved in the loader. If a host ignores it,
+select the skill explicitly by the actual file type. Mobile specialization adds
+applicable guidance through the mobile adapter without deleting other languages.
 
 ## Native workers and role models
 
 Translate Cursor Task to the current host's native agent tool. Each new work
 round gets a fresh worker. Preserve the core's narrow resume exceptions and the
 scoped-worker direct implementation exception; do not recursively delegate the
-same assignment. Claude Code uses the registered hugues-agent when available.
-Codex prepends that wrapper to the fresh worker's prompt. Supply absolute paths
+same assignment. A core `poteto-agent` call uses the registered hugues-agent in
+Claude Code; Codex prepends that wrapper to the fresh worker's prompt. Supply absolute paths
 to the public mode, plugin skills directory, pinned core and all three adapters,
 the exact base/head, writable scope, success predicate and evidence destination.
 Read the mode and applicable principle leaves in full before work. If the host
 cannot preserve required context isolation or parallelism, mark that phase blocked.
+
+For routed research/review calls, preserve `generalPurpose` and the workflow's
+own prompt, readonly/agent-mode requirement, model, cardinality and handoff order.
+Do not replace these workers with `hugues-agent`.
+Cursor's `generalPurpose` maps to Claude Code's native `general-purpose` agent;
+Codex uses a fresh native worker with that role's prompt. Use the actual native
+tool's exposed agent type rather than sending an unsupported Cursor spelling.
+The `worker_roles` index in
+core-bindings.json maps how explorers/explainers, why investigators/synthesizer,
+reflect's three lenses/synthesizer and interrogate reviewers to their complete
+pinned prompt files. Read each file verbatim and fill only its named placeholders;
+load every supporting reference required by the owning skill. For simple how,
+omit explorer findings exactly as the core directs. Why investigators retain
+category-specific playbooks and epistemics; reflect's synthesizer receives all
+three full outputs. Use the core inline brief for arena, swarm, history mining
+and trail audit. Architect supplies its runner prompt through arena. `core` in
+the index means dispatch according to the owning core, not an invented agent type.
+The index identifies roles and prompts; it does not replace their complete
+workflow definitions. General-purpose native workers receive absolute source,
+adapter and fixture paths, scope and success predicate, without a mode persona.
+Agent mode preserves available tool access; it never grants permission to write
+or query external sources. Missing authorized tools remain explicit coverage gaps.
 
 The no-comments Task role `Comment Sicko` uses the registered
 `hugues-comment-sicko` agent in Claude Code. Codex prepends that specialized

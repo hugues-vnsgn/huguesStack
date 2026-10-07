@@ -8,13 +8,19 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def skill_loader(name, row, root=ROOT):
     source = (root / 'plugin/core' / row['source']).read_text()
+    header = source.split('---', 2)[1]
+    description = re.search(r'^description: (.*?)(?=^[a-z-]+:|\Z)', header, re.M | re.S)[1].strip()
+    if description.startswith('>-'):
+        description = json.dumps(' '.join(line.strip() for line in description.splitlines()[1:]))
+    paths = re.search(r'^paths: (.+)$', header, re.M)
+    path_field = '\npaths: ' + paths[1] if paths else ''
     flag = '\ndisable-model-invocation: true' if re.search(
         r'^disable-model-invocation: true$', source, re.M) else ''
     leaf = row['source'].split('/')[2]
     return f'''---
 name: {name}
-description: "Pinned pstack 0.15.9 {leaf} workflow with explicit Claude Code, Codex and mobile adapters."
-source: {row['source']}{flag}
+description: {description}
+source: {row['source']}{flag}{path_field}
 ---
 
 # {name}

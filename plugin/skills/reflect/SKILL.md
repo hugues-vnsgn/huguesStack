@@ -1,6 +1,6 @@
 ---
 name: reflect
-description: "Pinned pstack 0.15.9 reflect workflow with explicit Claude Code, Codex and mobile adapters."
+description: Spawn three parallel review subagents over the active transcript, surface learnings, and route each to a concrete edit on an existing skill. Use when the user says reflect.
 source: pstack/skills/reflect/SKILL.md
 disable-model-invocation: true
 ---

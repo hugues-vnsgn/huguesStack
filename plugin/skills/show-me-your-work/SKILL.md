@@ -1,6 +1,6 @@
 ---
 name: show-me-your-work
-description: "Pinned pstack 0.15.9 show-me-your-work workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Keep a reviewable decision trail for long-running or unattended work: a TSV log with one row per decision (what, why, evidence, result). Local by default; commit it when a reviewer needs the trail to trust the result. Use for /show-me-your-work, autonomous or multi-phase runs, or work a human reviews after stepping away."
 source: pstack/skills/show-me-your-work/SKILL.md
 disable-model-invocation: true
 ---

@@ -1,6 +1,6 @@
 ---
 name: maintain-verification-skill
-description: "Pinned pstack 0.15.9 maintain-verification-skill workflow with explicit Claude Code, Codex and mobile adapters."
+description: "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\"."
 source: pstack/skills/maintain-verification-skill/SKILL.md
 disable-model-invocation: true
 ---

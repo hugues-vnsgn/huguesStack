@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: "Pinned pstack 0.15.9 unslop workflow with explicit Claude Code, Codex and mobile adapters."
+description: Cut AI tells from any writing. Must always apply.
 source: pstack/skills/unslop/SKILL.md
 disable-model-invocation: true
 ---
