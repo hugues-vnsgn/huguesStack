@@ -39,6 +39,21 @@ substitute this loader for the workflow. Report blocked gates and actual proof.
 
 
 def playbook_loader(name, row):
+    mechanics = ''
+    if name in {'multi-phase-plan', 'autopilot-full', 'autopilot-stack'}:
+        mechanics = '''
+Apply the [installed planning commands](../../../adapters/host-tools.md) to
+bundled helper and workflow reread operands. Execute `plan-check` and
+`read-workflow` through the saved installed-payload binding; keep consumer-owned
+trunk reads on consumer Git. Fill then translate the plan before handing it back.
+'''
+    elif name == 'worktree-cleanup':
+        mechanics = '''
+For step 1 execute the [native activity audit](../../../adapters/host-tools.md)
+through `host_tools.py worktree-audit` with the saved binding, consumer repo and
+explicit authorized source manifest. Unavailable coverage holds candidates.
+The separate active/pinned-chat gate is required; the helper never deletes.
+'''
     return f'''# {name}
 
 Read [host adapter](../../../adapters/host.md),
@@ -48,7 +63,7 @@ Read [host adapter](../../../adapters/host.md),
 Copy its ordered todos verbatim before execution. Keep skips with their reasons.
 The pinned source owns the steps; the adapters translate host mechanics and add
 applicable mobile proof. Missing capability blocks the gate, not its existence.
-'''
+{mechanics}'''
 
 
 WORKER = '''---

@@ -10,7 +10,7 @@ Use a fresh Claude Code session in the intended consumer repository:
 claude --plugin-dir /absolute/path/to/huguesStack/plugin
 ```
 
-Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack. Its version remains 0.1.0 pending a separate release, so verify the actual checkout path/revision rather than a cache/version label. Development cold-load behavior remains unobserved.
+Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack. Its version remains 0.1.0 pending a separate release, so verify the actual checkout path/revision rather than a cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
 
 For Codex, use an already-authorized native loader when available. Otherwise read `/absolute/path/to/huguesStack/plugin/skills/hugues-mode/SKILL.md` and all required links in full. Label direct reads separately from native discovery. These instructions authorize no host configuration changes or installations.
 
@@ -55,6 +55,8 @@ Long/autonomous work keeps the pinned append-only TSV trail, ownership start row
 
 Helpers live in the immutable core. Inspect local runtime/cache/authority first. Bun bootstrap may install packages; do not run it without installation scope. Missing cloud, loop, forge or model capability blocks dependent work. Shipping does not gain merge authority from green tests.
 
+For planning and cleanup, use the [installed host commands](../plugin/adapters/host-tools.md). Save the approved payload binding when authoring a program. Fill and translate bundled plan operands, validate with `plan-check`, and reread workflows through that binding at every required tick. Payload/adapter drift blocks the program; consumer-owned files still come from consumer trunk. The native worktree audit takes an explicit authorized source manifest and local PR snapshot. Incomplete activity coverage holds candidates. The separate active/pinned-chat gate remains required before any prune decision; the helper never deletes or discovers private transcript directories.
+
 Opening a PR retains ready-PR and stack/base mechanics. Prepare local commits/body when authorized; push/publication/merge/release need separate scope. Do not replace a blocked ready gate with a draft fallback.
 
 ## Change and validate the plugin
@@ -69,7 +71,7 @@ python3 scripts/upstream-diff.py check
 python3 scripts/check_whitespace.py
 ```
 
-Source checks reconstruct the pinned Git snapshot and verify all 161 names/modes/hashes. Development tests cover source, phases/cardinality/fallback, active wiring, bounded overrides and helpers. Frozen release tests cover historical contracts only. Passing static checks cannot attest to unrun host/mobile journeys.
+Source checks reconstruct the pinned Git snapshot and verify all 161 names/modes/hashes plus the shipped runtime manifest and reviewed adapter assets. Development tests cover source, phases/cardinality/fallback, active wiring, bounded overrides and helpers. Installed adapter tests use external disposable consumer directories and synthetic native transcripts. Frozen release tests cover historical contracts only; [test accounting](TEST-COVERAGE.md) separates these roots. Passing static checks cannot attest to unrun host/mobile journeys.
 
 See [restoration scope](CORE-RESTORATION.md) and [historical support](support.md). All upstream responsibilities stay in the ledger, including all 50 registered top-level skills, both native agent definitions and the separate Benny service source. Registration of automate-me or make-bot-ui grants no authority for personal transcript processing or bot/webhook execution. TypeScript guidance remains available alongside mobile adapters. The original deadline remains 9 October GMT+7.
 

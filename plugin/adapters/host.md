@@ -17,6 +17,16 @@ Resolve source-relative references from that source file's directory. Resolve
 public loader links from the loader's directory. Do not resolve either against
 the consumer's working directory.
 
+For executable operands in planning and cleanup, use the installed
+[host tools](host-tools.md) and [entrypoint](host_tools.py). In multi-phase-plan,
+replace the consumer-relative Node command with `plan-check`. Translate bundled
+`git show origin/main:pstack/...` reads in that plan and autopilot-full/stack to
+`read-workflow` using the program's saved installed-payload binding at every tick.
+Consumer-owned trunk reads stay on consumer Git. In worktree-cleanup step 1 use
+`worktree-audit` with explicit authorized native source inputs. Unknown activity
+coverage holds candidates; the separate active/pinned-chat gate remains required.
+These are mechanical operand translations, not new execution or deletion scope.
+
 The mode applies the pinned router, including figure-it-out for large,
 cross-cutting or unmatched work and Orchestrate for standing programs. For a
 selected upstream playbook, read its registered public bridge and its pinned

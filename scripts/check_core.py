@@ -54,6 +54,9 @@ def resolve_worker(binding, role):
     return resolve_skill(binding, row['skill']), row
 ADAPTERS = ['plugin/adapters/host.md', 'plugin/adapters/mobile.md',
             'plugin/policies/astra-pr-review.md']
+RUNTIME_ASSETS = ['plugin/adapters/host-tools.md', 'plugin/adapters/host_tools.py',
+                  'plugin/adapters/runtime/__init__.py', 'plugin/adapters/runtime/payload.py',
+                  'plugin/adapters/runtime/payload.json', 'plugin/adapters/runtime/activity.py']
 OVERRIDES = ['native-host-tools', 'project-local-model-rule', 'authority-boundaries',
              'mobile-routing-and-proof', 'fresh-regression-worker',
              'arena-context-isolation', 'bounded-mobile-opt-in', 'astra-high-pr-panel']
@@ -305,6 +308,15 @@ def check(root=ROOT):
             'unreviewed override inventory')
     require(receipt['adapter_sha256'] == {p: hashlib.sha256((root / p).read_bytes()).hexdigest()
                                         for p in ADAPTERS}, 'adapter bytes differ from reviewed receipt')
+    require(receipt['runtime_sha256'] == {p: hashlib.sha256((root / p).read_bytes()).hexdigest()
+                                        for p in RUNTIME_ASSETS}, 'runtime adapter bytes differ from reviewed receipt')
+    expected_payload = {'schema_version': 1, 'revision': PIN,
+                        'files': [{k: row[k] for k in ('path', 'sha256', 'mode')}
+                                  for row in snapshot['files']]}
+    payload_path = root / 'plugin/adapters/runtime/payload.json'
+    require(json.loads(payload_path.read_text()) == expected_payload, 'runtime payload manifest differs')
+    require("MANIFEST_SHA256 = '" + hashlib.sha256(payload_path.read_bytes()).hexdigest() + "'"
+            in (root / 'plugin/adapters/runtime/payload.py').read_text(), 'runtime payload anchor differs')
     # Core-relative dependency closure for explicit local Markdown links. External
     # tool names are capabilities, never counted as bundled or observed support.
     for path in (core / 'pstack/skills').rglob('*.md'):
