@@ -79,6 +79,12 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
             self.assertEqual(read.returncode, 0, read.stderr)
             self.assertEqual(read.stdout, (self.plugin / 'core' / self.source).read_text())
             self.assertEqual(self.translate(result.stdout).stdout, result.stdout)
+        result = self.translate('cat ' + self.source + '\n\ngit show origin/main:' + self.source)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.count(' read-workflow '), 2)
+        result = self.translate("The operator's plan reads `" + self.source + "`.\nOther prose remains.")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(' read-workflow ', result.stdout)
         path = self.plugin / 'core' / self.source
         path.write_text(path.read_text() + '\ndrift\n')
         read = subprocess.run(args, cwd=self.consumer, capture_output=True, text=True)
@@ -104,7 +110,10 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
                      *['cat ' + quote + '\n' + self.source + '\n' + quote for quote in [chr(39), chr(34)]],
                      'echo "$(\ncat ' + self.source + '\n)"',
                      'echo `\ncat ' + self.source + '\n`',
-                     'true &&\ncat ' + self.source]:
+                     'true &&\ncat ' + self.source,
+                     'cat "\n\n' + self.source + '\n\n"',
+                     'Narrative\ncat ' + self.source,
+                     'Narrative\n\ncat ' + self.source]:
             with self.subTest(text=text):
                 result = self.translate(text)
                 self.assertEqual(result.returncode, 2, result.stdout)

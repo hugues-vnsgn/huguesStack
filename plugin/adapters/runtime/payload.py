@@ -131,7 +131,10 @@ def translate(root, binding, text):
         return value
 
     result = []
+    standalone = 0
+    nonempty = 0
     for line in text.splitlines(keepends=True):
+        nonempty += bool(line.strip())
         if '`' in line:
             inline = r'(?<!`)`([^`\n]+)`(?!`)'
             surrounding = re.sub(inline, '', line).strip()
@@ -141,5 +144,8 @@ def translate(root, binding, text):
         else:
             content = line.strip()
             translated = fragment(content)
+            standalone += translated != content
             result.append(line if translated == content else line.replace(content, translated, 1))
+    if standalone and standalone != nonempty:
+        raise ValueError('standalone command input must contain only supported standalone commands; use inline references in Markdown plans')
     return ''.join(result)

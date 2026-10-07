@@ -105,7 +105,7 @@ class InstalledAdapters(InstalledFixture, unittest.TestCase):
         self.assertIn('git show origin/main:PLAN.md', result.stdout)
         self.assertNotIn('git show origin/main:pstack/', result.stdout)
         self.assertNotIn('node pstack/', result.stdout)
-        command = next(line for line in result.stdout.splitlines() if 'read-workflow --binding' in line)
+        command = next(line for line in result.stdout.splitlines() if 'read-workflow --binding' in line).strip('`')
         reread = subprocess.run(shlex.split(command), cwd=self.consumer, capture_output=True, text=True)
         self.assertEqual(reread.returncode, 0, reread.stderr)
         self.assertEqual(reread.stdout, (self.plugin / 'core/pstack/skills/swarm/SKILL.md').read_text())

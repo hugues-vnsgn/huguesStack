@@ -36,8 +36,13 @@ python3 "<plugin>/adapters/host_tools.py" translate-plan --binding "<program>/pl
 python3 "<plugin>/adapters/host_tools.py" plan-check --binding "<program>/plugin-binding.json" "<program>/plan.md"
 ```
 
-Translation recognizes complete inline-code contents and standalone command
-lines: a known pinned Markdown path, `cat <known path>`,
+Translation accepts two bounded input forms: Markdown plans with complete
+single-backtick inline references, or an input consisting only of supported
+standalone commands (blank lines are allowed). Mixing standalone bundled commands
+with other text holds, even across blank lines; put those references in inline
+code when writing a Markdown plan. Single-backtick spans are explicitly Markdown
+references, not shell command substitutions. Supported fragments are a known
+pinned Markdown path, `cat <known path>`,
 `git show origin/main:<known path>`, and the exact bundled Node plan-check command
 with one plan operand. Markdown references and reads become quoted, binding-guarded
 `read-workflow` commands; no direct installed-file read is emitted. Other Git

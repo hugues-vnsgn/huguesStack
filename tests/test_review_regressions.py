@@ -64,7 +64,7 @@ class PayloadReview(InstalledFixture, unittest.TestCase):
     def test_plain_plan_paths_resolve_to_installed_sources(self):
         source = 'pstack/skills/swarm/SKILL.md'
         plan = self.consumer / 'plan.md'
-        plan.write_text(f'Read `{source}`.\ngit show origin/main:{source}\nConsumer git show origin/main:PLAN.md\n')
+        plan.write_text(f'Read `{source}`.\n`git show origin/main:{source}`\nConsumer git show origin/main:PLAN.md\n')
         result = self.bound('translate-plan', plan)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertNotIn(str(self.plugin / 'core' / source), result.stdout)
