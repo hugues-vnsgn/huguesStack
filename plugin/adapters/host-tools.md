@@ -28,26 +28,50 @@ reread bundled files through the same saved binding:
 python3 "<plugin>/adapters/host_tools.py" read-workflow --binding "<program>/plugin-binding.json" pstack/skills/swarm/SKILL.md
 ```
 
-Replace each filled `git show origin/main:pstack/...` operand in multi-phase-plan,
-autopilot-full and autopilot-stack with that command for its exact pinned path.
-This translates the bundled workflow source from consumer trunk to the approved
-installed payload. Keep consumer-owned `git show origin/main:<control skill path>`
-and plan/source reads on consumer trunk. Fill skeleton placeholders first, then
-translate a plan to a different output file for inspection:
+Translate the filled bundled references in multi-phase-plan, autopilot-full and
+autopilot-stack before handing the plan to another worker:
 
 ```sh
 python3 "<plugin>/adapters/host_tools.py" translate-plan --binding "<program>/plugin-binding.json" "<program>/plan-draft.md" > "<program>/plan.md"
 python3 "<plugin>/adapters/host_tools.py" plan-check --binding "<program>/plugin-binding.json" "<program>/plan.md"
 ```
 
-The latter replaces `node pstack/skills/poteto-mode/scripts/check-plan.mjs <plan.md>`.
-It runs the unchanged installed Node helper with an absolute consumer plan path
-and preserves its exit code/diagnostics. Translation resolves executable bundled operands and plain pinned paths
-to the installed payload; plain paths are references, and executable rereads must
-still use `read-workflow` with the saved binding; inspect the resulting plan and use those commands during each
-tick. Any binding, hash, mode or required-file drift blocks rereading/validation.
-Reconcile changed payloads with the operator; never silently rebind a live program.
-These commands do not arm loops or start implementation.
+Translation recognizes complete inline-code contents and standalone command
+lines: a known pinned Markdown path, `cat <known path>`,
+`git show origin/main:<known path>`, and the exact bundled Node plan-check command
+with one plan operand. Markdown references and reads become quoted, binding-guarded
+`read-workflow` commands; no direct installed-file read is emitted. Other Git
+revisions, unknown consumer-owned `pstack/...` paths, and prefixed paths remain
+unchanged. Unsupported commands that contain a bundled operand block translation
+instead of being partially rewritten. This is not a shell interpreter.
+
+By choosing this translation, the author designates exact known pinned paths in
+those forms as bundled workflow references. Ownership cannot be inferred from
+arbitrary text. To read a consumer file with the same name, use an explicit
+consumer Git revision such as `git show HEAD:pstack/...`. Fill placeholders
+first. Inspect the translated plan; repeating translation preserves its commands.
+
+The unchanged installed Node helper validates the absolute consumer plan path
+and preserves its exit code and diagnostics. Any binding, hash, mode or
+required-file drift blocks rereading or validation. Reconcile changed payloads
+with the operator; never silently rebind a live program. These commands do not
+arm loops or start implementation.
+
+## Integrity trust boundary
+
+The trusted entrypoint is `adapters/host_tools.py`, including its approved runtime
+hash table. It verifies all four runtime source buffers before executing any,
+checks saved runtime/bootstrap binding data for bound commands, and executes those
+same buffers without reopening them. Package checks reject a runtime/hash-table
+mismatch. Python bytecode caches are not executed. The saved binding then checks
+the remaining installed payload before the requested operation.
+
+This requires a trusted entrypoint, Python interpreter/standard-library environment,
+and owner-approved binding. A maliciously rewritten entrypoint or trust table can
+lie; it cannot authenticate itself. Initial `bind` is the owner's approval point
+for the installed non-core files, not an external signature service. These checks
+detect drift; they do not promise protection against an adversary concurrently
+rewriting every workflow or external helper during later reads/execution.
 
 ## Audit explicit authorized native activity sources
 
@@ -108,7 +132,14 @@ labeled as validated records or unparsed path hints, never as deletion safety.
 Opaque records invalidate inherited relative context until a reviewed context
 resets it. Envelope/message metadata also uses bounded fields and types;
 unknown metadata, including unreviewed usage structures, holds. Other formats hold.
-The scan is conservative: exact worktree paths,
+The text matcher checks literal paths, current-user `~/` aliases, and up to
+three percent-decoding passes (including file URLs). Other-user home aliases and
+unresolved deeper encodings hold. Word characters and hyphens continue a filename;
+other punctuation, Markdown delimiters, shell separators and CJK punctuation
+can end a mention. This is a conservative text rule, not a universal path parser:
+ambiguous punctuation can produce extra recent-activity evidence. Case variants
+must identify the same filesystem object. Structured native operations still use
+their bounded schemas and directory contexts. The scan counts worktree paths,
 child paths and session working directories count as activity even in quoted
 messages. Encoded function arguments are decoded; relative path operations need
 session or tool working-directory context. Each operation retains its own context;
@@ -137,13 +168,21 @@ Record timestamps take priority; missing timestamps use file
 mtime conservatively and label that evidence. Recent means within four days.
 This is supported-format synthetic evidence, not attestation of every host version.
 
-Optional PR input is a local owner-supplied snapshot, for example
-`{"coverage":"complete","states":{"branch-name":"NONE"}}`. States are
-`OPEN`, `CLOSED`, `MERGED` or `NONE`; omitted/unknown PR or merge state holds. A
-snapshot's freshness and completeness must be checked separately before pruning.
-Missing, unreadable, invalid or incomplete PR metadata returns exit 2 even when
-activity coverage is complete; `metadata_coverage` and `pr_snapshot_error` explain
-that result. Unknown PR/merge state holds scratch candidates as well.
+The CLI accepts an omitted PR snapshot for diagnostics, but complete candidate
+metadata requires an owner-supplied snapshot, for example
+`{"coverage":"complete","states":{"branch-name":"NONE"}}`. Valid states are
+`OPEN`, `CLOSED`, `MERGED` and `NONE`. A detached candidate uses an exact absolute
+worktree key, such as `"worktree:/absolute/candidate":"NONE"`. Branch and worktree
+entries that disagree hold. The primary worktree is always retained and its PR
+metadata is not required for candidate completeness.
+
+Each candidate reports `metadata_coverage` and `metadata_errors`; the primary row
+reports `not-required`. Unknown PR/merge state or unavailable Git status holds the
+candidate, including scratch work. Global `metadata_coverage` aggregates candidates;
+`audit_status` is `hold` and the CLI exits 2 if activity or candidate metadata is
+unavailable. Complete inputs exit 0 but still grant no deletion permission.
+`pr_snapshot_error` separately explains a missing or invalid snapshot. Check the
+snapshot's freshness and completeness separately before any pruning decision.
 The report retains source paths and timestamps, never transcript bodies. Size
 and disk measurements remain the separate core `df`/local disk inspection steps.
 

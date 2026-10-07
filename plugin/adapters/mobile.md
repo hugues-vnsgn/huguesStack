@@ -68,6 +68,8 @@ whole-map maintenance cycle.
 Honor the consumer's existing `.claude/skills` or `.agents/skills` layout and
 disclose direct reads separately from native discovery. A user may explicitly
 request a bounded one-journey diagnostic. Label that as the bounded-mobile
-extension and report unvisited features. It cannot replace or satisfy the core
+extension and report unvisited features. Use the authored
+[bounded-mobile template](../skills/create-verification-skill/references/project-skill-template.md)
+only for that explicit opt-in. It cannot replace or satisfy the core
 generator/maintenance contract. Screenshots/logs remain local unless their
 transmission is explicitly authorized; apply the Jev/TypeSafe authority rules.

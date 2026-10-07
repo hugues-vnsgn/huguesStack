@@ -90,19 +90,44 @@ def command(root, binding, verb, operand):
 
 
 def translate(root, binding, text):
-    """Resolve bundled reads and plain operands; preserve consumer-owned paths."""
     import re
-    known = {row['path'] for row in verify(root)['files']}
-    helper = 'node pstack/skills/poteto-mode/scripts/check-plan.mjs '
-    text = text.replace(helper, shlex.join(['python3', str(root / 'adapters/host_tools.py'),
-                                          'plan-check', '--binding', str(binding)]) + ' ')
-    def replace(match):
-        source = match['source']
-        if source not in known:
-            raise ValueError('plan references unknown bundled path: ' + source)
-        if match['git']:
-            workflow(root, source)
-            return command(root, binding, 'read-workflow', source)
-        return str(checked_file(root, 'core/' + source))
-    return re.sub(r"(?P<git>git show origin/main:)?(?<![\w/])(?P<source>pstack/[\w./-]+\.[\w]+)",
-                  replace, text)
+    known = {row['path'] for row in verify(root)['files'] if row['path'].endswith('.md')}
+    helper = 'pstack/skills/poteto-mode/scripts/check-plan.mjs'
+
+    def fragment(value):
+        try:
+            words = shlex.split(value)
+        except ValueError:
+            if 'pstack/' in value:
+                raise ValueError('unresolved quoting in plan reference')
+            return value
+        if len(words) == 1 and words[0] in known:
+            return command(root, binding, 'read-workflow', words[0])
+        if len(words) == 3 and words[:2] == ['git', 'show']:
+            revision, separator, source = words[2].partition(':')
+            if separator and revision == 'origin/main' and source in known:
+                return command(root, binding, 'read-workflow', source)
+            return value
+        if len(words) == 2 and words[0] == 'cat' and words[1] in known:
+            return command(root, binding, 'read-workflow', words[1])
+        if len(words) == 3 and words[:2] == ['node', helper]:
+            return command(root, binding, 'plan-check', words[2])
+        if words and words[-1] in known and words == shlex.split(command(root, binding, 'read-workflow', words[-1])):
+            return value
+        if any(re.search(r'(?<![\w./:-])' + re.escape(source) + r'(?![\w./-])', value) for source in known):
+            raise ValueError('unsupported bundled command; use a standalone guarded read')
+        if any(word in known or word == helper or word.startswith('origin/main:pstack/')
+               and word[len('origin/main:'):] in known for word in words):
+            raise ValueError('unsupported bundled command; use a standalone guarded read')
+        return value
+
+    result = []
+    for line in text.splitlines(keepends=True):
+        if '`' in line:
+            result.append(re.sub(r'(?<!`)`([^`\n]+)`(?!`)',
+                                 lambda match: '`' + fragment(match[1]) + '`', line))
+        else:
+            content = line.strip()
+            translated = fragment(content)
+            result.append(line if translated == content else line.replace(content, translated, 1))
+    return ''.join(result)

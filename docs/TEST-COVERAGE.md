@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The suite has 336 independently collected unittest cases. Its previous 252-case
+The suite has 349 independently collected unittest cases. Its previous 252-case
 result and this result must not be described as wholly current native workflow
 coverage. Subtest scenarios are not added to the case total.
 
@@ -9,8 +9,8 @@ coverage. Subtest scenarios are not added to the case total.
 | Historical release contracts | 131 | Frozen SHA256-bound 0.1.0 archive; historical behavior only |
 | Current checker with historical fixtures | 27 | Current package checker over release-derived mutation fixtures |
 | Development contracts and helpers | 94 | Current checkout, provenance and source/wiring mutations; some compare released contracts |
-| Installed operational adapters and review regressions | 84 | Current plugin copied to an installed directory; disposable external consumers and synthetic transcript sources |
-| Total | 336 | Sum of the four distinct groups |
+| Installed operational adapters and review regressions | 97 | Current plugin copied to an installed directory; disposable external consumers and synthetic transcript sources |
+| Total | 349 | Sum of the four distinct groups |
 
 The historical modules are test_wp2_contract (45), test_wp3_contract (15),
 test_retained_design (7), test_retained_research (8), test_retained_verification
@@ -34,6 +34,11 @@ filesystem case identity, duplicate/deep JSON, unknown metadata exit status,
 complete plugin bindings, extra core files, permission modes, installed plain
 references and source-only execution despite poisoned runtime bytecode caches.
 
+test_rereview_regressions adds 13 cases for decorated/encoded/home text paths,
+rejection before any runtime execution, verified-buffer execution, consumer plan
+ownership and revision preservation, guarded inline and cat reads, the retained
+mobile-authored template, and per-candidate/detached metadata semantics.
+
 All native transcript fixtures are task-owned synthetic files. Permission errors
 are injected; denied private paths are never accessed. No real history is scanned
 and no worktree is deleted. These cases establish supported adapter behavior,
@@ -44,5 +49,5 @@ authorized, revision-bound proof.
 
 The prior separate Bun result at `8449416` is 52 tests (not 52 plus the earlier 40-test subset).
 Its strict TypeScript checking covered watch-pr. These unchanged-core checks were
-not rerun for this adapter-only fix. The offline helper tests use fake
+also rerun successfully at `37eb703`; final candidate receipts record subsequent runs. The offline helper tests use fake
 forge readers/local Git fixtures, so their result is not live forge evidence.

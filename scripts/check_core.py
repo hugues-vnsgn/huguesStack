@@ -1,5 +1,6 @@
 """Verify actual pinned bytes, active workflow wiring and bounded policy overrides."""
 import hashlib
+import ast
 import importlib.util
 import json
 from pathlib import Path
@@ -312,6 +313,13 @@ def check(root=ROOT):
                                         for p in [*ADAPTERS, PROJECT_POLICY]}, 'adapter bytes differ from reviewed receipt')
     require(receipt['runtime_sha256'] == {p: hashlib.sha256((root / p).read_bytes()).hexdigest()
                                         for p in RUNTIME_ASSETS}, 'runtime adapter bytes differ from reviewed receipt')
+    bootstrap = ast.parse((root / 'plugin/adapters/host_tools.py').read_text())
+    runtime_anchor = next(ast.literal_eval(node.value) for node in bootstrap.body
+                          if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name)
+                          and target.id == 'RUNTIME_SHA256' for target in node.targets))
+    require(runtime_anchor == {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                               for p in (root / 'plugin/adapters/runtime').glob('*.py')},
+            'trusted bootstrap runtime approval differs')
     expected_payload = {'schema_version': 1, 'revision': PIN,
                         'files': [{k: row[k] for k in ('path', 'sha256', 'mode')}
                                   for row in snapshot['files']]}

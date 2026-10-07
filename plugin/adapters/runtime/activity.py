@@ -7,8 +7,10 @@ import re
 import shlex
 import stat
 import subprocess
+from urllib.parse import unquote
 
 PROVIDERS = {'claude', 'codex'}
+PR_STATES = {'OPEN', 'CLOSED', 'MERGED', 'NONE'}
 PATH_KEYS = {'cwd', 'workdir', 'file_path', 'path', 'absolute_path', 'directory'}
 RECENT_SECONDS = 4 * 86400
 SIMPLE_COMMANDS = {'cat', 'ls', 'head', 'tail', 'wc', 'stat', 'rg', 'grep',
@@ -304,18 +306,33 @@ def mentions_worktree(value, worktree, decode_arguments=True):
         canonical = str(Path(alias).resolve())
         if str(worktree).startswith(canonical + '/'):
             variants.add(alias + str(worktree)[len(canonical):])
-    patterns = [re.compile('(' + re.escape(path) + r')(?=$|[/\s\"\'`,;:)\]}.?!<>])', re.IGNORECASE)
+    home = Path.home()
+    if worktree.is_relative_to(home):
+        variants.add('~/' + worktree.relative_to(home).as_posix())
+    patterns = [(re.compile('(' + re.escape(path) + r')(?![\w-])', re.IGNORECASE), path)
                 for path in variants]
     for text in text_strings(value, decode_arguments):
-        for pattern, path in zip(patterns, variants):
-            for match in pattern.finditer(text):
-                if match[1] == path:
-                    return True
-                try:
-                    if Path(match[1]).samefile(worktree):
+        representations = [text]
+        for _ in range(3):
+            decoded = unquote(representations[-1], errors='strict')
+            if decoded == representations[-1]:
+                break
+            representations.append(decoded)
+        if unquote(representations[-1], errors='strict') != representations[-1]:
+            raise ValueError('path encoding exceeds supported depth')
+        for representation in representations:
+            if re.search(r'~[^/\s]+/', representation):
+                raise ValueError('other-user home path cannot be resolved')
+            for pattern, path in patterns:
+                for match in pattern.finditer(representation):
+                    if match[1] == path:
                         return True
-                except FileNotFoundError:
-                    pass
+                    candidate = (home / match[1][2:] if match[1].startswith('~/') else Path(match[1]))
+                    try:
+                        if candidate.samefile(worktree):
+                            return True
+                    except FileNotFoundError:
+                        pass
     return False
 
 
@@ -690,7 +707,7 @@ def audit(repo, source_path, pr_path=None, base='refs/remotes/origin/main'):
             snapshot = load_json(pr_path.read_text())
             if (not isinstance(snapshot, dict) or set(snapshot) != {'coverage', 'states'}
                     or snapshot['coverage'] != 'complete' or not isinstance(snapshot['states'], dict)
-                    or any(not isinstance(state, str) or state not in {'OPEN', 'CLOSED', 'MERGED', 'NONE'}
+                    or any(not isinstance(state, str) or state not in PR_STATES
                            for state in snapshot['states'].values())):
                 raise ValueError('invalid or incomplete PR snapshot')
             prs = snapshot['states']
@@ -706,22 +723,26 @@ def audit(repo, source_path, pr_path=None, base='refs/remotes/origin/main'):
                  f'wip:{tracked}' if tracked else f'scratch:{len(entries)}')
         merge = git(wt, 'merge-base', '--is-ancestor', 'HEAD', base)
         merged = None if merge.returncode not in (0, 1) else merge.returncode == 0
-        pr = prs.get(branch, 'UNKNOWN')
-        if pr not in {'OPEN', 'CLOSED', 'MERGED', 'NONE'}:
-            pr = 'UNKNOWN'
+        known_states = {prs[key] for key in (branch, 'worktree:' + str(wt)) if key and key in prs}
+        pr = next(iter(known_states)) if len(known_states) == 1 else 'UNKNOWN'
+        metadata_errors = ([] if index == 0 else
+                           (['pr-state-unknown'] if pr == 'UNKNOWN' else []) +
+                           (['merge-state-unknown'] if merged is None else []) +
+                           (['git-status-unavailable'] if dirty == 'unavailable' else []))
         evidence = hits[str(wt)]
         recent = any(row['recent'] for row in evidence)
         rows.append({'worktree': str(wt), 'branch': branch, 'main_worktree': index == 0,
                      'dirty': dirty, 'merged_into_local_base': merged, 'pr': pr,
+                     'metadata_coverage': 'not-required' if index == 0 else 'unavailable' if metadata_errors else 'complete',
+                     'metadata_errors': metadata_errors,
                      'activity': 'recent' if recent else 'no-recent-evidence' if complete else 'unavailable',
                      'evidence': evidence, 'bucket': 'hold-main-worktree' if index == 0 else
                      classify(dirty, pr, merged, complete, recent),
                      'active_pinned_gate': 'required-separately', 'deletion_authorized': False})
-    metadata_complete = pr_error is None and all(
-        row['pr'] != 'UNKNOWN' and row['merged_into_local_base'] is not None
-        and row['dirty'] != 'unavailable' for row in rows)
+    metadata_complete = all(not row['metadata_errors'] for row in rows)
     return {'schema_version': 1, 'coverage': 'complete' if complete else 'unavailable',
             'metadata_coverage': 'complete' if metadata_complete else 'unavailable',
+            'audit_status': 'complete' if complete and metadata_complete else 'hold',
             'pr_snapshot_error': pr_error,
             'sources': reports, 'local_base': base, 'base_freshness': 'not-fetched',
             'network_used': False, 'deletion_performed': False, 'worktrees': rows}

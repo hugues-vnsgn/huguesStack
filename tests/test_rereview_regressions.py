@@ -1,5 +1,5 @@
-"""Executable Claude re-review cases, using synthetic installed fixtures only."""
 import json
+import runpy
 import shlex
 import subprocess
 import unittest
@@ -25,6 +25,24 @@ class BootstrapBoundary(InstalledFixture, unittest.TestCase):
                 self.assertFalse(marker.exists(), 'unapproved module executed before rejection')
             path.write_bytes(original)
             marker.unlink(missing_ok=True)
+
+    def test_all_sources_verified_before_compile_and_verified_buffers_are_used(self):
+        namespace = runpy.run_path(str(self.helper))
+        path = self.plugin / 'adapters/runtime/payload.py'
+        original = path.read_bytes()
+        path.write_bytes(original + b'\ndrift\n')
+        with patch('builtins.compile') as compiler:
+            with self.assertRaises(ValueError):
+                namespace['load_runtime_sources'](self.binding)
+            compiler.assert_not_called()
+        path.write_bytes(original)
+        original_compile = compile
+        def replace_after_verification(body, filename, mode):
+            path.write_text('raise RuntimeError("unverified reopened source")\n')
+            return original_compile(body, filename, mode)
+        with patch('builtins.compile', side_effect=replace_after_verification):
+            _, loaded = namespace['load_runtime_sources'](self.binding)
+        self.assertTrue(callable(loaded.bind))
 
     def test_initial_bind_rejects_unapproved_runtime(self):
         path = self.plugin / 'adapters/runtime/payload.py'
@@ -102,7 +120,6 @@ class ActivityRepresentations(unittest.TestCase):
 
 
 class MetadataSemantics(InstalledFixture, unittest.TestCase):
-    # Reuse fixture mechanics, not its tests.
     git = fixtures.ConsumerAudit.git
     audit = fixtures.ConsumerAudit.audit
 

@@ -1,28 +1,72 @@
 #!/usr/bin/env python3
 """Read-only host mechanics. No network, package bootstrap or deletion actions."""
-import argparse
-import json
-import importlib.util
-from pathlib import Path
-import shutil
-import subprocess
 import sys
 
+if __name__ == '__main__' and sys.path:
+    del sys.path[0]
+
+import argparse
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import shutil
+import stat
+import subprocess
+
 sys.dont_write_bytecode = True
-def load_runtime_sources():
-    """Load the fixed runtime directly; interpreter caches are not inputs."""
+RUNTIME_SHA256 = {
+    "__init__.py": "277b071e8e40f0aabb4007e0ae389824708b2bdd5259075623998749da582807",
+    "json_input.py": "d162867227d23f2c56b0e391977450ddfb81e1311394646947325581651c5423",
+    "activity.py": "df300f99c24e27ae5ec13cd5833bfb163adf1598197b38176086fc26d15fc87f",
+    "payload.py": "1a81998a050883b718e00cc98269e250e5c6bf1e3ae1d575602de10b62ed1815"
+}
+
+
+def load_runtime_sources(binding=None):
     directory = Path(__file__).resolve().parent / 'runtime'
+    if directory.is_symlink() or {p.name for p in directory.glob('*.py')} != set(RUNTIME_SHA256):
+        raise ValueError('unapproved runtime inventory')
+    sources = {}
+    for filename, expected in RUNTIME_SHA256.items():
+        path = directory / filename
+        if path.is_symlink() or not path.is_file() or stat.S_IMODE(path.stat().st_mode) != 0o644:
+            raise ValueError('unsafe runtime file: ' + filename)
+        body = path.read_bytes()
+        if hashlib.sha256(body).hexdigest() != expected:
+            raise ValueError('unapproved runtime bytes: ' + filename)
+        sources[filename] = body
+    if binding is not None:
+        def unique(pairs):
+            result = {}
+            for key, value in pairs:
+                if key in result:
+                    raise ValueError('duplicate binding key')
+                result[key] = value
+            return result
+        recorded = json.loads(binding.read_text(), object_pairs_hook=unique)
+        root = directory.parent.parent
+        if recorded['plugin_root'] != str(root):
+            raise ValueError('approved installation path changed')
+        for filename, body in sources.items():
+            relative = 'adapters/runtime/' + filename
+            if (recorded['adapter_sha256'][relative] != hashlib.sha256(body).hexdigest()
+                    or recorded['adapter_modes'][relative] != 0o644):
+                raise ValueError('bound runtime differs from approved source')
+        cli = Path(__file__).resolve()
+        if (recorded['adapter_sha256']['adapters/host_tools.py'] != hashlib.sha256(cli.read_bytes()).hexdigest()
+                or recorded['adapter_modes']['adapters/host_tools.py'] != stat.S_IMODE(cli.stat().st_mode)):
+            raise ValueError('bound bootstrap differs from approved source')
     loaded = {}
-    for name, filename in [('runtime', '__init__.py'), ('runtime.json_input', 'json_input.py'),
-                           ('runtime.activity', 'activity.py'), ('runtime.payload', 'payload.py')]:
+    for filename, body in sources.items():
+        name = 'runtime' if filename == '__init__.py' else 'runtime.' + Path(filename).stem
         path = directory / filename
         spec = importlib.util.spec_from_file_location(name, path)
         module = importlib.util.module_from_spec(spec)
         sys.modules[name] = module
-        exec(compile(path.read_bytes(), str(path), 'exec'), module.__dict__)
+        exec(compile(body, str(path), 'exec'), module.__dict__)
         loaded[name] = module
     return loaded['runtime.activity'], loaded['runtime.payload']
-
 
 
 def main(argv=None):
@@ -43,7 +87,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     root = Path(__file__).resolve().parents[1]
     try:
-        activity, payload = load_runtime_sources()
+        activity, payload = load_runtime_sources(None if args.verb == 'bind' else args.binding.resolve())
         if args.verb == 'bind':
             print(json.dumps(payload.bind(root), indent=2))
             return 0
