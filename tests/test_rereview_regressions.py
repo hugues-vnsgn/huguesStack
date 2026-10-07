@@ -130,6 +130,12 @@ class ActivityRepresentations(unittest.TestCase):
         with patch.object(Path, 'home', return_value=self.area):
             hits, _, complete = self.scan('claude', [self.claude(cwd=str(self.area / 'unrelated'), message={'content': '~/' + self.wt.name})])
         self.assertTrue(hits[str(self.wt)] or not complete)
+        home_link = self.area / 'home-link'
+        home_link.symlink_to(self.area, target_is_directory=True)
+        for home, mention in [(home_link, '~/' + self.wt.name), (self.wt, '~/notes.md')]:
+            with self.subTest(home=home, mention=mention), patch.object(Path, 'home', return_value=home):
+                hits, _, complete = self.scan('claude', [self.claude(cwd=str(self.area / 'unrelated'), message={'content': mention})])
+                self.assertTrue(hits[str(self.wt)] or not complete)
         hits, _, complete = self.scan('claude', [self.claude(cwd=str(self.area / 'unrelated'), message={'content': '~someone/unknown-worktree'})])
         self.assertFalse(complete)
 
