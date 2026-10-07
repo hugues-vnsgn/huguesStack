@@ -9,7 +9,7 @@
       "name": "hugues-stack",
       "description": "Mobile routing, proof guidance and principles for huguesStack in Claude Code and Codex.",
       "source": "./plugin",
-      "version": "0.1.0"
+      "version": "0.2.0"
     }
   ]
 }

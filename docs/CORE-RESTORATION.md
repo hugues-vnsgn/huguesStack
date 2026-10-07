@@ -1,6 +1,6 @@
 # Pinned-core restoration contract
 
-This unreleased branch restores source/workflow contracts from pstack 0.15.9, commit `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`, subtree `54dfdd87fd191ddda7fce01dd354d220adaeeacc`. Released 0.1.0 remains at `cc65cdd09c87510d3a71b273b8dbed906243f3e3`. No upgrade is included.
+Version 0.2.0 restores source/workflow contracts from pstack 0.15.9, commit `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`, subtree `54dfdd87fd191ddda7fce01dd354d220adaeeacc`. Released 0.1.0 remains at `cc65cdd09c87510d3a71b273b8dbed906243f3e3`. No upgrade is included.
 
 All 161 files are in `plugin/core/pstack`. The actual Git-object snapshot binds names, executable modes, blob SHA-1, SHA-256 and sizes. Public entrypoints are reproducibly rendered loaders that read explicit overlays before the entire pinned contract. Required references resolve from their source origin.
 
