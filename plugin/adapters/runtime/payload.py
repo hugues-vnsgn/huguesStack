@@ -86,7 +86,7 @@ def workflow(root, source):
 
 def command(root, binding, verb, operand):
     return shlex.join(['python3', str(root / 'adapters/host_tools.py'), verb,
-                       '--binding', str(binding), operand])
+                       '--binding', str(binding), '--', operand])
 
 
 def translate(root, binding, text):
