@@ -98,7 +98,9 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
                        for operand in ['plan.md;id', 'plan.md|cat', 'plan.md>out',
                                        '"$PLAN"', '*.md', '~/plan.md']],
                      'cat ' + self.source + ' `printf extra`',
-                     'cat ' + self.source + ' && echo `date`']:
+                     'cat ' + self.source + ' && echo `date`',
+                     'cat ' + chr(92) + '\n' + self.source,
+                     'cat <<EOF\n' + self.source + '\nEOF']:
             with self.subTest(text=text):
                 result = self.translate(text)
                 self.assertEqual(result.returncode, 2, result.stdout)
