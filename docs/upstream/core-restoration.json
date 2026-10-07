@@ -19,10 +19,10 @@
   },
   "evidence_boundary": "Static source, behavior-contract and wiring checks are development evidence. Released host/mobile observations do not attest to the restored development workflows.",
   "runtime_sha256": {
-    "plugin/adapters/host-tools.md": "e8f1928dc1c4e93a20dcf47571b38af203c38913853ebbec0da12cd8efbc5e6c",
-    "plugin/adapters/host_tools.py": "9e91cea67eb9e95c19968a150b03b677da3793c4ce6e93bb6366056439df77ed",
+    "plugin/adapters/host-tools.md": "8cb0bed7601032d0defc13c3e71cb79aaeb5c33c0bd38d300619f2b3b0faff4b",
+    "plugin/adapters/host_tools.py": "ea4cd5e2a8b5244d550ff2bb1029d13edc7a948aecac8a9d775abaa08e24cfb9",
     "plugin/adapters/runtime/__init__.py": "277b071e8e40f0aabb4007e0ae389824708b2bdd5259075623998749da582807",
-    "plugin/adapters/runtime/payload.py": "f73b30176d27d465ba7037022137bf9910226fee82348a03ed99ba2f6d79b178",
+    "plugin/adapters/runtime/payload.py": "d269053a556d4aa5c7ff9f9b7b327079e24a815ce75a0412c371b148ad1fb9ac",
     "plugin/adapters/runtime/payload.json": "c42187f44123ed5a6dbdb6bce2f270218c60e515bcec262ebe7315a70d76b364",
     "plugin/adapters/runtime/activity.py": "df300f99c24e27ae5ec13cd5833bfb163adf1598197b38176086fc26d15fc87f",
     "plugin/adapters/runtime/json_input.py": "d162867227d23f2c56b0e391977450ddfb81e1311394646947325581651c5423"

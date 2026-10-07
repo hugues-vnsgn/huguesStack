@@ -43,7 +43,10 @@ with one plan operand. Markdown references and reads become quoted, binding-guar
 `read-workflow` commands; no direct installed-file read is emitted. Other Git
 revisions, unknown consumer-owned `pstack/...` paths, and prefixed paths remain
 unchanged. Unsupported commands that contain a bundled operand block translation
-instead of being partially rewritten. This is not a shell interpreter.
+instead of being partially rewritten. Bundled input commands accept literal operands
+and ordinary quoting for spaces; shell operators, substitutions, globs, brace or
+tilde syntax hold, including quoted operands containing those syntax characters.
+Use a plain literal plan path. This is not a shell interpreter.
 
 By choosing this translation, the author designates exact known pinned paths in
 those forms as bundled workflow references. Ownership cannot be inferred from
