@@ -100,7 +100,11 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
                      'cat ' + self.source + ' `printf extra`',
                      'cat ' + self.source + ' && echo `date`',
                      'cat ' + chr(92) + '\n' + self.source,
-                     'cat <<EOF\n' + self.source + '\nEOF']:
+                     'cat <<EOF\n' + self.source + '\nEOF',
+                     *['cat ' + quote + '\n' + self.source + '\n' + quote for quote in [chr(39), chr(34)]],
+                     'echo "$(\ncat ' + self.source + '\n)"',
+                     'echo `\ncat ' + self.source + '\n`',
+                     'true &&\ncat ' + self.source]:
             with self.subTest(text=text):
                 result = self.translate(text)
                 self.assertEqual(result.returncode, 2, result.stdout)
