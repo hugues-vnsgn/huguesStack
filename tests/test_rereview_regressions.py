@@ -131,7 +131,8 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
         path = self.plugin / 'skills/create-verification-skill/references/project-skill-template.md'
         self.assertTrue(path.is_file())
         self.assertIn('explicitly requested one-journey diagnostic', path.read_text())
-        self.assertIn('project-skill-template.md', (self.plugin / 'adapters/mobile.md').read_text())
+        self.assertIn('[mobile workflows](mobile-workflows.md) in full', (self.plugin / 'adapters/mobile.md').read_text())
+        self.assertIn('project-skill-template.md', (self.plugin / 'adapters/mobile-workflows.md').read_text())
 
 
 class ActivityRepresentations(unittest.TestCase):

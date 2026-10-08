@@ -1,0 +1,192 @@
+{
+  "source_revision": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a",
+  "native_before_revision": "7db3e80d4b75e55f3f6d0ee85da5faa330e65d76",
+  "files": [
+    {
+      "source": "pstack/skills/poteto-mode/scripts/bootstrap.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/bootstrap.ts",
+      "source_sha256": "ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361",
+      "candidate_sha256": "ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/bun.lock",
+      "installed": "plugin/skills/hugues-mode/scripts/bun.lock",
+      "source_sha256": "667d9cf7222e9aae3fa42a4be383e657784216e9df115da02227fbc5ac7bbe46",
+      "candidate_sha256": "667d9cf7222e9aae3fa42a4be383e657784216e9df115da02227fbc5ac7bbe46",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/check-plan.mjs",
+      "installed": "plugin/skills/hugues-mode/scripts/check-plan.mjs",
+      "source_sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
+      "candidate_sha256": "007c84ff413271d1ae27530f63504b0fff719db37f81a3d23c598a036d68bb45",
+      "same_bytes_as_upstream": false,
+      "same_bytes_as_7db3e80": true,
+      "scope": "Node plan gate changed and exercised through installed Python/Node tests"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/orch/orch.test.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/orch/orch.test.ts",
+      "source_sha256": "174b86d21ff51ccd28d1a8c938cb2e0c6fa287b209d4ca6c03932fcb1b53372e",
+      "candidate_sha256": "174b86d21ff51ccd28d1a8c938cb2e0c6fa287b209d4ca6c03932fcb1b53372e",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/orch/orch.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/orch/orch.ts",
+      "source_sha256": "f091687df627a0b75fabd54af58945a9cd6c7039ef0622012ac9ed60cd8ec434",
+      "candidate_sha256": "f091687df627a0b75fabd54af58945a9cd6c7039ef0622012ac9ed60cd8ec434",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/orch/store.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/orch/store.ts",
+      "source_sha256": "0eae7cf69282e827b1227166f2e32cee3560f2f3e65b3f1f2faf6fb83d3b4c5b",
+      "candidate_sha256": "0eae7cf69282e827b1227166f2e32cee3560f2f3e65b3f1f2faf6fb83d3b4c5b",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/package.json",
+      "installed": "plugin/skills/hugues-mode/scripts/package.json",
+      "source_sha256": "d1f815091209d49763775cc188e8e06ff32d5fec648bffd2272bc25a165e87c3",
+      "candidate_sha256": "d1f815091209d49763775cc188e8e06ff32d5fec648bffd2272bc25a165e87c3",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/cli.test.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/cli.test.ts",
+      "source_sha256": "a35592b4c6da96caf8d47987e9cd503fab6c7774ab87d11a43f24b4b5df2a9d1",
+      "candidate_sha256": "a35592b4c6da96caf8d47987e9cd503fab6c7774ab87d11a43f24b4b5df2a9d1",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/cli.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/cli.ts",
+      "source_sha256": "89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680",
+      "candidate_sha256": "89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/fakes.test-helper.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/fakes.test-helper.ts",
+      "source_sha256": "e53e31b7f03068063f53a99a3591b052aaed66e4e2b196b3a364980f60324ab1",
+      "candidate_sha256": "e53e31b7f03068063f53a99a3591b052aaed66e4e2b196b3a364980f60324ab1",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/github.test.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/github.test.ts",
+      "source_sha256": "0cbce011050522938523e36bb42a260e92b812dcd2076930fa681672ad316b24",
+      "candidate_sha256": "0cbce011050522938523e36bb42a260e92b812dcd2076930fa681672ad316b24",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/github.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/github.ts",
+      "source_sha256": "d1bbbafbe8e2c703c84da2029de7f2c4011412512f8cf65a42100f46bcb92c8a",
+      "candidate_sha256": "d1bbbafbe8e2c703c84da2029de7f2c4011412512f8cf65a42100f46bcb92c8a",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/policy.test.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/policy.test.ts",
+      "source_sha256": "a9fedb25feefd1f57ef6a662f80c99018690170a3a8070773a08eaf694d1d3d9",
+      "candidate_sha256": "a9fedb25feefd1f57ef6a662f80c99018690170a3a8070773a08eaf694d1d3d9",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/policy.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/policy.ts",
+      "source_sha256": "68d240505852cf23c9b2dea463342e9e61243f486b3cc86c735d140f9ee7be49",
+      "candidate_sha256": "68d240505852cf23c9b2dea463342e9e61243f486b3cc86c735d140f9ee7be49",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/render.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/render.ts",
+      "source_sha256": "2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604",
+      "candidate_sha256": "2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/tsconfig.json",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/tsconfig.json",
+      "source_sha256": "1ecccc72320b086c63ce3f73c959896fd747363e63553b3b1136296ea4069e45",
+      "candidate_sha256": "1ecccc72320b086c63ce3f73c959896fd747363e63553b3b1136296ea4069e45",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/types.compile.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/types.compile.ts",
+      "source_sha256": "621af4c9a664fbf699a9737efccdc248abb416df8819c9dc5f824beae2b9b1d6",
+      "candidate_sha256": "621af4c9a664fbf699a9737efccdc248abb416df8819c9dc5f824beae2b9b1d6",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/types.ts",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/types.ts",
+      "source_sha256": "64ba6221e3bfe61bbb292337d199cdec6309455477280efb060203dba34e0e91",
+      "candidate_sha256": "64ba6221e3bfe61bbb292337d199cdec6309455477280efb060203dba34e0e91",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/watch-pr/watch-pr",
+      "installed": "plugin/skills/hugues-mode/scripts/watch-pr/watch-pr",
+      "source_sha256": "d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4",
+      "candidate_sha256": "d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4",
+      "same_bytes_as_upstream": true,
+      "same_bytes_as_7db3e80": true,
+      "scope": "relocated helper/dependency input; current Bun/TypeScript execution unverified"
+    },
+    {
+      "source": "pstack/skills/poteto-mode/scripts/worktree-audit.sh",
+      "installed": null,
+      "source_sha256": "95b8530f3c0ccada8cabc4b0727c052fbc85c141531375aaace65c427af8aecc",
+      "candidate_sha256": null,
+      "same_bytes_as_upstream": null,
+      "same_bytes_as_7db3e80": null,
+      "scope": "provenance-only legacy audit"
+    }
+  ],
+  "limits": [
+    "Byte identity is not runtime parity.",
+    "Current Bun/TypeScript run did not start because the harmless offline sandbox preflight returned EPERM. No containment bypass or retry occurred.",
+    "The Node plan gate differs from upstream and passed current installed Node tests.",
+    "Python installed helpers changed during consolidation and are covered separately by current adapter tests. Progressive disclosure only changes their bound inventory/hash constants."
+  ]
+}

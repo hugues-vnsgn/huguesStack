@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "method": "Unique bundled instruction inventory for explicit conditional workflows. Required paths include transitive skill bodies, owned references, applicable principles and specialized role prompts. Navigation-only links and inactive conditional branches are not traversed.",
+  "profiles": {
+    "initial_mode_routing": {
+      "scenario": "Route a non-mobile single-function CLI bug: read the full bug-fix playbook, copy its todos and announce the route with mandatory unslop. Stop before the first task step; no installed planning-helper operands are used.",
+      "required": [
+        {
+          "path": "plugin/skills/hugues-mode/SKILL.md",
+          "reason": "Full canonical mode and trigger index"
+        },
+        {
+          "path": "plugin/skills/unslop/SKILL.md",
+          "reason": "Every mode reply is prose, including the route announcement"
+        },
+        {
+          "path": "plugin/skills/hugues-mode/playbooks/bug-fix.md",
+          "reason": "Selected route must read its full playbook and copy todos before task work"
+        }
+      ],
+      "phase_guidance": [],
+      "workers": []
+    },
+    "bug_fix": {
+      "scenario": "One local CLI logic defect in one Python function, simple how, one source-control why category, cheap existing regression target; one scoped implementation worker; no defensive-code investigation, function-boundary change, comment findings, retries or mobile work. Includes the full Opening a PR contract and its preparatory guidance. External publication is modeled only, never executed.",
+      "required": [
+        {
+          "path": "plugin/agents/hugues-agent.md",
+          "reason": "Scoped implementation worker"
+        },
+        {
+          "path": "plugin/agents/hugues-comment-sicko.md",
+          "reason": "Required specialized no-comments role"
+        },
+        {
+          "path": "plugin/skills/how/SKILL.md",
+          "reason": "Ground the affected subsystem"
+        },
+        {
+          "path": "plugin/skills/how/references/explainer-prompt.md",
+          "reason": "Simple explainer or complex synthesis prompt"
+        },
+        {
+          "path": "plugin/skills/hugues-mode/SKILL.md",
+          "reason": "Full canonical mode and trigger index"
+        },
+        {
+          "path": "plugin/skills/hugues-mode/playbooks/bug-fix.md",
+          "reason": "All bug-fix steps"
+        },
+        {
+          "path": "plugin/skills/hugues-mode/playbooks/opening-a-pr.md",
+          "reason": "Required final playbook"
+        },
+        {
+          "path": "plugin/skills/no-comments/SKILL.md",
+          "reason": "Required before review"
+        },
+        {
+          "path": "plugin/skills/principle-boundary-discipline/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-build-the-lever/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-fix-root-causes/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-foundational-thinking/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-guard-the-context-window/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-laziness-protocol/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-minimize-reader-load/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-model-the-domain/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-prove-it-works/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-sequence-verifiable-units/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/principle-test-behavior-not-implementation/SKILL.md",
+          "reason": "Applied decision principle for the stated scenario"
+        },
+        {
+          "path": "plugin/skills/tdd/SKILL.md",
+          "reason": "Scenario has an existing cheap local regression target"
+        },
+        {
+          "path": "plugin/skills/technical-writing/SKILL.md",
+          "reason": "Commit and PR prose"
+        },
+        {
+          "path": "plugin/skills/unslop/SKILL.md",
+          "reason": "Every mode reply is prose, including the route announcement"
+        },
+        {
+          "path": "plugin/skills/why/SKILL.md",
+          "reason": "Regression history investigation"
+        },
+        {
+          "path": "plugin/skills/why/references/epistemics.md",
+          "reason": "Required source-control investigation/synthesis reference"
+        },
+        {
+          "path": "plugin/skills/why/references/investigator-prompt.md",
+          "reason": "Required source-control investigation/synthesis reference"
+        },
+        {
+          "path": "plugin/skills/why/references/source-playbook.md",
+          "reason": "Required source-control investigation/synthesis reference"
+        },
+        {
+          "path": "plugin/skills/why/references/sources/code-archaeology.md",
+          "reason": "Required source-control investigation/synthesis reference"
+        },
+        {
+          "path": "plugin/skills/why/references/synthesizer-prompt.md",
+          "reason": "Required source-control investigation/synthesis reference"
+        },
+        {
+          "path": "plugin/skills/principle-subtract-before-you-add/SKILL.md",
+          "reason": "Evaluate removal or reuse before adding the regression case or feature code"
+        }
+      ],
+      "phase_guidance": [
+        "host-workers.md",
+        "host-workflow-tools.md",
+        "host-publication.md"
+      ],
+      "workers": [
+        {
+          "role": "how explainer",
+          "count": 1,
+          "mode_context": false
+        },
+        {
+          "role": "why source-control investigator",
+          "count": 1,
+          "mode_context": false
+        },
+        {
+          "role": "why synthesizer",
+          "count": 1,
+          "mode_context": false
+        },
+        {
+          "role": "implementation",
+          "count": 1,
+          "mode_context": true
+        },
+        {
+          "role": "Comment Sicko",
+          "count": 1,
+          "mode_context": false
+        }
+      ]
+    },
+    "larger_feature": {
+      "scenario": "One TypeScript CLI feature with repeatable state transitions spanning three modules in one existing subsystem. Complex how runs in Feature and Architect, two exploration angles each. One design arena and one implementation arena, each three candidates and one judge. No ownership redesign, contested design, retries, comment findings, mobile work or unattended program. Includes full Opening a PR contract and preparatory guidance. A genuinely large/cross-cutting migration requires figure-it-out and a task-designed closure, not this fixed profile.",
+      "required": [
+        {
+          "path": "plugin/agents/hugues-agent.md",
+          "reason": "Mode workers for arena candidates/judges"
+        },
+        {
+          "path": "plugin/agents/hugues-comment-sicko.md",
+          "reason": "Required specialized no-comments role"
+        },
+        {
+          "path": "plugin/skills/architect/SKILL.md",
+          "reason": "Mandatory feature design exploration"
+        },
+        {
+          "path": "plugin/skills/architect/references/design-red-flags.md",
+          "reason": "Mandatory architect candidate/synthesis input"
+        },
+        {
+          "path": "plugin/skills/architect/references/rationale-template.md",
+          "reason": "Mandatory architect candidate/synthesis input"
+        },
+        {
+          "path": "plugin/skills/architect/references/runner-prompt.md",
+          "reason": "Mandatory architect candidate/synthesis input"
+        },
+        {
+          "path": "plugin/skills/arena/SKILL.md",
+          "reason": "Design and implementation alternatives"
+        },
+        {
+          "path": "plugin/skills/how/SKILL.md",
+          "reason": "Ground the affected subsystem"
+        },
+        {
+          "path": "plugin/skills/how/references/explainer-prompt.md",
+          "reason": "Simple explainer or complex synthesis prompt"
+        },
+        {
+          "path": "plugin/skills/how/references/explorer-prompt.md",
+          "reason": "Complex subsystem exploration"
+        },
+        {
+          "path": "plugin/skills/hugues-mode/SKILL.md",
+          "reason": "Full canonical mode and trigger index"
+        },
+        {
+          "path": "plugin/skills/hugues-mode/playbooks/feature.md",
+          "reason": "All feature steps"
+        },
+        {
+          "path": "plugin/skills/hugues-mode/playbooks/opening-a-pr.md",
+          "reason": "Required final playbook"
+        },
+        {
+          "path": "plugin/skills/no-comments/SKILL.md",
+          "reason": "Required before review"
+        },
+        {
+          "path": "plugin/skills/principle-boundary-discipline/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-build-the-lever/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-encode-lessons-in-structure/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-exhaust-the-design-space/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-fix-root-causes/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-foundational-thinking/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-guard-the-context-window/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-laziness-protocol/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-make-operations-idempotent/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-minimize-reader-load/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-model-the-domain/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-outcome-oriented-execution/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-prove-it-works/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-redesign-from-first-principles/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-separate-before-serializing-shared-state/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-sequence-verifiable-units/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-test-behavior-not-implementation/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/principle-type-system-discipline/SKILL.md",
+          "reason": "Applied design, implementation or verification principle for typed repeatable state transitions"
+        },
+        {
+          "path": "plugin/skills/swarm/SKILL.md",
+          "reason": "Mode parallel exploration-partition trigger"
+        },
+        {
+          "path": "plugin/skills/technical-writing/SKILL.md",
+          "reason": "Commit and PR prose"
+        },
+        {
+          "path": "plugin/skills/typescript-best-practices/SKILL.md",
+          "reason": "Scenario edits TypeScript domain types"
+        },
+        {
+          "path": "plugin/skills/typescript-best-practices/references/patterns.md",
+          "reason": "Type and boundary examples for the selected shapes"
+        },
+        {
+          "path": "plugin/skills/unslop/SKILL.md",
+          "reason": "Every mode reply is prose, including the route announcement"
+        },
+        {
+          "path": "plugin/skills/principle-subtract-before-you-add/SKILL.md",
+          "reason": "Evaluate removal or reuse before adding the regression case or feature code"
+        }
+      ],
+      "phase_guidance": [
+        "host-workers.md",
+        "host-workflow-tools.md",
+        "host-typescript.md",
+        "host-publication.md"
+      ],
+      "workers": [
+        {
+          "role": "how explorer across two rounds",
+          "count": 4,
+          "mode_context": false
+        },
+        {
+          "role": "how explainer across two rounds",
+          "count": 2,
+          "mode_context": false
+        },
+        {
+          "role": "arena design candidate",
+          "count": 3,
+          "mode_context": true
+        },
+        {
+          "role": "arena implementation candidate",
+          "count": 3,
+          "mode_context": true
+        },
+        {
+          "role": "arena cross-judge across two rounds",
+          "count": 2,
+          "mode_context": true
+        },
+        {
+          "role": "Comment Sicko",
+          "count": 1,
+          "mode_context": false
+        }
+      ]
+    }
+  },
+  "unknown_inputs": [
+    "Actual native host startup metadata exposure and tool/token framing",
+    "Supported invocation or required human handoff for every dependency; unknown capability holds instead of running",
+    "External control-cli, deslop and applicable create-skill/writing-for-agents instructions; consumer policy/model configuration",
+    "Consumer source, investigation evidence, generated briefs, artifacts, tool output and replies",
+    "Retries, additional evidence categories, contested designs, re-grounding or task-specific principles outside the fixed scenarios"
+  ],
+  "worker_accounting": "Unique inventory deduplicates paths across contexts; it is not a workflow token total. Record fixed worker counts separately and a floor for the mandatory fresh mode-worker read set. This floor excludes their additional skills, role inputs and generated evidence, and is not additive to the unique inventory."
+}

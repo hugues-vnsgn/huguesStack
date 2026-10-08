@@ -43,6 +43,12 @@ prevents unconditional traversal of navigation links. A figure-it-out consultati
 of mode principles must not restart mode routing. This is an instruction contract,
 not a filesystem security boundary or proof of every possible runtime trace.
 
+The shared contract now loads specialized adapter references only before their
+named phases. Mobile applicability is a small separate entry; explicit mobile
+work must load the complete mobile rules before routing or execution. All prior
+adapter requirements are retained. See [progressive disclosure](CONTEXT-FOOTPRINT.md)
+for the partition and comparable required-read inventories.
+
 The installed `read-workflow` helper refuses public `SKILL.md` files and their
 legacy aliases. `translate-plan` also rejects such reads. Plans must name native
 skill invocation explicitly; owned playbook/reference rereads stay binding-guarded.
@@ -77,14 +83,16 @@ Current checks exercise actual installed helpers, negative inventory/mode/body
 mutations, native-body read rejection, public names, workflow phase contracts,
 owned links and parser/audit safety. Context budgets are measured source bytes
 and characters, with characters/4 as an explicit token estimate; they are not
-observed host prompt usage. The measured initial read set is 36,783 bytes versus 36,503 before, about
-9,182 versus 9,111 estimated tokens. The small increase carries the native
-invocation boundary. Native frontmatter is 14,803 versus 15,764 bytes. Neither
-number measures actual host startup context; no runtime-context saving is promised.
+observed host prompt usage. Initial bug-fix routing, including its full playbook,
+todos and required unslop reply guidance, is now 33,752 bytes versus 45,289 before
+disclosure, about 8,428 versus 11,308 estimated tokens. The larger workflow inventories include their required
+transitive skills and resources. Native frontmatter remains 14,803 bytes, and all
+50 canonical skill bodies are unchanged by disclosure. These are source budgets;
+actual startup exposure, full execution cost and runtime savings remain unknown.
 
-The previous live discovery/invocation, disabled-skill and planning trials remain
-UNVERIFIED where startup/authentication blocked execution. No blocked probe was
-retried. Generic workflow content and mobile scope rules are retained; mobile
+Live discovery/invocation, disabled-skill and planning behavior remain
+UNVERIFIED for this consolidation candidate. Separate prior-layout trials cannot
+validate this source revision. No native host session was run against this candidate. Generic workflow content and mobile scope rules are retained; mobile
 redesign and optional automatic cross-skill composition are separate future work.
 
 Implementation review can proceed on this finite contract. A green static suite

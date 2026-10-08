@@ -47,6 +47,14 @@ def worker_roles():
 
 
 ADAPTERS = ['plugin/adapters/host.md', 'plugin/adapters/mobile.md']
+PHASE_GUIDANCE = {
+    'host-workers.md': 'Worker dispatch, worker execution, role selection or setup-huguesstack',
+    'host-workflow-tools.md': 'Installed planning or audit commands, workflow ticks, other installed helpers, Bun bootstrap, cloud/loop/forge operations',
+    'host-special-skills.md': 'Transcript-dependent skills, optional integrations or consumer skill placement',
+    'host-typescript.md': 'Reading or editing TypeScript files',
+    'host-publication.md': 'Skill authoring, commits, review, PR preparation/publication or missing control/writing capability reports',
+}
+ADAPTER_RESOURCES = ['plugin/adapters/' + name for name in PHASE_GUIDANCE] + ['plugin/adapters/mobile-workflows.md']
 PROJECT_POLICY = 'plugin/policies/astra-pr-review.md'
 
 
@@ -150,6 +158,24 @@ def behavior_errors(bodies):
 
 def adapter_errors(texts):
     errors = []
+    host = texts[ADAPTERS[0]]
+    for name, trigger in PHASE_GUIDANCE.items():
+        if not re.search(r'^\| ' + re.escape(trigger) + r' \| \[[^\]]+\]\(' + re.escape(name) + r'\) \|$', host, re.M):
+            errors.append('missing phase prerequisite: ' + name)
+    for marker in ['Before the triggering action, read its complete reference',
+                   'never use a file read as an invocation fallback', 'never restart task routing',
+                   'No translation grants new authority', 'A constraint\ncan block execution',
+                   'copy its ordered todos verbatim']:
+        if marker.casefold() not in host.casefold():
+            errors.append('lost always-loaded boundary: ' + marker)
+    mobile = texts[ADAPTERS[1]]
+    if not all(marker in mobile for marker in ['explicitly selected mobile task',
+               '[mobile workflows](mobile-workflows.md) in full', 'before selecting the route or executing a phase',
+               'For all other work, follow the pinned core unchanged']):
+        errors.append('lost mobile applicability prerequisite')
+    effective = dict(texts)
+    effective[ADAPTERS[0]] = '\n'.join([host, *(texts['plugin/adapters/' + name] for name in PHASE_GUIDANCE)])
+    effective[ADAPTERS[1]] = mobile + '\n' + texts['plugin/adapters/mobile-workflows.md']
     obligations = {
         ADAPTERS[0]: ['canonical skill owns workflow', 'never use a file read as an invocation fallback',
                      'never restart task routing', 'consumer or external skill', 'List length sets', 'never an implicit replacement',
@@ -181,7 +207,7 @@ def adapter_errors(texts):
     }
     for path, markers in obligations.items():
         for marker in markers:
-            if marker.casefold() not in texts[path].casefold():
+            if marker.casefold() not in effective[path].casefold():
                 errors.append(path + ': lost override boundary: ' + marker)
     return errors
 
@@ -336,7 +362,7 @@ def check(root=ROOT):
                            'setup-pstack', 'poteto-mode', 'tdd']}
     bodies['feature'] = (root / 'plugin/skills/hugues-mode/playbooks/feature.md').read_text()
     require(not behavior_errors(bodies), 'workflow behavior differs: ' + ', '.join(behavior_errors(bodies)))
-    texts = {p: (root / p).read_text() for p in [*ADAPTERS, PROJECT_POLICY]}
+    texts = {p: (root / p).read_text() for p in [*ADAPTERS, *ADAPTER_RESOURCES, PROJECT_POLICY]}
     require(not adapter_errors(texts), 'adapter behavior differs: ' + '; '.join(adapter_errors(texts)))
     mobile = {name: (root / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
               for name in ['kmp-bridge-change', 'cmp-two-target-change']}

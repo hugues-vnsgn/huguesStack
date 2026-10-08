@@ -143,18 +143,48 @@
       "mode": "100644"
     },
     {
+      "path": "adapters/host-publication.md",
+      "sha256": "6824ca8754023777a178a636a206cf9d2bfee96db4470e7deb99e118c3d2fd5e",
+      "mode": "100644"
+    },
+    {
+      "path": "adapters/host-special-skills.md",
+      "sha256": "ad560e44c7e5066a67100523ee2542813491fa1ef486bfba39b67aa5395076da",
+      "mode": "100644"
+    },
+    {
       "path": "adapters/host-tools.md",
       "sha256": "2db949040710af01990bd657bb618c44e00db4402e4a8f420f17dd45a0f4cc89",
       "mode": "100644"
     },
     {
+      "path": "adapters/host-typescript.md",
+      "sha256": "6fefce966a4b2a57f6f38f9ed556fb8e9220fc79a45b4d78e18a4e5b0b7b02a7",
+      "mode": "100644"
+    },
+    {
+      "path": "adapters/host-workers.md",
+      "sha256": "195fe19a15e5d4623619b8eef8192f7d72dc1a8e6a8cd510ec07e9717cc24e38",
+      "mode": "100644"
+    },
+    {
+      "path": "adapters/host-workflow-tools.md",
+      "sha256": "12e7e9fb6ab8e20dc8f4020fe8ab30a0ead91e0ee08349d3230c4689295cc9af",
+      "mode": "100644"
+    },
+    {
       "path": "adapters/host.md",
-      "sha256": "ba08ddbe8c1469d85649ef0ba1bd845cce075bcced7ea2300dc82c771c67a194",
+      "sha256": "cbcbd45a32f1b81fde3936a0f2c740aca66f76f5dafe5c2ae414721264fea9b5",
+      "mode": "100644"
+    },
+    {
+      "path": "adapters/mobile-workflows.md",
+      "sha256": "11a718eeaa16d23528b72f2791e5b80e360398c5fa85069af6b03904c2c5f228",
       "mode": "100644"
     },
     {
       "path": "adapters/mobile.md",
-      "sha256": "11a718eeaa16d23528b72f2791e5b80e360398c5fa85069af6b03904c2c5f228",
+      "sha256": "29e939e30177d5734e5e64718bacabcd2eb7b6698f005b208ee9622c5f5f5825",
       "mode": "100644"
     },
     {

@@ -7,7 +7,7 @@ import stat
 
 PIN = 'huguesstack-native-v1'
 ANCHORS = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adapters/host_tools.py'}
-MANIFEST_SHA256 = '499bba6bd26d1626fec77a38243d37c4e2c48fa91d58b4520ecf8e0530de17e8'
+MANIFEST_SHA256 = '29debe67b2b47664f72b64be81f6eb69b30dc5439d8ee347f8c16aff7439026c'
 
 
 def digest(path):

@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The candidate collects **329 top-level unittest cases**. One is a driver that
+The candidate collects **337 top-level unittest cases**. One is a driver that
 separately executes **50 frozen 0.2.0 restoration cases**. Do not add the driver
 and its children as independent coverage, or describe historical passes as current
 native workflow proof. Subtests are not added to case totals.
@@ -13,7 +13,8 @@ native workflow proof. Subtests are not added to case totals.
 | Current source/provenance checks | 44 | test_upstream_sync (33), test_retained_provenance (11) |
 | Current installed adapters and regressions | 97 | test_host_adapters (72), test_review_regressions (12), test_rereview_regressions (13) |
 | Current native-layout contracts | 29 | test_native_layout; canonical source, permissions, invocation boundaries and budgets |
-| Total collected | 329 | Current, mixed and historical scopes remain distinct |
+| Current progressive-disclosure contracts | 8 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories and bound resources |
+| Total collected | 337 | Current, mixed and historical scopes remain distinct |
 
 The 131 historical modules are test_wp2_contract (45), test_wp3_contract (15),
 test_retained_design (7), test_retained_research (8), test_retained_verification (6),
@@ -21,6 +22,9 @@ test_retained_integration (26) and test_lane_evidence (24). Their root is
 `release_root()`. No frozen archive was modified to make a current test pass.
 The newly retained 0.2.0 archive is the original `509cbec` Git tree, not the
 candidate layout. Its 50 restored-contract cases remain historical evidence.
+Main collected 349 cases. Moving those 50 behind one driver and adding 29
+native-layout plus eight disclosure cases gives 337, without dropping the frozen
+50 executions or counting them twice. The preceding native candidate had 329.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.
@@ -51,3 +55,7 @@ worker dispatch, mobile device journeys and forge/cloud/loop execution remain
 unverified. Earlier native observations are bound to their original revisions.
 Historical Bun/TypeScript helper results remain separate from any new candidate
 run recorded in the implementation evidence.
+Their source and dependency inputs remain unchanged; the Node plan checker did
+change and has current Python/Node integration coverage. The current Bun/TypeScript
+run was blocked before execution by sandbox preflight `EPERM`. See the
+[helper input receipt](HELPER-INPUTS.json) and [context report](CONTEXT-FOOTPRINT.md).
