@@ -91,3 +91,17 @@ the current task. The [Astra High review policy](plugin/policies/astra-pr-review
 is suspended for this repository: PR-bound changes need no Astra review until the
 owner re-activates it here. Installing the plugin never imposes it on consumer
 projects.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues on hugues-vnsgn/huguesStack, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `docs/GLOSSARY.md` plus `docs/adr/`. See `docs/agents/domain.md`.
