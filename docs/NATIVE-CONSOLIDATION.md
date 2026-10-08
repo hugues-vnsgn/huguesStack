@@ -32,21 +32,25 @@ provenance-only. The installed artifact includes the original MIT notice.
 
 ## Invocation and resources
 
-Use native skill invocation. Read ordinary owned references only when the
-current phase needs them. A public or consumer skill is not a reference-file
-fallback: unavailable, owner-disabled, denied or unknown invocation stops its
-dependent phase. A manual handoff is needed only when the host requires explicit
-user invocation; it is not a proven universal limitation in this setup.
+Use native skill invocation for a consumer or external skill. Read ordinary
+owned references only when the current phase needs them. A consumer or
+external skill is not a reference-file fallback: unavailable, owner-disabled,
+denied or unknown invocation stops its dependent phase. A manual handoff is
+needed only when the host requires explicit user invocation; it is not a
+proven universal limitation in this setup.
 
-Upstream Cursor metadata marks 49 skills manual-only. On Claude Code and Codex that
-blocks every skill-to-skill call and, per the Claude Code skill documentation,
-also blocks preloading into a subagent. A reviewed host invocation table replaces
-it: `automate-me`, `make-bot-ui`, `recall` and `reflect` stay user-only, and the
-other 46 skills are model-invocable dependencies. Their descriptions therefore
-enter startup context. `hugues-agent` preloads `hugues-mode` through the Claude Code
-agent `skills` field and invokes it natively when the preload is absent; whether
-the plugin-scoped name `hugues-stack:hugues-mode` resolves is unobserved. Generated
-project verification skills are model-invocable so proof steps can drive them.
+Upstream Cursor metadata marks 49 skills manual-only; `poteto-mode` is the one
+exception. huguesStack restores that design instead of the earlier native
+table that made 46 skills model-invocable: only `hugues-mode` and
+`setup-huguesstack` are model-invocable now, so only their descriptions enter
+startup context on Claude Code. The other 48 bundled skills are user-only; the
+owner can still type any of them by name, and the mode reaches each one as its
+router's reference, reading its SKILL.md in full instead of invoking it
+natively. `hugues-agent` preloads `hugues-mode` through the Claude Code agent
+`skills` field and invokes it natively when the preload is absent; whether the
+plugin-scoped name `hugues-stack:hugues-mode` resolves is unobserved. Generated
+project verification skills stay consumer-local and model-invocable so proof
+steps can drive them; that tier is unrelated to the bundled table above.
 
 The host adapter takes precedence over inherited sibling-read wording. It also
 prevents unconditional traversal of navigation links. A figure-it-out consultation

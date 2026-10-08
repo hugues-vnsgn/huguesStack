@@ -15,11 +15,30 @@ PIN = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
 TREE = '54dfdd87fd191ddda7fce01dd354d220adaeeacc'
 EXCLUDED = set()
 ALIASES = {'poteto-mode': 'hugues-mode', 'setup-pstack': 'setup-huguesstack'}
-# Reviewed host invocation table. Upstream marks 49 skills manual-only for Cursor; on
-# Claude Code and Codex that blocks every skill-to-skill call, so only entry points that
-# mine personal history or expose services stay user-only. Every other skill is a
-# model-invocable dependency.
-USER_ONLY = {'automate-me', 'make-bot-ui', 'recall', 'reflect'}
+# Reviewed host invocation table. pstack's router read every other skill as a file;
+# huguesStack restores that design. Only `hugues-mode` (the router) and
+# `setup-huguesstack` stay model-invocable, so their descriptions are the only ones
+# paid for in the host's per-turn skill list. Every other bundled skill is user-only:
+# the owner can still type it by name, and the mode reaches it by reading its
+# SKILL.md in full (the scoped host adapter rule), never by native invocation.
+USER_ONLY = {
+    'architect', 'arena', 'automate-me', 'benchmark-checklist', 'blast-radius', 'bro',
+    'correct', 'create-verification-skill', 'figure-it-out', 'how', 'interrogate',
+    'maintain-verification-skill', 'make-bot-ui', 'no-comments',
+    'principle-attack-the-premise', 'principle-boundary-discipline', 'principle-build-the-lever',
+    'principle-encode-lessons-in-structure', 'principle-exhaust-the-design-space',
+    'principle-experience-first', 'principle-explain-the-number', 'principle-fix-root-causes',
+    'principle-foundational-thinking', 'principle-guard-the-context-window',
+    'principle-laziness-protocol', 'principle-make-operations-idempotent',
+    'principle-migrate-callers-then-delete-legacy-apis', 'principle-minimize-reader-load',
+    'principle-model-the-domain', 'principle-never-block-on-the-human',
+    'principle-outcome-oriented-execution', 'principle-prove-it-works',
+    'principle-redesign-from-first-principles', 'principle-separate-before-serializing-shared-state',
+    'principle-sequence-verifiable-units', 'principle-subtract-before-you-add',
+    'principle-test-behavior-not-implementation', 'principle-type-system-discipline',
+    'recall', 'reflect', 'show-me-your-work', 'swarm', 'tdd', 'teach', 'technical-writing',
+    'typescript-best-practices', 'unslop', 'why',
+}
 AGENTS = {
     'poteto-agent': {'source': 'pstack/agents/poteto-agent.md',
                      'entrypoint': 'plugin/agents/hugues-agent.md'},

@@ -1,6 +1,6 @@
 ---
 name: setup-huguesstack
-description: Configure which models pstack uses per role and at what reasoning budget. Detects the models your host's agent tool accepts and writes a project model-role file that overrides the skill defaults. Use for /setup-huguesstack, "configure pstack models", "pstack budget", or changing pstack's model choices.
+description: Configure huguesStack's model and reasoning budget per role. Use for /setup-huguesstack or changing which models huguesStack uses.
 ---
 
 ## Host invocation contract

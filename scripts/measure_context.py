@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 import tarfile
 
+import check_core
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -124,6 +126,19 @@ def measure(root=ROOT):
         'codex_policy_metadata': {'scope': 'Additional policy-file bytes, not a claim these files enter model context.',
             'native_before': inventory(before, [p for p in before if p.endswith('/agents/openai.yaml')]),
             'candidate': inventory(current, [p for p in current if p.endswith('/agents/openai.yaml')])},
+        'skill_list': {'scope': "Description characters of every skill without `disable-model-invocation: true`; "
+                "Claude Code documents this text as entering its per-turn skill list, budgeted at 1% of the "
+                "context window (Codex: 2%), both with an 8000-character fallback. Not a runtime observation.",
+            'pre_restoration_baseline': {'model_invocable_skills': 46, 'characters': 9869,
+                'note': 'Measured at main a67df90 (PR 1 start), before hugues-mode and setup-huguesstack '
+                        'became the only model-invocable skills; recorded for context, not recomputed from '
+                        'live source.'},
+            'model_invocable_skills': sum(1 for p in declaration_paths
+                if not check_core.native_frontmatter(current[p])['disable-model-invocation']),
+            'candidate': metrics([check_core.native_frontmatter(current[p])['description']
+                for p in declaration_paths if not check_core.native_frontmatter(current[p])['disable-model-invocation']]),
+            'paths': [p for p in declaration_paths
+                if not check_core.native_frontmatter(current[p])['disable-model-invocation']]},
         'canonical_skill_bodies': {'scope': 'Whole native SKILL.md files, metadata included; separate from invocation closure.',
             'native_before': inventory(before, declaration_paths), 'candidate': inventory(current, declaration_paths),
             'workflow_body_only_before': metrics([before[p].split('---', 2)[2] for p in declaration_paths]),

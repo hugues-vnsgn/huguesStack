@@ -18,7 +18,8 @@ class ContextDisclosure(unittest.TestCase):
         host = (ROOT / 'plugin/adapters/host.md').read_text()
         mobile = (ROOT / 'plugin/adapters/mobile.md').read_text()
         self.assertLess(len(host.encode()) + len(mobile.encode()), 6000)
-        self.assertIn('never use a file read as an invocation fallback', host)
+        self.assertIn('substitute a file read for them', host)
+        self.assertIn("reads the owning `SKILL.md` in full as the router's", host)
         self.assertIn('never restart task routing', host)
         self.assertIn('No translation grants new authority', host)
         self.assertIn('For all other work, follow the pinned core unchanged', mobile)
@@ -93,16 +94,28 @@ class ContextDisclosure(unittest.TestCase):
     def test_source_budgets_recompute_and_bound_unchanged_bodies(self):
         measured = measure_context.measure(ROOT)
         self.assertEqual(measured, json.loads((ROOT / 'docs/CONTEXT-BUDGET.json').read_text()))
-        # The host invocation table drops inherited manual-only metadata from 45 skill bodies and
-        # native model-role wiring changes reflect and setup-huguesstack; automate-me, make-bot-ui
-        # and recall stay byte-identical.
-        self.assertEqual(measured['canonical_skill_bodies']['unchanged_files'], 3)
+        # Restoring pstack's router design puts the inherited manual-only line back on 44 more
+        # skill bodies, matching most of the pre-restoration baseline again. Nine bodies still
+        # differ: hugues-mode and setup-huguesstack diverge from upstream to stay model-invocable,
+        # and architect, arena, how, interrogate, reflect, swarm and why carry the separate
+        # tiered-model-role wiring change.
+        self.assertEqual(measured['canonical_skill_bodies']['unchanged_files'], 41)
         self.assertLess(measured['native_frontmatter']['candidate']['bytes'],
                         measured['native_frontmatter']['native_before']['bytes'])
         for profile in measured['scenarios'].values():
             self.assertLess(profile['candidate']['bytes'], profile['native_before']['bytes'])
         routing = measured['scenarios']['initial_mode_routing']
         self.assertLess(routing['candidate']['bytes'], routing['native_before']['bytes'] * .8)
+
+    def test_skill_list_budget_is_at_most_2500_characters(self):
+        measured = measure_context.measure(ROOT)
+        skill_list = measured['skill_list']
+        self.assertLessEqual(skill_list['candidate']['characters'], 2500)
+        self.assertEqual(skill_list['model_invocable_skills'], 2)
+        self.assertEqual(set(skill_list['paths']),
+                         {'plugin/skills/hugues-mode/SKILL.md', 'plugin/skills/setup-huguesstack/SKILL.md'})
+        self.assertEqual(skill_list['pre_restoration_baseline']['characters'], 9869)
+        self.assertEqual(skill_list['pre_restoration_baseline']['model_invocable_skills'], 46)
 
     def test_context_baseline_drift_is_rejected(self):
         with tempfile.TemporaryDirectory(prefix='context-baseline-') as directory:

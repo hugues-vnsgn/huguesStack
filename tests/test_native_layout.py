@@ -152,7 +152,7 @@ class NativeIntegrity(unittest.TestCase):
         self.rejected()
 
     def test_native_policy_mutation_is_rejected_even_after_sealing(self):
-        path = self.root / 'plugin/skills/architect/agents/openai.yaml'
+        path = self.root / 'plugin/skills/setup-huguesstack/agents/openai.yaml'
         path.write_text('policy:\n  allow_implicit_invocation: false\n')
         seal_payload.seal(self.root)
         self.rejected()
@@ -189,10 +189,10 @@ class NativeIntegrity(unittest.TestCase):
         self.rejected()
 
     def test_dependency_skill_cannot_become_manual_only(self):
-        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path = self.root / 'plugin/skills/setup-huguesstack/SKILL.md'
         path.write_text(path.read_text().replace('\n---\n', '\ndisable-model-invocation: true\n---\n', 1))
         (path.parent / 'agents/openai.yaml').write_text('policy:\n  allow_implicit_invocation: false\n')
-        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
+        seal_payload.seal(self.root, accept=['plugin/skills/setup-huguesstack/SKILL.md'])
         self.rejected()
 
     def test_verbatim_port_may_only_drop_the_inherited_manual_only_line(self):

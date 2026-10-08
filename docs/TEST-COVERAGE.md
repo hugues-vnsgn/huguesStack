@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The candidate collects **351 top-level unittest cases**. One is a driver that
+The candidate collects **352 top-level unittest cases**. One is a driver that
 separately executes **50 frozen 0.2.0 restoration cases**. Do not add the driver
 and its children as independent coverage, or describe historical passes as current
 native workflow proof. Subtests are not added to case totals.
@@ -13,9 +13,9 @@ native workflow proof. Subtests are not added to case totals.
 | Current source/provenance checks | 44 | test_upstream_sync (33), test_retained_provenance (11) |
 | Current installed adapters and regressions | 97 | test_host_adapters (72), test_review_regressions (12), test_rereview_regressions (13) |
 | Current native-layout contracts | 34 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt and budgets |
-| Current progressive-disclosure contracts | 8 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories and bound resources |
+| Current progressive-disclosure contracts | 9 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories, the skill-list budget and bound resources |
 | Current installed-tolerance regressions | 9 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes and raw skill-read spellings |
-| Total collected | 351 | Current, mixed and historical scopes remain distinct |
+| Total collected | 352 | Current, mixed and historical scopes remain distinct |
 
 The 131 historical modules are test_wp2_contract (45), test_wp3_contract (15),
 test_retained_design (7), test_retained_research (8), test_retained_verification (6),
@@ -28,6 +28,8 @@ native-layout plus eight disclosure cases gives 337, without dropping the frozen
 50 executions or counting them twice. The preceding native candidate had 329.
 The review-fix pass adds five native-layout and nine installed-tolerance cases,
 giving 351. The historical driver now also fails when any nested case is skipped.
+Restoring pstack's router design adds one skill-list budget disclosure case,
+giving 352.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.

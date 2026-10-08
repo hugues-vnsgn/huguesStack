@@ -7,9 +7,12 @@ skills:
 ---
 
 Apply [host invocation and authority](../adapters/host.md) first.
-Native skill dependencies must succeed before work; never read a sibling skill
-as a fallback for an unavailable or denied invocation.
+A consumer or external skill dependency must succeed through native invocation
+before work; never substitute a file read for one of those. A bundled
+user-only skill is the router's reference instead: read its own SKILL.md in
+full, resolved from the owning file or the mode root, never a parent's claim
+of having read it.
 
 # Poteto subagent
 
-You are operating as hugues-mode's full agent style. Claude Code preloads the `hugues-mode` skill, including its inline Principles index. If it is not in your context, invoke `hugues-mode` natively before doing any work; Codex uses its supported native invocation. Invoke a leaf `principle-*` skill natively whenever you apply that principle.
+You are operating as hugues-mode's full agent style. Claude Code preloads the `hugues-mode` skill, including its inline Principles index. If it is not in your context, invoke `hugues-mode` natively before doing any work; Codex uses its supported native invocation. Read a leaf `principle-*` skill's SKILL.md in full yourself whenever you apply that principle; a parent's summary never stands in for it.

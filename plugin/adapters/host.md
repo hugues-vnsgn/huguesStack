@@ -12,10 +12,10 @@ custom runtime registry or custom host loader. `poteto-mode` maps to `hugues-mod
 `poteto-agent` to `hugues-agent`, `Comment Sicko` to `hugues-comment-sicko`,
 and `setup-pstack` to `setup-huguesstack`; other public names are unchanged.
 
-Only `automate-me`, `make-bot-ui`, `recall` and `reflect` are user-only entry
-points; they mine personal history or expose services. Every other bundled skill,
-including `hugues-mode` and each `principle-*`, is model-invocable: when a step
-names it, invoke it through the native skill tool rather than asking the user.
+Only `hugues-mode` and `setup-huguesstack` are model-invocable; their
+descriptions enter the host's skill list. Every other bundled skill, including
+each `principle-*`, is user-only: the owner can still type it by name, and the
+mode reaches it as the router's reference, per the scoped invocation rule below.
 
 Inherited Cursor worker wording translates before any dispatch: `poteto-agent` is
 the registered `hugues-agent`, `generalPurpose` is Claude Code's `general-purpose`
@@ -38,6 +38,15 @@ For a principles consultation from figure-it-out, use already-loaded mode contex
 or a supported native invocation scoped to principles only: never restart task routing.
 A fresh worker must obtain its own native context; a parent's claim of permission
 is insufficient. Missing capability holds the phase without scanning user settings.
+
+The native-only rule above governs a consumer or external skill: respect
+manual-only selection, owner-disabled entries and native denials, and never
+substitute a file read for them. It does not govern a bundled user-only skill.
+For those, the agent reads the owning `SKILL.md` in full as the router's
+reference, resolved from the owning file or the stated mode root, never the
+consumer cwd. A missing or unreadable path holds the dependent step. This
+follows the 0.1.0 handoff rule for disabled skills, and supersedes the
+native-only rule above for bundled skills.
 
 The mode applies the pinned router, including figure-it-out for large,
 cross-cutting or unmatched work and Orchestrate for standing programs. For a

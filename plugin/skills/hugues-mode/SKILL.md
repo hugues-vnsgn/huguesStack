@@ -1,6 +1,6 @@
 ---
 name: hugues-mode
-description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /hugues-mode, or requests to work in this style.
+description: Router for nontrivial engineering work. Matches the task to a playbook and applies the principles. Use for a bug fix, feature, refactor, perf issue, investigation (how or why X works), PR babysit or ship, long autonomous run, or any mobile task (Swift/iOS, Kotlin/Android, KMP, CMP, simulator or emulator proof).
 mode: true
 icon: crown
 color: yellow
