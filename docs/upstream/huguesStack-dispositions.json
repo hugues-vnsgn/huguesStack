@@ -1390,7 +1390,7 @@
       "blob_sha": "eeebc42b7477d435d8ac61d631d84822f908f59c",
       "size": 2255,
       "sha256": "018bbc146ae19145caa6c7e70591fee081b64447dda1c1c4b681c9974d928b13",
-      "disposition": "port verbatim",
+      "disposition": "port with adaptation",
       "reason": "Canonical native consolidation; original bytes preserved in the upstream provenance archive.",
       "release_target": "0.2",
       "destinations": [
@@ -1428,7 +1428,7 @@
       "blob_sha": "79a6bbbe0ce61c3b5ef9af1ee8e3ccdb0557edc6",
       "size": 2766,
       "sha256": "3a62cc4a8cbcf144bb9dd05f05420a15be0d38b784d3b141bb730a5852f50a62",
-      "disposition": "port verbatim",
+      "disposition": "port with adaptation",
       "reason": "Canonical native consolidation; original bytes preserved in the upstream provenance archive.",
       "release_target": "0.2",
       "destinations": [
@@ -1447,7 +1447,7 @@
       "blob_sha": "c6441b92d30a71489d88eae5bfa8dc457da55cb1",
       "size": 4403,
       "sha256": "244f289898fe67a458065e90fe8217c916c5acf61cdee8975ade3f9831a12e91",
-      "disposition": "port verbatim",
+      "disposition": "port with adaptation",
       "reason": "Canonical native consolidation; original bytes preserved in the upstream provenance archive.",
       "release_target": "0.2",
       "destinations": [
@@ -1584,7 +1584,7 @@
       "blob_sha": "405c7a4362bedbd4194a5ef234553adf0dff78c9",
       "size": 1446,
       "sha256": "2b88ad0f880e4d4d755ac19fe52414d6631d6baa816d060f53cf0a7429d7e14a",
-      "disposition": "port verbatim",
+      "disposition": "port with adaptation",
       "reason": "Canonical native consolidation; original bytes preserved in the upstream provenance archive.",
       "release_target": "0.2",
       "destinations": [
@@ -1629,7 +1629,7 @@
       "blob_sha": "df2a863b531906c64f92b9f9d8feb62f8c7a8665",
       "size": 3211,
       "sha256": "50f4f7d3d301551f8b8a57c3303c99958c5ca630ae0d0051823b6987c0eb5b96",
-      "disposition": "port verbatim",
+      "disposition": "port with adaptation",
       "reason": "Canonical native consolidation; original bytes preserved in the upstream provenance archive.",
       "release_target": "0.2",
       "destinations": [

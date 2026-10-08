@@ -11,8 +11,8 @@ Before publication, obtain two fresh independent GPT-Astra reviewers at High eff
 against the exact final candidate commit. Give both seats the same intent, diff,
 rubric and supporting source. Each seat returns findings before the coordinator
 adjudicates them. A same-model panel provides process independence, not model
-family diversity. Generic interrogate keeps its pinned three-family defaults or
-the explicitly configured list; this profile does not rewrite that list.
+family diversity. Generic interrogate keeps its three-seat `inherit-parent` defaults
+or the explicitly configured list; this profile does not rewrite that list.
 
 Record base/head, actual invocation, requested and host-confirmed model/effort,
 verdict, findings, adjudications, checks and access limits. A tool accepting a

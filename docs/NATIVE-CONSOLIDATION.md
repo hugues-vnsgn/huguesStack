@@ -100,11 +100,12 @@ mutations, native-body read rejection, public names, workflow phase contracts,
 owned links and parser/audit safety. Context budgets are measured source bytes
 and characters, with characters/4 as an explicit token estimate; they are not
 observed host prompt usage. Initial bug-fix routing, including its full playbook,
-todos and required unslop reply guidance, is now 34,405 bytes versus 45,289 before
-disclosure, about 8,591 versus 11,308 estimated tokens. The larger workflow inventories include their required
-transitive skills and resources. Native frontmatter is 13,408 bytes after the host
-invocation table removed 45 inherited manual-only lines; workflow bodies excluding
-frontmatter are unchanged. These are source budgets;
+todos and required unslop reply guidance, is now 34,456 bytes versus 45,289 before
+disclosure, about 8,604 versus 11,308 estimated tokens. The larger workflow inventories include their required
+transitive skills and resources. Native frontmatter is 13,431 bytes after the host
+invocation table removed 45 inherited manual-only lines and the setup description
+named the native model-role file. Workflow bodies excluding frontmatter change only
+where nine skills replace Cursor model-role wiring. These are source budgets;
 actual startup exposure, full execution cost and runtime savings remain unknown.
 
 Live discovery/invocation, disabled-skill and planning behavior remain

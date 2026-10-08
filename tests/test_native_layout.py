@@ -285,7 +285,7 @@ class NativeIntegrity(unittest.TestCase):
         bodies['feature'] = (self.root / 'plugin/skills/hugues-mode/playbooks/feature.md').read_text()
         self.assertEqual(check_core.behavior_errors(bodies), [])
         for name, before, after in [('arena', '## Phase E: Graft', '## Phase Z: Graft'),
-            ('interrogate', '| Reviewer C | `grok-4.7-xhigh-fast` |', '| Reviewer C | `gpt-5.6-sol-max` |'),
+            ('interrogate', '| Reviewer C | `inherit-parent max` |', '| Reviewer C | `opus max` |'),
             ('swarm', 'A gap does not count as a pass', 'A gap counts as a pass'),
             ('tdd', '4. **Run the new test before fixing', '7. **Run the new test before fixing'),
             ('maintain-verification-skill', 'Exercise every feature at least once', 'Exercise one feature'),

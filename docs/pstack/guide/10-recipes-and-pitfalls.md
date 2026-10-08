@@ -85,7 +85,7 @@ That's the whole prompt. [`/bro`](../../../plugin/skills/bro/SKILL.md) restates 
 - **Parallel agents in one worktree.** They overwrite each other and the diff becomes archaeology. Say "own worktree per attempt" and the isolation is free.
 - **Using `/arena` for coverage.** `/arena` repeats one design or code brief, then picks a base and grafts the best parts. `/swarm` partitions slices or declared race arms and aggregates one report.
 - **Accepting every review comment.** Bots and humans both file real catches and noise in one list. `/interrogate` sorts findings into act-on and dismissed buckets with reasons, and you can override either way.
-- **Treating `auto` as a model slug.** `auto` and `inherit-parent` mean "omit the model field so the subagent inherits the parent chat model." [Setup](./01-setup.md) covers the roles.
+- **Reading a default panel as model diversity.** Every default `/interrogate`, `/arena`, and `/architect` seat is `inherit-parent`, so the panel is one model in fresh contexts: process independence. Name distinct models per seat in [setup](./01-setup.md) for model diversity.
 - **Reporting success off a green build.** A build proves it compiles. Ask for the real command, flow, stored value, or profile, and expect the evidence in the reply.
 - **Writing a `SKILL.md` freehand.** Route it through the [Authoring or modifying a skill playbook](../../../plugin/skills/hugues-mode/playbooks/authoring-a-skill.md) so validation and review happen.
 

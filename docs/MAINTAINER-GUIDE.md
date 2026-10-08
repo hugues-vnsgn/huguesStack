@@ -31,11 +31,11 @@ The coordinator invokes the selected native skill, loads its phase-required owne
 
 ## Configure roles explicitly
 
-Pinned defaults remain defaults. Optional project-local `.huguesstack/models.md` overrides roles; deleting a role restores its source default. `/setup-huguesstack` detects exposed models, loads state, asks for budget/role choices, validates and writes only after confirmation and authority. Restoring the plugin does not execute setup.
+Every role defaults to `inherit-parent` at the effort its skill names. Optional project-local `.huguesstack/models.md` overrides roles; deleting a role restores its skill default. `/setup-huguesstack` detects exposed models, loads state, asks for budget/role choices, validates and writes only after confirmation and authority. Restoring the plugin does not execute setup.
 
-Budgets remain unlimited/max, large/xhigh, medium/high and small/medium. Panel lists launch one worker per entry, aliases included. Explicit auto/inherit-parent aliases omit model overrides; they never silently replace all defaults. Rejected slugs follow the core fallback using confirmed capabilities. Report actual models/efforts, blocked seats and process independence separately from family diversity.
+Budgets remain unlimited/max, large/xhigh, medium/high and small/medium. Panel lists launch one worker per entry, `inherit-parent` entries included. `inherit-parent` omits the model override. A rejected value runs on `inherit-parent` at its effort. Report actual models/efforts, blocked seats and process independence separately from model diversity.
 
-Generic interrogate keeps its pinned Claude/GPT/Grok panel or configured list, sends the same prompt/rubric, synthesizes adjudicated findings and does not auto-fix. The [two-seat Astra High policy](../plugin/policies/astra-pr-review.md) is suspended for huguesStack PRs; re-activating it in AGENTS.md restores its exact-head review, fix and fresh re-review gate.
+Generic interrogate keeps its three `inherit-parent` seats or configured list, sends the same prompt/rubric, synthesizes adjudicated findings and does not auto-fix. The [two-seat Astra High policy](../plugin/policies/astra-pr-review.md) is suspended for huguesStack PRs; re-activating it in AGENTS.md restores its exact-head review, fix and fresh re-review gate.
 
 ## Prove the actual mobile behavior
 
