@@ -19,8 +19,13 @@ RUNTIME_SHA256 = {
     "__init__.py": "277b071e8e40f0aabb4007e0ae389824708b2bdd5259075623998749da582807",
     "json_input.py": "d162867227d23f2c56b0e391977450ddfb81e1311394646947325581651c5423",
     "activity.py": "5803f97bcc6270bf6d5b5139a68add48a5bb386e05d2d16bed3044a0a223da93",
-    "payload.py": "0cf66cb6dceb02973cbd0bc8794f525be69950275e287d895e52fbe05de71640"
+    "payload.py": "7a47c199bef497e8a74236f76fa6a42843b269e8cf149467963b0977e97542ac"
 }
+
+
+def plain_mode(mode):
+    # Same rule as runtime.payload.mode_matches for 0o644, which cannot load until verified.
+    return not mode & (stat.S_IWOTH | stat.S_IXUSR)
 
 
 def load_runtime_sources(binding=None):
@@ -30,7 +35,7 @@ def load_runtime_sources(binding=None):
     sources = {}
     for filename, expected in RUNTIME_SHA256.items():
         path = directory / filename
-        if path.is_symlink() or not path.is_file() or stat.S_IMODE(path.stat().st_mode) != 0o644:
+        if path.is_symlink() or not path.is_file() or not plain_mode(stat.S_IMODE(path.stat().st_mode)):
             raise ValueError('unsafe runtime file: ' + filename)
         body = path.read_bytes()
         if hashlib.sha256(body).hexdigest() != expected:
@@ -51,7 +56,7 @@ def load_runtime_sources(binding=None):
         for filename, body in sources.items():
             relative = 'adapters/runtime/' + filename
             if (recorded['adapter_sha256'][relative] != hashlib.sha256(body).hexdigest()
-                    or recorded['adapter_modes'][relative] != 0o644):
+                    or not plain_mode(recorded['adapter_modes'][relative])):
                 raise ValueError('bound runtime differs from approved source')
         cli = Path(__file__).resolve()
         if (recorded['adapter_sha256']['adapters/host_tools.py'] != hashlib.sha256(cli.read_bytes()).hexdigest()
@@ -100,7 +105,7 @@ def main(argv=None):
             node = shutil.which('node')
             if not node:
                 raise ValueError('Node unavailable; plan validation gate blocked')
-            helper = payload.checked_file(root, 'core/pstack/skills/poteto-mode/scripts/check-plan.mjs')
+            helper = payload.checked_file(root, 'skills/hugues-mode/scripts/check-plan.mjs')
             return subprocess.run([node, str(helper), str(Path(args.plan).resolve())], check=False).returncode
         elif args.verb == 'worktree-audit':
             result = activity.audit(args.repo.resolve(), args.sources, args.pr_snapshot, args.base)

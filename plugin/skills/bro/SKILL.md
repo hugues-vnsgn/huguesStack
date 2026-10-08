@@ -1,18 +1,12 @@
 ---
 name: bro
 description: Restate the last message in plain human language, with no jargon.
-source: pstack/skills/bro/SKILL.md
-disable-model-invocation: true
 ---
 
-# bro
+## Host invocation contract
 
-Before work, read in full and in this order:
+Before these workflow steps, apply the [host contract](../../adapters/host.md)
+and [mobile applicability](../../adapters/mobile.md#applicability).
+The host contract supersedes inherited sibling-body reads.
 
-1. [Host adapter](../../adapters/host.md).
-2. [Mobile adapter](../../adapters/mobile.md).
-3. [Pinned bro core](../../core/pstack/skills/bro/SKILL.md).
-
-Execute that core contract, applying only the named adapter translations and
-the consumer project’s explicit policy. Read its phase-required references in full. Do not
-substitute this loader for the workflow. Report blocked gates and actual proof.
+Restate your last message. Stop using jargon and speak coherently. State it more simply and concisely, like one human talking to another.

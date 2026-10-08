@@ -1,0 +1,147 @@
+{
+  "baseline_revision": "7db3e80d4b75e55f3f6d0ee85da5faa330e65d76",
+  "host_source": "plugin/adapters/host.md",
+  "host_fragments": [
+    {
+      "paragraph": 0,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "d134f221705d8d1277806e659529441c622977b012ceccdcc3fcf6f91360ecee"
+    },
+    {
+      "paragraph": 1,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "571635456034ac994641e3445f29dc01e26f776e917b5fa019589648906cea02"
+    },
+    {
+      "paragraph": 2,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "62f2cfabed2b4061be39c5047fdd472ca447eb15b97076de1501d31cca72ff0a"
+    },
+    {
+      "paragraph": 3,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "d737eb8fd6e9b2d696582714e83ee6c1bb13a9b63da1a4a9f34bbbe976351a98"
+    },
+    {
+      "paragraph": 4,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "6cda7b2d4280393385930a92b93fc84517955d63248070f2c4c6f020977b34ec"
+    },
+    {
+      "paragraph": 5,
+      "slice": null,
+      "destination": "plugin/adapters/host-workflow-tools.md",
+      "sha256": "548ed366116bc182509a9a6aa888a11156928204e9ec45a09dcb876e37b0855e"
+    },
+    {
+      "paragraph": 6,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "4ee3bf6f9c8991310ae0c75b4ef04b9b3cee7cf3c5683409b9106f3b9dfe92e7"
+    },
+    {
+      "paragraph": 7,
+      "slice": null,
+      "destination": "plugin/adapters/host-special-skills.md",
+      "sha256": "4b28dfe0b58f99ceaf6a77ac5be86c16a03d018f86bbe4bc15caa7436f6acf49"
+    },
+    {
+      "paragraph": 8,
+      "slice": [
+        0,
+        981
+      ],
+      "destination": "plugin/adapters/host-special-skills.md",
+      "sha256": "2d38038763942aa5a5b899bf5703ff26ae744ba876af43f62efa8233654c3651"
+    },
+    {
+      "paragraph": 8,
+      "slice": [
+        981,
+        1394
+      ],
+      "destination": "plugin/adapters/host-typescript.md",
+      "sha256": "3048c5937ba87ae37e1c6302de9747b669f907cf5bcbb79e84008d07c5f5457d"
+    },
+    {
+      "paragraph": 9,
+      "slice": null,
+      "destination": "plugin/adapters/host-workers.md",
+      "sha256": "b52ecfe5c764496a7708e90e9ef443d446f2ea78dc44486fa87fc33e5f0551a0"
+    },
+    {
+      "paragraph": 10,
+      "slice": null,
+      "destination": "plugin/adapters/host-workers.md",
+      "sha256": "7c0de9131a8a78650cc736da2d62ffc8679936c5f08c3b723e3278b528a67df3"
+    },
+    {
+      "paragraph": 11,
+      "slice": null,
+      "destination": "plugin/adapters/host-workers.md",
+      "sha256": "d537a9b8d6aa8cb7e3e6ccdedfbd6c70158445e43d06828c97156c0e94eb13eb"
+    },
+    {
+      "paragraph": 12,
+      "slice": null,
+      "destination": "plugin/adapters/host-workers.md",
+      "sha256": "11dd0faa65a765a1c3ef1f3e707f25f1d9a64f57b07f204d41eef020ce1f8525"
+    },
+    {
+      "paragraph": 13,
+      "slice": null,
+      "destination": "plugin/adapters/host-workers.md",
+      "sha256": "56163ca26b69186942627c507d49b1830e2d1fd8db34931df93686fdfab3bc30"
+    },
+    {
+      "paragraph": 14,
+      "slice": null,
+      "destination": "plugin/adapters/host-workers.md",
+      "sha256": "e0466a1eff2e7767c9c4af77dd5f6e0c5b42c72cd99469fdf3ee0a0a700afce7"
+    },
+    {
+      "paragraph": 15,
+      "slice": null,
+      "destination": "plugin/adapters/host-workers.md",
+      "sha256": "1a0c39ffe445cc11c913d832f7962feeec220a32870e15299c9ff2448a2b8e29"
+    },
+    {
+      "paragraph": 16,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "75dade775b37e1019f067b69233464548dd4f6832ca48bf00a9a7b6b9b3de566"
+    },
+    {
+      "paragraph": 17,
+      "slice": null,
+      "destination": "plugin/adapters/host.md",
+      "sha256": "c5aac6e3e882ca12c14c9e9a6e37cdf1cf26e205cd1d684708a253987e9ef4cb"
+    },
+    {
+      "paragraph": 18,
+      "slice": null,
+      "destination": "plugin/adapters/host-workflow-tools.md",
+      "sha256": "715c8801587cbccaf6c5bb7a236b687cb5cda08c482f06daf4f26317878e1f51"
+    },
+    {
+      "paragraph": 19,
+      "slice": null,
+      "destination": "plugin/adapters/host-publication.md",
+      "sha256": "0c91ccbec3761664db9089bb8b9cb471d0a3d357510608995c2a7dd240407146"
+    },
+    {
+      "paragraph": 20,
+      "slice": null,
+      "destination": "plugin/adapters/host-publication.md",
+      "sha256": "58187cbd9efb9e4cef51caf5e1959f7ad4f88d42be244eeda09bdcdfcd930624"
+    }
+  ],
+  "mobile_source": "plugin/adapters/mobile.md",
+  "mobile_destination": "plugin/adapters/mobile-workflows.md",
+  "mobile_sha256": "11a718eeaa16d23528b72f2791e5b80e360398c5fa85069af6b03904c2c5f228"
+}

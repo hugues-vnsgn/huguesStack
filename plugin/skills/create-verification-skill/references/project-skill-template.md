@@ -1,4 +1,4 @@
-> Retained bounded-mobile extension template. Use only for an explicitly requested one-journey diagnostic. The default generator loads the pinned feature-map example from plugin/core and seeds the top 3–5 features. This template cannot satisfy generation or whole-map maintenance by itself.
+> Retained bounded-mobile extension template. Use only for an explicitly requested one-journey diagnostic. The default generator loads its owned feature-map example and seeds the top 3–5 features. This template cannot satisfy generation or whole-map maintenance by itself.
 
 # Project verification skill template
 
@@ -8,7 +8,6 @@ Use this structure when writing a consumer-local skill. Replace angle-bracket pr
 ---
 name: verify-<app>
 description: "Verify <agreed user journey> on <named targets> and retain its evidence."
-disable-model-invocation: true
 ---
 
 # Verify <app>
@@ -17,7 +16,7 @@ disable-model-invocation: true
 
 <Repository/worktree, permitted files/actions, domains, journey and expected checkpoints.>
 <Applicable repository instructions and required tools.>
-<Repository-supported canonical skill path and host layout; verified symlink resolution/loader result or regular-copy hashes and synchronization rule. Record direct-reading fallback and native discovery unrun where applicable.>
+<Repository-supported canonical skill path and host layout; verified symlink resolution/loader result or regular-copy hashes and synchronization rule. Record supported native invocation and actual discovery evidence. If unavailable or denied, hold; never substitute direct body reads.>
 
 ## Launch
 

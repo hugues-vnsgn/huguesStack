@@ -10,8 +10,7 @@
       "sha256": "644f2551403c1bca01a2855b34611b6e7be0ce0dc5b204514c376c0f6a6e6ac4",
       "disposition": "adapted",
       "destinations": [
-        "plugin/skills/create-verification-skill/SKILL.md",
-        "plugin/skills/create-verification-skill/references/project-skill-template.md"
+        "plugin/skills/create-verification-skill/SKILL.md"
       ],
       "adaptations": [
         "The original 0.15.5 generator blob is also the pinned 0.15.9 blob. Its complete feature-map and proof contract is now loaded byte-for-byte from plugin/core.",

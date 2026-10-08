@@ -1,6 +1,6 @@
 # huguesStack maintainer reference
 
-This reference describes the core restoration shipped in 0.2.0. Start with the [developer guide](DEVELOPER-GUIDE.md) to install and use it. The 0.1.0 guide and release remain historical; their host/mobile evidence does not cover these loaders. The pin remains pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`.
+This reference describes the unreleased native consolidation of 0.2.0. Start with the [developer guide](DEVELOPER-GUIDE.md) for the current layout and invocation limits. Published release evidence remains bound to its original revision. The source pin remains pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`.
 
 ## Load the intended checkout
 
@@ -10,11 +10,11 @@ Use a fresh Claude Code session in the intended consumer repository:
 claude --plugin-dir /absolute/path/to/huguesStack/plugin
 ```
 
-Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack. The 0.2.0 manifest identifies this release; verify the actual checkout path/revision as well as the cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
+Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack and carries prerelease version 0.3.0-rc.1, because the native layout, payload schema 2 and bindings are incompatible with 0.2.0. Identify this unreleased candidate by its checkout path and exact commit as well as the cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
 
-For Codex, use an already-authorized native loader when available. Otherwise read `/absolute/path/to/huguesStack/plugin/skills/hugues-mode/SKILL.md` and all required links in full. Label direct reads separately from native discovery. These instructions authorize no host configuration changes or installations.
+For Codex, use an already-authorized supported native invocation. If discovery or invocation is unavailable, disabled, denied or unknown, hold the dependent step. Provide a manual handoff only when the host requires explicit user invocation; never substitute a direct file read. These instructions authorize no host configuration changes or installations.
 
-Functional entrypoints load host adapter → mobile applicability → full pinned core. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
+Canonical native skill bodies apply host guidance and mobile applicability before their workflow steps. Other skills use supported native invocation, with conditional handoff or hold; never a direct-read fallback. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
 
 ## State a task and follow its route
 
@@ -27,7 +27,7 @@ Functional entrypoints load host adapter → mobile applicability → full pinne
 
 Give the consumer path/revision, authorized actions and observable result. Intent precedes language: lifecycle, authoring, review, investigation and verification retain their routes. Native implementation uses core playbooks; KMP/CMP use named extensions. Large/cross-cutting/unmatched work uses figure-it-out; standing programs use Orchestrate. Mobile proof becomes a phase of that designed workflow.
 
-The coordinator reads the selected public bridge and full core, copies ordered todos, grounds/designs, delegates fresh rounds and independently checks actual artifacts. Feature work with multiple valid shapes requires arena. For mobile arena work, candidates get sanitized fresh contexts and isolated write paths; the judge gets neutral artifacts/rubric after writers finish. Missing isolation blocks blind judging.
+The coordinator invokes the selected native skill, loads its phase-required owned references, copies ordered todos, grounds/designs, delegates fresh rounds and independently checks actual artifacts. Feature work with multiple valid shapes requires arena. For mobile arena work, candidates get sanitized fresh contexts and isolated write paths; the judge gets neutral artifacts/rubric after writers finish. Missing isolation blocks blind judging.
 
 ## Configure roles explicitly
 
@@ -35,7 +35,7 @@ Pinned defaults remain defaults. Optional project-local `.huguesstack/models.md`
 
 Budgets remain unlimited/max, large/xhigh, medium/high and small/medium. Panel lists launch one worker per entry, aliases included. Explicit auto/inherit-parent aliases omit model overrides; they never silently replace all defaults. Rejected slugs follow the core fallback using confirmed capabilities. Report actual models/efforts, blocked seats and process independence separately from family diversity.
 
-Generic interrogate keeps its pinned Claude/GPT/Grok panel or configured list, sends the same prompt/rubric, synthesizes adjudicated findings and does not auto-fix. PR-bound huguesStack work adds the [two-seat Astra High policy](../plugin/policies/astra-pr-review.md): exact candidate head, fixes, checks and fresh re-review. Launch acceptance does not attest to backend settings or completion.
+Generic interrogate keeps its pinned Claude/GPT/Grok panel or configured list, sends the same prompt/rubric, synthesizes adjudicated findings and does not auto-fix. The [two-seat Astra High policy](../plugin/policies/astra-pr-review.md) is suspended for huguesStack PRs; re-activating it in AGENTS.md restores its exact-head review, fix and fresh re-review gate.
 
 ## Prove the actual mobile behavior
 
@@ -53,7 +53,7 @@ Read [lane rules](../plugin/skills/hugues-mode/references/mobile-lanes.md), [evi
 
 Long/autonomous work keeps the pinned append-only TSV trail, ownership start rows, evidence pointers and superseding corrections. Audit only the current run against its available transcript. Missing native transcript/cross-family review is an explicit audit gap. Use pause-safely/session-pickup to reconstruct actual state and preserve evidence.
 
-Helpers live in the immutable core. Inspect local runtime/cache/authority first. Bun bootstrap may install packages; do not run it without installation scope. Missing cloud, loop, forge or model capability blocks dependent work. Shipping does not gain merge authority from green tests.
+Helpers live alongside their owning canonical skills. Inspect local runtime/cache/authority first. Bun bootstrap may install packages; do not run it without installation scope. Missing cloud, loop, forge or model capability blocks dependent work. Shipping does not gain merge authority from green tests.
 
 For planning and cleanup, use the [installed host commands](../plugin/adapters/host-tools.md). Save the approved payload binding when authoring a program. Fill and translate bundled plan operands, validate with `plan-check`, and reread workflows through that binding at every required tick. Payload/adapter drift blocks the program; consumer-owned files still come from consumer trunk. The native worktree audit takes an explicit authorized source manifest and local PR snapshot. Incomplete activity coverage holds candidates. The separate active/pinned-chat gate remains required before any prune decision; the helper never deletes or discovers private transcript directories.
 
@@ -61,7 +61,7 @@ Opening a PR retains ready-PR and stack/base mechanics. Prepare local commits/bo
 
 ## Change and validate the plugin
 
-Edit adapters/project policy for host/mobile translations, never the pinned source. Core upgrades are separate. Render loaders with `python3 scripts/render_core.py`; update provenance/reviewed adapter receipts deliberately, then test and review semantic boundaries.
+Edit canonical skills or owned adapters, then run `python3 scripts/seal_payload.py`, naming each changed canonical file with `--accept <repository path>`, and update retained-source receipts for affected files. Review these changes and run all checks; sealing is not behavioral approval. The upstream archive is immutable provenance. `render_core.py` is retired. Mobile redesign remains separate from this consolidation.
 
 ```sh
 python3 -m unittest discover -s tests -v
@@ -71,8 +71,8 @@ python3 scripts/upstream-diff.py check
 python3 scripts/check_whitespace.py
 ```
 
-Source checks reconstruct the pinned Git snapshot and verify all 161 names/modes/hashes plus the shipped runtime manifest and reviewed adapter assets. Development tests cover source, phases/cardinality/fallback, active wiring, bounded overrides and helpers. Installed adapter tests use external disposable consumer directories and synthetic native transcripts. Frozen release tests cover historical contracts only; [test accounting](TEST-COVERAGE.md) separates these roots. Passing static checks cannot attest to unrun host/mobile journeys.
+Source checks verify all 161 archived upstream files against the Git snapshot, then check canonical mappings, installed inventory, modes, hashes and workflow boundaries. Development tests cover source, phases/cardinality/fallback, active wiring, bounded overrides and helpers. Installed adapter tests use external disposable consumer directories and synthetic native transcripts. Frozen release tests cover historical contracts only; [test accounting](TEST-COVERAGE.md) separates these roots. Passing static checks cannot attest to unrun host/mobile journeys.
 
 See [restoration scope](CORE-RESTORATION.md) and [historical support](support.md). All upstream responsibilities stay in the ledger, including all 50 registered top-level skills, both native agent definitions and the separate Benny service source. Registration of automate-me or make-bot-ui grants no authority for personal transcript processing or bot/webhook execution. TypeScript guidance remains available alongside mobile adapters.
 
-The native Comment Sicko wrapper loads its complete pinned rules for no-comments. KMP/CMP extensions compose the selected core action procedure and require implementation arena within step 3 when Feature has multiple valid shapes; design-only arena cannot satisfy that gate. Both wiring failures have phase-local mutation regressions.
+The canonical Comment Sicko agent retains its complete source rules for no-comments. KMP/CMP extensions compose the selected core action procedure and require implementation arena within step 3 when Feature has multiple valid shapes; design-only arena cannot satisfy that gate. Both wiring failures have phase-local mutation regressions.

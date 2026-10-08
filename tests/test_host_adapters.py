@@ -27,7 +27,9 @@ class InstalledFixture:
         self.consumer.mkdir()
         self.helper = self.plugin / 'adapters/host_tools.py'
         self.binding = self.area / 'binding.json'
-        self.binding.write_text(self.run_tool('bind').stdout)
+        bound = self.run_tool('bind')
+        self.assertEqual(bound.returncode, 0, bound.stderr)
+        self.binding.write_text(bound.stdout)
 
     def run_tool(self, *args, **kwargs):
         return subprocess.run([sys.executable, str(self.helper), *map(str, args)],
@@ -39,38 +41,38 @@ class InstalledFixture:
 
 class InstalledAdapters(InstalledFixture, unittest.TestCase):
     def test_installed_read_outside_plugin_without_git(self):
-        source = 'pstack/skills/swarm/SKILL.md'
+        source = 'skills/hugues-mode/playbooks/feature.md'
         self.assertFalse((self.plugin / '.git').exists())
         self.assertFalse((self.consumer / 'pstack').exists())
         result = self.bound('read-workflow', source)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout, (self.plugin / 'core' / source).read_text())
+        self.assertEqual(result.stdout, (self.plugin / source).read_text())
 
     def test_binding_is_revision_and_adapter_bound(self):
         data = json.loads(self.binding.read_text())
-        self.assertEqual(data['revision'], 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a')
+        self.assertEqual(data['revision'], 'huguesstack-native-v1')
         self.assertIn('adapters/runtime/activity.py', data['adapter_sha256'])
         self.assertEqual(data['plugin_root'], str(self.plugin))
 
     def test_workflow_drift_blocks_tick(self):
-        path = self.plugin / 'core/pstack/skills/swarm/SKILL.md'
+        path = self.plugin / 'skills/hugues-mode/playbooks/feature.md'
         path.write_text(path.read_text() + '\nchanged\n')
-        result = self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md')
+        result = self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md')
         self.assertEqual(result.returncode, 2)
         self.assertIn('workflow bytes/mode drift', result.stderr)
 
     def test_adapter_drift_blocks_tick(self):
         path = self.plugin / 'adapters/host.md'
         path.write_text(path.read_text() + '\nchanged\n')
-        self.assertIn('binding changed', self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md').stderr)
+        self.assertIn('drift', self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md').stderr)
 
     def test_mode_drift_blocks_tick(self):
-        path = self.plugin / 'core/pstack/skills/poteto-mode/scripts/worktree-audit.sh'
+        path = self.plugin / 'skills/show-me-your-work/scripts/log.sh'
         path.chmod(0o644)
-        self.assertEqual(self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md').returncode, 2)
+        self.assertEqual(self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md').returncode, 2)
 
     def test_missing_installed_helper_blocks_validation(self):
-        (self.plugin / 'core/pstack/skills/poteto-mode/scripts/check-plan.mjs').unlink()
+        (self.plugin / 'skills/hugues-mode/scripts/check-plan.mjs').unlink()
         result = self.bound('plan-check', self.consumer / 'plan.md')
         self.assertEqual(result.returncode, 2)
         self.assertIn('missing installed payload', result.stderr)
@@ -88,14 +90,14 @@ class InstalledAdapters(InstalledFixture, unittest.TestCase):
         moved = self.area / 'replacement plugin'
         self.plugin.rename(moved)
         self.helper = moved / 'adapters/host_tools.py'
-        self.assertEqual(self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md').returncode, 2)
+        self.assertEqual(self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md').returncode, 2)
 
     def test_symlink_payload_rejected(self):
-        source = self.plugin / 'core/pstack/skills/swarm/SKILL.md'
+        source = self.plugin / 'skills/hugues-mode/playbooks/feature.md'
         saved = self.area / 'saved.md'
         source.rename(saved)
         source.symlink_to(saved)
-        self.assertEqual(self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md').returncode, 2)
+        self.assertEqual(self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md').returncode, 2)
 
     def test_translation_executes_bound_workflow_and_keeps_consumer_trunk(self):
         draft = self.consumer / 'draft.md'
@@ -108,7 +110,7 @@ class InstalledAdapters(InstalledFixture, unittest.TestCase):
         command = next(line for line in result.stdout.splitlines() if 'read-workflow --binding' in line).strip('`')
         reread = subprocess.run(shlex.split(command), cwd=self.consumer, capture_output=True, text=True)
         self.assertEqual(reread.returncode, 0, reread.stderr)
-        self.assertEqual(reread.stdout, (self.plugin / 'core/pstack/skills/swarm/SKILL.md').read_text())
+        self.assertEqual(reread.stdout, (self.plugin / 'skills/hugues-mode/playbooks/feature.md').read_text())
 
     @unittest.skipUnless(shutil.which('node'), 'Node unavailable; plan gate unrun')
     def test_translated_plan_passes_and_invalid_live_gate_fails(self):

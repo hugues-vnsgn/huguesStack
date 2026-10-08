@@ -1,3 +1,4 @@
+import sys
 """Mutate isolated package copies to exercise the static safety boundaries."""
 import json
 from pathlib import Path
@@ -21,7 +22,7 @@ class PackageChecks(unittest.TestCase):
         self.mode_body = (self.repo / 'plugin/skills/hugues-mode/SKILL.md').read_text().split('---\n', 2)[2]
 
     def run_check(self):
-        return subprocess.run(['sh', str(CHECKER), str(self.repo)], text=True, capture_output=True)
+        return subprocess.run([sys.executable, str(ROOT / 'scripts/check_plugin.py'), str(self.repo), '--historical-release-0.1.0'], text=True, capture_output=True)
 
     def assert_rejected(self, diagnostic):
         result = self.run_check()
@@ -40,7 +41,7 @@ class PackageChecks(unittest.TestCase):
         (self.repo / 'plugin/skills/hugues-mode/SKILL.md').write_text(text + self.mode_body)
 
     def test_valid_package_and_cwd_independence(self):
-        result = subprocess.run(['sh', str(self.repo / 'scripts/check-plugin.sh')], cwd=self.temp.name, text=True, capture_output=True)
+        result = subprocess.run([sys.executable, str(self.repo / 'scripts/check_plugin.py'), '--historical-release-0.1.0'], cwd=self.temp.name, text=True, capture_output=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(self.run_check().returncode, 0)
 

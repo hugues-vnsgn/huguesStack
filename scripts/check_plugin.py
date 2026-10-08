@@ -6,7 +6,9 @@ import re
 import sys
 from urllib.parse import unquote, urlsplit
 
-supplied_root = Path(sys.argv[1] if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]).absolute()
+arguments = [a for a in sys.argv[1:] if a != '--historical-release-0.1.0']
+historical = '--historical-release-0.1.0' in sys.argv[1:]
+supplied_root = Path(arguments[0] if arguments else Path(__file__).resolve().parents[1]).absolute()
 if supplied_root.is_symlink() or not supplied_root.is_dir():
     print('repository-root: expected existing directory, not symlink', file=sys.stderr)
     sys.exit(1)
@@ -228,7 +230,9 @@ if receipt_path.exists():
 # bytes and effective loaders before exempting upstream formatting from the
 # authored-document parser. No filename-only vendor exemption is allowed.
 core_validated = False
-if (root / 'plugin/core').exists() or (root / 'plugin/core-bindings.json').exists():
+if historical and standard.get('version') != '0.1.0':
+    fail('historical validation only accepts release 0.1.0')
+if not historical:
     try:
         from check_core import check
         check(root)
@@ -238,6 +242,15 @@ if (root / 'plugin/core').exists() or (root / 'plugin/core-bindings.json').exist
     if not core_validated:
         print('\n'.join(errors), file=sys.stderr)
         sys.exit(1)
+
+# Upstream fill-in templates write `(url)` as a placeholder, not a link. Exempt
+# only that target, only in canonical files still byte-identical to upstream.
+placeholder_links = set()
+if core_validated:
+    for row in load(root / 'docs/upstream/consolidation.json')['files']:
+        if (row['destination'] == 'plugin/skills/why/references/synthesizer-prompt.md'
+                and row['destination_sha256'] == row['source_sha256']):
+            placeholder_links.add((row['destination'], 'url'))
 
 # This small link checker covers authored inline and full/collapsed references.
 def prose(text):
@@ -276,10 +289,6 @@ for path in sorted(root.rglob('*.md')):
                 fail(f'{relative}: unsupported link {value}')
             continue
         decoded = unquote(parsed.path)
-        if (core_validated and str(relative) == 'plugin/skills/why/references/synthesizer-prompt.md'
-                and value == 'url' and path.read_bytes() ==
-                (root / 'plugin/core/pstack/skills/why/references/synthesizer-prompt.md').read_bytes()):
-            continue  # Exact pinned citation-template placeholder, not a dependency.
         if decoded.startswith('/') or '\\' in decoded:
             fail(f'{relative}: absolute local link {value}')
             continue
@@ -287,6 +296,8 @@ for path in sorted(root.rglob('*.md')):
         if not inside(target, root):
             fail(f'{relative}: link escapes root {value}')
         elif not target.exists():
+            if (relative.as_posix(), value) in placeholder_links:
+                continue
             if (str(relative), value) in deferred_links:
                 deferred_warnings.append(f'DEFERRED: {relative} -> {value} (pstack 0.15.9 helper deferred to 0.2; source bytes verified)')
             else:

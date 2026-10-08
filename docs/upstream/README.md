@@ -1,6 +1,12 @@
-## Unreleased core restoration
+## Unreleased native consolidation
 
-The approved pin remains pstack 0.15.9. All 161 source files are preserved byte-for-byte in `plugin/core/pstack`, including Git executable modes. Active entrypoints load all 50 top-level skills, both upstream agents and all 23 core playbooks plus four mobile routes. All three former omissions are registered definitions; transcript, bot/webhook and configuration execution retain their permission boundaries. Benny is a separate nested service bundle. See [restoration contracts](../CORE-RESTORATION.md). Run `python3 scripts/check_core.py` as well as the checks below. Historical delta counts remain unchanged; current ledger dispositions describe the restoration, rather than the released 0.1.0 subset. The ledger target `0.2` is shipped as release `0.2.0`; the baseline ledger remains historical. A later version upgrade is a separate review.
+All 161 pstack 0.15.9 source files are preserved byte-for-byte with their modes in
+`provenance/upstream/pstack-0.15.9.tar.gz`. Canonical native bodies retain all 50 top-level skills,
+both upstream agents, 23 generic playbooks and four mobile routes. The runtime
+core mirror and generated body loaders are retired. The current ledger and
+[consolidation map](consolidation.json) distinguish adapted runtime files from
+provenance-only assets. Historical releases and source snapshots remain unchanged.
+See [migration contracts](../NATIVE-CONSOLIDATION.md). A pin upgrade is separate.
 
 # Upstream sync
 

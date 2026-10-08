@@ -194,28 +194,28 @@
     },
     {
       "source": "pstack/skills/interrogate/references/code-quality-review.md",
-      "destination": "plugin/core/pstack/skills/interrogate/references/code-quality-review.md",
+      "destination": "plugin/skills/interrogate/references/code-quality-review.md",
       "disposition": "verbatim",
       "blob_sha": "16581250d81044c7e80fe234c4970a3f7b7fc98a",
       "sha256": "79162fda183eafd40d51661fbb5e151c7ba250f89e506ba17f5bd135dcbd50a8"
     },
     {
       "source": "pstack/skills/interrogate/references/lead-judgment.md",
-      "destination": "plugin/core/pstack/skills/interrogate/references/lead-judgment.md",
+      "destination": "plugin/skills/interrogate/references/lead-judgment.md",
       "disposition": "verbatim",
       "blob_sha": "5ce526097fdd3dfeaf4cd3b126a3f486c3ee36ae",
       "sha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361"
     },
     {
       "source": "pstack/skills/interrogate/references/reviewer-prompt.md",
-      "destination": "plugin/core/pstack/skills/interrogate/references/reviewer-prompt.md",
+      "destination": "plugin/skills/interrogate/references/reviewer-prompt.md",
       "disposition": "verbatim",
       "blob_sha": "13a252b2c3cd18522d4c8dc39a7030477037b249",
       "sha256": "e0598e254792b56de39bb16b1e6db559b03a522fdc54b98f942d254090920ae6"
     },
     {
       "source": "pstack/skills/interrogate/references/rubric.md",
-      "destination": "plugin/core/pstack/skills/interrogate/references/rubric.md",
+      "destination": "plugin/skills/interrogate/references/rubric.md",
       "disposition": "verbatim",
       "blob_sha": "2d92f1b83e13be03fb10f20cba12639a1406a2da",
       "sha256": "a85aa801abbaf14434f00579440abc0d8e2723227ba8bf57de7cca8d6e7d2f25"
@@ -223,63 +223,63 @@
     {
       "source": "pstack/skills/poteto-mode/playbooks/investigation.md",
       "destination": "plugin/skills/hugues-mode/playbooks/investigation.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "cd119f04f23e0b7acb3f8cc5ba13ce4ab7aa6c7d",
       "sha256": "dc66bcf6af3a074fc7f67aa5e12b93ef571a4fb4d8e17f2f1af5ae5359f42e46"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/bug-fix.md",
       "destination": "plugin/skills/hugues-mode/playbooks/bug-fix.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "eeebc42b7477d435d8ac61d631d84822f908f59c",
       "sha256": "018bbc146ae19145caa6c7e70591fee081b64447dda1c1c4b681c9974d928b13"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/feature.md",
       "destination": "plugin/skills/hugues-mode/playbooks/feature.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "79a6bbbe0ce61c3b5ef9af1ee8e3ccdb0557edc6",
       "sha256": "3a62cc4a8cbcf144bb9dd05f05420a15be0d38b784d3b141bb730a5852f50a62"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/prototype.md",
       "destination": "plugin/skills/hugues-mode/playbooks/prototype.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "18bedc7e9249d180f9198d5b4b13e3817d41d281",
       "sha256": "7aa1f52c691c3d46d5afc527b23f90977fce869ce33573c73c81a4c7f0cde962"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/refactoring.md",
       "destination": "plugin/skills/hugues-mode/playbooks/refactoring.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "df2a863b531906c64f92b9f9d8feb62f8c7a8665",
       "sha256": "50f4f7d3d301551f8b8a57c3303c99958c5ca630ae0d0051823b6987c0eb5b96"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/visual-parity.md",
       "destination": "plugin/skills/hugues-mode/playbooks/visual-parity.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "248830ec74a593fc22143a842026388f92f1b9f4",
       "sha256": "950ca51999a6454c98eee6bcbc3d1bbe501a4e3a5d5439b6f6ddc378991b256c"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/authoring-a-skill.md",
       "destination": "plugin/skills/hugues-mode/playbooks/authoring-a-skill.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "8c5a55a44f5e95bba92f652da0ac87e941c49538",
       "sha256": "f6a13a445c360b48d6cd72780ac01955f45b82826476efe0e67c7559329407aa"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/session-pickup.md",
       "destination": "plugin/skills/hugues-mode/playbooks/session-pickup.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "9b2ed06e0ff8b01bf03b7a0d6a4cbb8ba3a46720",
       "sha256": "1604fb463f7c7410d43fa024ca76c1c1824c166a01fd69d61f073d06fdca2a47"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/pause-safely.md",
       "destination": "plugin/skills/hugues-mode/playbooks/pause-safely.md",
-      "disposition": "adapted",
+      "disposition": "verbatim",
       "blob_sha": "9d1c5f8303976fff40de099f7f28185909430c11",
       "sha256": "77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d"
     },

@@ -1,18 +1,115 @@
 ---
 name: interrogate
 description: "Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stress test this code\", \"find blind spots\", or \"tear this apart\". Multiple LLM reviewers challenge changes from independent angles."
-source: pstack/skills/interrogate/SKILL.md
-disable-model-invocation: true
 ---
 
-# interrogate
+## Host invocation contract
 
-Before work, read in full and in this order:
+Before these workflow steps, apply the [host contract](../../adapters/host.md)
+and [mobile applicability](../../adapters/mobile.md#applicability).
+The host contract supersedes inherited sibling-body reads.
 
-1. [Host adapter](../../adapters/host.md).
-2. [Mobile adapter](../../adapters/mobile.md).
-3. [Pinned interrogate core](../../core/pstack/skills/interrogate/SKILL.md).
+# Interrogate
 
-Execute that core contract, applying only the named adapter translations and
-the consumer project’s explicit policy. Read its phase-required references in full. Do not
-substitute this loader for the workflow. Report blocked gates and actual proof.
+Spawn one reviewer per configured model to adversarially review code changes. Each model gets the same prompt and rubric. The adversarial signal comes from model diversity, not assigned personas.
+
+The deliverable is a synthesized verdict. Do NOT auto-apply changes.
+
+## Step 1, Determine Scope
+
+Identify what to review from context:
+
+- If the user points at specific files or a diff, use that
+- If on a feature branch, run `git diff main...HEAD` (or the appropriate base branch) for the full changeset
+- If the user's message references recent work, gather the relevant files
+
+Package the diff (or file contents) plus any surrounding context files the reviewers need to understand the code.
+
+## Step 2, State the Intent
+
+Before spawning reviewers, state the intent explicitly. Derive this from:
+
+- The user's message
+- Commit messages
+- PR description if one exists
+- The code itself
+
+Write one clear paragraph. If you're unsure about the intent, ask the user before proceeding.
+
+## Step 3, Spawn Reviewers
+
+Launch all reviewers in a single message using the Task tool. Use the `interrogate reviewers` line in `~/.cursor/rules/pstack-models.mdc`, one reviewer per entry, extending or shrinking the Reviewer A/B/C labels below to the configured entry count. If the rule or that line is missing, use the table defaults.
+
+| Subagent | Default model |
+|----------|---------------|
+| Reviewer A | `claude-opus-5-5-max` |
+| Reviewer B | `gpt-5.6-sol-max` |
+| Reviewer C | `grok-4.7-xhigh-fast` |
+
+For each reviewer:
+- `subagent_type`: `generalPurpose`
+- `model`: the configured `interrogate reviewers` entry, or the table default with no configured line. For an `auto` or `inherit-parent` entry, omit `model` so that reviewer runs on the parent model.
+- `readonly`: `true`
+
+If the Task tool rejects a configured entry, run that reviewer on the table default of its family and say so. Families go by prefix: `claude-*`, `gpt-*`, and `grok-*`. With no family match, use Reviewer A's default. If it rejects a table default, check the valid slugs in the Task tool's error message, pick the closest equivalent (prefer the highest-reasoning tier of the same family), spawn with it, and open a separate PR to update the default table. Do not block the review on the slug issue. Never treat an alias entry as a rejected slug or apply either fallback to it.
+
+Read `references/reviewer-prompt.md` and fill in the template with:
+1. The stated intent
+2. The diff or file contents
+3. The review rubric from `references/rubric.md`
+4. The code-quality lens from `references/code-quality-review.md`
+
+The same filled template goes to all reviewers, so every model applies the code-quality lens.
+
+## Step 4, Synthesize
+
+As results come back, build a unified picture:
+
+1. **Parse all findings** from the reviewers
+2. **Identify consensus**. Findings raised by 2+ models independently are highest signal.
+3. **Identify lone-model findings**. Still worth reading, but weight accordingly.
+4. **Deduplicate**. Different models may describe the same issue differently. Merge these and note which models raised it.
+5. **Note disagreements**. If one model flags something and another explicitly says the opposite, that's useful context for the verdict.
+
+## Step 5, Lead Judgment
+
+You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator.
+
+Read `references/lead-judgment.md` for the full framework.
+
+Categorize every finding using these buckets:
+
+- **Act on**. Real issues affecting correctness, security, or maintainability given the actual goals. These would block a real PR.
+- **Consider**. Legitimate points, but you're not sure they outweigh the cost of addressing them right now. Worth the user's attention.
+- **Noted**. Technically valid but not actionable. Context-dependent, premature optimization, or low-impact given the current stage.
+- **Dismissed**. Wrong, nitpicky, or missing context. Brief explanation why.
+
+For each finding, include:
+- Which model(s) raised it
+- The category (act on / consider / noted / dismissed)
+- A one-line rationale for the categorization
+
+## Output Format
+
+Present the verdict in this structure:
+
+### Intent
+> [The stated intent paragraph from Step 2]
+
+### Reviewers
+- Reviewer [label]: [model name], [N findings] (one bullet per reviewer)
+
+### Act On
+[Findings that should be addressed. For each: description, which models raised it, why it matters.]
+
+### Consider
+[Findings worth thinking about. For each: description, which models raised it, tradeoff involved.]
+
+### Noted
+[Valid but low-priority. Brief list.]
+
+### Dismissed
+[Rejected findings with brief rationale.]
+
+### Agreement Map
+[Where did models agree, where did they diverge, and what does the pattern of agreement/disagreement tell us?]

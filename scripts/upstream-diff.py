@@ -49,6 +49,19 @@ def oid(kind, data):
     return hashlib.sha1(f'{kind} {len(data)}\0'.encode() + data).hexdigest()
 
 
+MANUAL_ONLY = b'disable-model-invocation: true\n'
+
+
+def same_as_upstream(body, blob_sha, sha256):
+    """Byte equality, allowing only the reviewed removal of inherited Cursor manual-only metadata."""
+    candidates = [body]
+    header = re.match(rb'---\n(.*?\n)---\n', body, re.S)
+    if header and b'disable-model-invocation' not in header[1]:
+        candidates.append(b'---\n' + header[1] + MANUAL_ONLY + body[header.end() - 4:])
+    return any(oid('blob', item) == blob_sha and hashlib.sha256(item).hexdigest() == sha256
+               for item in candidates)
+
+
 def sha(value, length=40):
     require(isinstance(value, str) and re.fullmatch(f'[0-9a-f]{{{length}}}', value), 'invalid object digest')
     return value
@@ -313,8 +326,7 @@ def check_retained_provenance(ledger, source, root):
             parts = PurePosixPath(name).parts
             require(len(parts) >= 4 and parts[1] == 'skills' and parts[2] in RETAINED_SKILLS,
                     'retained receipt source is outside retained families')
-            require(destination.startswith(f'plugin/skills/{parts[2]}/')
-                    or destination == 'plugin/core/' + name,
+            require(destination.startswith(f'plugin/skills/{parts[2]}/'),
                     'retained receipt destination is outside its family')
             require(name not in seen_sources and destination not in seen_destinations,
                     'duplicate retained receipt source or destination')
@@ -344,8 +356,7 @@ def check_retained_provenance(ledger, source, root):
             require(hashlib.sha256(body).hexdigest() == entry['destination_sha256'],
                     f'retained destination bytes differ: {destination}')
             if entry['disposition'] == 'verbatim':
-                require(oid('blob', body) == expected['blob_sha']
-                        and hashlib.sha256(body).hexdigest() == expected['sha256'],
+                require(same_as_upstream(body, expected['blob_sha'], expected['sha256']),
                         f'retained verbatim destination differs: {destination}')
 
     shipped = set()
@@ -358,7 +369,8 @@ def check_retained_provenance(ledger, source, root):
                 require(not path.is_symlink(), f'unsafe retained path: {path}')
                 if path.is_file():
                     package_file(path)
-                    shipped.add(path.relative_to(root).as_posix())
+                    if path.relative_to(directory).as_posix() != 'agents/openai.yaml':
+                        shipped.add(path.relative_to(root).as_posix())
     # Core references use their exact pinned destinations and are byte-checked
     # above; effective loaders remain covered by the installed-family inventory.
     shipped.update(name for name in seen_destinations if name.startswith('plugin/core/'))
@@ -383,8 +395,8 @@ def check_destinations(ledger, source, root):
                     and not path.is_symlink(), f'missing/unsafe present destination: {name}')
             if row['disposition'] == 'port verbatim':
                 body = path.read_bytes()
-                require(oid('blob', body) == row['blob_sha']
-                        and hashlib.sha256(body).hexdigest() == row['sha256'], f'verbatim destination differs: {name}')
+                require(same_as_upstream(body, row['blob_sha'], row['sha256']),
+                        f'verbatim destination differs: {name}')
     receipts = load(root / 'docs/upstream/wp2-provenance.json')
     require(receipts['revision'] == source['revision'] and receipts['repository'] == REPOSITORY,
             'WP2 receipts do not match pin')

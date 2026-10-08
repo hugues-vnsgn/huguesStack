@@ -20,7 +20,7 @@ class BootstrapBoundary(InstalledFixture, unittest.TestCase):
             malicious = "\nfrom pathlib import Path\nPath(" + repr(str(marker)) + ").write_text('executed')\n"
             path.write_bytes(original + malicious.encode())
             with self.subTest(module=module):
-                result = self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md')
+                result = self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md')
                 self.assertEqual(result.returncode, 2, result.stderr)
                 self.assertFalse(marker.exists(), 'unapproved module executed before rejection')
             path.write_bytes(original)
@@ -51,7 +51,7 @@ class BootstrapBoundary(InstalledFixture, unittest.TestCase):
 
 
 class PlanOwnership(InstalledFixture, unittest.TestCase):
-    source = 'pstack/skills/swarm/SKILL.md'
+    source = 'skills/hugues-mode/playbooks/feature.md'
 
     def translate(self, text):
         plan = self.consumer / 'plan.md'
@@ -77,7 +77,7 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
             self.assertIn('read-workflow', args)
             read = subprocess.run(args, cwd=self.consumer, capture_output=True, text=True)
             self.assertEqual(read.returncode, 0, read.stderr)
-            self.assertEqual(read.stdout, (self.plugin / 'core' / self.source).read_text())
+            self.assertEqual(read.stdout, (self.plugin / self.source).read_text())
             self.assertEqual(self.translate(result.stdout).stdout, result.stdout)
         result = self.translate('cat ' + self.source + '\n\ngit show origin/main:' + self.source)
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -94,7 +94,7 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
         helper_args[helper_args.index('--binding') + 1] = str(self.area / 'missing-binding.json')
         checked = subprocess.run(helper_args, cwd=self.consumer, capture_output=True, text=True)
         self.assertEqual(checked.returncode, 2, checked.stdout + checked.stderr)
-        path = self.plugin / 'core' / self.source
+        path = self.plugin / self.source
         path.write_text(path.read_text() + '\ndrift\n')
         read = subprocess.run(args, cwd=self.consumer, capture_output=True, text=True)
         self.assertEqual(read.returncode, 2)
@@ -131,7 +131,8 @@ class PlanOwnership(InstalledFixture, unittest.TestCase):
         path = self.plugin / 'skills/create-verification-skill/references/project-skill-template.md'
         self.assertTrue(path.is_file())
         self.assertIn('explicitly requested one-journey diagnostic', path.read_text())
-        self.assertIn('project-skill-template.md', (self.plugin / 'adapters/mobile.md').read_text())
+        self.assertIn('[mobile workflows](mobile-workflows.md) in full', (self.plugin / 'adapters/mobile.md').read_text())
+        self.assertIn('project-skill-template.md', (self.plugin / 'adapters/mobile-workflows.md').read_text())
 
 
 class ActivityRepresentations(unittest.TestCase):
