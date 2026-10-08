@@ -149,22 +149,22 @@
     },
     {
       "path": "adapters/host-special-skills.md",
-      "sha256": "ad560e44c7e5066a67100523ee2542813491fa1ef486bfba39b67aa5395076da",
+      "sha256": "53215bf5203164b23c367bf7289e98f23b8d125ab98720726ff27677a6454420",
       "mode": "100644"
     },
     {
       "path": "adapters/host-tools.md",
-      "sha256": "21449b27c0577f5992712a3556480e73de54529f4afbdf15af8ac7e3442a8f4e",
+      "sha256": "9c1b4ffc66f77b9ebfa2ed9cb9683c073f77484611974f32172f5c3475c8f72c",
       "mode": "100644"
     },
     {
       "path": "adapters/host-typescript.md",
-      "sha256": "e13b67cc12e9544762f6881bdca2529c95842d822192ac195d34275b013441b8",
+      "sha256": "27f7d09bad9e656c2f34e7bafdeaf6230b04d2034799f47ec14a7a1a3c229a0e",
       "mode": "100644"
     },
     {
       "path": "adapters/host-workers.md",
-      "sha256": "2d3124bb7025fa081ef98fee68b3245405fb4bca08383e22e1581c7ef0101bc9",
+      "sha256": "5911d3722cee83d7754fd02425238b3ef759d2f110fa12f1dc74806528eec73a",
       "mode": "100644"
     },
     {
@@ -174,7 +174,7 @@
     },
     {
       "path": "adapters/host.md",
-      "sha256": "6cb9d37de1a386480da91354f433fa3497f73b151cab93356f40edc4ccfdf62b",
+      "sha256": "2056dedb6bf15d2add9c9a1147f9cbce26695f79c3c10402a3b6fabdfee90321",
       "mode": "100644"
     },
     {
@@ -979,7 +979,7 @@
     },
     {
       "path": "skills/setup-huguesstack/SKILL.md",
-      "sha256": "5025862116288eeeacd02a8ce68cf1ef1206067f228524e8789cdaed7ef4e023",
+      "sha256": "81403cb51e8fd1527a56925c07e8b809ae41a04db317dd1488b80ad7622f80bf",
       "mode": "100644"
     },
     {

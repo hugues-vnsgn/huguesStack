@@ -37,18 +37,18 @@ invoke all linked skills. This native-mechanism requirement overrides inherited
 raw sibling-read wording for consumer and external skills only; the scoped rule
 below restores inherited sibling-read wording for bundled user-only skills instead.
 For a principles consultation from figure-it-out, use already-loaded mode context
-or a supported native invocation scoped to principles only: never restart task routing.
-A fresh worker must obtain its own native context; a parent's claim of permission
-is insufficient. Missing capability holds the phase without scanning user settings.
+or read the needed principle's SKILL.md in full as the scoped bundled reference:
+never restart task routing. A fresh worker must read any bundled user-only
+dependency itself and obtain its own native context for anything that still
+requires native invocation; a parent's claim of permission is insufficient.
+Missing capability holds the phase without scanning user settings.
 
-The native-only rule above governs a consumer or external skill: respect
-manual-only selection, owner-disabled entries and native denials, and never
-substitute a file read for them. It does not govern a bundled user-only skill.
-For those, the agent reads the owning `SKILL.md` in full as the router's
-reference, resolved from the owning file or the stated mode root, never the
-consumer cwd. A missing or unreadable path holds the dependent step. This
-follows the 0.1.0 handoff rule for disabled skills, and supersedes the
-native-only rule above for bundled skills.
+The native-only rule above governs a consumer or external skill; never
+substitute a file read for them. It does not govern a bundled user-only skill:
+the agent reads the owning `SKILL.md` in full as the router's reference
+instead. A missing or unreadable path holds the dependent step. This follows
+the 0.1.0 handoff rule for disabled skills, and supersedes the native-only
+rule above for bundled skills.
 
 The mode applies the pinned router, including figure-it-out for large,
 cross-cutting or unmatched work and Orchestrate for standing programs. For a

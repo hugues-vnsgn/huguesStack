@@ -283,6 +283,26 @@ class NativeIntegrity(unittest.TestCase):
         with self.assertRaises(ValueError):
             seal_payload.seal(self.root)
 
+    def test_native_reach_lint_rejects_a_user_only_skill_promised_native_invocation(self):
+        # Root cause of PR 1 fix rounds 1 and 2: the bundled-reference rule was restated
+        # across many files, so each round left a contradiction somewhere. This lint scans
+        # every agent-facing sentence under plugin/ for a USER_ONLY skill named beside a
+        # native-invocation/native-context/auto-load trigger. Reintroducing one of the exact
+        # contradictions this PR fixed must fail the check, proving the lint actually runs.
+        path = self.root / 'plugin/adapters/host-special-skills.md'
+        text = path.read_text()
+        self.assertIn("by reading automate-me's SKILL.md in\nfull as the scoped bundled reference", text)
+        path.write_text(text.replace("by reading automate-me's SKILL.md in\nfull as the scoped bundled reference",
+                                     'through the native automate-me entry'))
+        self.rejected()
+
+    def test_native_reach_lint_allows_a_reviewed_sentence_stating_native_reach_is_disabled(self):
+        # The TypeScript route legitimately names a USER_ONLY skill beside `auto-load` to
+        # say that mechanism is disabled, not to instruct relying on it. check_core.py's
+        # allowlist exempts that exact reviewed sentence; this proves the lint still passes
+        # the untouched repository (a regression here would make every check fail noisily).
+        self.assertEqual(check_core.native_reach_errors(self.root), [])
+
     def test_mode_principles_consultation_cannot_restart_routing(self):
         path = self.root / 'plugin/adapters/host.md'
         path.write_text(path.read_text().replace('never restart task routing', 'restart task routing'))

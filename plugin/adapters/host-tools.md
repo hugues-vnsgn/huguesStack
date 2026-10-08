@@ -37,18 +37,26 @@ Reread an owned playbook through the saved binding:
 python3 "<plugin>/adapters/host_tools.py" read-workflow --binding "<program>/plugin-binding.json" skills/hugues-mode/playbooks/feature.md
 ```
 
-A bundled skill's own `SKILL.md` is readable through `read-workflow` once it
-resolves, including through a legacy alias, to a known path in the approved
-installed payload, integrity-verified like any other owned reference. Any
-other `SKILL.md` read is rejected: a legacy alias resolving outside the
-payload, an unapproved or unknown path, and a consumer or external skill's
-`SKILL.md`. Invoke a consumer or external skill through the host's supported
-native mechanism instead. A helper cannot grant invocation permission or
-report an owner-disabled skill as enabled. If required native invocation is
-unavailable or denied, hold the dependent phase. Manual handoff is
-conditional on host behavior, not a universal requirement. Owned references and
-playbooks are ordinary resources; never duplicate a sibling body into them in
-place of a fresh `read-workflow` or native invocation.
+A bundled user-only skill's own `SKILL.md` is readable through `read-workflow`
+once it resolves, including through a legacy alias, to a known path in the
+approved installed payload, integrity-verified like any other owned
+reference. Any other `SKILL.md` read is rejected: a legacy alias resolving
+outside the payload, an unapproved or unknown path, `hugues-mode` and
+`setup-huguesstack` (the two model-invocable bundled skills, which stay
+native-only like any consumer or external skill), and a consumer or external
+skill's `SKILL.md`. Invoke a consumer or external skill through the host's supported
+native mechanism instead. A helper cannot grant invocation permission for one
+of those skills, or report it as enabled when the host denies or disables it.
+A bundled user-only skill carries no separate per-skill disablement to
+respect: the owner's real control over it is enabling or disabling the plugin
+as a whole, not a native denial on that one skill, and once the plugin is
+installed and enabled this helper reads its body regardless of any native
+denial that would otherwise block its invocation. If required native
+invocation of a consumer, external or model-invocable skill is unavailable or
+denied, hold the dependent phase. Manual handoff is conditional on host
+behavior, not a universal requirement. Owned references and playbooks are
+ordinary resources; never duplicate a sibling body into them in place of a
+fresh `read-workflow` or native invocation.
 
 Translate the filled bundled references in multi-phase-plan, autopilot-full and
 autopilot-stack before handing the plan to another worker:

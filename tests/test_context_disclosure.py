@@ -155,6 +155,39 @@ class ContextDisclosure(unittest.TestCase):
         expected_characters = sum(len(measure_context.description_text(
             check_core.native_frontmatter(baseline[p])['description'])) for p in expected_invocable)
         self.assertEqual(skill_list['native_before']['characters'], expected_characters)
+        # native_before (7db3e80) predates the 0.2.0-to-46-skill flip this PR undoes, so it
+        # is 1 skill, not a pre-PR comparison point. pre_pr_main (a67df90, where this
+        # restoration branched from, and the exact revision the Issue's Problem Statement
+        # measures) is the real one: recomputed here too, from its own minimal fixture
+        # (just the 50 SKILL.md frontmatter blocks), by the same unmodified function.
+        self.assertEqual(measured['pre_pr_main_revision'], 'a67df901162cc2add4aabb9e2a3843134696c490')
+        pre_pr_main, _ = measure_context.pre_pr_main_baseline(ROOT)
+        pre_pr_paths = sorted(pre_pr_main)
+        self.assertEqual(len(pre_pr_paths), 50)
+        pre_pr_invocable = [p for p in pre_pr_paths
+                           if not check_core.native_frontmatter(pre_pr_main[p])['disable-model-invocation']]
+        self.assertEqual(skill_list['pre_pr_main']['model_invocable_skills'], len(pre_pr_invocable))
+        self.assertEqual(skill_list['pre_pr_main']['model_invocable_skills'], 46)
+        self.assertEqual(set(skill_list['pre_pr_main']['paths']), set(pre_pr_invocable))
+        pre_pr_characters = sum(len(measure_context.description_text(
+            check_core.native_frontmatter(pre_pr_main[p])['description'])) for p in pre_pr_invocable)
+        self.assertEqual(skill_list['pre_pr_main']['characters'], pre_pr_characters)
+        # Close to, but not forced to equal, the owner's informally recorded 9,869: that
+        # figure was "recorded rather than recomputed from pinned bytes" (NATIVE-CONSOLIDATION.md).
+        # This is the first reproducible, hash-pinned recomputation of the Issue's own baseline.
+        self.assertGreater(skill_list['pre_pr_main']['characters'], 9500)
+
+    def test_pre_pr_main_baseline_drift_is_rejected(self):
+        with tempfile.TemporaryDirectory(prefix='pre-pr-baseline-') as directory:
+            root = Path(directory)
+            (root / 'docs').mkdir()
+            receipt = ROOT / 'docs/CONTEXT-BASELINE-PRE-PR.json'
+            shutil.copyfile(receipt, root / 'docs/CONTEXT-BASELINE-PRE-PR.json')
+            name = json.loads(receipt.read_text())['archive']
+            (root / name).parent.mkdir(parents=True)
+            (root / name).write_bytes((ROOT / name).read_bytes() + b'drift')
+            with self.assertRaisesRegex(ValueError, 'pre-PR baseline archive drift'):
+                measure_context.pre_pr_main_baseline(root)
 
     def test_skill_list_description_excludes_yaml_quoting(self):
         # A host that YAML-parses the frontmatter never sees the surrounding quote

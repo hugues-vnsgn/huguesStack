@@ -235,6 +235,55 @@ def adapter_errors(texts):
     return errors
 
 
+NATIVE_REACH_INVOCATION = re.compile(r'native[\s-]+invo\w*|native[\s-]+context|auto-?load\w*', re.I)
+NATIVE_REACH_ENTRY = re.compile(r'native\s+\S+\s+entry', re.I)
+# Sentences reviewed and confirmed NOT to instruct native reach for a user-only skill,
+# even though a trigger word and a user-only skill name both land in them: each one only
+# states that native reach is disabled or absent, never that an agent should rely on it.
+# Whitespace-normalized exact match, same as the sentences the lint below builds.
+NATIVE_REACH_ALLOWLIST = {
+    "TypeScript paths remain `**/*.ts` and `**/*.tsx`; `disable-model-invocation: true` "
+    "disables typescript-best-practices' preserved `paths` auto-load, so reading or "
+    "editing those files reads its SKILL.md in full first, as the scoped bundled "
+    "reference, then principle-type-system-discipline's the same way.",
+}
+PARAGRAPH_BREAK = re.compile(r'\n\s*\n')
+SENTENCE_BREAK = re.compile(r'(?<=[.!?])\s+')
+
+
+def native_reach_errors(root):
+    """Fail when agent-facing text under plugin/ instructs reaching a USER_ONLY skill
+    through native invocation, native context or auto-load: the exact class of
+    contradiction PR 1 fix rounds 1 and 2 kept finding and patching sentence by
+    sentence, because the bundled-reference rule lived in prose repeated across many
+    files instead of one lint anyone could rerun. Scoped to whole sentences, not raw
+    Markdown lines, so arbitrary line-wrapping cannot hide a match; scoped to the
+    authored USER_ONLY table (the host-invocation source of truth already enforced
+    against each skill's frontmatter) so this set cannot drift from a second list.
+    `hugues-mode` and `setup-huguesstack` are deliberately not in that table: native
+    invocation naming them is correct, not a violation. A short, reviewed allowlist
+    exempts sentences that only state native reach is disabled, never an instruction
+    to rely on it; this is precise rather than exhaustive -- it catches a skill named
+    beside a trigger word in one sentence, not every possible phrasing of the same
+    mistake spread across a whole paragraph."""
+    names = sorted(USER_ONLY, key=len, reverse=True)
+    errors = []
+    for path in sorted((root / 'plugin').rglob('*.md')):
+        text = path.read_text()
+        # Paragraph-first, so a heading or bullet with no sentence-ending punctuation
+        # never bleeds into the next paragraph's sentences.
+        for paragraph in PARAGRAPH_BREAK.split(text):
+            normalized = ' '.join(paragraph.split())
+            for sentence in SENTENCE_BREAK.split(normalized):
+                if not (NATIVE_REACH_INVOCATION.search(sentence) or NATIVE_REACH_ENTRY.search(sentence)):
+                    continue
+                hit = [n for n in names if re.search(r'(?<![\w-])' + re.escape(n) + r'(?![\w-])', sentence)]
+                if hit and sentence not in NATIVE_REACH_ALLOWLIST:
+                    errors.append(path.relative_to(root).as_posix() + ': ' + ', '.join(hit)
+                                 + ' near a native-reach trigger: ' + sentence)
+    return errors
+
+
 def current_document_errors(texts):
     errors = []
     plan = texts['docs/PLAN.md']
@@ -392,6 +441,8 @@ def check(root=ROOT):
     require(not cursor_models, 'Cursor model wiring in installed skills: ' + ', '.join(cursor_models))
     texts = {p: (root / p).read_text() for p in [*ADAPTERS, *ADAPTER_RESOURCES, PROJECT_POLICY]}
     require(not adapter_errors(texts), 'adapter behavior differs: ' + '; '.join(adapter_errors(texts)))
+    reach_errors = native_reach_errors(root)
+    require(not reach_errors, 'user-only skill promised native reach: ' + '; '.join(reach_errors))
     mobile = {name: (root / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
               for name in ['kmp-bridge-change', 'cmp-two-target-change']}
     require(not mobile_route_errors(mobile), 'mobile workflow gates differ')

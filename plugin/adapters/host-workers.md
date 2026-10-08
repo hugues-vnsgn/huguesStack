@@ -12,11 +12,11 @@ applicable principle's SKILL.md in full as the scoped bundled reference below.
 If the host cannot preserve required context isolation or parallelism, mark
 that phase blocked.
 
-The native-invocation rule above governs a consumer or external skill. A
-bundled user-only skill, including every `principle-*` entry and a routed
-dependency such as arena below, is the mode's reference instead: per the
-scoped [host adapter rule](host.md), read its SKILL.md in full, never a
-consumer or external fallback.
+The native-invocation rule in [host.md](host.md) governs a consumer or
+external skill. A bundled user-only skill, including every `principle-*`
+entry and a routed dependency such as arena below, is the mode's reference
+instead, per that same rule: read its SKILL.md in full, never a consumer or
+external fallback.
 
 For routed research/review calls, preserve `generalPurpose` and the workflow's
 own prompt, readonly/agent-mode requirement, model, cardinality and handoff order.

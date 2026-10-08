@@ -127,6 +127,75 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout, (self.plugin / 'skills/tdd/SKILL.md').read_text())
 
+    def test_translate_rejects_a_skill_body_at_any_revision_other_than_origin_main(self):
+        # PR 1 fix round 2 security regression: `git show <rev>:<path>/SKILL.md` returned
+        # the literal plan text unchanged for every revision other than `origin/main`,
+        # skipping the skill-body guard entirely. That held for a consumer path
+        # (`.claude/skills/...`) and even for a bundled, approved path
+        # (`skills/tdd/SKILL.md`) read at the wrong revision -- both must still require
+        # native invocation, exactly as the pre-regression `a67df90` translator did.
+        for text in ['git show HEAD:.claude/skills/mine/SKILL.md',
+                     'git show HEAD:.agents/skills/mine/SKILL.md',
+                     'git show HEAD:skills/tdd/SKILL.md',
+                     'git show feature-branch:plugin/skills/other-plugin/SKILL.md']:
+            with self.subTest(text=text):
+                plan = self.consumer / 'plan.md'
+                plan.write_text(text + '\n')
+                result = self.bound('translate-plan', plan)
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn('native skill invocation', result.stderr)
+
+    def test_translate_rejects_consumer_and_external_skill_body_paths(self):
+        # A consumer's own `.claude/skills/...` or `.agents/skills/...` convention, and an
+        # external plugin's skill, are never bundled references: no guarded read ever
+        # substitutes for their native invocation.
+        for text in ['cat .claude/skills/mine/SKILL.md',
+                     'cat .agents/skills/mine/SKILL.md',
+                     '`other-plugin/skills/foo/SKILL.md`']:
+            with self.subTest(text=text):
+                plan = self.consumer / 'plan.md'
+                plan.write_text(text + '\n')
+                result = self.bound('translate-plan', plan)
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn('native skill invocation', result.stderr)
+
+    def test_translate_distinguishes_unsupported_syntax_on_a_bundled_body_from_native_only(self):
+        # `sed`/other unsupported shell forms naming a KNOWN, approved bundled SKILL.md are
+        # a syntax problem, not a permission problem: the author can fix it by using one of
+        # the supported literal forms (a plain reference, `cat`, or `git show origin/main:`).
+        # That is a different, more specific failure than "native skill invocation
+        # required", which means no guarded read could ever satisfy the reference.
+        for text in ['sed -n 1,5p skills/tdd/SKILL.md', 'head skills/tdd/SKILL.md']:
+            with self.subTest(text=text):
+                plan = self.consumer / 'plan.md'
+                plan.write_text(text + '\n')
+                result = self.bound('translate-plan', plan)
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn('standalone guarded read', result.stderr)
+                self.assertNotIn('native skill invocation', result.stderr)
+
+    def test_read_workflow_and_translate_keep_model_invocable_skills_native_only(self):
+        # `hugues-mode` and `setup-huguesstack` stay model-invocable; their own SKILL.md is
+        # never a guarded bundled reference, even though it sits in the approved installed
+        # payload like every user-only skill's body does. Allowing it would let the router
+        # read -- and so effectively invoke -- the two skills a host's native denial is
+        # actually meant to gate.
+        for source in ['skills/hugues-mode/SKILL.md', 'skills/setup-huguesstack/SKILL.md',
+                       'pstack/skills/poteto-mode/SKILL.md', 'pstack/skills/setup-pstack/SKILL.md']:
+            with self.subTest(source=source):
+                result = self.bound('read-workflow', source)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn('native skill invocation', result.stderr)
+        for text in ['cat skills/hugues-mode/SKILL.md', 'cat skills/setup-huguesstack/SKILL.md',
+                     'git show origin/main:skills/hugues-mode/SKILL.md',
+                     '`skills/setup-huguesstack/SKILL.md`']:
+            with self.subTest(text=text):
+                plan = self.consumer / 'plan.md'
+                plan.write_text(text + '\n')
+                result = self.bound('translate-plan', plan)
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn('native skill invocation', result.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,8 +1,8 @@
 # Personal history, integrations and consumer skill placement
 
 All 50 top-level skills are registered, including automate-me, make-bot-ui and
-typescript-best-practices. Resolve recall's habit-to-skill handoff through the
-native automate-me entry. Registration grants no permission to process personal transcripts,
+typescript-best-practices. Resolve recall's habit-to-skill handoff by reading automate-me's SKILL.md in
+full as the scoped bundled reference. Registration grants no permission to process personal transcripts,
 author a personal mode, create bot/webhook integrations, transmit data, request
 credentials, expose a server or install/configure Tailscale. Execute those steps
 only under the user's current explicit scope and the pinned confirmation rules.

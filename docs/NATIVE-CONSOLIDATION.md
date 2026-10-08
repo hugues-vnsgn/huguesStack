@@ -52,10 +52,13 @@ plugin-scoped name `hugues-stack:hugues-mode` resolves is unobserved. Generated
 project verification skills stay consumer-local and model-invocable so proof
 steps can drive them; that tier is unrelated to the bundled table above.
 
-The host adapter takes precedence over inherited sibling-read wording. It also
-prevents unconditional traversal of navigation links. A figure-it-out consultation
-of mode principles must not restart mode routing. This is an instruction contract,
-not a filesystem security boundary or proof of every possible runtime trace.
+The host adapter's native-only rule takes precedence over inherited
+sibling-read wording for a consumer, external or model-invocable skill; for a
+bundled user-only skill it restores that inherited wording instead, read in
+full as the mode's reference. The adapter also prevents unconditional
+traversal of navigation links. A figure-it-out consultation of mode principles
+must not restart mode routing. This is an instruction contract, not a
+filesystem security boundary or proof of every possible runtime trace.
 
 The shared contract now loads specialized adapter references only before their
 named phases. Mobile applicability is a small separate entry; explicit mobile

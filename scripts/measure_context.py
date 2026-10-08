@@ -37,6 +37,27 @@ def native_baseline(root):
     return texts, receipt['revision']
 
 
+def pre_pr_main_baseline(root):
+    """The actual pre-PR point this restoration branched from (`a67df90`, the revision
+    the Issue's Problem Statement measures): just the 50 SKILL.md frontmatter blocks,
+    sha256-pinned, following the CONTEXT-BASELINE.json fixture pattern but holding only
+    what skill_list_metrics needs. `native_before` (pinned `7db3e80`) is a different,
+    earlier point that predates the 0.2.0-to-46-skill flip this PR undoes -- it is not a
+    pre-PR comparison for the skill-list budget, only for the other measurements on this
+    page that it was already pinned for."""
+    receipt = json.loads((root / 'docs/CONTEXT-BASELINE-PRE-PR.json').read_text())
+    path = root / receipt['archive']
+    if hashlib.sha256(path.read_bytes()).hexdigest() != receipt['archive_sha256']:
+        raise ValueError('pre-PR baseline archive drift')
+    texts = archive_texts(path)
+    if set(texts) != set(receipt['files']):
+        raise ValueError('pre-PR baseline inventory drift')
+    for name, text in texts.items():
+        if hashlib.sha256(text.encode()).hexdigest() != receipt['files'][name]['sha256']:
+            raise ValueError('pre-PR baseline bytes drift: ' + name)
+    return texts, receipt['revision']
+
+
 def description_text(raw):
     """Unwrap a frontmatter description scalar the way a YAML-parsing host sees it:
     a quoted scalar's surrounding quotes are not part of the displayed string."""
@@ -69,6 +90,7 @@ def inventory(texts, paths):
 def measure(root=ROOT):
     release = archive_texts(root / 'tests/fixtures/release-0.2.0.tar.gz')
     before, before_revision = native_baseline(root)
+    pre_pr_main, pre_pr_main_revision = pre_pr_main_baseline(root)
     current = {p.relative_to(root).as_posix(): p.read_text()
                for p in (root / 'plugin').rglob('*') if p.is_file() and
                (p.suffix == '.md' or p.name == 'openai.yaml')}
@@ -133,6 +155,7 @@ def measure(root=ROOT):
     return {'method': 'UTF-8 bytes; Unicode characters; characters/4 estimate. Deterministic source accounting, not runtime latency or observed host context.',
         'baseline_revision': '509cbec0486c23bb76a943ffec1ea7c7fb553c0f',
         'native_before_revision': before_revision,
+        'pre_pr_main_revision': pre_pr_main_revision,
         'mode_initial_read_set': {'scope': 'Mode entry and unconditional adapters only, before reply or task-dependent reads. See initial_mode_routing for the route announcement closure.',
             'baseline_paths': old_paths, 'candidate_paths': new_paths,
             'baseline': metrics([release[p] for p in old_paths]),
@@ -149,8 +172,12 @@ def measure(root=ROOT):
         'skill_list': {'scope': "Description characters of every skill without `disable-model-invocation: true`, "
                 "the description value as a YAML-parsing host sees it (surrounding quotes excluded); "
                 "Claude Code documents this text as entering its per-turn skill list, budgeted at 1% of the "
-                "context window (Codex: 2%), both with an 8000-character fallback. Not a runtime observation.",
+                "context window (Codex: 2%), both with an 8000-character fallback. Not a runtime observation. "
+                "native_before (pinned 7db3e80) predates the 0.2.0-to-46-skill flip this PR undoes and is not a "
+                "pre-PR comparison point for this measurement; pre_pr_main (pinned a67df90, the revision this "
+                "restoration branched from and the Issue's Problem Statement measures) is the real one.",
             'native_before': skill_list_metrics(before, declaration_paths),
+            'pre_pr_main': skill_list_metrics(pre_pr_main, sorted(pre_pr_main)),
             'candidate': skill_list_metrics(current, declaration_paths)},
         'canonical_skill_bodies': {'scope': 'Whole native SKILL.md files, metadata included; separate from invocation closure.',
             'native_before': inventory(before, declaration_paths), 'candidate': inventory(current, declaration_paths),

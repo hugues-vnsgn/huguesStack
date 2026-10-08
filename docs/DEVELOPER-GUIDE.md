@@ -96,7 +96,12 @@ current invocation eligibility. Do not scan unrelated chat histories.
 Keep the old install while an active task is bound to it. Public skill names and
 relative entry paths are retained; a changed installation root may still affect
 owner settings that use absolute paths. Reconcile these explicitly through the
-host's supported controls. Never silently re-enable a previously disabled skill.
+host's supported controls. The real controls are the plugin as a whole
+(install, enable, disable) and any native denial the host applies to
+`hugues-mode` or `setup-huguesstack`'s invocation; never silently re-enable
+either after the owner disabled it. A bundled user-only skill has no separate
+per-skill disablement to preserve across an update, since the mode reads its
+body regardless of any such setting.
 
 Old 0.2.0 installed-payload bindings are intentionally rejected. Review the changed
 workflow and plan, then create a new binding as described in

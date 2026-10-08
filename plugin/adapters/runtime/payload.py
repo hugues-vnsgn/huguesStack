@@ -13,7 +13,9 @@ ANCHORS = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adap
 GENERATED_TREES = {'skills/hugues-mode/scripts/node_modules'}
 HOST_METADATA = {'.DS_Store'}
 SKILL_BODY = re.compile(r'(?<![\w.-])skills/[^/\s]+/+SKILL\.md(?![\w./-])')
-MANIFEST_SHA256 = '8e11b531c97ce035612fe7c3a8148fbc8926b65cdb61e2383ec15f9161512d72'
+MANIFEST_SHA256 = '50bd853159206df149cb9d94eeffe467108c4278deaba08a99659f8cc193e510'
+FRONTMATTER_HEADER = re.compile(r'\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)', re.S)
+MANUAL_ONLY_FIELD = re.compile(r'^disable-model-invocation:\s+true\s*$', re.M)
 
 
 def digest(path):
@@ -41,6 +43,16 @@ def mode_matches(actual, approved):
 
 def names_skill_body(text):
     return bool(SKILL_BODY.search(text))
+
+
+def model_invocable(root, relative):
+    """True only for `hugues-mode` and `setup-huguesstack`'s own SKILL.md: the two
+    bundled skills that stay native-only. Read from the hash-verified installed bytes
+    themselves (frontmatter lacks `disable-model-invocation: true`), not a second
+    hardcoded list, so this cannot drift from check_core.py's authored host-invocation
+    table of every other skill."""
+    header = FRONTMATTER_HEADER.match(checked_file(root, relative).read_text())
+    return bool(header) and not MANUAL_ONLY_FIELD.search(header[1])
 
 
 def unreadable(error):
@@ -116,12 +128,14 @@ def workflow(root, source):
     rows = verify(root)
     source = resolve_source(rows, source)
     known = {row['path'] for row in rows['files']}
-    if source not in known or not source.endswith('.md'):
-        # A bundled skill's own SKILL.md is allowed once it resolves to a known, approved
-        # installed payload path above; anything else that merely resembles a skill body
-        # (wrong prefix, absolute path, legacy path resolving outside the payload, a
-        # consumer or external skill) still requires native invocation.
-        if names_skill_body(source) or PurePosixPath(source).name == 'SKILL.md':
+    denied = source in known and source.endswith('/SKILL.md') and model_invocable(root, source)
+    if source not in known or not source.endswith('.md') or denied:
+        # A bundled user-only skill's own SKILL.md is allowed once it resolves to a known,
+        # approved installed payload path above; anything else that merely resembles a
+        # skill body (wrong prefix, absolute path, legacy path resolving outside the
+        # payload, a consumer or external skill, or one of the two model-invocable bundled
+        # skills) still requires native invocation.
+        if denied or names_skill_body(source) or PurePosixPath(source).name == 'SKILL.md':
             raise ValueError('native skill invocation required; a guarded file read grants no invocation permission')
         raise ValueError('workflow is not in approved installed payload')
     return checked_file(root, source).read_bytes()
@@ -134,7 +148,8 @@ def command(root, binding, verb, operand):
 
 def translate(root, binding, text):
     rows = verify(root)
-    known = {row['path'] for row in rows['files'] if row['path'].endswith('.md')}
+    known = {row['path'] for row in rows['files'] if row['path'].endswith('.md')
+             and not (row['path'].endswith('/SKILL.md') and model_invocable(root, row['path']))}
     known |= {old for old, new in rows['legacy_paths'].items() if new in known}
     helpers = {'pstack/skills/poteto-mode/scripts/check-plan.mjs', 'skills/hugues-mode/scripts/check-plan.mjs'}
     operands = [re.compile(r'(?<![\w./:-])(?:origin/main:)?' + re.escape(source) + r'(?![\w./-])')
@@ -161,23 +176,32 @@ def translate(root, binding, text):
             return command(root, binding, 'read-workflow', words[0])
         if len(words) == 3 and words[:2] == ['git', 'show']:
             revision, separator, source = words[2].partition(':')
-            if separator and revision == 'origin/main':
-                if source in known:
-                    return command(root, binding, 'read-workflow', source)
-            else:
-                return value
+            # Only `origin/main` resolves a known bundled path through a guarded read; any
+            # other revision -- even one naming an otherwise-known path -- falls through to
+            # the guards below instead of returning early. Returning here unconditionally
+            # for a non-`origin/main` revision was PR 1 fix round 2's security regression:
+            # it let `git show HEAD:<consumer or bundled path>/SKILL.md` translate as a
+            # no-op instead of being checked at all.
+            if separator and revision == 'origin/main' and source in known:
+                return command(root, binding, 'read-workflow', source)
         if len(words) == 2 and words[0] == 'cat' and words[1] in known:
             return command(root, binding, 'read-workflow', words[1])
         if len(words) == 3 and words[0] == 'node' and words[1] in helpers:
             return command(root, binding, 'plan-check', words[2])
-        # A reference to an approved bundled SKILL.md in one of the forms above already
-        # returned a translated read-workflow command. Anything else that still names a
-        # skill body (wrong spelling, wrong prefix, an unapproved or consumer/external
-        # skill) is not a known bundled reference and still requires native invocation.
-        if names_skill_body(value) or any(names_skill_body(word) for word in words):
-            raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
+        # Every supported bundled-reference form above already returned a translated
+        # read-workflow/plan-check command. A command that still names a KNOWN, approved
+        # bundled path here used an unsupported shape (wrong Git revision, `sed`/other
+        # unsupported syntax): that is a syntax problem the author can fix with one of the
+        # supported literal forms, not a permission problem, so it gets this more specific
+        # message instead of falling through to the native-invocation guard below.
         if bundled:
             raise ValueError('unsupported bundled command; use a standalone guarded read')
+        # Anything else that still names a skill body (wrong spelling, wrong prefix, an
+        # unapproved path, a consumer or external skill, or one of the two model-invocable
+        # bundled skills) is not a known bundled reference at any revision or syntax: it
+        # still requires native invocation, and no guarded read ever substitutes for it.
+        if names_skill_body(value) or any(names_skill_body(word) for word in words):
+            raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
         return value
 
     result = []

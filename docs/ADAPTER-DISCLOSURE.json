@@ -54,7 +54,10 @@
       "paragraph": 4,
       "slice": [946, 1281],
       "destination": "plugin/adapters/host.md",
-      "sha256": "74195c3c6c409ed21724d998466d87b7355c4758c735a52616d2762161501cda"
+      "sha256": "74195c3c6c409ed21724d998466d87b7355c4758c735a52616d2762161501cda",
+      "disposition": "replaced",
+      "reason": "A figure-it-out principles consultation naming 'a supported native invocation scoped to principles only' and a fresh worker needing to 'obtain its own native context' both assumed principles stay model-invocable, which disable-model-invocation: true now forbids; PR 1 fix round 2 reads the principle's SKILL.md in full instead, and scopes the fresh-worker native-context requirement to dependencies that still need native invocation.",
+      "replacement": "For a principles consultation from figure-it-out, use already-loaded mode context\nor read the needed principle's SKILL.md in full as the scoped bundled reference:\nnever restart task routing. A fresh worker must read any bundled user-only\ndependency itself and obtain its own native context for anything that still\nrequires native invocation; a parent's claim of permission is insufficient.\nMissing capability holds the phase without scanning user settings."
     },
     {
       "paragraph": 5,
@@ -70,9 +73,24 @@
     },
     {
       "paragraph": 7,
-      "slice": null,
+      "slice": [0, 106],
       "destination": "plugin/adapters/host-special-skills.md",
-      "sha256": "4b28dfe0b58f99ceaf6a77ac5be86c16a03d018f86bbe4bc15caa7436f6acf49"
+      "sha256": "2b022e09b00727d9ace0a7c6be32d67d6b2c6782c25c1094300c4c118df0ffa5"
+    },
+    {
+      "paragraph": 7,
+      "slice": [106, 183],
+      "destination": "plugin/adapters/host-special-skills.md",
+      "sha256": "7c8c84045fddd2c5f5c150788b395cdf98572c2dcc553d45155ba4eab8f6a35b",
+      "disposition": "replaced",
+      "reason": "'Resolve recall's habit-to-skill handoff through the native automate-me entry' promises native invocation for automate-me, which disable-model-invocation: true forbids; PR 1 fix round 2 reads automate-me's SKILL.md in full instead, as the scoped bundled reference.",
+      "replacement": "Resolve recall's habit-to-skill handoff by reading automate-me's SKILL.md in\nfull as the scoped bundled reference."
+    },
+    {
+      "paragraph": 7,
+      "slice": [183, 778],
+      "destination": "plugin/adapters/host-special-skills.md",
+      "sha256": "63770e6f5651476b96594fb1eccf6a2a96a56c602fc0e9778be47006c2ba90bc"
     },
     {
       "paragraph": 8,
@@ -89,14 +107,17 @@
       "destination": "plugin/adapters/host-typescript.md",
       "sha256": "f76cefa49103026d1cc77857fc030c67c4d7bb0cc37e542392108df02ed7375e",
       "disposition": "replaced",
-      "reason": "Invoking principle-type-system-discipline natively is impossible once it is user-only; PR 1 fix round 1 reads its SKILL.md in full instead, as the scoped bundled reference.",
-      "replacement": "TypeScript paths remain `**/*.ts` and `**/*.tsx`; apply its registered guidance\nwhen reading or editing those files and read principle-type-system-discipline's\nSKILL.md in full first, as the scoped bundled reference."
+      "reason": "Invoking principle-type-system-discipline natively is impossible once it is user-only, and 'apply its registered guidance' assumed typescript-best-practices' preserved `paths` metadata still auto-loads it, which disable-model-invocation: true also disables; PR 1 fix round 2 reads both SKILL.md files in full instead, as the scoped bundled reference.",
+      "replacement": "TypeScript paths remain `**/*.ts` and `**/*.tsx`; `disable-model-invocation: true`\ndisables typescript-best-practices' preserved `paths` auto-load, so reading or\nediting those files reads its SKILL.md in full first, as the scoped bundled\nreference, then principle-type-system-discipline's the same way."
     },
     {
       "paragraph": 8,
       "slice": [1147, 1394],
       "destination": "plugin/adapters/host-typescript.md",
-      "sha256": "f770602b9ffc729fbcf03d7510cc46fdd936e4ec428ee416bb5a1d29f1c4d74b"
+      "sha256": "f770602b9ffc729fbcf03d7510cc46fdd936e4ec428ee416bb5a1d29f1c4d74b",
+      "disposition": "replaced",
+      "reason": "'If a host ignores it, select the skill explicitly' implied the preserved `paths` auto-load sometimes still works; PR 1 fix round 2 states it never does once disable-model-invocation: true applies, so the explicit file read is unconditional, not a per-host fallback.",
+      "replacement": "\nThe path metadata stays on the canonical entry as provenance only, never a\nworking auto-load; select the skill explicitly by the actual file type on every\nhost. Mobile specialization adds\napplicable guidance through the mobile adapter without deleting other languages."
     },
     {
       "paragraph": 9,
