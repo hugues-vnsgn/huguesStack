@@ -89,10 +89,10 @@ characters, close to but not forced to equal the owner's earlier informally
 recorded 9,869, since that number was recorded rather than recomputed from
 pinned bytes). The other 48 skills are user-only: typed by
 name, and read in full by the mode as its router reference, never by native
-invocation. [Host validation](pr1-fix-round-1-validation.md) (renamed and
-rerun this round; see that file's own note) observed that exactly two
-huguesStack skills reach Claude Code's and Codex's model-visible skill list;
-it establishes that specific claim, not the byte/character counts
+invocation. [Host validation](skill-list-host-validation.md) observed, this
+round, that exactly two huguesStack skills reach Claude Code's and Codex's
+model-visible skill list and that a user-only skill still runs when typed by
+name; it establishes that specific claim, not the byte/character counts
 themselves. A user-only skill's frontmatter still counts toward the all-50
 upper bound above regardless, since that bound is deliberately over every
 declared skill, not only what a host happens to expose. The reduction comes from avoiding unrelated adapter reads,
