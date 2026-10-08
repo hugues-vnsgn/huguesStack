@@ -1,6 +1,6 @@
 # Daily workflow
 
-Load the intended checkout using the [guide](DEVELOPER-GUIDE.md). State a goal, consumer path/revision, authorized actions and an observable result. The mode loads explicit adapters and the full pinned core before selecting a playbook. On a host without native discovery, direct-read the absolute mode path and disclose that method.
+Load the intended checkout using the [guide](DEVELOPER-GUIDE.md). State a goal, consumer path/revision, authorized actions and an observable result. Invoke the mode natively. Its canonical body applies the host contract and mobile applicability before selecting a playbook. If native invocation is unavailable or denied, hold; do not substitute a file read.
 
 Intent precedes domain: pause, pickup, maintenance, authoring, review and investigation retain their own routes. Language alone grants no implementation authority. Large or unmatched work uses figure-it-out; standing programs use Orchestrate. Mobile proof becomes a phase in that workflow.
 

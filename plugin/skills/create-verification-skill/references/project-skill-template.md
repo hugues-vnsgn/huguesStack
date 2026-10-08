@@ -17,7 +17,7 @@ disable-model-invocation: true
 
 <Repository/worktree, permitted files/actions, domains, journey and expected checkpoints.>
 <Applicable repository instructions and required tools.>
-<Repository-supported canonical skill path and host layout; verified symlink resolution/loader result or regular-copy hashes and synchronization rule. Record direct-reading fallback and native discovery unrun where applicable.>
+<Repository-supported canonical skill path and host layout; verified symlink resolution/loader result or regular-copy hashes and synchronization rule. Record supported native invocation and actual discovery evidence. If unavailable or denied, hold; never substitute direct body reads.>
 
 ## Launch
 

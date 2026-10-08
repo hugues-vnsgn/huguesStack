@@ -313,8 +313,7 @@ def check_retained_provenance(ledger, source, root):
             parts = PurePosixPath(name).parts
             require(len(parts) >= 4 and parts[1] == 'skills' and parts[2] in RETAINED_SKILLS,
                     'retained receipt source is outside retained families')
-            require(destination.startswith(f'plugin/skills/{parts[2]}/')
-                    or destination == 'plugin/core/' + name,
+            require(destination.startswith(f'plugin/skills/{parts[2]}/'),
                     'retained receipt destination is outside its family')
             require(name not in seen_sources and destination not in seen_destinations,
                     'duplicate retained receipt source or destination')
@@ -358,7 +357,8 @@ def check_retained_provenance(ledger, source, root):
                 require(not path.is_symlink(), f'unsafe retained path: {path}')
                 if path.is_file():
                     package_file(path)
-                    shipped.add(path.relative_to(root).as_posix())
+                    if path.relative_to(directory).as_posix() != 'agents/openai.yaml':
+                        shipped.add(path.relative_to(root).as_posix())
     # Core references use their exact pinned destinations and are byte-checked
     # above; effective loaders remain covered by the installed-family inventory.
     shipped.update(name for name in seen_destinations if name.startswith('plugin/core/'))

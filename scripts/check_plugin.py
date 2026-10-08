@@ -6,7 +6,9 @@ import re
 import sys
 from urllib.parse import unquote, urlsplit
 
-supplied_root = Path(sys.argv[1] if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]).absolute()
+arguments = [a for a in sys.argv[1:] if a != '--historical-release-0.1.0']
+historical = '--historical-release-0.1.0' in sys.argv[1:]
+supplied_root = Path(arguments[0] if arguments else Path(__file__).resolve().parents[1]).absolute()
 if supplied_root.is_symlink() or not supplied_root.is_dir():
     print('repository-root: expected existing directory, not symlink', file=sys.stderr)
     sys.exit(1)
@@ -228,7 +230,9 @@ if receipt_path.exists():
 # bytes and effective loaders before exempting upstream formatting from the
 # authored-document parser. No filename-only vendor exemption is allowed.
 core_validated = False
-if (root / 'plugin/core').exists() or (root / 'plugin/core-bindings.json').exists():
+if historical and standard.get('version') != '0.1.0':
+    fail('historical validation only accepts release 0.1.0')
+if not historical:
     try:
         from check_core import check
         check(root)
@@ -276,10 +280,6 @@ for path in sorted(root.rglob('*.md')):
                 fail(f'{relative}: unsupported link {value}')
             continue
         decoded = unquote(parsed.path)
-        if (core_validated and str(relative) == 'plugin/skills/why/references/synthesizer-prompt.md'
-                and value == 'url' and path.read_bytes() ==
-                (root / 'plugin/core/pstack/skills/why/references/synthesizer-prompt.md').read_bytes()):
-            continue  # Exact pinned citation-template placeholder, not a dependency.
         if decoded.startswith('/') or '\\' in decoded:
             fail(f'{relative}: absolute local link {value}')
             continue

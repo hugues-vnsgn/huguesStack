@@ -1,6 +1,6 @@
 # Jev Drive for mobile proof
 
-Read this file when the agreed proof needs a mobile screen journey. Compose the installed jev-ios-bridge skills; this plugin ships no bridge client or scenario runtime. Read the current installed `test-ios` or `test-android` SKILL.md and the guide pages they name before authoring a scenario. Record the actual bridge version and resolved guide paths rather than assuming this reference matches every version.
+Read this file when the agreed proof needs a mobile screen journey. Compose the installed jev-ios-bridge skills; this plugin ships no bridge client or scenario runtime. Invoke the current installed `test-ios` or `test-android` skill natively, then read the ordinary guide pages it names before authoring a scenario. If native invocation is unavailable, disabled, denied or unknown, hold this step; never substitute a direct body read. Record the actual bridge version and resolved guide paths rather than assuming this reference matches every version.
 
 ## Capability and authority
 

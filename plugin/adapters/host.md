@@ -1,22 +1,32 @@
 # Claude Code and Codex host adapter
 
-Read this adapter and the mobile adapter’s applicability section before the pinned
-core. Follow the consumer project’s own PR policy. These adapters translate host
-mechanisms and limit authority; the core owns workflow
+Apply this adapter and the mobile applicability section before the canonical workflow. Follow the consumer project’s own PR policy. These adapters translate host
+mechanisms and limit authority; the canonical skill owns workflow
 phases, mandatory gates, panel cardinality, fallback and stop rules. A constraint
 can block execution. It cannot turn an omitted gate into success.
 
 ## Loading and routing
 
-The active registry is [core-bindings.json](../core-bindings.json).
-`poteto-mode` maps to `hugues-mode`, `poteto-agent` to `hugues-agent`,
-`Comment Sicko` to `hugues-comment-sicko`, and `setup-pstack` to
-`setup-huguesstack`. Every other active skill retains its name.
-Load the registered entrypoint before executing a referenced skill. Read its
-pinned source in full, including every reference required by the current phase.
-Resolve source-relative references from that source file's directory. Resolve
-public loader links from the loader's directory. Do not resolve either against
-the consumer's working directory.
+Native discovery uses each canonical `skills/<name>/SKILL.md`. There is no
+custom runtime registry or custom host loader. `poteto-mode` maps to `hugues-mode`,
+`poteto-agent` to `hugues-agent`, `Comment Sicko` to `hugues-comment-sicko`,
+and `setup-pstack` to `setup-huguesstack`; other public names are unchanged.
+
+Invoke each bundled, consumer or external skill through the host's supported native mechanism. Respect
+manual-only selection, owner-disabled entries and native denials; never use a file read as an invocation fallback.
+Unavailable, disabled, denied or unknown invocation stops the dependent step.
+When supported execution requires explicit user invocation, provide the exact
+native command and wait; do not imply this handoff is always required. A model's
+printed slash or dollar command is not proof that a native invocation occurred.
+An available file or a successful binding check establishes no skill permission.
+Read ordinary references owned by the invoked skill only when its phase needs them.
+Resolve relative resources from their owning file or the stated mode root, never
+from the consumer cwd. Do not recursively traverse navigation links or eagerly
+invoke all linked skills. This contract overrides inherited raw sibling-read wording.
+For a principles consultation from figure-it-out, use already-loaded mode context
+or a supported native invocation scoped to principles only: never restart task routing.
+A fresh worker must obtain its own native context; a parent's claim of permission
+is insufficient. Missing capability holds the phase without scanning user settings.
 
 For executable operands in planning and cleanup, use the installed
 [host tools](host-tools.md) and [entrypoint](host_tools.py). In multi-phase-plan,
@@ -32,19 +42,19 @@ These are mechanical operand translations, not new execution or deletion scope.
 
 The mode applies the pinned router, including figure-it-out for large,
 cross-cutting or unmatched work and Orchestrate for standing programs. For a
-selected upstream playbook, read its registered public bridge and its pinned
-source in full. Copy the source's ordered todos verbatim. Keep every skipped todo
-with its reason; do not replace the procedure with the bridge's summary.
+selected playbook, read its canonical file in full. Copy its ordered todos verbatim.
+Keep every skipped todo with its reason.
 
 All 50 top-level skills are registered, including automate-me, make-bot-ui and
 typescript-best-practices. Resolve recall's habit-to-skill handoff through the
-registered automate-me loader. Registration grants no permission to process personal transcripts,
+native automate-me entry. Registration grants no permission to process personal transcripts,
 author a personal mode, create bot/webhook integrations, transmit data, request
 credentials, expose a server or install/configure Tailscale. Execute those steps
 only under the user's current explicit scope and the pinned confirmation rules.
 Unavailable tools block their dependent phase without changing its contract.
 Benny is a separate nested service bundle and is not a top-level skill or agent.
-Its source is preserved; service execution still requires its own authority.
+Its source is preserved only in the nondiscoverable upstream provenance archive;
+it is not a supported native service or helper.
 
 Translate Cursor skill placement to the consumer's established `.agents/skills`
 or `.claude/skills` convention. Preserve existing personal-mode categories and
@@ -59,8 +69,8 @@ history and no permission to apply Reflect's proposed edits. Preserve Recall's
 explicit state-capsule shortcut; do not pretend a digest proves a transcript audit
 for show-me-your-work or supplies automate-me's repeated historical evidence.
 TypeScript paths remain `**/*.ts` and `**/*.tsx`; apply its registered guidance
-when reading or editing those files and load principle-type-system-discipline first.
-The original path metadata is preserved in the loader. If a host ignores it,
+when reading or editing those files and invoke principle-type-system-discipline first.
+The original path metadata is preserved in the canonical entry. If a host ignores it,
 select the skill explicitly by the actual file type. Mobile specialization adds
 applicable guidance through the mobile adapter without deleting other languages.
 
@@ -70,10 +80,10 @@ Translate Cursor Task to the current host's native agent tool. Each new work
 round gets a fresh worker. Preserve the core's narrow resume exceptions and the
 scoped-worker direct implementation exception; do not recursively delegate the
 same assignment. A core `poteto-agent` call uses the registered hugues-agent in
-Claude Code; Codex prepends that wrapper to the fresh worker's prompt. Supply absolute paths
-to the public mode, plugin skills directory, pinned core and the host adapter and applicable mobile adapter,
+Claude Code; Codex uses the role instructions through its supported fresh-worker mechanism. Supply absolute paths
+to the public mode, plugin skills directory and the host adapter and applicable mobile adapter,
 the exact base/head, writable scope, success predicate and evidence destination.
-Read the mode and applicable principle leaves in full before work. If the host
+Obtain the mode and applicable principles through supported native invocation before work. If the host
 cannot preserve required context isolation or parallelism, mark that phase blocked.
 
 For routed research/review calls, preserve `generalPurpose` and the workflow's
@@ -82,26 +92,21 @@ Do not replace these workers with `hugues-agent`.
 Cursor's `generalPurpose` maps to Claude Code's native `general-purpose` agent;
 Codex uses a fresh native worker with that role's prompt. Use the actual native
 tool's exposed agent type rather than sending an unsupported Cursor spelling.
-The `worker_roles` index in
-core-bindings.json maps how explorers/explainers, why investigators/synthesizer,
-reflect's three lenses/synthesizer and interrogate reviewers to their complete
-pinned prompt files. Read each file verbatim and fill only its named placeholders;
-load every supporting reference required by the owning skill. For simple how,
-omit explorer findings exactly as the core directs. Why investigators retain
-category-specific playbooks and epistemics; reflect's synthesizer receives all
-three full outputs. Use the core inline brief for arena, swarm, history mining
-and trail audit. Architect supplies its runner prompt through arena. `core` in
-the index means dispatch according to the owning core, not an invented agent type.
-The index identifies roles and prompts; it does not replace their complete
-workflow definitions. General-purpose native workers receive absolute source,
+Each owning skill names its complete worker prompts alongside its workflow.
+The maintainer provenance receipt records 15 role mappings; it is not a host registry.
+Read the selected role's ordinary prompt reference, fill its named placeholders,
+and preserve the owning workflow's order, cardinality and context isolation.
+For simple how, omit explorer findings exactly as directed. Why retains its
+category playbooks; reflect synthesis receives all three full outputs. Architect
+passes its runner brief through arena. Native-invoke that dependency when supported;
+never read arena's body as a substitute. Inline briefs remain with their owner.
+General-purpose native workers receive absolute source,
 adapter and fixture paths, scope and success predicate, without a mode persona.
 Agent mode preserves available tool access; it never grants permission to write
 or query external sources. Missing authorized tools remain explicit coverage gaps.
 
 The no-comments Task role `Comment Sicko` uses the registered
-`hugues-comment-sicko` agent in Claude Code. Codex prepends that specialized
-wrapper and reads the complete pinned comment-sicko agent before the fresh worker
-acts. Do not substitute a generic worker without those rules. Preserve its exact
+`hugues-comment-sicko` agent in Claude Code. Codex supplies that canonical specialized role through its supported fresh-worker mechanism before work. Do not substitute a generic worker without those rules. Preserve its exact
 comment exceptions, scope fence, MUST KILL proof and no application-code edits;
 the no-comments coordinator retains rejection, one rerun and failure rules.
 

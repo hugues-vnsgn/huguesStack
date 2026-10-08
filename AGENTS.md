@@ -3,31 +3,22 @@
 huguesStack is pstack for mobile development, running in Claude Code and Codex.
 pstack is poteto's Cursor plugin: a router mode matches a task to a playbook,
 the playbook calls skills and principles as its steps fire, and the work ends in
-evidence. huguesStack keeps pstack 0.15.9 *pinned* byte-for-byte and adds host
-and mobile adapters for Swift/iOS, Kotlin/Android, Kotlin Multiplatform (KMP)
-and Compose Multiplatform (CMP). Its router is `hugues-mode` (pstack's
-`poteto-mode`). Read the [pstack guide](plugin/core/pstack/docs/guide/README.md)
-for how pstack works and the [glossary](docs/GLOSSARY.md) for project terms.
-
-This repository ships only the plugin. Agents working inside *consumer* apps,
-the mobile projects that install huguesStack, load everything under `plugin/`,
-so write it for them. Rules for maintaining huguesStack itself live here and in
-`docs/`.
+evidence. huguesStack preserves its upstream source in a nondiscoverable provenance archive
+and authors one canonical native body per skill. Read the
+[pstack guide](docs/pstack/guide/README.md) and [glossary](docs/GLOSSARY.md).
 
 ## Where an edit goes
 
-- `plugin/core/pstack/` is the *pinned* core: 161 files whose bytes and Git
-  modes the checks verify. It changes only in a pin upgrade, which is its own
-  task ([upstream sync](docs/upstream/README.md)).
-- *Generated*: every `plugin/skills/*/SKILL.md`, the playbooks in
-  `plugin/skills/hugues-mode/playbooks/` that `plugin/core-bindings.json` names,
-  and `plugin/agents/`. Change `scripts/render_core.py` or the bindings, then run
-  `python3 scripts/render_core.py`.
-- Everything else under `plugin/` is *authored*: adapters, the Astra policy, the
-  mobile playbooks and the `hugues-mode` references. Many authored files have
-  their SHA-256 recorded in a *receipt*; after editing one, run
-  `grep -rl --include='*.json' '<path>' docs` and update any hash it finds in
-  the same commit.
+- `plugin/skills/<name>/SKILL.md` is the authored canonical skill. Public names
+  and paths are compatibility surfaces. Owned references load only when needed.
+- `plugin/adapters/` contains host mechanics, mobile applicability and the
+  conservative read-only activity audit. Do not bypass native skill controls.
+- `provenance/upstream/` retains exact upstream bytes outside runtime discovery.
+  `docs/upstream/consolidation.json` maps every original responsibility and binds
+  the installed inventory. `scripts/seal_payload.py` updates reviewable receipts
+  and bootstrap hashes after intentional edits; it is not a consumer repair tool.
+- Current candidate tests and frozen historical release tests are separate.
+  Do not edit frozen archives to make current failures pass.
 
 ## Checks
 

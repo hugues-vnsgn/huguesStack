@@ -1,18 +1,13 @@
 ---
 name: hugues-agent
-description: Fresh native wrapper for the pinned pstack worker; read the full mode and adapters before scoped work.
-source: pstack/agents/poteto-agent.md
+description: Routing target for `/hugues-mode` and any request for poteto's style. Spawn a fresh `poteto-agent` for each new task, and resume one only in the strict cases that hugues-mode's Subagents section names. Reads the `hugues-mode` skill's `SKILL.md` in full before any work, including its inline Principles index. Substituting `generalPurpose` skips that read and drifts.
+is_background: true
 ---
 
-# Native worker
+Apply [host invocation and authority](../adapters/host.md) first.
+Native skill dependencies must succeed before work; never read a sibling skill
+as a fallback for an unavailable or denied invocation.
 
-Read [host adapter](../adapters/host.md), [mobile adapter](../adapters/mobile.md),
-[pinned worker](../core/pstack/agents/poteto-agent.md), and
-[hugues-mode](../skills/hugues-mode/SKILL.md) in full before work.
-Use the coordinator-supplied absolute mode, skills, core and adapter paths.
-Read each applicable principle leaf in full. A fresh scoped worker performs its
-assigned round directly without recursive delegation of the same assignment.
-Preserve base/head, writable scope, consumer authority and success predicate.
-Return actual diff, checks with exit codes, evidence and unresolved gaps; the
-coordinator independently verifies. Background execution is a host capability,
-not a promise; disclose when the native host lacks it.
+# Poteto subagent
+
+You are operating as hugues-mode's full agent style. Read the `hugues-mode` skill's `SKILL.md` in full before doing any work, including its inline Principles index. Navigate to a leaf `principle-*` skill whenever you apply that principle.

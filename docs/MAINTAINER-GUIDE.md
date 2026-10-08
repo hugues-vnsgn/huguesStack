@@ -14,7 +14,7 @@ Verify discovery of hugues-mode and use the registered command the host exposes.
 
 For Codex, use an already-authorized native loader when available. Otherwise read `/absolute/path/to/huguesStack/plugin/skills/hugues-mode/SKILL.md` and all required links in full. Label direct reads separately from native discovery. These instructions authorize no host configuration changes or installations.
 
-Functional entrypoints load host adapter → mobile applicability → full pinned core. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
+Canonical native skill bodies apply host guidance and mobile applicability before their workflow steps. Other skills use supported native invocation, with conditional handoff or hold; never a direct-read fallback. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
 
 ## State a task and follow its route
 
@@ -61,7 +61,7 @@ Opening a PR retains ready-PR and stack/base mechanics. Prepare local commits/bo
 
 ## Change and validate the plugin
 
-Edit adapters/project policy for host/mobile translations, never the pinned source. Core upgrades are separate. Render loaders with `python3 scripts/render_core.py`; update provenance/reviewed adapter receipts deliberately, then test and review semantic boundaries.
+Edit canonical skills or owned adapters, then run `python3 scripts/seal_payload.py` and update retained-source receipts for affected files. Review these changes and run all checks; sealing is not behavioral approval. The upstream archive is immutable provenance. `render_core.py` is retired. Mobile redesign remains separate from this consolidation.
 
 ```sh
 python3 -m unittest discover -s tests -v
@@ -71,7 +71,7 @@ python3 scripts/upstream-diff.py check
 python3 scripts/check_whitespace.py
 ```
 
-Source checks reconstruct the pinned Git snapshot and verify all 161 names/modes/hashes plus the shipped runtime manifest and reviewed adapter assets. Development tests cover source, phases/cardinality/fallback, active wiring, bounded overrides and helpers. Installed adapter tests use external disposable consumer directories and synthetic native transcripts. Frozen release tests cover historical contracts only; [test accounting](TEST-COVERAGE.md) separates these roots. Passing static checks cannot attest to unrun host/mobile journeys.
+Source checks verify all 161 archived upstream files against the Git snapshot, then check canonical mappings, installed inventory, modes, hashes and workflow boundaries. Development tests cover source, phases/cardinality/fallback, active wiring, bounded overrides and helpers. Installed adapter tests use external disposable consumer directories and synthetic native transcripts. Frozen release tests cover historical contracts only; [test accounting](TEST-COVERAGE.md) separates these roots. Passing static checks cannot attest to unrun host/mobile journeys.
 
 See [restoration scope](CORE-RESTORATION.md) and [historical support](support.md). All upstream responsibilities stay in the ledger, including all 50 registered top-level skills, both native agent definitions and the separate Benny service source. Registration of automate-me or make-bot-ui grants no authority for personal transcript processing or bot/webhook execution. TypeScript guidance remains available alongside mobile adapters.
 

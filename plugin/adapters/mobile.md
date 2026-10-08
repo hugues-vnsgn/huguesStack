@@ -66,7 +66,8 @@ Neither a single successful journey nor a bounded checkpoint proves a clean
 whole-map maintenance cycle.
 
 Honor the consumer's existing `.claude/skills` or `.agents/skills` layout and
-disclose direct reads separately from native discovery. A user may explicitly
+use supported native invocation for skills; never substitute direct body reads for
+unavailable or denied invocation. A user may explicitly
 request a bounded one-journey diagnostic. Label that as the bounded-mobile
 extension and report unvisited features. Use the authored
 [bounded-mobile template](../skills/create-verification-skill/references/project-skill-template.md)

@@ -149,7 +149,9 @@ class PinnedEvidenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             row = next(r for r in self.ledger['items'] if r['path'] == 'pstack/LICENSE')
-            (root / 'PSTACK-LICENSE').write_bytes(b'corrupt')
+            destination = root / row['destinations'][0]
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(b'corrupt')
             with self.assertRaisesRegex(ValueError, 'verbatim'):
                 u.check_destinations({'items': [row]}, self.after, root)
         ledger = copy.deepcopy(self.ledger)

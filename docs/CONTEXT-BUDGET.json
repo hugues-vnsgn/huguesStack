@@ -1,0 +1,46 @@
+{
+  "method": "UTF-8 bytes; Unicode characters; characters/4 token estimate; no native context observed",
+  "baseline_revision": "509cbec0486c23bb76a943ffec1ea7c7fb553c0f",
+  "mode_initial_read_set": {
+    "baseline_paths": [
+      "plugin/skills/hugues-mode/SKILL.md",
+      "plugin/adapters/host.md",
+      "plugin/adapters/mobile.md",
+      "plugin/core/pstack/skills/poteto-mode/SKILL.md"
+    ],
+    "candidate_paths": [
+      "plugin/skills/hugues-mode/SKILL.md",
+      "plugin/adapters/host.md",
+      "plugin/adapters/mobile.md"
+    ],
+    "baseline": {
+      "bytes": 36503,
+      "characters": 36443,
+      "estimated_tokens_characters_divided_by_4": 9110.75
+    },
+    "candidate": {
+      "bytes": 36783,
+      "characters": 36727,
+      "estimated_tokens_characters_divided_by_4": 9181.75
+    }
+  },
+  "native_frontmatter": {
+    "baseline": {
+      "bytes": 15764,
+      "characters": 15761,
+      "estimated_tokens_characters_divided_by_4": 3940.25
+    },
+    "candidate": {
+      "bytes": 14803,
+      "characters": 14800,
+      "estimated_tokens_characters_divided_by_4": 3700.0
+    }
+  },
+  "public_skills": 50,
+  "limits": [
+    "All frontmatter is an upper-bound source measure, not observed startup context.",
+    "Includes full mobile adapter for a conservative comparable read set.",
+    "Phase-specific reference and dependency invocation costs are not included.",
+    "Moving bodies does not itself promise runtime context savings."
+  ]
+}

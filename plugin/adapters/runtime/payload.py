@@ -5,8 +5,9 @@ from pathlib import Path, PurePosixPath
 import shlex
 import stat
 
-PIN = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
-MANIFEST_SHA256 = 'c42187f44123ed5a6dbdb6bce2f270218c60e515bcec262ebe7315a70d76b364'
+PIN = 'huguesstack-native-v1'
+ANCHORS = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adapters/host_tools.py'}
+MANIFEST_SHA256 = '0854902ed2f3d02758bafd878bfd4f8f211025f16862b4a130429ba71f18ddaa'
 
 
 def digest(path):
@@ -28,19 +29,22 @@ def checked_file(root, relative):
 
 
 def verify(root):
+    for name in ANCHORS:
+        if stat.S_IMODE(checked_file(root, name).stat().st_mode) != 0o644:
+            raise ValueError('installed trust anchor mode drift: ' + name)
     manifest = checked_file(root, 'adapters/runtime/payload.json')
     if digest(manifest) != MANIFEST_SHA256:
         raise ValueError('installed payload manifest differs from approved revision')
     rows = load_json(manifest.read_text())
-    if rows['revision'] != PIN:
+    if rows['schema_version'] != 2 or rows['revision'] != PIN:
         raise ValueError('installed payload revision differs')
     for row in rows['files']:
-        path = checked_file(root, 'core/' + row['path'])
+        path = checked_file(root, row['path'])
         mode = '100' + format(stat.S_IMODE(path.stat().st_mode), '03o')
         if digest(path) != row['sha256'] or mode != row['mode']:
             raise ValueError('installed workflow bytes/mode drift: ' + row['path'])
-    if set(inventory(root / 'core')) != {row['path'] for row in rows['files']}:
-        raise ValueError('installed core inventory differs')
+    if set(inventory(root, allow_runtime_cache=True)) != {row['path'] for row in rows['files']} | ANCHORS:
+        raise ValueError('installed payload inventory differs')
     return rows
 
 
@@ -76,12 +80,19 @@ def load_binding(root, path):
     return recorded
 
 
+def resolve_source(rows, source):
+    return rows['legacy_paths'].get(source, source)
+
+
 def workflow(root, source):
     rows = verify(root)
+    source = resolve_source(rows, source)
+    if source.endswith('/SKILL.md'):
+        raise ValueError('native skill invocation required; a guarded file read grants no invocation permission')
     known = {row['path'] for row in rows['files']}
     if source not in known or not source.endswith('.md'):
-        raise ValueError('workflow is not in approved pinned payload')
-    return checked_file(root, 'core/' + source).read_bytes()
+        raise ValueError('workflow is not in approved installed payload')
+    return checked_file(root, source).read_bytes()
 
 
 def command(root, binding, verb, operand):
@@ -91,10 +102,12 @@ def command(root, binding, verb, operand):
 
 def translate(root, binding, text):
     import re
-    known = {row['path'] for row in verify(root)['files'] if row['path'].endswith('.md')}
-    helper = 'pstack/skills/poteto-mode/scripts/check-plan.mjs'
+    rows = verify(root)
+    known = {row['path'] for row in rows['files'] if row['path'].endswith('.md')}
+    known |= {old for old, new in rows['legacy_paths'].items() if new in known}
+    helpers = {'pstack/skills/poteto-mode/scripts/check-plan.mjs', 'skills/hugues-mode/scripts/check-plan.mjs'}
     operands = [re.compile(r'(?<![\w./:-])(?:origin/main:)?' + re.escape(source) + r'(?![\w./-])')
-                for source in known | {helper}]
+                for source in known | helpers]
 
     joined = re.sub(r'\\\r?\n', '', text)
     if joined != text or '<<' in text:
@@ -104,9 +117,12 @@ def translate(root, binding, text):
         try:
             words = shlex.split(value)
         except ValueError:
-            if 'pstack/' in value:
+            if 'pstack/' in value or 'skills/' in value:
                 raise ValueError('unresolved quoting in plan reference')
             return value
+        if any(pattern.search(value) for name in known if name.endswith('/SKILL.md')
+               for pattern in [re.compile(r'(?<![\w./:-])(?:origin/main:)?' + re.escape(name) + r'(?![\w./-])')]):
+            raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
         if words and words[-1] in known and words == shlex.split(command(root, binding, 'read-workflow', words[-1])):
             return value
         bundled = any(pattern.search(content) for pattern in operands
@@ -124,7 +140,7 @@ def translate(root, binding, text):
                 return value
         if len(words) == 2 and words[0] == 'cat' and words[1] in known:
             return command(root, binding, 'read-workflow', words[1])
-        if len(words) == 3 and words[:2] == ['node', helper]:
+        if len(words) == 3 and words[0] == 'node' and words[1] in helpers:
             return command(root, binding, 'plan-check', words[2])
         if bundled:
             raise ValueError('unsupported bundled command; use a standalone guarded read')

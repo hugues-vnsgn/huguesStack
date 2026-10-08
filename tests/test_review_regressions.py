@@ -27,9 +27,9 @@ class PayloadReview(InstalledFixture, unittest.TestCase):
             path.write_bytes(body)
             os.utime(path, ns=(metadata.st_atime_ns, metadata.st_mtime_ns))
             self.assertTrue(Path(cache).is_file())
-        result = self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md')
+        result = self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md')
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout, (self.plugin / 'core/pstack/skills/swarm/SKILL.md').read_text())
+        self.assertEqual(result.stdout, (self.plugin / 'skills/hugues-mode/playbooks/feature.md').read_text())
         self.assertEqual(self.run_tool('bind').stdout, self.binding.read_text())
 
     def test_every_effective_adapter_bridge_and_policy_is_bound(self):
@@ -40,34 +40,34 @@ class PayloadReview(InstalledFixture, unittest.TestCase):
                 path = self.plugin / name
                 original = path.read_bytes()
                 path.write_bytes(original + b'\ndrift\n')
-                self.assertEqual(self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md').returncode, 2)
+                self.assertEqual(self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md').returncode, 2)
                 path.write_bytes(original)
 
     def test_extra_core_file_and_non_executable_permission_changes_hold(self):
-        extra = self.plugin / 'core/pstack/unapproved.md'
+        extra = self.plugin / 'skills/hugues-mode/unapproved.md'
         extra.write_text('not pinned')
         self.assertEqual(self.run_tool('bind').returncode, 2)
         extra.unlink()
-        cache = self.plugin / 'core/__pycache__'
+        cache = self.plugin / 'skills/hugues-mode/__pycache__'
         cache.mkdir()
         (cache / 'extra.pyc').write_bytes(b'not pinned')
         self.assertEqual(self.run_tool('bind').returncode, 2)
         (cache / 'extra.pyc').unlink()
         cache.rmdir()
-        for name in ['core/pstack/skills/swarm/SKILL.md', 'skills/hugues-mode/SKILL.md']:
+        for name in ['skills/hugues-mode/playbooks/feature.md', 'skills/hugues-mode/SKILL.md']:
             path = self.plugin / name
             mode = stat.S_IMODE(path.stat().st_mode)
             path.chmod(0o600)
-            self.assertEqual(self.bound('read-workflow', 'pstack/skills/swarm/SKILL.md').returncode, 2)
+            self.assertEqual(self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md').returncode, 2)
             path.chmod(mode)
 
     def test_plain_plan_paths_resolve_to_installed_sources(self):
-        source = 'pstack/skills/swarm/SKILL.md'
+        source = 'skills/hugues-mode/playbooks/feature.md'
         plan = self.consumer / 'plan.md'
         plan.write_text(f'Read `{source}`.\n`git show origin/main:{source}`\nConsumer git show origin/main:PLAN.md\n')
         result = self.bound('translate-plan', plan)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertNotIn(str(self.plugin / 'core' / source), result.stdout)
+        self.assertNotIn(str(self.plugin / source), result.stdout)
         self.assertIn('read-workflow --binding', result.stdout)
         self.assertIn('git show origin/main:PLAN.md', result.stdout)
 

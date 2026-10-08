@@ -1,7 +1,7 @@
 # Installed planning and worktree audit commands
 
-These are mechanical translations of bundled operands in the pinned playbooks.
-Read the full selected core first and preserve its todo order, verification rules,
+These are mechanical translations of bundled operands in the canonical playbooks.
+Invoke the selected native skill first and preserve its todo order, verification rules,
 explicit execution go and active/pinned-chat gate. Python 3 and Git must already
 be available; plan validation also needs Node. Missing tools block the gate.
 The adapters do not install dependencies, fetch, query a forge or delete anything.
@@ -16,17 +16,29 @@ At program authoring, save a binding in the authorized program evidence director
 python3 "<plugin>/adapters/host_tools.py" bind > "<program>/plugin-binding.json"
 ```
 
-The binding records pstack's approved revision, the shipped 161-file hash/mode
-manifest, installation path and every non-core plugin file’s hash and full permission mode.
-Extra core files also block the binding. The CLI loads its fixed runtime modules
-directly from source; Python bytecode caches are never executed and are excluded
-from the non-core inventory. Record the plugin's
-Git commit separately when the installation has one. At every required tick,
-reread bundled files through the same saved binding:
+The binding records the canonical layout identity, approved manifest digest,
+installation path and every plugin file's hash and full permission mode. The
+manifest covers the entire installed inventory except the three trust anchors
+(manifest, payload verifier and bootstrap); the bootstrap binds runtime source
+and the saved binding also covers those anchors. Unexpected files hold. Only
+runtime Python bytecode caches are excluded and they are never executed.
+The upstream revision is provenance, not the installed revision. Record the
+candidate commit separately. A 0.2.0 binding cannot be reused after migration;
+review and create a new binding explicitly.
+
+Reread an owned playbook through the saved binding:
 
 ```sh
-python3 "<plugin>/adapters/host_tools.py" read-workflow --binding "<program>/plugin-binding.json" pstack/skills/swarm/SKILL.md
+python3 "<plugin>/adapters/host_tools.py" read-workflow --binding "<program>/plugin-binding.json" skills/hugues-mode/playbooks/feature.md
 ```
+
+Public `SKILL.md` reads are rejected, including legacy aliases. Invoke the skill
+through the host's supported native mechanism. A helper cannot grant invocation
+permission or report an owner-disabled skill as enabled. If required native
+invocation is unavailable or denied, hold the dependent phase. Manual handoff is
+conditional on host behavior, not a universal requirement. Owned references and
+playbooks are ordinary resources; never move a disabled sibling body into them
+as an invocation workaround.
 
 Translate the filled bundled references in multi-phase-plan, autopilot-full and
 autopilot-stack before handing the plan to another worker:
@@ -42,7 +54,7 @@ standalone commands (blank lines are allowed). Mixing standalone bundled command
 with other text holds, even across blank lines; put those references in inline
 code when writing a Markdown plan. Single-backtick spans are explicitly Markdown
 references, not shell command substitutions. Supported fragments are a known
-pinned Markdown path, `cat <known path>`,
+owned Markdown resource path, `cat <known path>`,
 `git show origin/main:<known path>`, and the exact bundled Node plan-check command
 with one plan operand. Markdown references and reads become quoted, binding-guarded
 `read-workflow` commands; no direct installed-file read is emitted. Other Git
@@ -55,7 +67,7 @@ Use a plain literal plan path. Line continuations and heredoc syntax are outside
 this translator's input contract and hold before individual fragments are processed.
 This is not a shell interpreter.
 
-By choosing this translation, the author designates exact known pinned paths in
+By choosing this translation, the author designates exact known bundled paths in
 those forms as bundled workflow references. Ownership cannot be inferred from
 arbitrary text. To read a consumer file with the same name, use an explicit
 consumer Git revision such as `git show HEAD:pstack/...`. Fill placeholders

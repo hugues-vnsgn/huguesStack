@@ -8,7 +8,7 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 ## Program checklist
 ### Arm the program
 `git show origin/main:PLAN.md`
-`git show origin/main:pstack/skills/swarm/SKILL.md`
+`git show origin/main:skills/hugues-mode/playbooks/feature.md`
 `node pstack/skills/poteto-mode/scripts/check-plan.mjs plan.md`
 ### Spawn owners
 /loop 1h

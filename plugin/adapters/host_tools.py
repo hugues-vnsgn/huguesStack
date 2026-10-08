@@ -19,7 +19,7 @@ RUNTIME_SHA256 = {
     "__init__.py": "277b071e8e40f0aabb4007e0ae389824708b2bdd5259075623998749da582807",
     "json_input.py": "d162867227d23f2c56b0e391977450ddfb81e1311394646947325581651c5423",
     "activity.py": "5803f97bcc6270bf6d5b5139a68add48a5bb386e05d2d16bed3044a0a223da93",
-    "payload.py": "0cf66cb6dceb02973cbd0bc8794f525be69950275e287d895e52fbe05de71640"
+    "payload.py": "043e23d66aebe7efc4e14e46fd93cdb485d112ccd19bd6f94a4ffdc719f65a81"
 }
 
 
@@ -100,7 +100,7 @@ def main(argv=None):
             node = shutil.which('node')
             if not node:
                 raise ValueError('Node unavailable; plan validation gate blocked')
-            helper = payload.checked_file(root, 'core/pstack/skills/poteto-mode/scripts/check-plan.mjs')
+            helper = payload.checked_file(root, 'skills/hugues-mode/scripts/check-plan.mjs')
             return subprocess.run([node, str(helper), str(Path(args.plan).resolve())], check=False).returncode
         elif args.verb == 'worktree-audit':
             result = activity.audit(args.repo.resolve(), args.sources, args.pr_snapshot, args.base)

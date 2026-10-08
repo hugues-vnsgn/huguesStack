@@ -8,7 +8,7 @@ import re
 import stat
 import sys
 
-from render_core import outputs
+import tarfile
 
 ROOT = Path(__file__).resolve().parents[1]
 PIN = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
@@ -46,22 +46,8 @@ def worker_roles():
             for name, (skill, dispatch, prompt) in WORKER_ROLES.items()}
 
 
-def resolve_skill(binding, name):
-    return binding['skills'][ALIASES.get(name, name)]
-
-
-def resolve_worker(binding, role):
-    row = binding['worker_roles'][role]
-    return resolve_skill(binding, row['skill']), row
 ADAPTERS = ['plugin/adapters/host.md', 'plugin/adapters/mobile.md']
 PROJECT_POLICY = 'plugin/policies/astra-pr-review.md'
-RUNTIME_ASSETS = ['plugin/adapters/host-tools.md', 'plugin/adapters/host_tools.py',
-                  'plugin/adapters/runtime/__init__.py', 'plugin/adapters/runtime/payload.py',
-                  'plugin/adapters/runtime/payload.json', 'plugin/adapters/runtime/activity.py',
-                  'plugin/adapters/runtime/json_input.py']
-OVERRIDES = ['native-host-tools', 'project-local-model-rule', 'authority-boundaries',
-             'mobile-routing-and-proof', 'fresh-regression-worker',
-             'arena-context-isolation', 'bounded-mobile-opt-in', 'astra-high-pr-panel']
 
 
 def require(value, message):
@@ -143,7 +129,8 @@ def behavior_errors(bodies):
 def adapter_errors(texts):
     errors = []
     obligations = {
-        ADAPTERS[0]: ['core owns workflow', 'List length sets', 'never an implicit replacement',
+        ADAPTERS[0]: ['canonical skill owns workflow', 'never use a file read as an invocation fallback',
+                     'never restart task routing', 'consumer or external skill', 'List length sets', 'never an implicit replacement',
                      'project-local `.huguesstack/models.md`', 'No translation grants new authority',
                      'mark the seat blocked', 'Do not execute it without installation authority',
                      'ready-PR and stack/base mechanics', 'Supply absolute paths',
@@ -212,144 +199,159 @@ def mobile_route_errors(texts):
 
 
 def check(root=ROOT):
+    require(not root.is_symlink(), 'unsafe repository root')
     root = root.resolve()
-    spec = importlib.util.spec_from_file_location('upstream_diff', ROOT / 'scripts/upstream-diff.py')
+    require(not any(p.is_symlink() for p in root.rglob('*') if '.git' not in p.parts),
+            'unsafe repository symlink')
+    spec = importlib.util.spec_from_file_location('native_upstream', root / 'scripts/upstream-diff.py')
     upstream = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(upstream)
     snapshot = upstream.read_pin(root / 'docs/upstream/pin.json')
-    require(snapshot['revision'] == PIN and snapshot['pstack_tree_sha'] == TREE
-            and snapshot['version'] == '0.15.9' and snapshot['file_count'] == 161,
-            'restoration must retain the approved pinned core')
-    core = root / 'plugin/core'
-    actual = set()
-    for path in core.rglob('*'):
-        require(not path.is_symlink(), 'symlink in immutable core')
-        if path.is_file():
-            actual.add(path.relative_to(core).as_posix())
-    require(actual == {row['path'] for row in snapshot['files']}, 'core inventory differs')
-    for row in snapshot['files']:
-        path = core / row['path']
-        body = path.read_bytes()
-        mode = '100' + format(stat.S_IMODE(path.stat().st_mode), '03o')
-        require(mode == row['mode'] and upstream.oid('blob', body) == row['blob_sha']
-                and hashlib.sha256(body).hexdigest() == row['sha256']
-                and len(body) == row['size'], 'pinned core bytes/mode differ: ' + row['path'])
-    binding = upstream.load(root / 'plugin/core-bindings.json')
-    require(set(binding) == {'schema_version', 'revision', 'upstream_version', 'core_directory',
-                            'excluded_skills', 'skills', 'playbooks', 'agents', 'worker_roles', 'adapters'}, 'unknown binding fields')
-    require(binding['schema_version'] == 1 and binding['revision'] == PIN and
-            binding['upstream_version'] == '0.15.9' and binding['core_directory'] == 'plugin/core'
-            and binding['excluded_skills'] == sorted(EXCLUDED) and binding['adapters'] == ADAPTERS,
-            'binding pin, scope or adapter order differs')
-    expected_skills = {}
-    expected_playbooks = {}
-    for row in snapshot['files']:
-        parts = Path(row['path']).parts
-        if len(parts) == 4 and parts[1] == 'skills' and parts[-1] == 'SKILL.md' and parts[2] not in EXCLUDED:
-            name = ALIASES.get(parts[2], parts[2])
-            expected_skills[name] = {'source': row['path'],
-                'entrypoint': f'plugin/skills/{name}/SKILL.md',
-                'kind': 'verbatim' if name.startswith('principle-') else 'loader'}
-        if parts[:4] == ('pstack', 'skills', 'poteto-mode', 'playbooks'):
-            name = Path(row['path']).stem
-            expected_playbooks[name] = {'source': row['path'],
-                'entrypoint': f'plugin/skills/hugues-mode/playbooks/{name}.md'}
-    require(binding['skills'] == expected_skills and len(expected_skills) == 50,
-            'active skill set or source wiring differs')
-    require(binding['playbooks'] == expected_playbooks and len(expected_playbooks) == 23,
-            'active playbook set or source wiring differs')
-    require(binding['agents'] == AGENTS, 'specialized agent binding differs')
-    expected_agents = {row['path'] for row in snapshot['files']
-                       if Path(row['path']).parts[:2] == ('pstack', 'agents')}
-    require({row['source'] for row in binding['agents'].values()} == expected_agents,
-            'upstream agent inventory differs')
-    require(binding['worker_roles'] == worker_roles(), 'core worker role wiring differs')
-    for role in WORKER_ROLES:
-        skill, worker = resolve_worker(binding, role)
-        owner = core / skill['source']
-        prompt = core / worker['prompt']
-        require(prompt.is_file() and prompt.resolve().is_relative_to(owner.parent.resolve()),
-                'worker prompt missing/escaping: ' + role)
-        reference = prompt.relative_to(owner.parent).as_posix()
-        require(reference == 'SKILL.md' or reference in owner.read_text(),
-                'worker prompt not required by core: ' + role)
-        require(worker['dispatch'] != 'generalPurpose' or 'generalPurpose' in owner.read_text(),
-                'worker dispatch differs from core: ' + role)
+    require(snapshot['revision'] == PIN and snapshot['file_count'] == 161, 'upstream pin differs')
+    receipt = upstream.load(root / 'docs/upstream/consolidation.json')
+    require(receipt['schema_version'] == 1 and receipt['upstream_revision'] == PIN,
+            'consolidation pin differs')
+    require(not (root / 'plugin/core').exists() and not (root / 'plugin/core-bindings.json').exists(),
+            'retired runtime core or registry present')
+    archive = root / 'provenance/upstream/pstack-0.15.9.tar.gz'
+    require(receipt['archive'] == archive.relative_to(root).as_posix() and not archive.is_symlink()
+            and hashlib.sha256(archive.read_bytes()).hexdigest() == receipt['archive_sha256'],
+            'upstream archive differs')
+    expected = {r['path']: r for r in snapshot['files']}
+    original_bodies = {}
+    with tarfile.open(archive) as tar:
+        members = tar.getmembers()
+        require(len(members) == len(expected) and {m.name for m in members} == set(expected),
+                'upstream archive inventory differs')
+        for member in members:
+            require(member.isfile(), 'unsafe upstream archive entry')
+            body = tar.extractfile(member).read()
+            original_bodies[member.name] = body
+            row = expected[member.name]
+            require(member.mode == int(row['mode'][-3:], 8) and len(body) == row['size']
+                    and hashlib.sha256(body).hexdigest() == row['sha256']
+                    and upstream.oid('blob', body) == row['blob_sha'], 'upstream archive bytes/mode differ')
+    rows = receipt['files']
+    require(len(rows) == len(expected) and {r['source'] for r in rows} == set(expected),
+            'consolidation source coverage differs')
+    destinations = [r['destination'] for r in rows if r['destination']]
+    require(len(destinations) == len(set(destinations)), 'duplicate canonical destination')
+    for row in rows:
+        original = expected[row['source']]
+        source = row['source'].removeprefix('pstack/')
+        if source.startswith('skills/'):
+            parts = source.split('/')
+            parts[1] = ALIASES.get(parts[1], parts[1])
+            destination = 'plugin/' + '/'.join(parts)
+            if source.endswith('/scripts/worktree-audit.sh'):
+                destination = None
+        elif source.startswith('agents/'):
+            destination = next(v['entrypoint'] for v in AGENTS.values() if v['source'] == row['source'])
+        elif source.startswith('docs/'):
+            destination = 'docs/pstack/' + source.removeprefix('docs/')
+        elif source == 'LICENSE':
+            destination = 'plugin/PSTACK-LICENSE'
+        else:
+            destination = None
+        require(row['destination'] == destination and row['disposition'] ==
+                ('canonical' if destination else 'provenance-only'), 'canonical source identity differs')
+        require(row['source_sha256'] == original['sha256']
+                and row['source_mode'] == int(original['mode'][-3:], 8), 'source provenance differs')
+        if row['destination']:
+            path = root / upstream.destination_path(row['destination'])
+            require(path.is_file() and not path.is_symlink() and path.resolve().is_relative_to(root),
+                    'missing/unsafe canonical destination')
+            require(hashlib.sha256(path.read_bytes()).hexdigest() == row['destination_sha256'],
+                    'canonical destination bytes differ: ' + row['destination'])
+            require(stat.S_IMODE(path.stat().st_mode) == row['source_mode'], 'canonical source mode differs')
+    names = {ALIASES.get(Path(name).parts[2], Path(name).parts[2]) for name in expected
+             if len(Path(name).parts) == 4 and name.endswith('/SKILL.md')}
+    require(set(receipt['public_skills']) == names and len(names) == 50, 'public skill inventory differs')
+    declarations = list((root / 'plugin').rglob('SKILL.md'))
+    require({p.relative_to(root).as_posix() for p in declarations} ==
+            {f'plugin/skills/{name}/SKILL.md' for name in names}, 'registered skill inventory differs')
+    for path in declarations:
+        text = path.read_text()
+        name = path.parent.name
+        require(re.search(r'^name: ' + re.escape(name) + r'$', text, re.M), 'native name differs: ' + name)
+        manual = 'disable-model-invocation: true' in text.split('---', 2)[1]
+        upstream_name = next((old for old, new in ALIASES.items() if new == name), name)
+        original_header = original_bodies[f'pstack/skills/{upstream_name}/SKILL.md'].decode().split('---', 2)[1]
+        require(manual == ('disable-model-invocation: true' in original_header),
+                'manual-only invocation changed: ' + name)
+        require(re.findall(r'^paths: (.*)$', text.split('---', 2)[1], re.M) ==
+                re.findall(r'^paths: (.*)$', original_header, re.M), 'native path scope differs: ' + name)
+        require((path.parent / 'agents/openai.yaml').read_text() ==
+                'policy:\n  allow_implicit_invocation: ' + str(not manual).lower() + '\n',
+                'native invocation policy differs: ' + name)
+        if not name.startswith('principle-'):
+            require('The host contract supersedes inherited sibling-body reads.' in text
+                    and '[host contract](../../adapters/host.md)' in text,
+                    'native dependency boundary missing: ' + name)
+    for relative in ['skills/hugues-mode/playbooks/mobile-proof.md',
+                     'skills/hugues-mode/references/mobile-lanes.md',
+                     'skills/hugues-mode/references/jev-drive.md']:
+        text = (root / 'plugin' / relative).read_text()
+        require(not re.search(r'(?:read|Read)[^\n]*directly[^\n]*(?:invocation|disabled)', text),
+                'consumer skill invocation bypass: ' + relative)
     manifest = upstream.load(root / 'plugin/.claude-plugin/plugin.json')
     require(manifest['skills'] == ['./skills'] and manifest['agents'] ==
-            ['./agents/hugues-agent.md', './agents/hugues-comment-sicko.md'],
-            'active manifest wiring differs')
-    require({p.relative_to(root).as_posix() for p in (root / 'plugin/agents').glob('*.md')} ==
-            {row['entrypoint'] for row in AGENTS.values()}, 'registered agent inventory differs')
-    discovered = {p.relative_to(root).as_posix() for p in (root / 'plugin/skills').rglob('SKILL.md')}
-    require(discovered == {row['entrypoint'] for row in expected_skills.values()},
-            'registered skill inventory differs')
+            ['./agents/hugues-agent.md', './agents/hugues-comment-sicko.md'], 'manifest wiring differs')
+    require({p.name for p in (root / 'plugin/agents').glob('*.md')} ==
+            {'hugues-agent.md', 'hugues-comment-sicko.md'}, 'registered agent inventory differs')
+    require(receipt['agents'] == AGENTS, 'specialized agent binding differs')
+    source_map = {r['source']: r['destination'] for r in rows}
+    require(receipt['worker_roles'] == {role: {**row, 'prompt': source_map[row['prompt']]}
+            for role, row in worker_roles().items()}, 'worker role wiring differs')
     playbooks = {p.stem for p in (root / 'plugin/skills/hugues-mode/playbooks').glob('*.md')}
-    require(playbooks == set(expected_playbooks) | {'build-doctor', 'mobile-proof',
-                'kmp-bridge-change', 'cmp-two-target-change'}, 'playbook extension inventory differs')
-    for destination, content in outputs(root).items():
-        path = root / destination
-        require(path.is_file() and not path.is_symlink() and path.read_text() == content,
-                'active loader/worker drift: ' + destination)
-    bodies = {name: (core / f'pstack/skills/{name}/SKILL.md').read_text() for name in
-              ['architect', 'arena', 'interrogate', 'create-verification-skill',
-               'maintain-verification-skill', 'swarm', 'show-me-your-work', 'setup-pstack',
-               'poteto-mode', 'tdd']}
-    bodies['feature'] = (core / 'pstack/skills/poteto-mode/playbooks/feature.md').read_text()
-    require(not behavior_errors(bodies), 'core behavior contracts differ: ' + ', '.join(behavior_errors(bodies)))
-    texts = {path: (root / path).read_text() for path in [*ADAPTERS, PROJECT_POLICY]}
+    original_playbooks = {Path(p).stem for p in expected
+                         if p.startswith('pstack/skills/poteto-mode/playbooks/')}
+    require(playbooks == original_playbooks | {'build-doctor', 'mobile-proof', 'kmp-bridge-change',
+                                              'cmp-two-target-change'}, 'playbook inventory differs')
+    bodies = {name: (root / 'plugin/skills' / ALIASES.get(name, name) / 'SKILL.md').read_text()
+              for name in ['architect', 'arena', 'interrogate', 'create-verification-skill',
+                           'maintain-verification-skill', 'swarm', 'show-me-your-work',
+                           'setup-pstack', 'poteto-mode', 'tdd']}
+    bodies['feature'] = (root / 'plugin/skills/hugues-mode/playbooks/feature.md').read_text()
+    require(not behavior_errors(bodies), 'workflow behavior differs: ' + ', '.join(behavior_errors(bodies)))
+    texts = {p: (root / p).read_text() for p in [*ADAPTERS, PROJECT_POLICY]}
     require(not adapter_errors(texts), 'adapter behavior differs: ' + '; '.join(adapter_errors(texts)))
-    documents = {p: (root / p).read_text() for p in ['docs/PLAN.md', 'docs/upstream/README.md']}
-    require(not current_document_errors(documents),
-            'current documentation differs: ' + '; '.join(current_document_errors(documents)))
-    mobile_routes = {name: (root / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
-                     for name in ['kmp-bridge-change', 'cmp-two-target-change']}
-    require(not mobile_route_errors(mobile_routes),
-            'mobile core gates differ: ' + ', '.join(mobile_route_errors(mobile_routes)))
-    receipt = upstream.load(root / 'docs/upstream/core-restoration.json')
-    require(receipt['revision'] == PIN and receipt['effective_overrides'] == OVERRIDES,
-            'unreviewed override inventory')
-    require(receipt['adapter_sha256'] == {p: hashlib.sha256((root / p).read_bytes()).hexdigest()
-                                        for p in [*ADAPTERS, PROJECT_POLICY]}, 'adapter bytes differ from reviewed receipt')
-    require(receipt['runtime_sha256'] == {p: hashlib.sha256((root / p).read_bytes()).hexdigest()
-                                        for p in RUNTIME_ASSETS}, 'runtime adapter bytes differ from reviewed receipt')
+    mobile = {name: (root / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
+              for name in ['kmp-bridge-change', 'cmp-two-target-change']}
+    require(not mobile_route_errors(mobile), 'mobile workflow gates differ')
+    installed = {}
+    for path in (root / 'plugin').rglob('*'):
+        relative = path.relative_to(root / 'plugin').as_posix()
+        if relative.startswith('adapters/runtime/__pycache__/') and path.suffix == '.pyc' and not path.is_symlink():
+            continue
+        require(not path.is_symlink() and (path.is_file() or path.is_dir()), 'unsafe installed path')
+        if path.is_file():
+            installed[relative] = {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                                   'mode': stat.S_IMODE(path.stat().st_mode)}
+    require(installed == receipt['installed_files'], 'installed inventory/bytes/mode differs')
     bootstrap = ast.parse((root / 'plugin/adapters/host_tools.py').read_text())
-    runtime_anchor = next(ast.literal_eval(node.value) for node in bootstrap.body
-                          if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name)
-                          and target.id == 'RUNTIME_SHA256' for target in node.targets))
-    require(runtime_anchor == {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-                               for p in (root / 'plugin/adapters/runtime').glob('*.py')},
-            'trusted bootstrap runtime approval differs')
-    expected_payload = {'schema_version': 1, 'revision': PIN,
-                        'files': [{k: row[k] for k in ('path', 'sha256', 'mode')}
-                                  for row in snapshot['files']]}
+    anchor = next(ast.literal_eval(n.value) for n in bootstrap.body if isinstance(n, ast.Assign)
+                  and any(isinstance(t, ast.Name) and t.id == 'RUNTIME_SHA256' for t in n.targets))
+    require(anchor == {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                       for p in (root / 'plugin/adapters/runtime').glob('*.py')}, 'runtime anchor differs')
     payload_path = root / 'plugin/adapters/runtime/payload.json'
-    require(json.loads(payload_path.read_text()) == expected_payload, 'runtime payload manifest differs')
-    require("MANIFEST_SHA256 = '" + hashlib.sha256(payload_path.read_bytes()).hexdigest() + "'"
-            in (root / 'plugin/adapters/runtime/payload.py').read_text(), 'runtime payload anchor differs')
-    # Core-relative dependency closure for explicit local Markdown links. External
-    # tool names are capabilities, never counted as bundled or observed support.
-    for path in (core / 'pstack/skills').rglob('*.md'):
-        prose = re.sub(r'^(`{3,}|~{3,}).*?^\1[^\n]*$', '', path.read_text(), flags=re.M | re.S)
-        prose = re.sub(r'`[^`\n]*`', '', prose)
-        for target in re.findall(r'\]\(([^\s)]+)\)', prose):
-            if '://' in target or target.startswith('#'):
-                continue
-            # Literal citation-template example in the verified upstream bytes.
-            if (path.relative_to(core).as_posix(), target) == (
-                    'pstack/skills/why/references/synthesizer-prompt.md', 'url'):
-                continue
-            resolved = path.parent / target.split('#')[0]
-            require(resolved.resolve().is_relative_to(core.resolve()) and resolved.exists(),
-                    f'core dependency missing/escaping: {path.relative_to(core)} -> {target}')
-    return {'core_files': 161, 'active_skills': 50, 'core_playbooks': 23, 'mobile_playbooks': 4,
-            'core_agents': len(AGENTS), 'worker_roles': len(WORKER_ROLES)}
+    payload = upstream.load(payload_path)
+    anchors = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adapters/host_tools.py'}
+    require(payload == {'schema_version': 2, 'revision': 'huguesstack-native-v1',
+        'upstream_revision': PIN,
+        'legacy_paths': {s: d.removeprefix('plugin/') for s, d in source_map.items() if d and d.startswith('plugin/')},
+        'files': [{'path': p, 'sha256': row['sha256'], 'mode': '100'+format(row['mode'], '03o')}
+                  for p, row in sorted(installed.items()) if p not in anchors]}, 'installed payload manifest differs')
+    require("MANIFEST_SHA256 = '" + hashlib.sha256(payload_path.read_bytes()).hexdigest() + "'" in
+            (root / 'plugin/adapters/runtime/payload.py').read_text(), 'payload anchor differs')
+    return {'upstream_archive_files': 161, 'active_skills': 50, 'core_playbooks': 23,
+            'mobile_playbooks': 4, 'core_agents': 2, 'worker_roles': 15}
 
 
 if __name__ == '__main__':
     try:
-        print('PASS: pinned source + behavior + active wiring + override checks',
+        print('PASS: source provenance + canonical workflows + installed integrity',
               check(Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT))
-    except (ValueError, OSError, KeyError, TypeError) as exc:
-        print('core parity rejected: ' + str(exc), file=sys.stderr)
+    except (ValueError, OSError, KeyError, TypeError, tarfile.TarError) as exc:
+        print('native distribution rejected: ' + str(exc), file=sys.stderr)
         sys.exit(1)
