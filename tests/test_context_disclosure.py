@@ -126,4 +126,3 @@ class InstalledPhaseGuidance(InstalledFixture, unittest.TestCase):
                 path.write_bytes(original + b'\ndrift\n')
                 self.assertEqual(self.bound('read-workflow', name).returncode, 2)
                 path.write_bytes(original)
-
