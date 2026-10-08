@@ -1,5 +1,7 @@
 """Installed-payload regressions from the PR 17 review: host files, modes and raw skill reads."""
 import os
+import shlex
+import subprocess
 import unittest
 from unittest.mock import patch
 
@@ -77,11 +79,11 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
                 self.assertEqual(self.run_tool('bind').returncode, 2)
                 path.chmod(original)
 
-    def test_translate_refuses_every_spelling_of_a_raw_skill_read(self):
+    def test_translate_refuses_every_malformed_spelling_of_a_raw_skill_read(self):
+        # None of these spell the exact, literal bundled path `skills/tdd/SKILL.md`, so none
+        # resolves to an approved installed payload entry; native invocation is still required.
         for text in ['cat /abs/plugin/skills/tdd/SKILL.md',
                      'cat plugin/skills/tdd/SKILL.md',
-                     "cat skills/tdd/SK''ILL.md",
-                     'cat "skills/tdd/SKILL.md"',
                      "`cat 'plugin/skills/tdd/SKILL.md'`",
                      'Read (plugin/skills/tdd/SKILL.md) first.']:
             with self.subTest(text=text):
@@ -95,11 +97,35 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
         prose = self.bound('translate-plan', plan)
         self.assertEqual((prose.returncode, prose.stdout), (0, plan.read_text()), prose.stderr)
 
-    def test_read_workflow_refuses_every_spelling_of_a_skill_body(self):
-        for source in ['skills/tdd/SKILL.md', 'skills/tdd//SKILL.md', './skills/tdd/SKILL.md', 'SKILL.md']:
+    def test_translate_allows_a_bundled_skill_body_spelled_exactly(self):
+        # A bundled user-only skill's own SKILL.md, spelled as the exact literal payload path
+        # (however quoted), is the mode's reference and translates to a guarded read-workflow.
+        for text in ["cat skills/tdd/SK''ILL.md", 'cat "skills/tdd/SKILL.md"']:
+            with self.subTest(text=text):
+                plan = self.consumer / 'plan.md'
+                plan.write_text(text + '\n')
+                result = self.bound('translate-plan', plan)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn('read-workflow', result.stdout)
+                command = result.stdout.strip('`\n')
+                reread = subprocess.run(shlex.split(command), cwd=self.consumer, capture_output=True, text=True)
+                self.assertEqual(reread.returncode, 0, reread.stderr)
+                self.assertEqual(reread.stdout, (self.plugin / 'skills/tdd/SKILL.md').read_text())
+
+    def test_read_workflow_refuses_every_malformed_spelling_of_a_skill_body(self):
+        for source in ['skills/tdd//SKILL.md', './skills/tdd/SKILL.md', 'SKILL.md']:
             with self.subTest(source=source):
                 result = self.bound('read-workflow', source)
                 self.assertEqual(result.returncode, 2)
+                self.assertIn('native skill invocation', result.stderr)
+
+    def test_read_workflow_allows_a_bundled_user_only_skill_body(self):
+        # The exact literal path of a bundled, user-only skill's SKILL.md is the mode's
+        # reference once it is in the approved installed payload: a guarded read, not a
+        # native invocation.
+        result = self.bound('read-workflow', 'skills/tdd/SKILL.md')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, (self.plugin / 'skills/tdd/SKILL.md').read_text())
 
 
 if __name__ == '__main__':

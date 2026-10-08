@@ -1,7 +1,8 @@
 Apply [installed host tools](../../../adapters/host-tools.md): bound `read-workflow`
-for owned playbook/reference rereads and `plan-check` for validation. Public
-SKILL.md dependencies require supported native invocation; do not translate them
-to file reads. Unavailable or denied invocation holds that step.
+for owned playbook/reference rereads, `plan-check` for validation, and a bundled
+skill's own SKILL.md once it is in the approved payload. A consumer or external
+skill dependency still requires supported native invocation; do not translate
+it to a file read. Unavailable or denied invocation holds that step.
 
 ### Multi-phase or multi-PR plan
 
@@ -39,10 +40,10 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 - [ ] State the protocol and this plan to the operator, then stop. Start execution only on the operator's explicit go.
 - [ ] Read these from trunk at program start. Re-read them at every tick.
   - [ ] `git show origin/main:skills/hugues-mode/playbooks/<execution playbook>.md`
-  - [ ] Invoke `swarm` through the native host; record actual invocation or hold
+  - [ ] Read `swarm`'s SKILL.md in full via the bound `read-workflow`; hold on a missing or unreadable path
   - [ ] Invoke the required control skill through the native host; hold if unavailable/denied
   - [ ] `git show origin/main:skills/hugues-mode/playbooks/opening-a-pr.md`
-  - [ ] Invoke each other public leaf through the native host; stop unavailable/denied dependencies
+  - [ ] Read each other bundled leaf's SKILL.md via `read-workflow`; invoke a consumer or external leaf through the native host; stop on an unavailable, denied or unreadable dependency
 - [ ] On the operator's go, arm the audit tick as `/loop 1h` with the tick prompt below. Never leave the cadence to memory.
 - [ ] Use this tick prompt, verbatim. "Re-read the execution playbook from trunk. Audit the operation against it and fix drift in this tick. Probe every active lane and judge progress by side effects only. Stand down a stuck lane and dispatch its replacement now. Then post a short status message to the operator in chat only when the audit found a tracked change that no earlier status message reported, such as a PR opened, a code-ready head, a round launched or closed, a verdict, a merge, a stuck agent and the action taken, a blocker added or cleared, or a decision only the operator can make. Name every such change and nothing else. Do not repeat a table, the merged list, or an unchanged blocker. If the audit found none, end the turn with no reply text. Either way, log this tick's row in your decision trail. The row names the items reported, or none."
 - [ ] On the operator's hold or stand-down, send every owner a zero-writes order at once.
@@ -67,7 +68,7 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 
 ### Verdict and merge, for every PR
 
-- [ ] At the code-ready head SHA and at each later push that changes the patch, run the swarm per the native `swarm` skill. One gates lane. The ten live lanes from the PR's **Verify, live** block. The perf lane from its **Verify, perf** block. Two or more audit lanes, each with its own focus, that read the diff and the receipts and distrust the PR body. The root audits the receipts in the merge-ready report before the verdict.
+- [ ] At the code-ready head SHA and at each later push that changes the patch, run the swarm per the `swarm` skill. One gates lane. The ten live lanes from the PR's **Verify, live** block. The perf lane from its **Verify, perf** block. Two or more audit lanes, each with its own focus, that read the diff and the receipts and distrust the PR body. The root audits the receipts in the merge-ready report before the verdict.
 - [ ] Clean only when every lane is `PASS`. Findings go back to the owner, including a defect that a lane filed as a note. A new head gets a fresh swarm and a fresh verdict, except for results that stay valid under the patch-id rule in `playbooks/shipping.md`.
 - [ ] <The merge or append rule from the execution playbook, with the patch-id rule from `playbooks/shipping.md`.>
 
@@ -154,7 +155,7 @@ Each live lane runs on its own cloud VM at the PR head. Drive through `control-u
 
 ## Appendix D. Links and reading list
 
-<Docs to read before editing. Which PRs get the native `how` skill and the native `interrogate` skill. The trail per the native `show-me-your-work` skill.>
+<Docs to read before editing. Which PRs get the `how` skill and the `interrogate` skill. The trail per the `show-me-your-work` skill.>
 ````
 
 **Reply:** the plan path, the PR ids with their dependencies and the review-gated set, what the prototypes proved and what stays unproven, and the check script's output.

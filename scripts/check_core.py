@@ -357,7 +357,7 @@ def check(root=ROOT):
                 'policy:\n  allow_implicit_invocation: ' + str(not manual).lower() + '\n',
                 'native invocation policy differs: ' + name)
         if not name.startswith('principle-'):
-            require('The host contract supersedes inherited sibling-body reads.' in text
+            require('The host contract governs how this skill reaches any sibling dependency.' in text
                     and '[host contract](../../adapters/host.md)' in text,
                     'native dependency boundary missing: ' + name)
     for relative in ['skills/hugues-mode/playbooks/mobile-proof.md',

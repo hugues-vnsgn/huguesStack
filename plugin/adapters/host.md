@@ -23,8 +23,8 @@ agent, `run_in_background: true` is the host's background option, and Cursor mod
 slugs are role defaults to resolve against models the native tool exposes. Read
 [workers and models](host-workers.md) before the dispatch itself.
 
-Invoke each bundled, consumer or external skill through the host's supported native mechanism. Respect
-manual-only selection, owner-disabled entries and native denials; never use a file read as an invocation fallback.
+Invoke each consumer or external skill through the host's supported native mechanism. Respect
+manual-only selection, owner-disabled entries and native denials; for those skills, never use a file read as an invocation fallback.
 Unavailable, disabled, denied or unknown invocation stops the dependent step.
 When supported execution requires explicit user invocation, provide the exact
 native command and wait; do not imply this handoff is always required. A model's
@@ -33,7 +33,9 @@ An available file or a successful binding check establishes no skill permission.
 Read ordinary references owned by the invoked skill only when its phase needs them.
 Resolve relative resources from their owning file or the stated mode root, never
 from the consumer cwd. Do not recursively traverse navigation links or eagerly
-invoke all linked skills. This contract overrides inherited raw sibling-read wording.
+invoke all linked skills. This native-mechanism requirement overrides inherited
+raw sibling-read wording for consumer and external skills only; the scoped rule
+below restores inherited sibling-read wording for bundled user-only skills instead.
 For a principles consultation from figure-it-out, use already-loaded mode context
 or a supported native invocation scoped to principles only: never restart task routing.
 A fresh worker must obtain its own native context; a parent's claim of permission

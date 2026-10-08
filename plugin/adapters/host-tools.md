@@ -37,13 +37,18 @@ Reread an owned playbook through the saved binding:
 python3 "<plugin>/adapters/host_tools.py" read-workflow --binding "<program>/plugin-binding.json" skills/hugues-mode/playbooks/feature.md
 ```
 
-Public `SKILL.md` reads are rejected, including legacy aliases. Invoke the skill
-through the host's supported native mechanism. A helper cannot grant invocation
-permission or report an owner-disabled skill as enabled. If required native
-invocation is unavailable or denied, hold the dependent phase. Manual handoff is
+A bundled skill's own `SKILL.md` is readable through `read-workflow` once it
+resolves, including through a legacy alias, to a known path in the approved
+installed payload, integrity-verified like any other owned reference. Any
+other `SKILL.md` read is rejected: a legacy alias resolving outside the
+payload, an unapproved or unknown path, and a consumer or external skill's
+`SKILL.md`. Invoke a consumer or external skill through the host's supported
+native mechanism instead. A helper cannot grant invocation permission or
+report an owner-disabled skill as enabled. If required native invocation is
+unavailable or denied, hold the dependent phase. Manual handoff is
 conditional on host behavior, not a universal requirement. Owned references and
-playbooks are ordinary resources; never move a disabled sibling body into them
-as an invocation workaround.
+playbooks are ordinary resources; never duplicate a sibling body into them in
+place of a fresh `read-workflow` or native invocation.
 
 Translate the filled bundled references in multi-phase-plan, autopilot-full and
 autopilot-stack before handing the plan to another worker:

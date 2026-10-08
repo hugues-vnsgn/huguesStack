@@ -7,8 +7,10 @@ same assignment. A core `poteto-agent` call uses the registered hugues-agent in
 Claude Code; Codex uses the role instructions through its supported fresh-worker mechanism. Supply absolute paths
 to the public mode, plugin skills directory and the host adapter and applicable mobile adapter,
 the exact base/head, writable scope, success predicate and evidence destination.
-Obtain the mode and applicable principles through supported native invocation before work. If the host
-cannot preserve required context isolation or parallelism, mark that phase blocked.
+Obtain the mode through supported native invocation before work; read each
+applicable principle's SKILL.md in full as the scoped bundled reference below.
+If the host cannot preserve required context isolation or parallelism, mark
+that phase blocked.
 
 The native-invocation rule above governs a consumer or external skill. A
 bundled user-only skill, including every `principle-*` entry and a routed
@@ -28,8 +30,9 @@ Read the selected role's ordinary prompt reference, fill its named placeholders,
 and preserve the owning workflow's order, cardinality and context isolation.
 For simple how, omit explorer findings exactly as directed. Why retains its
 category playbooks; reflect synthesis receives all three full outputs. Architect
-passes its runner brief through arena. Native-invoke that dependency when supported;
-never read arena's body as a substitute. Inline briefs remain with their owner.
+passes its runner brief through arena. Read arena's SKILL.md in full as the
+scoped bundled reference; never substitute a consumer or external fallback for
+it. Inline briefs remain with their owner.
 General-purpose native workers receive absolute source,
 adapter and fixture paths, scope and success predicate, without a mode persona.
 Agent mode preserves available tool access; it never grants permission to write

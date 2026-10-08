@@ -14,7 +14,7 @@ Verify discovery of hugues-mode and use the registered command the host exposes.
 
 For Codex, use an already-authorized supported native invocation. If discovery or invocation is unavailable, disabled, denied or unknown, hold the dependent step. Provide a manual handoff only when the host requires explicit user invocation; never substitute a direct file read. These instructions authorize no host configuration changes or installations.
 
-Canonical native skill bodies apply host guidance and mobile applicability before their workflow steps. Other skills use supported native invocation, with conditional handoff or hold; never a direct-read fallback. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
+Canonical native skill bodies apply host guidance and mobile applicability before their workflow steps. A consumer or external skill still uses supported native invocation, with conditional handoff or hold; never a direct-read fallback for those. A bundled user-only skill, including every principle, is the mode's reference instead: read its own SKILL.md in full. Reread relevant files after compaction if the contract is no longer available in context.
 
 ## State a task and follow its route
 

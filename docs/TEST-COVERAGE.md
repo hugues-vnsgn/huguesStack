@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The candidate collects **352 top-level unittest cases**. One is a driver that
+The candidate collects **356 top-level unittest cases**. One is a driver that
 separately executes **50 frozen 0.2.0 restoration cases**. Do not add the driver
 and its children as independent coverage, or describe historical passes as current
 native workflow proof. Subtests are not added to case totals.
@@ -12,10 +12,10 @@ native workflow proof. Subtests are not added to case totals.
 | Historical 0.2.0 restoration driver | 1 | Executes 50 cases inside a separate hash-bound archive |
 | Current source/provenance checks | 44 | test_upstream_sync (33), test_retained_provenance (11) |
 | Current installed adapters and regressions | 97 | test_host_adapters (72), test_review_regressions (12), test_rereview_regressions (13) |
-| Current native-layout contracts | 34 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt and budgets |
-| Current progressive-disclosure contracts | 9 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories, the skill-list budget and bound resources |
-| Current installed-tolerance regressions | 9 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes and raw skill-read spellings |
-| Total collected | 352 | Current, mixed and historical scopes remain distinct |
+| Current native-layout contracts | 35 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt and budgets |
+| Current progressive-disclosure contracts | 10 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories, the skill-list budget, YAML-description quoting and bound resources |
+| Current installed-tolerance regressions | 11 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes and bundled-versus-malformed raw skill-read spellings |
+| Total collected | 356 | Current, mixed and historical scopes remain distinct |
 
 The 131 historical modules are test_wp2_contract (45), test_wp3_contract (15),
 test_retained_design (7), test_retained_research (8), test_retained_verification (6),
@@ -29,7 +29,10 @@ native-layout plus eight disclosure cases gives 337, without dropping the frozen
 The review-fix pass adds five native-layout and nine installed-tolerance cases,
 giving 351. The historical driver now also fails when any nested case is skipped.
 Restoring pstack's router design adds one skill-list budget disclosure case,
-giving 352.
+giving 352. PR 1 fix round 1 adds one native-layout case (an unknown skill body
+still refuses translation), one disclosure case (YAML-description quoting) and
+two installed-tolerance cases (a bundled skill's exact SKILL.md path now
+translates and reads), giving 356.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.
@@ -37,8 +40,11 @@ Bindings cover canonical files, metadata, adapters, policies, runtime code and
 permission modes. Tests reject missing/extra files, symlinks, world-writable files,
 changed executable bits, bootstrap execution before verification, poisoned
 bytecode caches, consumer path ownership errors and unsupported shell shapes.
-Public SKILL.md reads and aliases, in any path or quoting spelling, are explicitly rejected in favor of native invocation; tests do not simulate a
-successful host permission decision.
+A bundled skill's own SKILL.md, spelled as its exact literal payload path
+(however quoted) or a legacy alias resolving to it, is read as a guarded
+reference; every other spelling (wrong prefix, absolute path, an unapproved
+or consumer/external skill) is still explicitly rejected in favor of native
+invocation. Tests do not simulate a successful host permission decision.
 
 The unchanged activity parser is exercised with synthetic Claude/Codex records,
 relative contexts, malformed/unsupported inputs, empty sources, duplicate/deep

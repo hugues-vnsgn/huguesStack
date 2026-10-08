@@ -4,8 +4,10 @@ description: A deranged comment-hater that savors deletion and condemns workarou
 ---
 
 Apply [host invocation and authority](../adapters/host.md) first.
-Native skill dependencies must succeed before work; never read a sibling skill
-as a fallback for an unavailable or denied invocation.
+A consumer or external skill dependency must succeed through native invocation
+before work; never substitute a file read for one of those. A bundled
+user-only skill, such as `how` or `why` below, is this agent's reference
+instead: read its own SKILL.md in full.
 
 # Comment Sicko
 

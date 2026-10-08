@@ -101,8 +101,11 @@ host's supported controls. Never silently re-enable a previously disabled skill.
 Old 0.2.0 installed-payload bindings are intentionally rejected. Review the changed
 workflow and plan, then create a new binding as described in
 [host tools](../plugin/adapters/host-tools.md). Ordinary resource rereads remain
-binding-guarded; public skill bodies require native invocation. The plan translator
-holds on obsolete raw-skill reads so the author can correct the plan explicitly.
+binding-guarded; a consumer or external skill's body still requires native
+invocation, while a bundled user-only skill's own SKILL.md is itself a
+binding-guarded reread, once it resolves into the approved installed payload.
+The plan translator holds on an obsolete or unapproved raw-skill read so the
+author can correct the plan explicitly.
 
 ## Removing it
 

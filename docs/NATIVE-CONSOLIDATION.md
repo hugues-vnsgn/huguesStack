@@ -100,17 +100,27 @@ Only synthetic transcripts and disposable Git consumers are used in current test
 
 See [test accounting](TEST-COVERAGE.md) for current versus historical totals.
 Current checks exercise actual installed helpers, negative inventory/mode/body
-mutations, native-body read rejection, public names, workflow phase contracts,
-owned links and parser/audit safety. Context budgets are measured source bytes
-and characters, with characters/4 as an explicit token estimate; they are not
-observed host prompt usage. Initial bug-fix routing, including its full playbook,
-todos and required unslop reply guidance, is now 34,456 bytes versus 45,289 before
-disclosure, about 8,604 versus 11,308 estimated tokens. The larger workflow inventories include their required
-transitive skills and resources. Native frontmatter is 13,431 bytes after the host
-invocation table removed 45 inherited manual-only lines and the setup description
-named the native model-role file. Workflow bodies excluding frontmatter change only
-where nine skills replace Cursor model-role wiring. These are source budgets;
-actual startup exposure, full execution cost and runtime savings remain unknown.
+mutations, bundled-reference and native-body read rejection, public names,
+workflow phase contracts, owned links and parser/audit safety. A bundled
+user-only skill's own `SKILL.md` is a guarded reference read once it is in
+the approved installed payload; a consumer or external skill's body still
+rejects a read in place of native invocation. Context budgets are measured
+source bytes and characters, with characters/4 as an explicit token estimate;
+they are not observed host prompt usage.
+
+The following figures are historical: measured at this consolidation's own
+`7db3e80` disclosure pass, not recomputed since. Initial bug-fix routing,
+including its full playbook, todos and required unslop reply guidance, was
+then 34,456 bytes versus 45,289 before disclosure, about 8,604 versus 11,308
+estimated tokens. The larger workflow inventories include their required
+transitive skills and resources. Native frontmatter was 13,431 bytes after
+the host invocation table removed 45 inherited manual-only lines and the
+setup description named the native model-role file. Workflow bodies
+excluding frontmatter changed only where nine skills replaced Cursor
+model-role wiring. These were source budgets, not actual startup exposure,
+full execution cost or runtime savings, and they predate PR 1's restoration
+of pstack's user-only tiering; see [context footprint](CONTEXT-FOOTPRINT.md)
+and [the budget record](CONTEXT-BUDGET.json) for current figures.
 
 Live discovery/invocation, disabled-skill and planning behavior remain
 UNVERIFIED for this consolidation candidate. Separate prior-layout trials cannot

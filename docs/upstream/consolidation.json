@@ -43,7 +43,7 @@
       "source_mode": 420,
       "destination": "plugin/agents/hugues-comment-sicko.md",
       "disposition": "canonical",
-      "destination_sha256": "c0f232ec6154a3cc561740a7fa710621fa9f80b5cd4904bf153e5cc93cb0536e"
+      "destination_sha256": "535e9453caa91b288b12c39d3de89a2d89947799d07919077c514cf7c7ad1de1"
     },
     {
       "source": "pstack/agents/poteto-agent.md",
@@ -299,7 +299,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/architect/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "0b9866c94a04ab1ee0d6e6c6ba10667ad8ccd8cef3c388f279e0909b6fa365bf"
+      "destination_sha256": "7af9effadb82d5541958a4978ef886ed162555f6bbe3fb8ccfca97d52fcf1285"
     },
     {
       "source": "pstack/skills/architect/references/design-red-flags.md",
@@ -331,7 +331,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/arena/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "807c59b269c9e5ac5b9e6b17fd0c7c17f8d90d8e2fd08aaa31852b43ffef70a7"
+      "destination_sha256": "722ba06d6b38e70ad9b62bd2eab436677e131f81e6015624f042be7e1d6308be"
     },
     {
       "source": "pstack/skills/automate-me/SKILL.md",
@@ -339,7 +339,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/automate-me/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "9bec416ca715f394f6ffe812fbb4b93064b5e7d06c137ce60cb3c68742e9ab12"
+      "destination_sha256": "67201c4e4354451e2c467016cae787c62db285a83564771fe246253b89388e8c"
     },
     {
       "source": "pstack/skills/benchmark-checklist/SKILL.md",
@@ -347,7 +347,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/benchmark-checklist/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "c83f6b599672926883d2179d7863c4a4c99020e20cb9b199d9bb1acc67c7c8ee"
+      "destination_sha256": "bf9244402893c071eaab7e8c45dc70f71f38d404df41f453dabd1b6674c65da3"
     },
     {
       "source": "pstack/skills/blast-radius/SKILL.md",
@@ -355,7 +355,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/blast-radius/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "dbd4bd2fcfe261dd55b3ca788f2701199820344f2e3dd0dd8f7c2a626ea14755"
+      "destination_sha256": "9f51307382b95f9e7b274e3b6bdab29f37e7e98c7d9e0b68c7edca751e644bad"
     },
     {
       "source": "pstack/skills/bro/SKILL.md",
@@ -363,7 +363,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/bro/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "ff72ed77dd56f712b483bea223a24b0b0ed9feae13c1e75dd14edc5dcaf9311a"
+      "destination_sha256": "ff866cf5ebf8c64415a6b99733a9569cf78e3f1a96307015c26eddd6c062b3d9"
     },
     {
       "source": "pstack/skills/correct/SKILL.md",
@@ -371,7 +371,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/correct/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "47d1275fd7b07223f79bfb2c802ccc52b7bb4e8bdeb31353f7769d37f9cb6026"
+      "destination_sha256": "411eff45d49450731c8b82fb7a3b0dc6a3f6f591b5736aeaf18a4e46451cb7ac"
     },
     {
       "source": "pstack/skills/create-verification-skill/SKILL.md",
@@ -379,7 +379,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/create-verification-skill/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "b1dfc697e7bb77e7da2ea7c6582c8ee629e9c40830a9c52a87b62843e00c249b"
+      "destination_sha256": "cd6b29574e00e156b43e364b5b1575f98a10e123b14162bc7453e8ea587b65ff"
     },
     {
       "source": "pstack/skills/create-verification-skill/references/feature-map-example/README.md",
@@ -411,7 +411,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/figure-it-out/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "3f01f47abf7cbb2eb6527125e3424202e6d745b71bacfccb6c365d29e3c1a8f6"
+      "destination_sha256": "fb779ade01eb03591f71f96eb4e2e6b9a939063067ff6ddaf50cf28a667d994a"
     },
     {
       "source": "pstack/skills/how/SKILL.md",
@@ -419,7 +419,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/how/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "7eb2dc938f60c4253ec29c1ca57b1177ff78296d55d9f2e552c7f380e8adb967"
+      "destination_sha256": "0e93c00ef1afe1cdbdb01d2198620ac4e094ebad2863ae54f5a1b74694628cff"
     },
     {
       "source": "pstack/skills/how/references/explainer-prompt.md",
@@ -443,7 +443,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/interrogate/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "ca6aeeebdf2d88ef8a0c4be1e70269fae2bd99f00666ceef603f91f80a503c48"
+      "destination_sha256": "585c6f07a50a14c51ecd4894ee6d79fb478f49cfcc549845f11a6100e33d610b"
     },
     {
       "source": "pstack/skills/interrogate/references/code-quality-review.md",
@@ -483,7 +483,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/maintain-verification-skill/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "c967438a6a357c1ea4d475a29e938182208e7cab12e99d2050315fd63b1e76af"
+      "destination_sha256": "a4176cf966bc2be60076b3ee720bf151714806ba7be78037c9f94aa1ed43a8da"
     },
     {
       "source": "pstack/skills/make-bot-ui/SKILL.md",
@@ -491,7 +491,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/make-bot-ui/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "b57631a939af9a7829ce15f02a42a1818b5c44a3211bcf28ed61a2605173482f"
+      "destination_sha256": "d6a15e984e7100191e1d48b5fbe35ffa7ce0959385db1c26e79a15e8f598ded9"
     },
     {
       "source": "pstack/skills/no-comments/SKILL.md",
@@ -499,7 +499,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/no-comments/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "1897681f3acd5ebbee914f4a90cc7c30a9b63f15bbbc634d85c7c8144ea6f773"
+      "destination_sha256": "535d672907268afcbbed3ce6d1581da9ff933fad58ed6703532b3a524eff3721"
     },
     {
       "source": "pstack/skills/poteto-mode/SKILL.md",
@@ -507,7 +507,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/hugues-mode/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "025232cfb8b9dee7f7a5a5011a3ddd8acbc918cfc0d01022d58ad37e18a17a33"
+      "destination_sha256": "5dcf6e148a9ca8c06dc8f39dcbef7939bf39335d9d09312e413de7574aef02ba"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/authoring-a-skill.md",
@@ -531,7 +531,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/hugues-mode/playbooks/autopilot-full.md",
       "disposition": "canonical",
-      "destination_sha256": "00bc7837a0d82cd6297afed3f1e2dc93a67da0a61f787ec2d79168bac09c946e"
+      "destination_sha256": "a25376f428e6f4716a07a487664c4461c936c43ad6ef5f28a197d0a852fd5640"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/autopilot-stack.md",
@@ -539,7 +539,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/hugues-mode/playbooks/autopilot-stack.md",
       "disposition": "canonical",
-      "destination_sha256": "3f1b5031a00fc82e7b82bd282fe7b1fe2acdedbb203860c2b4c65a50fc6211a4"
+      "destination_sha256": "ddd19516944726d6d75391da1a9c52d7b9d90507504b695e5297e38f3f11d2a9"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/babysit.md",
@@ -595,7 +595,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/hugues-mode/playbooks/multi-phase-plan.md",
       "disposition": "canonical",
-      "destination_sha256": "e7cd3156c13303518e9a9617e1f34c011a548153423ff640b4cb9ba430432d55"
+      "destination_sha256": "30970484fc79196c21fe6bbbc6e832a2bdc589e1adb34381c3cfbbe653fa4b9c"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/opening-a-pr.md",
@@ -1059,7 +1059,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/recall/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "c2225b466125b1ad3c7d5d0d5e2b24ba4f3e7d8e3acadf364a2be5f682f543a2"
+      "destination_sha256": "ef994b187eedca2c0fa7eb3c88232f2ab0ad8a3733c985bef2673c2458e603ab"
     },
     {
       "source": "pstack/skills/reflect/SKILL.md",
@@ -1067,7 +1067,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/reflect/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "955b07dc59345d7fc5b011a2f657f39aaf6948d0e60c61cb11d8812530fd6050"
+      "destination_sha256": "8f35e542c280ba45e6b5c63b4157d229493f8b554f0f17c59bcf82b64ab22ddf"
     },
     {
       "source": "pstack/skills/reflect/references/divergent-reviewer.md",
@@ -1107,7 +1107,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/setup-huguesstack/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "d6c4bc6cc95ec6e07cfb8bcafa8a0b22327669ebee565e4109f7f6528e016de4"
+      "destination_sha256": "5025862116288eeeacd02a8ce68cf1ef1206067f228524e8789cdaed7ef4e023"
     },
     {
       "source": "pstack/skills/show-me-your-work/SKILL.md",
@@ -1115,7 +1115,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/show-me-your-work/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "20bf0bd6bf63d33a5242f6a67a49d507fa6153f9eb69cd56233e69f86ee14468"
+      "destination_sha256": "75ebeaf8d1de7236b41f6631f696d8d859b808cb7260f85677752d659417953f"
     },
     {
       "source": "pstack/skills/show-me-your-work/references/decision-log-template.tsv",
@@ -1139,7 +1139,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/swarm/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "8b2e6fd923b2f0563b1549851843dd9c3d246b01330267e5c39c2e7d376b7a7c"
+      "destination_sha256": "3847a1e1cdd55b0ee5ca41969a7fd4996554a6c49b524ad905810b1af2cf2cad"
     },
     {
       "source": "pstack/skills/tdd/SKILL.md",
@@ -1147,7 +1147,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/tdd/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "185ffe0f4787170d00c6aa0141a03d4b612b19c84e3ca2af78978658db1e5eae"
+      "destination_sha256": "6193214b1512463e65a663e31ff3058ebfd7cca7704953cba9a4974f5fdc3dcd"
     },
     {
       "source": "pstack/skills/teach/SKILL.md",
@@ -1155,7 +1155,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/teach/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "4ea6be3ff01b047936ac460bf189b5536dea3ff614b01d33da5e859217d42ba5"
+      "destination_sha256": "823395c0206756b0470e9d935e2432944f741eebe5a708272bbf83a9a5a6cf5b"
     },
     {
       "source": "pstack/skills/technical-writing/SKILL.md",
@@ -1163,7 +1163,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/technical-writing/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "ef0b3ad866798090f1e95aa209343bdfd821b4d79f3077da0f8f1ed362c026dc"
+      "destination_sha256": "99dbccb6dc61e0138c0696a18d3a0dfddae163f17f582ab45caf44af3aa88ccb"
     },
     {
       "source": "pstack/skills/typescript-best-practices/SKILL.md",
@@ -1171,7 +1171,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/typescript-best-practices/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "743fc22393679d2eb6b5e8c95198d61a11a3c99a91bb2d92dd8405a747923056"
+      "destination_sha256": "1feecbb768e418dc9f9851cb7652b71b3fbddf35768703b2d563cd839b7e2432"
     },
     {
       "source": "pstack/skills/typescript-best-practices/references/patterns.md",
@@ -1187,7 +1187,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/unslop/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "86bc74e529f6d83edff5502d63ad525446e74da0bd755fe8f002ad7608023ea5"
+      "destination_sha256": "818444c8cf0ec9dbff863e2d85c2fb7853898ac5edf824557f1025cc9193785e"
     },
     {
       "source": "pstack/skills/why/SKILL.md",
@@ -1195,7 +1195,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/why/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "4ca3e0b3070398bf1c8a72c4d697ef832e5bc295d085138545d1638009bd9e2e"
+      "destination_sha256": "9de168d266946698eb21a2a482b019a61f184ac5be5b086081f53e6df2802c69"
     },
     {
       "source": "pstack/skills/why/references/epistemics.md",
@@ -1511,15 +1511,15 @@
       "mode": 420
     },
     "adapters/host-tools.md": {
-      "sha256": "325e7b66624e632f8f319475099c3c3049cf9f110b2530dd78879ae8a9024adb",
+      "sha256": "21449b27c0577f5992712a3556480e73de54529f4afbdf15af8ac7e3442a8f4e",
       "mode": 420
     },
     "adapters/host-typescript.md": {
-      "sha256": "6fefce966a4b2a57f6f38f9ed556fb8e9220fc79a45b4d78e18a4e5b0b7b02a7",
+      "sha256": "e13b67cc12e9544762f6881bdca2529c95842d822192ac195d34275b013441b8",
       "mode": 420
     },
     "adapters/host-workers.md": {
-      "sha256": "5311ad8e35a05d1d818b395257be484275ccb42e2a8327763bb732749b3d3fe4",
+      "sha256": "2d3124bb7025fa081ef98fee68b3245405fb4bca08383e22e1581c7ef0101bc9",
       "mode": 420
     },
     "adapters/host-workflow-tools.md": {
@@ -1527,11 +1527,11 @@
       "mode": 420
     },
     "adapters/host.md": {
-      "sha256": "1462064fc4b2d5388b1416bcbbed29ec96e376872c2e6ef793abdccaf16f1407",
+      "sha256": "6cb9d37de1a386480da91354f433fa3497f73b151cab93356f40edc4ccfdf62b",
       "mode": 420
     },
     "adapters/host_tools.py": {
-      "sha256": "05e20bc59be0f0d40f8f30b232dce47b90608f5bd560c7c7193f71773028a24e",
+      "sha256": "a796774d7e4cb007b8006dcb669529c9e0ecafae3b0dd38dfd43ed407286aa18",
       "mode": 420
     },
     "adapters/mobile-workflows.md": {
@@ -1555,11 +1555,11 @@
       "mode": 420
     },
     "adapters/runtime/payload.json": {
-      "sha256": "195ae4d8cb41fb3f2c295ef420395ffc6b407e060d6e6729f55e82293b5cc4c0",
+      "sha256": "8e11b531c97ce035612fe7c3a8148fbc8926b65cdb61e2383ec15f9161512d72",
       "mode": 420
     },
     "adapters/runtime/payload.py": {
-      "sha256": "fafdad8084f54e614a46b2033af791e8692c5914ffa690c42427d2f64c567dc1",
+      "sha256": "b9ec10d45d3952a66fe574e89952b2f2282dd379af259ae7b39d12219f446ee9",
       "mode": 420
     },
     "agents/hugues-agent.md": {
@@ -1567,7 +1567,7 @@
       "mode": 420
     },
     "agents/hugues-comment-sicko.md": {
-      "sha256": "c0f232ec6154a3cc561740a7fa710621fa9f80b5cd4904bf153e5cc93cb0536e",
+      "sha256": "535e9453caa91b288b12c39d3de89a2d89947799d07919077c514cf7c7ad1de1",
       "mode": 420
     },
     "policies/astra-pr-review.md": {
@@ -1575,7 +1575,7 @@
       "mode": 420
     },
     "skills/architect/SKILL.md": {
-      "sha256": "0b9866c94a04ab1ee0d6e6c6ba10667ad8ccd8cef3c388f279e0909b6fa365bf",
+      "sha256": "7af9effadb82d5541958a4978ef886ed162555f6bbe3fb8ccfca97d52fcf1285",
       "mode": 420
     },
     "skills/architect/agents/openai.yaml": {
@@ -1595,7 +1595,7 @@
       "mode": 420
     },
     "skills/arena/SKILL.md": {
-      "sha256": "807c59b269c9e5ac5b9e6b17fd0c7c17f8d90d8e2fd08aaa31852b43ffef70a7",
+      "sha256": "722ba06d6b38e70ad9b62bd2eab436677e131f81e6015624f042be7e1d6308be",
       "mode": 420
     },
     "skills/arena/agents/openai.yaml": {
@@ -1603,7 +1603,7 @@
       "mode": 420
     },
     "skills/automate-me/SKILL.md": {
-      "sha256": "9bec416ca715f394f6ffe812fbb4b93064b5e7d06c137ce60cb3c68742e9ab12",
+      "sha256": "67201c4e4354451e2c467016cae787c62db285a83564771fe246253b89388e8c",
       "mode": 420
     },
     "skills/automate-me/agents/openai.yaml": {
@@ -1611,7 +1611,7 @@
       "mode": 420
     },
     "skills/benchmark-checklist/SKILL.md": {
-      "sha256": "c83f6b599672926883d2179d7863c4a4c99020e20cb9b199d9bb1acc67c7c8ee",
+      "sha256": "bf9244402893c071eaab7e8c45dc70f71f38d404df41f453dabd1b6674c65da3",
       "mode": 420
     },
     "skills/benchmark-checklist/agents/openai.yaml": {
@@ -1619,7 +1619,7 @@
       "mode": 420
     },
     "skills/blast-radius/SKILL.md": {
-      "sha256": "dbd4bd2fcfe261dd55b3ca788f2701199820344f2e3dd0dd8f7c2a626ea14755",
+      "sha256": "9f51307382b95f9e7b274e3b6bdab29f37e7e98c7d9e0b68c7edca751e644bad",
       "mode": 420
     },
     "skills/blast-radius/agents/openai.yaml": {
@@ -1627,7 +1627,7 @@
       "mode": 420
     },
     "skills/bro/SKILL.md": {
-      "sha256": "ff72ed77dd56f712b483bea223a24b0b0ed9feae13c1e75dd14edc5dcaf9311a",
+      "sha256": "ff866cf5ebf8c64415a6b99733a9569cf78e3f1a96307015c26eddd6c062b3d9",
       "mode": 420
     },
     "skills/bro/agents/openai.yaml": {
@@ -1635,7 +1635,7 @@
       "mode": 420
     },
     "skills/correct/SKILL.md": {
-      "sha256": "47d1275fd7b07223f79bfb2c802ccc52b7bb4e8bdeb31353f7769d37f9cb6026",
+      "sha256": "411eff45d49450731c8b82fb7a3b0dc6a3f6f591b5736aeaf18a4e46451cb7ac",
       "mode": 420
     },
     "skills/correct/agents/openai.yaml": {
@@ -1643,7 +1643,7 @@
       "mode": 420
     },
     "skills/create-verification-skill/SKILL.md": {
-      "sha256": "b1dfc697e7bb77e7da2ea7c6582c8ee629e9c40830a9c52a87b62843e00c249b",
+      "sha256": "cd6b29574e00e156b43e364b5b1575f98a10e123b14162bc7453e8ea587b65ff",
       "mode": 420
     },
     "skills/create-verification-skill/agents/openai.yaml": {
@@ -1667,7 +1667,7 @@
       "mode": 420
     },
     "skills/figure-it-out/SKILL.md": {
-      "sha256": "3f01f47abf7cbb2eb6527125e3424202e6d745b71bacfccb6c365d29e3c1a8f6",
+      "sha256": "fb779ade01eb03591f71f96eb4e2e6b9a939063067ff6ddaf50cf28a667d994a",
       "mode": 420
     },
     "skills/figure-it-out/agents/openai.yaml": {
@@ -1675,7 +1675,7 @@
       "mode": 420
     },
     "skills/how/SKILL.md": {
-      "sha256": "7eb2dc938f60c4253ec29c1ca57b1177ff78296d55d9f2e552c7f380e8adb967",
+      "sha256": "0e93c00ef1afe1cdbdb01d2198620ac4e094ebad2863ae54f5a1b74694628cff",
       "mode": 420
     },
     "skills/how/agents/openai.yaml": {
@@ -1691,7 +1691,7 @@
       "mode": 420
     },
     "skills/hugues-mode/SKILL.md": {
-      "sha256": "025232cfb8b9dee7f7a5a5011a3ddd8acbc918cfc0d01022d58ad37e18a17a33",
+      "sha256": "5dcf6e148a9ca8c06dc8f39dcbef7939bf39335d9d09312e413de7574aef02ba",
       "mode": 420
     },
     "skills/hugues-mode/agents/openai.yaml": {
@@ -1707,11 +1707,11 @@
       "mode": 420
     },
     "skills/hugues-mode/playbooks/autopilot-full.md": {
-      "sha256": "00bc7837a0d82cd6297afed3f1e2dc93a67da0a61f787ec2d79168bac09c946e",
+      "sha256": "a25376f428e6f4716a07a487664c4461c936c43ad6ef5f28a197d0a852fd5640",
       "mode": 420
     },
     "skills/hugues-mode/playbooks/autopilot-stack.md": {
-      "sha256": "3f1b5031a00fc82e7b82bd282fe7b1fe2acdedbb203860c2b4c65a50fc6211a4",
+      "sha256": "ddd19516944726d6d75391da1a9c52d7b9d90507504b695e5297e38f3f11d2a9",
       "mode": 420
     },
     "skills/hugues-mode/playbooks/babysit.md": {
@@ -1755,7 +1755,7 @@
       "mode": 420
     },
     "skills/hugues-mode/playbooks/multi-phase-plan.md": {
-      "sha256": "e7cd3156c13303518e9a9617e1f34c011a548153423ff640b4cb9ba430432d55",
+      "sha256": "30970484fc79196c21fe6bbbc6e832a2bdc589e1adb34381c3cfbbe653fa4b9c",
       "mode": 420
     },
     "skills/hugues-mode/playbooks/opening-a-pr.md": {
@@ -1911,7 +1911,7 @@
       "mode": 493
     },
     "skills/interrogate/SKILL.md": {
-      "sha256": "ca6aeeebdf2d88ef8a0c4be1e70269fae2bd99f00666ceef603f91f80a503c48",
+      "sha256": "585c6f07a50a14c51ecd4894ee6d79fb478f49cfcc549845f11a6100e33d610b",
       "mode": 420
     },
     "skills/interrogate/agents/openai.yaml": {
@@ -1935,7 +1935,7 @@
       "mode": 420
     },
     "skills/maintain-verification-skill/SKILL.md": {
-      "sha256": "c967438a6a357c1ea4d475a29e938182208e7cab12e99d2050315fd63b1e76af",
+      "sha256": "a4176cf966bc2be60076b3ee720bf151714806ba7be78037c9f94aa1ed43a8da",
       "mode": 420
     },
     "skills/maintain-verification-skill/agents/openai.yaml": {
@@ -1943,7 +1943,7 @@
       "mode": 420
     },
     "skills/make-bot-ui/SKILL.md": {
-      "sha256": "b57631a939af9a7829ce15f02a42a1818b5c44a3211bcf28ed61a2605173482f",
+      "sha256": "d6a15e984e7100191e1d48b5fbe35ffa7ce0959385db1c26e79a15e8f598ded9",
       "mode": 420
     },
     "skills/make-bot-ui/agents/openai.yaml": {
@@ -1951,7 +1951,7 @@
       "mode": 420
     },
     "skills/no-comments/SKILL.md": {
-      "sha256": "1897681f3acd5ebbee914f4a90cc7c30a9b63f15bbbc634d85c7c8144ea6f773",
+      "sha256": "535d672907268afcbbed3ce6d1581da9ff933fad58ed6703532b3a524eff3721",
       "mode": 420
     },
     "skills/no-comments/agents/openai.yaml": {
@@ -2151,7 +2151,7 @@
       "mode": 420
     },
     "skills/recall/SKILL.md": {
-      "sha256": "c2225b466125b1ad3c7d5d0d5e2b24ba4f3e7d8e3acadf364a2be5f682f543a2",
+      "sha256": "ef994b187eedca2c0fa7eb3c88232f2ab0ad8a3733c985bef2673c2458e603ab",
       "mode": 420
     },
     "skills/recall/agents/openai.yaml": {
@@ -2159,7 +2159,7 @@
       "mode": 420
     },
     "skills/reflect/SKILL.md": {
-      "sha256": "955b07dc59345d7fc5b011a2f657f39aaf6948d0e60c61cb11d8812530fd6050",
+      "sha256": "8f35e542c280ba45e6b5c63b4157d229493f8b554f0f17c59bcf82b64ab22ddf",
       "mode": 420
     },
     "skills/reflect/agents/openai.yaml": {
@@ -2183,7 +2183,7 @@
       "mode": 420
     },
     "skills/setup-huguesstack/SKILL.md": {
-      "sha256": "d6c4bc6cc95ec6e07cfb8bcafa8a0b22327669ebee565e4109f7f6528e016de4",
+      "sha256": "5025862116288eeeacd02a8ce68cf1ef1206067f228524e8789cdaed7ef4e023",
       "mode": 420
     },
     "skills/setup-huguesstack/agents/openai.yaml": {
@@ -2191,7 +2191,7 @@
       "mode": 420
     },
     "skills/show-me-your-work/SKILL.md": {
-      "sha256": "20bf0bd6bf63d33a5242f6a67a49d507fa6153f9eb69cd56233e69f86ee14468",
+      "sha256": "75ebeaf8d1de7236b41f6631f696d8d859b808cb7260f85677752d659417953f",
       "mode": 420
     },
     "skills/show-me-your-work/agents/openai.yaml": {
@@ -2207,7 +2207,7 @@
       "mode": 493
     },
     "skills/swarm/SKILL.md": {
-      "sha256": "8b2e6fd923b2f0563b1549851843dd9c3d246b01330267e5c39c2e7d376b7a7c",
+      "sha256": "3847a1e1cdd55b0ee5ca41969a7fd4996554a6c49b524ad905810b1af2cf2cad",
       "mode": 420
     },
     "skills/swarm/agents/openai.yaml": {
@@ -2215,7 +2215,7 @@
       "mode": 420
     },
     "skills/tdd/SKILL.md": {
-      "sha256": "185ffe0f4787170d00c6aa0141a03d4b612b19c84e3ca2af78978658db1e5eae",
+      "sha256": "6193214b1512463e65a663e31ff3058ebfd7cca7704953cba9a4974f5fdc3dcd",
       "mode": 420
     },
     "skills/tdd/agents/openai.yaml": {
@@ -2223,7 +2223,7 @@
       "mode": 420
     },
     "skills/teach/SKILL.md": {
-      "sha256": "4ea6be3ff01b047936ac460bf189b5536dea3ff614b01d33da5e859217d42ba5",
+      "sha256": "823395c0206756b0470e9d935e2432944f741eebe5a708272bbf83a9a5a6cf5b",
       "mode": 420
     },
     "skills/teach/agents/openai.yaml": {
@@ -2231,7 +2231,7 @@
       "mode": 420
     },
     "skills/technical-writing/SKILL.md": {
-      "sha256": "ef0b3ad866798090f1e95aa209343bdfd821b4d79f3077da0f8f1ed362c026dc",
+      "sha256": "99dbccb6dc61e0138c0696a18d3a0dfddae163f17f582ab45caf44af3aa88ccb",
       "mode": 420
     },
     "skills/technical-writing/agents/openai.yaml": {
@@ -2239,7 +2239,7 @@
       "mode": 420
     },
     "skills/typescript-best-practices/SKILL.md": {
-      "sha256": "743fc22393679d2eb6b5e8c95198d61a11a3c99a91bb2d92dd8405a747923056",
+      "sha256": "1feecbb768e418dc9f9851cb7652b71b3fbddf35768703b2d563cd839b7e2432",
       "mode": 420
     },
     "skills/typescript-best-practices/agents/openai.yaml": {
@@ -2251,7 +2251,7 @@
       "mode": 420
     },
     "skills/unslop/SKILL.md": {
-      "sha256": "86bc74e529f6d83edff5502d63ad525446e74da0bd755fe8f002ad7608023ea5",
+      "sha256": "818444c8cf0ec9dbff863e2d85c2fb7853898ac5edf824557f1025cc9193785e",
       "mode": 420
     },
     "skills/unslop/agents/openai.yaml": {
@@ -2259,7 +2259,7 @@
       "mode": 420
     },
     "skills/why/SKILL.md": {
-      "sha256": "4ca3e0b3070398bf1c8a72c4d697ef832e5bc295d085138545d1638009bd9e2e",
+      "sha256": "9de168d266946698eb21a2a482b019a61f184ac5be5b086081f53e6df2802c69",
       "mode": 420
     },
     "skills/why/agents/openai.yaml": {

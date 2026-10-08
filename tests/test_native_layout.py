@@ -28,19 +28,39 @@ class NativeInstalled(InstalledFixture, unittest.TestCase):
         self.assertEqual(rejected.returncode, 1)
         self.assertIn('bound read-workflow', rejected.stderr)
 
-    def test_installed_playbook_read_and_native_skill_boundary(self):
+    def test_installed_playbook_read_and_bundled_skill_body_boundary(self):
         result = self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('Mandatory: no skip-with-reason escape', result.stdout)
+        # `swarm` is a bundled user-only skill: its own SKILL.md is the mode's reference
+        # once it resolves, including through its legacy pstack-relative alias, to the
+        # approved installed payload. A guarded read, not a native invocation.
         for path in ['skills/swarm/SKILL.md', 'pstack/skills/swarm/SKILL.md']:
-            denied = self.bound('read-workflow', path)
-            self.assertEqual(denied.returncode, 2)
-            self.assertIn('native skill invocation', denied.stderr)
+            with self.subTest(path=path):
+                allowed = self.bound('read-workflow', path)
+                self.assertEqual(allowed.returncode, 0, allowed.stderr)
+                self.assertEqual(allowed.stdout, (self.plugin / 'skills/swarm/SKILL.md').read_text())
+        # An unknown skill name never resolves into the approved payload, bundled or not.
+        for path in ['skills/nope/SKILL.md', 'pstack/skills/nope/SKILL.md']:
+            with self.subTest(path=path):
+                denied = self.bound('read-workflow', path)
+                self.assertEqual(denied.returncode, 2)
+                self.assertIn('native skill invocation', denied.stderr)
 
-    def test_translate_does_not_bypass_native_skill_invocation(self):
+    def test_translate_turns_a_bundled_skill_body_into_a_guarded_read(self):
         for text in ['`pstack/skills/swarm/SKILL.md`',
                      'cat skills/swarm/SKILL.md',
                      'git show origin/main:skills/swarm/SKILL.md']:
+            with self.subTest(text=text):
+                plan = self.consumer / 'plan.md'
+                plan.write_text(text)
+                result = self.bound('translate-plan', plan)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn('read-workflow', result.stdout)
+
+    def test_translate_still_refuses_an_unknown_skill_body(self):
+        for text in ['`pstack/skills/nope/SKILL.md`', 'cat skills/nope/SKILL.md',
+                     'git show origin/main:skills/nope/SKILL.md']:
             with self.subTest(text=text):
                 plan = self.consumer / 'plan.md'
                 plan.write_text(text)
@@ -146,8 +166,8 @@ class NativeIntegrity(unittest.TestCase):
 
     def test_sealing_does_not_approve_lost_invocation_boundary(self):
         path = self.root / 'plugin/skills/architect/SKILL.md'
-        self.assertIn('The host contract supersedes inherited sibling-body reads.', path.read_text())
-        path.write_text(path.read_text().replace('The host contract supersedes inherited sibling-body reads.', 'read any skill body'))
+        self.assertIn('The host contract governs how this skill reaches any sibling dependency.', path.read_text())
+        path.write_text(path.read_text().replace('The host contract governs how this skill reaches any sibling dependency.', 'read any skill body'))
         seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
         self.rejected()
 

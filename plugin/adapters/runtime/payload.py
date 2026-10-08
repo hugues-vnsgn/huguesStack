@@ -13,7 +13,7 @@ ANCHORS = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adap
 GENERATED_TREES = {'skills/hugues-mode/scripts/node_modules'}
 HOST_METADATA = {'.DS_Store'}
 SKILL_BODY = re.compile(r'(?<![\w.-])skills/[^/\s]+/+SKILL\.md(?![\w./-])')
-MANIFEST_SHA256 = '195ae4d8cb41fb3f2c295ef420395ffc6b407e060d6e6729f55e82293b5cc4c0'
+MANIFEST_SHA256 = '8e11b531c97ce035612fe7c3a8148fbc8926b65cdb61e2383ec15f9161512d72'
 
 
 def digest(path):
@@ -115,10 +115,14 @@ def resolve_source(rows, source):
 def workflow(root, source):
     rows = verify(root)
     source = resolve_source(rows, source)
-    if names_skill_body(source) or PurePosixPath(source).name == 'SKILL.md':
-        raise ValueError('native skill invocation required; a guarded file read grants no invocation permission')
     known = {row['path'] for row in rows['files']}
     if source not in known or not source.endswith('.md'):
+        # A bundled skill's own SKILL.md is allowed once it resolves to a known, approved
+        # installed payload path above; anything else that merely resembles a skill body
+        # (wrong prefix, absolute path, legacy path resolving outside the payload, a
+        # consumer or external skill) still requires native invocation.
+        if names_skill_body(source) or PurePosixPath(source).name == 'SKILL.md':
+            raise ValueError('native skill invocation required; a guarded file read grants no invocation permission')
         raise ValueError('workflow is not in approved installed payload')
     return checked_file(root, source).read_bytes()
 
@@ -147,8 +151,6 @@ def translate(root, binding, text):
             if 'pstack/' in value or 'skills/' in value:
                 raise ValueError('unresolved quoting in plan reference')
             return value
-        if names_skill_body(value) or any(names_skill_body(word) for word in words):
-            raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
         if words and words[-1] in known and words == shlex.split(command(root, binding, 'read-workflow', words[-1])):
             return value
         bundled = any(pattern.search(content) for pattern in operands
@@ -168,6 +170,12 @@ def translate(root, binding, text):
             return command(root, binding, 'read-workflow', words[1])
         if len(words) == 3 and words[0] == 'node' and words[1] in helpers:
             return command(root, binding, 'plan-check', words[2])
+        # A reference to an approved bundled SKILL.md in one of the forms above already
+        # returned a translated read-workflow command. Anything else that still names a
+        # skill body (wrong spelling, wrong prefix, an unapproved or consumer/external
+        # skill) is not a known bundled reference and still requires native invocation.
+        if names_skill_body(value) or any(names_skill_body(word) for word in words):
+            raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
         if bundled:
             raise ValueError('unsupported bundled command; use a standalone guarded read')
         return value

@@ -37,6 +37,26 @@ def native_baseline(root):
     return texts, receipt['revision']
 
 
+def description_text(raw):
+    """Unwrap a frontmatter description scalar the way a YAML-parsing host sees it:
+    a quoted scalar's surrounding quotes are not part of the displayed string."""
+    value = raw.strip()
+    if len(value) >= 2 and value[0] == value[-1] == '"':
+        return value[1:-1].replace('\\"', '"').replace('\\\\', '\\')
+    if len(value) >= 2 and value[0] == value[-1] == "'":
+        return value[1:-1].replace("''", "'")
+    return value
+
+
+def skill_list_metrics(texts, paths):
+    """Description characters of every skill without `disable-model-invocation: true`,
+    over one caller-supplied, already-pinned set of skill texts."""
+    selected = sorted(p for p in paths
+                      if not check_core.native_frontmatter(texts[p])['disable-model-invocation'])
+    descriptions = [description_text(check_core.native_frontmatter(texts[p])['description']) for p in selected]
+    return {'model_invocable_skills': len(selected), 'paths': selected, **metrics(descriptions)}
+
+
 def inventory(texts, paths):
     paths = sorted(set(paths))
     if any(path not in texts for path in paths):
@@ -126,19 +146,12 @@ def measure(root=ROOT):
         'codex_policy_metadata': {'scope': 'Additional policy-file bytes, not a claim these files enter model context.',
             'native_before': inventory(before, [p for p in before if p.endswith('/agents/openai.yaml')]),
             'candidate': inventory(current, [p for p in current if p.endswith('/agents/openai.yaml')])},
-        'skill_list': {'scope': "Description characters of every skill without `disable-model-invocation: true`; "
+        'skill_list': {'scope': "Description characters of every skill without `disable-model-invocation: true`, "
+                "the description value as a YAML-parsing host sees it (surrounding quotes excluded); "
                 "Claude Code documents this text as entering its per-turn skill list, budgeted at 1% of the "
                 "context window (Codex: 2%), both with an 8000-character fallback. Not a runtime observation.",
-            'pre_restoration_baseline': {'model_invocable_skills': 46, 'characters': 9869,
-                'note': 'Measured at main a67df90 (PR 1 start), before hugues-mode and setup-huguesstack '
-                        'became the only model-invocable skills; recorded for context, not recomputed from '
-                        'live source.'},
-            'model_invocable_skills': sum(1 for p in declaration_paths
-                if not check_core.native_frontmatter(current[p])['disable-model-invocation']),
-            'candidate': metrics([check_core.native_frontmatter(current[p])['description']
-                for p in declaration_paths if not check_core.native_frontmatter(current[p])['disable-model-invocation']]),
-            'paths': [p for p in declaration_paths
-                if not check_core.native_frontmatter(current[p])['disable-model-invocation']]},
+            'native_before': skill_list_metrics(before, declaration_paths),
+            'candidate': skill_list_metrics(current, declaration_paths)},
         'canonical_skill_bodies': {'scope': 'Whole native SKILL.md files, metadata included; separate from invocation closure.',
             'native_before': inventory(before, declaration_paths), 'candidate': inventory(current, declaration_paths),
             'workflow_body_only_before': metrics([before[p].split('---', 2)[2] for p in declaration_paths]),

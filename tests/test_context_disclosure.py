@@ -29,16 +29,38 @@ class ContextDisclosure(unittest.TestCase):
         receipt = json.loads((ROOT / 'docs/ADAPTER-DISCLOSURE.json').read_text())
         paragraphs = baseline[receipt['host_source']].strip().split('\n\n')
         restored = {}
+        replaced = []
         for row in receipt['host_fragments']:
             fragment = paragraphs[row['paragraph']]
             if row['slice']:
                 fragment = fragment[slice(*row['slice'])].rstrip()
             self.assertEqual(hashlib.sha256(fragment.encode()).hexdigest(), row['sha256'])
-            self.assertEqual((ROOT / row['destination']).read_text().count(fragment), 1)
+            destination_text = (ROOT / row['destination']).read_text()
+            disposition = row.get('disposition', 'original')
+            if disposition == 'original':
+                self.assertEqual(destination_text.count(fragment), 1)
+            elif disposition == 'replaced':
+                # An intentional edit: the receipt still pins the original baseline fragment's
+                # hash (so drift in what was replaced is caught), but the destination now carries
+                # the recorded replacement text instead of the original wording verbatim.
+                self.assertTrue(row.get('reason'), 'a replaced fragment needs a reason')
+                self.assertEqual(destination_text.count(row['replacement']), 1)
+                self.assertEqual(destination_text.count(fragment), 0)
+                replaced.append(fragment)
+            else:
+                self.fail('unknown disposition: ' + disposition)
             restored.setdefault(row['paragraph'], []).append(fragment)
         self.assertEqual(set(restored), set(range(len(paragraphs))))
         for index, pieces in restored.items():
             self.assertEqual(' '.join(' '.join(pieces).split()), ' '.join(paragraphs[index].split()))
+        # The blanket pre-fix sentences are gone from the live adapter, not merely shadowed by a
+        # later paragraph: a model-invocable-only reading of host.md no longer contradicts the
+        # scoped bundled-reference rule.
+        host_text = (ROOT / 'plugin/adapters/host.md').read_text()
+        for fragment in replaced:
+            self.assertNotIn(fragment, host_text)
+        self.assertNotIn('Invoke each bundled, consumer or external skill', host_text)
+        self.assertNotIn('This contract overrides inherited raw sibling-read wording.', host_text)
         mobile = (ROOT / receipt['mobile_destination']).read_bytes()
         self.assertEqual(mobile, baseline[receipt['mobile_source']].encode())
         self.assertEqual(hashlib.sha256(mobile).hexdigest(), receipt['mobile_sha256'])
@@ -95,11 +117,15 @@ class ContextDisclosure(unittest.TestCase):
         measured = measure_context.measure(ROOT)
         self.assertEqual(measured, json.loads((ROOT / 'docs/CONTEXT-BUDGET.json').read_text()))
         # Restoring pstack's router design puts the inherited manual-only line back on 44 more
-        # skill bodies, matching most of the pre-restoration baseline again. Nine bodies still
-        # differ: hugues-mode and setup-huguesstack diverge from upstream to stay model-invocable,
-        # and architect, arena, how, interrogate, reflect, swarm and why carry the separate
-        # tiered-model-role wiring change.
-        self.assertEqual(measured['canonical_skill_bodies']['unchanged_files'], 41)
+        # skill bodies, matching most of the pre-restoration baseline again. PR 1 fix round 1's
+        # reworded host-contract marker (now scoped to the bundled-reference rule rather than a
+        # blanket override) touches the same sentence in all 26 non-principle bodies, 24 of which
+        # were otherwise unchanged; the other two (hugues-mode, setup-huguesstack) already
+        # differed. architect, arena, how, interrogate, reflect, swarm and why also still carry
+        # the separate tiered-model-role wiring change. 50 - 26 = 24 bodies remain byte-identical
+        # to the pre-restoration baseline (the 24 principle-* skills, which never carried that
+        # marker).
+        self.assertEqual(measured['canonical_skill_bodies']['unchanged_files'], 24)
         self.assertLess(measured['native_frontmatter']['candidate']['bytes'],
                         measured['native_frontmatter']['native_before']['bytes'])
         for profile in measured['scenarios'].values():
@@ -111,11 +137,33 @@ class ContextDisclosure(unittest.TestCase):
         measured = measure_context.measure(ROOT)
         skill_list = measured['skill_list']
         self.assertLessEqual(skill_list['candidate']['characters'], 2500)
-        self.assertEqual(skill_list['model_invocable_skills'], 2)
-        self.assertEqual(set(skill_list['paths']),
+        self.assertEqual(skill_list['candidate']['model_invocable_skills'], 2)
+        self.assertEqual(set(skill_list['candidate']['paths']),
                          {'plugin/skills/hugues-mode/SKILL.md', 'plugin/skills/setup-huguesstack/SKILL.md'})
-        self.assertEqual(skill_list['pre_restoration_baseline']['characters'], 9869)
-        self.assertEqual(skill_list['pre_restoration_baseline']['model_invocable_skills'], 46)
+        # No hardcoded baseline here: native_before is recomputed, by the same function, over
+        # the same pinned CONTEXT-BASELINE.json bytes every other measurement in this module
+        # already compares against (measured['native_before_revision'] names the exact
+        # revision). Recompute it independently of measure_context.skill_list_metrics itself,
+        # so this proves the counting rule, not just the wiring.
+        baseline, _ = measure_context.native_baseline(ROOT)
+        declaration_paths = sorted(p for p in baseline
+                                   if p.startswith('plugin/skills/') and p.endswith('/SKILL.md'))
+        expected_invocable = [p for p in declaration_paths
+                              if not check_core.native_frontmatter(baseline[p])['disable-model-invocation']]
+        self.assertEqual(skill_list['native_before']['model_invocable_skills'], len(expected_invocable))
+        self.assertEqual(set(skill_list['native_before']['paths']), set(expected_invocable))
+        expected_characters = sum(len(measure_context.description_text(
+            check_core.native_frontmatter(baseline[p])['description'])) for p in expected_invocable)
+        self.assertEqual(skill_list['native_before']['characters'], expected_characters)
+
+    def test_skill_list_description_excludes_yaml_quoting(self):
+        # A host that YAML-parses the frontmatter never sees the surrounding quote
+        # characters themselves; the measured character count must not either.
+        self.assertEqual(measure_context.description_text('Plain, unquoted text.'), 'Plain, unquoted text.')
+        self.assertEqual(measure_context.description_text('"Quoted, with an escaped \\" mark."'),
+                         'Quoted, with an escaped " mark.')
+        self.assertEqual(measure_context.description_text("'Single-quoted, with a doubled '' mark.'"),
+                         "Single-quoted, with a doubled ' mark.")
 
     def test_context_baseline_drift_is_rejected(self):
         with tempfile.TemporaryDirectory(prefix='context-baseline-') as directory:

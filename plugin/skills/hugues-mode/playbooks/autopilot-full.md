@@ -1,7 +1,8 @@
 Apply [installed host tools](../../../adapters/host-tools.md): bound `read-workflow`
-for owned playbook/reference rereads and `plan-check` for validation. Public
-SKILL.md dependencies require supported native invocation; do not translate them
-to file reads. Unavailable or denied invocation holds that step.
+for owned playbook/reference rereads, `plan-check` for validation, and a bundled
+skill's own SKILL.md once it is in the approved payload. A consumer or external
+skill dependency still requires supported native invocation; do not translate
+it to a file read. Unavailable or denied invocation holds that step.
 
 ### Autopilot-full
 

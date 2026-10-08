@@ -10,9 +10,12 @@ applicability decision. This uses ordinary file reads, not a new native loader.
 Every original host instruction is retained in one of those files, and the full
 mobile adapter is byte-identical to the previous candidate. The
 [partition receipt](ADAPTER-DISCLOSURE.json) and regression checks account for
-every original paragraph. Deferral changes when guidance is read, not whether
-its triggered requirements apply. Unknown native invocation still holds; a
-reference cannot substitute for a skill invocation.
+every original paragraph, each preserved verbatim or replaced with an explicit,
+tested reason. Deferral changes when guidance is read, not whether its
+triggered requirements apply. Unknown native invocation for a consumer or
+external skill still holds; a reference never substitutes for that invocation.
+A bundled user-only skill's reference is its sanctioned reach instead, per the
+scoped host adapter rule.
 
 ## Comparable source scenarios
 
@@ -32,11 +35,11 @@ assumptions and mandatory transitive inputs are in the
 | Scenario | Released 0.2.0, estimated tokens | Before disclosure | After disclosure | Bytes before → after |
 |---|---:|---:|---:|---:|
 | Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,685.5 | 14,803 → 14,745 |
-| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,781.0 | 45,289 → 35,166 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,301.5 | 135,888 → 133,268 |
-| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 35,951.5 | 146,269 → 143,868 |
+| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,829.75 | 45,289 → 35,361 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,423.75 | 135,888 → 133,757 |
+| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,093.25 | 146,269 → 144,435 |
 
-The routing inventory falls about 22.4% from the previous native candidate.
+The routing inventory falls about 21.9% from the previous native candidate.
 Complete bundled workflow inventories fall less, because worker dispatch,
 verification and publication instructions still apply. The bug-fix profile
 includes how, why, TDD, source-control investigation and synthesis prompts,
@@ -52,39 +55,52 @@ the fixed profile or claimed covered by its total.
 
 ## What the counts include and leave unknown
 
-Forty-one canonical skill files remain byte-identical to `7db3e80`: restoring
-pstack's router design puts the inherited Cursor `disable-model-invocation: true`
-line back on 44 skill bodies, matching most of that pre-restoration baseline
-again. The other nine differ for two separate reasons: `hugues-mode` and
-`setup-huguesstack` diverge from upstream to stay the only model-invocable
-skills, and architect, arena, how, interrogate, reflect, swarm and why carry
-the separate tiered-model-role wiring that replaced Cursor's rule file with
-project-local `.huguesstack/models.md` and `inherit-parent` defaults. The 50
-files' combined whole-file size is 192,077 bytes; bodies excluding frontmatter
-and delimiters total 177,032 bytes, unchanged, since this pass only edits
-frontmatter and two descriptions. The mode file is 20,947 bytes, including its
-unchanged 20,446-byte body. Only `hugues-mode` and `setup-huguesstack` are
-model-invocable now, so only their 442 characters of description enter startup
-context on Claude Code; the [skill-list measurement](CONTEXT-BUDGET.json) tracks
-this directly against a 9,869-character, 46-skill pre-restoration baseline. The
-other 48 skills are user-only: typed by name, and read in full by the mode as
-its router reference, never by native invocation. Their frontmatter still
-counts toward the all-50 upper bound above, since actual host exposure for a
-user-only skill remains unobserved, not assumed zero. The reduction comes from
-avoiding unrelated adapter reads, not shrinking or omitting the procedures.
-Reducing the mode further by making its own mandatory sections optional would
-change its agreed full-body loading contract.
+Twenty-four canonical skill files remain byte-identical to `7db3e80`: the 24
+`principle-*` skills, which never carried the reworded host-contract marker
+below. Restoring pstack's router design puts the inherited Cursor
+`disable-model-invocation: true` line back on 44 skill bodies, matching most
+of that pre-restoration baseline again. The other 26 differ for three
+separate reasons: `hugues-mode` and `setup-huguesstack` diverge from upstream
+to stay the only model-invocable skills; architect, arena, how, interrogate,
+reflect, swarm and why carry the separate tiered-model-role wiring that
+replaced Cursor's rule file with project-local `.huguesstack/models.md` and
+`inherit-parent` defaults; and PR 1 fix round 1's reworded host-contract
+marker ("The host contract governs how this skill reaches any sibling
+dependency.", replacing wording that read as a blanket override of the scoped
+bundled-reference rule) touches every one of the 26 non-principle bodies. The
+50 files' combined whole-file size is 192,560 bytes; bodies excluding
+frontmatter and delimiters total 177,515 bytes. The mode file is 20,961
+bytes, including its 20,460-byte body. Only `hugues-mode` and
+`setup-huguesstack` are model-invocable now, so only their 442 characters of
+description enter startup context on Claude Code; the
+[skill-list measurement](CONTEXT-BUDGET.json) tracks this directly, computed
+against the same `7db3e80`-pinned bytes every other measurement on this page
+compares against (1 model-invocable skill, 280 description characters at that
+revision). Separately, and recorded rather than recomputed from pinned bytes,
+the owner measured 46 model-invocable skills and 9,869 description characters
+at `a67df90`, the commit this restoration branched from; that is the figure
+the Issue's Problem Statement cites, and no archive this repo pins captures
+that exact intermediate revision. The other 48 skills are user-only: typed by
+name, and read in full by the mode as its router reference, never by native
+invocation. [Host validation](pr1-fix-round-1-validation.md) observes that
+exactly two huguesStack skills reach Claude Code's and Codex's model-visible
+skill list, not the byte/character counts themselves. Their frontmatter still counts toward the all-50 upper bound
+above, since actual host exposure for a user-only skill remains unobserved,
+not assumed zero. The reduction comes from avoiding unrelated adapter reads,
+not shrinking or omitting the procedures. Reducing the mode further by making
+its own mandatory sections optional would change its agreed full-body loading
+contract.
 
 The old 9,182-versus-9,111 comparison counted only mode entry plus unconditional
-adapters, before a reply or task. That narrower read set is now 26,659 bytes,
-about 6,654.75 estimated tokens, mostly the longer router description. It must
+adapters, before a reply or task. That narrower read set is now 26,840 bytes,
+about 6,700.0 estimated tokens, mostly the longer router description. It must
 not replace the routing-reply row above, which also includes the selected
 bug-fix playbook and mandatory unslop dependency.
 
 Startup metadata is unchanged by this phase split. The table counts all declared
 frontmatter as an upper bound; actual host exposure, suppression and framing
-remain unobserved. Codex policy files add 2,149 source bytes, unchanged, but those
-bytes are not assumed to enter model context. Startup and full-body numbers
+remain unobserved. Codex policy files add 2,149 source bytes at `7db3e80`
+versus 2,148 now, not assumed to enter model context either way. Startup and full-body numbers
 overlap and must not be added as though they were independent reads.
 
 The workflow rows count each bundled path once across all participants. Fresh
@@ -92,8 +108,8 @@ workers can load it again. The scenarios state five workers for the bug fix,
 including one mode worker, and fifteen for the feature, including eight mode
 workers. A separately reported mode-worker floor counts the required mode,
 agent and applicable shared guidance once per fresh mode worker. It falls from
-9,403.5 to 8,139.0 estimated tokens for the bug-fix worker, and from 75,228 to
-65,112 for the eight feature workers. These partial floors exclude other worker
+9,403.5 to 8,208.25 estimated tokens for the bug-fix worker, and from 75,228 to
+65,666.0 for the eight feature workers. These partial floors exclude other worker
 skills, role inputs and evidence; they are not additive to the unique inventories.
 
 External control/deslop/agent-writing instructions, consumer configuration,

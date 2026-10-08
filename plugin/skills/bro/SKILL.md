@@ -8,6 +8,6 @@ disable-model-invocation: true
 
 Before these workflow steps, apply the [host contract](../../adapters/host.md)
 and [mobile applicability](../../adapters/mobile.md#applicability).
-The host contract supersedes inherited sibling-body reads.
+The host contract governs how this skill reaches any sibling dependency.
 
 Restate your last message. Stop using jargon and speak coherently. State it more simply and concisely, like one human talking to another.
