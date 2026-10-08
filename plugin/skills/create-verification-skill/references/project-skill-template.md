@@ -1,4 +1,4 @@
-> Retained bounded-mobile extension template. Use only for an explicitly requested one-journey diagnostic. The default generator loads the pinned feature-map example from plugin/core and seeds the top 3–5 features. This template cannot satisfy generation or whole-map maintenance by itself.
+> Retained bounded-mobile extension template. Use only for an explicitly requested one-journey diagnostic. The default generator loads its owned feature-map example and seeds the top 3–5 features. This template cannot satisfy generation or whole-map maintenance by itself.
 
 # Project verification skill template
 

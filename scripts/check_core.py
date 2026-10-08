@@ -55,6 +55,28 @@ def require(value, message):
         raise ValueError(message)
 
 
+def native_frontmatter(text):
+    header = re.match(r'\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)', text, re.S)
+    require(header, 'missing native frontmatter')
+    fields = {}
+    description_block = False
+    for line in header[1].splitlines():
+        if not line.strip() or line.lstrip().startswith('#'):
+            continue
+        if description_block and line[0].isspace():
+            continue
+        pair = re.fullmatch(r'([a-z][a-z-]*):\s+(.+)', line)
+        require(pair, 'unsupported native frontmatter scalar')
+        key, value = pair.groups()
+        require(key not in fields, 'duplicate native frontmatter field: ' + key)
+        fields[key] = value
+        description_block = key == 'description' and value in {'>', '>-', '>+', '|', '|-', '|+'}
+    manual = fields.get('disable-model-invocation', 'false')
+    require(manual in {'true', 'false'}, 'invalid native invocation boolean')
+    fields['disable-model-invocation'] = manual == 'true'
+    return fields
+
+
 def section(text, heading):
     match = re.search(r'^## ' + re.escape(heading) + r'\n(.*?)(?=^## |\Z)',
                       text, re.M | re.S)
@@ -273,14 +295,14 @@ def check(root=ROOT):
     for path in declarations:
         text = path.read_text()
         name = path.parent.name
-        require(re.search(r'^name: ' + re.escape(name) + r'$', text, re.M), 'native name differs: ' + name)
-        manual = 'disable-model-invocation: true' in text.split('---', 2)[1]
+        fields = native_frontmatter(text)
+        require(fields.get('name') == name, 'native name differs: ' + name)
+        manual = fields['disable-model-invocation']
         upstream_name = next((old for old, new in ALIASES.items() if new == name), name)
-        original_header = original_bodies[f'pstack/skills/{upstream_name}/SKILL.md'].decode().split('---', 2)[1]
-        require(manual == ('disable-model-invocation: true' in original_header),
+        original_fields = native_frontmatter(original_bodies[f'pstack/skills/{upstream_name}/SKILL.md'].decode())
+        require(manual == original_fields['disable-model-invocation'],
                 'manual-only invocation changed: ' + name)
-        require(re.findall(r'^paths: (.*)$', text.split('---', 2)[1], re.M) ==
-                re.findall(r'^paths: (.*)$', original_header, re.M), 'native path scope differs: ' + name)
+        require(fields.get('paths') == original_fields.get('paths'), 'native path scope differs: ' + name)
         require((path.parent / 'agents/openai.yaml').read_text() ==
                 'policy:\n  allow_implicit_invocation: ' + str(not manual).lower() + '\n',
                 'native invocation policy differs: ' + name)

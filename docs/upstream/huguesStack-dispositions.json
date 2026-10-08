@@ -1819,8 +1819,8 @@
       "blob_sha": "d242f28eb801e781ccc2f2ba93b700b263a77816",
       "size": 7594,
       "sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
-      "disposition": "port verbatim",
-      "reason": "Canonical native consolidation; original bytes preserved in the upstream provenance archive.",
+      "disposition": "port with adaptation",
+      "reason": "Retain the plan evidence gate and accept bound native workflow rereads after plan translation; exact original helper remains in the upstream provenance archive.",
       "release_target": "0.2",
       "destinations": [
         "plugin/skills/hugues-mode/scripts/check-plan.mjs"

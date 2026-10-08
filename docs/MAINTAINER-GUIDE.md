@@ -1,6 +1,6 @@
 # huguesStack maintainer reference
 
-This reference describes the core restoration shipped in 0.2.0. Start with the [developer guide](DEVELOPER-GUIDE.md) to install and use it. The 0.1.0 guide and release remain historical; their host/mobile evidence does not cover these loaders. The pin remains pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`.
+This reference describes the unreleased native consolidation of 0.2.0. Start with the [developer guide](DEVELOPER-GUIDE.md) for the current layout and invocation limits. Published release evidence remains bound to its original revision. The source pin remains pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`.
 
 ## Load the intended checkout
 
@@ -10,9 +10,9 @@ Use a fresh Claude Code session in the intended consumer repository:
 claude --plugin-dir /absolute/path/to/huguesStack/plugin
 ```
 
-Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack. The 0.2.0 manifest identifies this release; verify the actual checkout path/revision as well as the cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
+Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack and still carries version 0.2.0. Identify this unreleased candidate by its checkout path and exact commit as well as the cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
 
-For Codex, use an already-authorized native loader when available. Otherwise read `/absolute/path/to/huguesStack/plugin/skills/hugues-mode/SKILL.md` and all required links in full. Label direct reads separately from native discovery. These instructions authorize no host configuration changes or installations.
+For Codex, use an already-authorized supported native invocation. If discovery or invocation is unavailable, disabled, denied or unknown, hold the dependent step. Provide a manual handoff only when the host requires explicit user invocation; never substitute a direct file read. These instructions authorize no host configuration changes or installations.
 
 Canonical native skill bodies apply host guidance and mobile applicability before their workflow steps. Other skills use supported native invocation, with conditional handoff or hold; never a direct-read fallback. Principles remain verbatim. Reread relevant files after compaction if the contract is no longer available in context.
 
@@ -27,7 +27,7 @@ Canonical native skill bodies apply host guidance and mobile applicability befor
 
 Give the consumer path/revision, authorized actions and observable result. Intent precedes language: lifecycle, authoring, review, investigation and verification retain their routes. Native implementation uses core playbooks; KMP/CMP use named extensions. Large/cross-cutting/unmatched work uses figure-it-out; standing programs use Orchestrate. Mobile proof becomes a phase of that designed workflow.
 
-The coordinator reads the selected public bridge and full core, copies ordered todos, grounds/designs, delegates fresh rounds and independently checks actual artifacts. Feature work with multiple valid shapes requires arena. For mobile arena work, candidates get sanitized fresh contexts and isolated write paths; the judge gets neutral artifacts/rubric after writers finish. Missing isolation blocks blind judging.
+The coordinator invokes the selected native skill, loads its phase-required owned references, copies ordered todos, grounds/designs, delegates fresh rounds and independently checks actual artifacts. Feature work with multiple valid shapes requires arena. For mobile arena work, candidates get sanitized fresh contexts and isolated write paths; the judge gets neutral artifacts/rubric after writers finish. Missing isolation blocks blind judging.
 
 ## Configure roles explicitly
 
@@ -53,7 +53,7 @@ Read [lane rules](../plugin/skills/hugues-mode/references/mobile-lanes.md), [evi
 
 Long/autonomous work keeps the pinned append-only TSV trail, ownership start rows, evidence pointers and superseding corrections. Audit only the current run against its available transcript. Missing native transcript/cross-family review is an explicit audit gap. Use pause-safely/session-pickup to reconstruct actual state and preserve evidence.
 
-Helpers live in the immutable core. Inspect local runtime/cache/authority first. Bun bootstrap may install packages; do not run it without installation scope. Missing cloud, loop, forge or model capability blocks dependent work. Shipping does not gain merge authority from green tests.
+Helpers live alongside their owning canonical skills. Inspect local runtime/cache/authority first. Bun bootstrap may install packages; do not run it without installation scope. Missing cloud, loop, forge or model capability blocks dependent work. Shipping does not gain merge authority from green tests.
 
 For planning and cleanup, use the [installed host commands](../plugin/adapters/host-tools.md). Save the approved payload binding when authoring a program. Fill and translate bundled plan operands, validate with `plan-check`, and reread workflows through that binding at every required tick. Payload/adapter drift blocks the program; consumer-owned files still come from consumer trunk. The native worktree audit takes an explicit authorized source manifest and local PR snapshot. Incomplete activity coverage holds candidates. The separate active/pinned-chat gate remains required before any prune decision; the helper never deletes or discovers private transcript directories.
 
@@ -75,4 +75,4 @@ Source checks verify all 161 archived upstream files against the Git snapshot, t
 
 See [restoration scope](CORE-RESTORATION.md) and [historical support](support.md). All upstream responsibilities stay in the ledger, including all 50 registered top-level skills, both native agent definitions and the separate Benny service source. Registration of automate-me or make-bot-ui grants no authority for personal transcript processing or bot/webhook execution. TypeScript guidance remains available alongside mobile adapters.
 
-The native Comment Sicko wrapper loads its complete pinned rules for no-comments. KMP/CMP extensions compose the selected core action procedure and require implementation arena within step 3 when Feature has multiple valid shapes; design-only arena cannot satisfy that gate. Both wiring failures have phase-local mutation regressions.
+The canonical Comment Sicko agent retains its complete source rules for no-comments. KMP/CMP extensions compose the selected core action procedure and require implementation arena within step 3 when Feature has multiple valid shapes; design-only arena cannot satisfy that gate. Both wiring failures have phase-local mutation regressions.

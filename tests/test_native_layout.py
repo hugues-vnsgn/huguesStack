@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 import unittest
 ROOT = Path(__file__).resolve().parents[1]
 class NativeLayout(unittest.TestCase):
@@ -10,6 +11,23 @@ class NativeLayout(unittest.TestCase):
 
 from test_host_adapters import InstalledFixture
 class NativeInstalled(InstalledFixture, unittest.TestCase):
+    @unittest.skipUnless(shutil.which('node'), 'Node unavailable; plan gate unrun')
+    def test_translated_plan_without_consumer_git_read_passes_bound_gate(self):
+        plan = self.consumer / 'plan with spaces.md'
+        plan.write_text((ROOT / 'tests/fixtures/adapter-plan.md').read_text().replace(
+            '`git show origin/main:PLAN.md`\n', ''))
+        self.assertEqual(self.bound('plan-check', plan).returncode, 0)
+        translated = self.bound('translate-plan', plan)
+        self.assertEqual(translated.returncode, 0, translated.stderr)
+        self.assertNotIn('git show origin/main:', translated.stdout)
+        plan.write_text(translated.stdout)
+        checked = self.bound('plan-check', plan)
+        self.assertEqual(checked.returncode, 0, checked.stderr)
+        plan.write_text(translated.stdout.replace('read-workflow --binding', 'read-workflow'))
+        rejected = self.bound('plan-check', plan)
+        self.assertEqual(rejected.returncode, 1)
+        self.assertIn('bound read-workflow', rejected.stderr)
+
     def test_installed_playbook_read_and_native_skill_boundary(self):
         result = self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md')
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -61,7 +79,6 @@ class NativeInstalled(InstalledFixture, unittest.TestCase):
 
 import hashlib
 import json
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -168,6 +185,20 @@ class NativeIntegrity(unittest.TestCase):
         path = self.root / 'plugin/skills/architect/SKILL.md'
         path.write_text(path.read_text().replace('disable-model-invocation: true\n', ''))
         (path.parent / 'agents/openai.yaml').write_text('policy:\n  allow_implicit_invocation: true\n')
+        seal_payload.seal(self.root)
+        self.rejected()
+
+    def test_manual_only_comment_cannot_override_effective_false(self):
+        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path.write_text(path.read_text().replace('disable-model-invocation: true\n',
+            'disable-model-invocation: false\n# Previous setting: disable-model-invocation: true\n'))
+        seal_payload.seal(self.root)
+        self.rejected()
+
+    def test_duplicate_native_invocation_field_is_rejected(self):
+        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path.write_text(path.read_text().replace('disable-model-invocation: true\n',
+            'disable-model-invocation: true\ndisable-model-invocation: false\n'))
         seal_payload.seal(self.root)
         self.rejected()
 

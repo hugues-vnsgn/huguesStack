@@ -299,7 +299,7 @@
     },
     {
       "path": "skills/create-verification-skill/references/project-skill-template.md",
-      "sha256": "cbd8372560ec2deaaedba228ec1630281a9277793ae83e527dc3a353b822268b",
+      "sha256": "dc82cbc46e784f89cfab052886a45630e6b7c80c1690f2c32f829896a43b4e16",
       "mode": "100644"
     },
     {
@@ -524,7 +524,7 @@
     },
     {
       "path": "skills/hugues-mode/scripts/check-plan.mjs",
-      "sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
+      "sha256": "007c84ff413271d1ae27530f63504b0fff719db37f81a3d23c598a036d68bb45",
       "mode": "100755"
     },
     {

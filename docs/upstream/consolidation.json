@@ -723,7 +723,7 @@
       "source_mode": 493,
       "destination": "plugin/skills/hugues-mode/scripts/check-plan.mjs",
       "disposition": "canonical",
-      "destination_sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523"
+      "destination_sha256": "007c84ff413271d1ae27530f63504b0fff719db37f81a3d23c598a036d68bb45"
     },
     {
       "source": "pstack/skills/poteto-mode/scripts/orch/orch.test.ts",
@@ -1458,7 +1458,7 @@
       "mode": 420
     },
     "adapters/host_tools.py": {
-      "sha256": "f11b53e78f4b8a3f4e7221eef3f690db65954f9934079024b7336423128d30e3",
+      "sha256": "d0fa418b444ef714a34b719f76e997a231999ae959ced739285a774168f9ae6f",
       "mode": 420
     },
     "adapters/mobile.md": {
@@ -1478,11 +1478,11 @@
       "mode": 420
     },
     "adapters/runtime/payload.json": {
-      "sha256": "0854902ed2f3d02758bafd878bfd4f8f211025f16862b4a130429ba71f18ddaa",
+      "sha256": "499bba6bd26d1626fec77a38243d37c4e2c48fa91d58b4520ecf8e0530de17e8",
       "mode": 420
     },
     "adapters/runtime/payload.py": {
-      "sha256": "043e23d66aebe7efc4e14e46fd93cdb485d112ccd19bd6f94a4ffdc719f65a81",
+      "sha256": "66e0a5673f6fa7b13f5f17697c16967565787cf7b23ed40cd8441641d68999cf",
       "mode": 420
     },
     "agents/hugues-agent.md": {
@@ -1586,7 +1586,7 @@
       "mode": 420
     },
     "skills/create-verification-skill/references/project-skill-template.md": {
-      "sha256": "cbd8372560ec2deaaedba228ec1630281a9277793ae83e527dc3a353b822268b",
+      "sha256": "dc82cbc46e784f89cfab052886a45630e6b7c80c1690f2c32f829896a43b4e16",
       "mode": 420
     },
     "skills/figure-it-out/SKILL.md": {
@@ -1766,7 +1766,7 @@
       "mode": 420
     },
     "skills/hugues-mode/scripts/check-plan.mjs": {
-      "sha256": "4f9432d9989880b6afc2bdda503d5b12a9d07d357ecf31936b7ab5e83bc80523",
+      "sha256": "007c84ff413271d1ae27530f63504b0fff719db37f81a3d23c598a036d68bb45",
       "mode": 493
     },
     "skills/hugues-mode/scripts/orch/orch.test.ts": {
