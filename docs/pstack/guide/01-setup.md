@@ -24,7 +24,7 @@ Run:
 
 You only override what you care about. A role with no line in the file keeps the skill's default. To restore a default, delete that role's line. A rerun of `/setup-huguesstack` keeps any role whose model differs from the default.
 
-Every default is `inherit-parent`: pstack omits the subagent `model` field, so the subagent inherits your parent chat model in Claude Code or Codex. Each value also names an effort, such as `inherit-parent xhigh`, which the budget question sets. To move a role off the parent model, pick one of the models setup detected, such as `opus` or `sonnet` in Claude Code. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size. Setup also configures `swarm workers`, the default model for every `/swarm` worker unless a race names a model for each arm.
+Setup starts each role on a Claude model with a Codex model after it, such as `sonnet high or gpt-6.1-sol high`. Each host runs the first model its agent tool accepts, so one file serves Claude Code and Codex, and the budget question sets the efforts. Panel seats alternate which host's model comes first, so each host's panel runs distinct models: Opus, Sonnet and Fable in Claude Code, and GPT-6-Astra, GPT-6.1-Sol and GPT-6-Sol in Codex. A role with no line runs on `inherit-parent`: pstack omits the subagent `model` field, so the subagent inherits your parent chat model. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size. Setup also configures `swarm workers`, the default model for every `/swarm` worker unless a race names a model for each arm.
 
 ## Accept the verification offer, or don't
 

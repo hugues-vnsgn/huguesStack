@@ -164,7 +164,7 @@
     },
     {
       "path": "adapters/host-workers.md",
-      "sha256": "0f4029c2bbb7872a89c7fe0871c31c6fa29309274b1d38c09e34301352dfe34d",
+      "sha256": "8207473c04d4197b6bf3171cd6cd142e1af4b1317c9f4fd5d97f1293b6fce6d2",
       "mode": "100644"
     },
     {
@@ -979,7 +979,7 @@
     },
     {
       "path": "skills/setup-huguesstack/SKILL.md",
-      "sha256": "5a820b595dc560461450289ebaf44dd120fbfbfd8ceaad3b044a60341f2c90d0",
+      "sha256": "1cb951775c6025a7765052b828966cc8bbd7845eb2b1dc522b4e579a81649fd5",
       "mode": "100644"
     },
     {

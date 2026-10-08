@@ -163,7 +163,7 @@
       "source_mode": 420,
       "destination": "docs/pstack/guide/01-setup.md",
       "disposition": "canonical",
-      "destination_sha256": "cffdbb46c728a64af1422177b5c3b5f78835af038a96aeb038e4b6eba7ba482f"
+      "destination_sha256": "737c736e66c0896133574aae2f7a61d5e1be8f54777ff48369584cb272304d71"
     },
     {
       "source": "pstack/docs/guide/02-poteto-mode.md",
@@ -1107,7 +1107,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/setup-huguesstack/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "5a820b595dc560461450289ebaf44dd120fbfbfd8ceaad3b044a60341f2c90d0"
+      "destination_sha256": "1cb951775c6025a7765052b828966cc8bbd7845eb2b1dc522b4e579a81649fd5"
     },
     {
       "source": "pstack/skills/show-me-your-work/SKILL.md",
@@ -1475,7 +1475,7 @@
       "mode": 420
     },
     "adapters/host-workers.md": {
-      "sha256": "0f4029c2bbb7872a89c7fe0871c31c6fa29309274b1d38c09e34301352dfe34d",
+      "sha256": "8207473c04d4197b6bf3171cd6cd142e1af4b1317c9f4fd5d97f1293b6fce6d2",
       "mode": 420
     },
     "adapters/host-workflow-tools.md": {
@@ -1487,7 +1487,7 @@
       "mode": 420
     },
     "adapters/host_tools.py": {
-      "sha256": "a975bf7b5edbc24cb0363eb678abcdd2588fb446a0507f0976d32c5d1b5aff08",
+      "sha256": "c4d5bbdc00b33e7937f74822ece1bb548f58851413a671f1dbbd53f2e9f89e3a",
       "mode": 420
     },
     "adapters/mobile-workflows.md": {
@@ -1511,11 +1511,11 @@
       "mode": 420
     },
     "adapters/runtime/payload.json": {
-      "sha256": "e4e2c3269ffffe70eacf961ed5c1e1b6f347efe31876cbe44d24738bfea23111",
+      "sha256": "98e0cf02658de4f7cfd15d8f493534f0fae07a8a6ea0950508bc6f823ef1c082",
       "mode": 420
     },
     "adapters/runtime/payload.py": {
-      "sha256": "8c0e5d1063312c7a2fb5ee258c93f01a6f249602e7af35eef6ff6ded65ecc15b",
+      "sha256": "5df8c8fa39009b36fbf2b899e996a652a480a2ab977c8a9f125aeed828eb759a",
       "mode": 420
     },
     "agents/hugues-agent.md": {
@@ -2139,7 +2139,7 @@
       "mode": 420
     },
     "skills/setup-huguesstack/SKILL.md": {
-      "sha256": "5a820b595dc560461450289ebaf44dd120fbfbfd8ceaad3b044a60341f2c90d0",
+      "sha256": "1cb951775c6025a7765052b828966cc8bbd7845eb2b1dc522b4e579a81649fd5",
       "mode": 420
     },
     "skills/setup-huguesstack/agents/openai.yaml": {

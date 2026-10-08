@@ -368,7 +368,7 @@ def check(root=ROOT):
     bodies['feature'] = (root / 'plugin/skills/hugues-mode/playbooks/feature.md').read_text()
     require(not behavior_errors(bodies), 'workflow behavior differs: ' + ', '.join(behavior_errors(bodies)))
     cursor_models = sorted(p.relative_to(root).as_posix() for p in (root / 'plugin').rglob('*.md')
-                           if re.search(r'pstack-models\.mdc|\.cursor/rules|grok-\d|claude-opus-\d-\d-max|gpt-\d\.\d-sol',
+                           if re.search(r'pstack-models\.mdc|\.cursor/rules|grok-\d|claude-opus-\d-\d-max|gpt-\d\.\d-sol-max',
                                         p.read_text()))
     require(not cursor_models, 'Cursor model wiring in installed skills: ' + ', '.join(cursor_models))
     texts = {p: (root / p).read_text() for p in [*ADAPTERS, *ADAPTER_RESOURCES, PROJECT_POLICY]}

@@ -42,6 +42,9 @@ independence separately from family diversity.
 
 Pass a role value's effort token through the native tool's effort setting. Where
 the tool has none, the worker runs at the host's effort and the report says so.
+A role value may join alternatives with ` or `: use the first one the native tool
+accepts, else `inherit-parent` at the first alternative's effort, and report which
+ran.
 
 Enumerate models actually exposed by the native tool. Preserve each core skill's
 fallback sequence on rejected slugs, using only confirmed capabilities; record
