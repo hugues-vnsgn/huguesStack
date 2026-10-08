@@ -40,6 +40,9 @@ cardinality. Aliases omit model overrides; they are explicit configuration,
 never an implicit replacement for every default. Report same-model process
 independence separately from family diversity.
 
+Pass a role value's effort token through the native tool's effort setting. Where
+the tool has none, the worker runs at the host's effort and the report says so.
+
 Enumerate models actually exposed by the native tool. Preserve each core skill's
 fallback sequence on rejected slugs, using only confirmed capabilities; record
 the requested and actual family/model/effort. If no allowed equivalent is exposed,

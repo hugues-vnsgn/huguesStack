@@ -121,9 +121,8 @@ def behavior_errors(bodies):
            and ordered(bodies['feature'], ['1. `how`', '2. `architect`',
                                           '3. Write the throughput', '4. Delegate code-writing',
                                           '5. Verify', '6. Rebase', '7. If the design', '8. Run']))
-    expect('three-family-interrogate', re.findall(
-        r'\| Reviewer [ABC] \| `([^`]+)` \|', bodies['interrogate']) ==
-        ['claude-opus-5-5-max', 'gpt-5.6-sol-max', 'grok-4.7-xhigh-fast'])
+    expect('three-seat-interrogate', re.findall(
+        r'\| Reviewer [ABC] \| `([^`]+)` \|', bodies['interrogate']) == ['inherit-parent max'] * 3)
     expect('interrogate-adjudication', ordered(bodies['interrogate'],
         ['## Step 1,', '## Step 2,', '## Step 3,', '## Step 4,', '## Step 5,'])
         and 'Do NOT auto-apply changes' in bodies['interrogate'])
@@ -183,7 +182,7 @@ def adapter_errors(texts):
     effective[ADAPTERS[1]] = mobile + '\n' + texts['plugin/adapters/mobile-workflows.md']
     obligations = {
         ADAPTERS[0]: ['canonical skill owns workflow', 'never use a file read as an invocation fallback',
-                     'never restart task routing', 'consumer or external skill', 'List length sets', 'never an implicit replacement',
+                     'never restart task routing', 'consumer or external skill', 'List length sets', 'never an implicit replacement', 'effort setting',
                      'project-local `.huguesstack/models.md`', 'No translation grants new authority',
                      'mark the seat blocked', 'Do not execute it without installation authority',
                      'ready-PR and stack/base mechanics', 'Supply absolute paths',
@@ -206,7 +205,7 @@ def adapter_errors(texts):
                      'cannot replace or satisfy the core', 'One target does not prove'],
         PROJECT_POLICY: ['does not activate this profile', 'two fresh independent GPT-Astra reviewers at High effort',
                      'exact final candidate commit', 'explicit project addition',
-                     'Generic interrogate keeps its pinned three-family defaults',
+                     'Generic interrogate keeps its three-seat',
                      'report the required review blocked', 'fresh review of the new exact head',
                      'Do not create a draft as an implicit fallback'],
     }
@@ -368,6 +367,10 @@ def check(root=ROOT):
                            'setup-pstack', 'poteto-mode', 'tdd']}
     bodies['feature'] = (root / 'plugin/skills/hugues-mode/playbooks/feature.md').read_text()
     require(not behavior_errors(bodies), 'workflow behavior differs: ' + ', '.join(behavior_errors(bodies)))
+    cursor_models = sorted(p.relative_to(root).as_posix() for p in (root / 'plugin').rglob('*.md')
+                           if re.search(r'pstack-models\.mdc|\.cursor/rules|grok-\d|claude-opus-\d-\d-max|gpt-\d\.\d-sol',
+                                        p.read_text()))
+    require(not cursor_models, 'Cursor model wiring in installed skills: ' + ', '.join(cursor_models))
     texts = {p: (root / p).read_text() for p in [*ADAPTERS, *ADAPTER_RESOURCES, PROJECT_POLICY]}
     require(not adapter_errors(texts), 'adapter behavior differs: ' + '; '.join(adapter_errors(texts)))
     mobile = {name: (root / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()

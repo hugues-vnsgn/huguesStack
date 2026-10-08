@@ -164,7 +164,7 @@
     },
     {
       "path": "adapters/host-workers.md",
-      "sha256": "195fe19a15e5d4623619b8eef8192f7d72dc1a8e6a8cd510ec07e9717cc24e38",
+      "sha256": "0f4029c2bbb7872a89c7fe0871c31c6fa29309274b1d38c09e34301352dfe34d",
       "mode": "100644"
     },
     {
@@ -214,12 +214,12 @@
     },
     {
       "path": "policies/astra-pr-review.md",
-      "sha256": "cda8a0ee725d420c77244b3529718e8cca664a18951fd4ed4d3e65e4b64462b5",
+      "sha256": "cc85dc3107f12b02e42f092046b17e7ccf9b6c19e2df92e43b4d669327e5d464",
       "mode": "100644"
     },
     {
       "path": "skills/architect/SKILL.md",
-      "sha256": "de795900c3de3a43860303c07e6fdcb89f198b50a5c5f9eef239e59429b4b4cd",
+      "sha256": "6491d0a03f086dc9fac8c9316842b1b3748eee9732f461c230dc3fc4ced86424",
       "mode": "100644"
     },
     {
@@ -244,7 +244,7 @@
     },
     {
       "path": "skills/arena/SKILL.md",
-      "sha256": "e8662f6b541c7943ec87d61c680417b8227948ea0796735bf5257e2db47e2b03",
+      "sha256": "c0830b05fe38ff211f0841023046eb4d906bcaa28446cbac033a2012fd196ea7",
       "mode": "100644"
     },
     {
@@ -344,7 +344,7 @@
     },
     {
       "path": "skills/how/SKILL.md",
-      "sha256": "60f9c8e16ae53134313254c5df5b7b6661c2fadd3aad4734df5fde4487103da0",
+      "sha256": "dd3766b65a0b49072a2197b843db1f960027ca009168c6aad5dbda6344081174",
       "mode": "100644"
     },
     {
@@ -364,7 +364,7 @@
     },
     {
       "path": "skills/hugues-mode/SKILL.md",
-      "sha256": "a3699e2723e7b69c74a5cf346237bcfe6ebf6b16f91f47e326a4587decc6a470",
+      "sha256": "5b832b92c1033dcf553350c23e2a9726130b14e02fae57452459d754044b478f",
       "mode": "100644"
     },
     {
@@ -399,7 +399,7 @@
     },
     {
       "path": "skills/hugues-mode/playbooks/bug-fix.md",
-      "sha256": "018bbc146ae19145caa6c7e70591fee081b64447dda1c1c4b681c9974d928b13",
+      "sha256": "105d43dab9da3d0b2462a6dfdab85eb75d7e2bbb84b94728d4f4c3b92f7e92c7",
       "mode": "100644"
     },
     {
@@ -419,12 +419,12 @@
     },
     {
       "path": "skills/hugues-mode/playbooks/feature.md",
-      "sha256": "3a62cc4a8cbcf144bb9dd05f05420a15be0d38b784d3b141bb730a5852f50a62",
+      "sha256": "ed2cf26e5602db243f245c426489ee050480e2f639ee6bb85cb638ab3ef199c8",
       "mode": "100644"
     },
     {
       "path": "skills/hugues-mode/playbooks/hillclimb.md",
-      "sha256": "244f289898fe67a458065e90fe8217c916c5acf61cdee8975ade3f9831a12e91",
+      "sha256": "f11db26f2a90776ba50379c71ae55110398033644ffd4ade0a2c95ed34aacb93",
       "mode": "100644"
     },
     {
@@ -444,7 +444,7 @@
     },
     {
       "path": "skills/hugues-mode/playbooks/multi-phase-plan.md",
-      "sha256": "123e2ef543a58282fb8da1e687b8e0e61d017f70d8b601a217f00f89640647c9",
+      "sha256": "e7cd3156c13303518e9a9617e1f34c011a548153423ff640b4cb9ba430432d55",
       "mode": "100644"
     },
     {
@@ -464,7 +464,7 @@
     },
     {
       "path": "skills/hugues-mode/playbooks/perf-issue.md",
-      "sha256": "2b88ad0f880e4d4d755ac19fe52414d6631d6baa816d060f53cf0a7429d7e14a",
+      "sha256": "0b0a785386df14261d76996644e2fbd465f9ac3308b83d3ac749228f4f753f64",
       "mode": "100644"
     },
     {
@@ -474,7 +474,7 @@
     },
     {
       "path": "skills/hugues-mode/playbooks/refactoring.md",
-      "sha256": "50f4f7d3d301551f8b8a57c3303c99958c5ca630ae0d0051823b6987c0eb5b96",
+      "sha256": "1e03054f51de8910d54d7b2e3944c3b1a256c264bc302f0360f198f084594990",
       "mode": "100644"
     },
     {
@@ -639,7 +639,7 @@
     },
     {
       "path": "skills/interrogate/SKILL.md",
-      "sha256": "4e9e7765895518bb6bbd17d1f454b89df76f0c0cb442eebb0acdc55c09b178f1",
+      "sha256": "2bd6b1d4446332d895919b71fd4c710352c2f07eb769518ade217d801b032631",
       "mode": "100644"
     },
     {
@@ -949,7 +949,7 @@
     },
     {
       "path": "skills/reflect/SKILL.md",
-      "sha256": "430e88bdf3aeec3e8d7cce06688925449edb9d2247e74dee55b75499fbdab64b",
+      "sha256": "955b07dc59345d7fc5b011a2f657f39aaf6948d0e60c61cb11d8812530fd6050",
       "mode": "100644"
     },
     {
@@ -979,7 +979,7 @@
     },
     {
       "path": "skills/setup-huguesstack/SKILL.md",
-      "sha256": "99da52b6b52d5bdbd387340130491d5a9936dff3b70f75cb9a85597b8f56eb57",
+      "sha256": "5a820b595dc560461450289ebaf44dd120fbfbfd8ceaad3b044a60341f2c90d0",
       "mode": "100644"
     },
     {
@@ -1009,7 +1009,7 @@
     },
     {
       "path": "skills/swarm/SKILL.md",
-      "sha256": "028607df9e8e99fcbec7ad43c667086cd0ffbc6ed72edf3b6809a475149f172e",
+      "sha256": "e0ed281f9e94780e6f734b9285d971bee7123f92fb035981910150e5852682ad",
       "mode": "100644"
     },
     {
@@ -1074,7 +1074,7 @@
     },
     {
       "path": "skills/why/SKILL.md",
-      "sha256": "ea7781bc488bb277bdba4bab6ddffb7166e20908b559e28a57464d044cab2bcc",
+      "sha256": "1f950addbe4ceaadc31d3c70793ab7b8c6c5937821233beba6c6558c14770c35",
       "mode": "100644"
     },
     {

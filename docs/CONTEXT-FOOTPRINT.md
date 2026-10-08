@@ -31,12 +31,12 @@ assumptions and mandatory transitive inputs are in the
 
 | Scenario | Released 0.2.0, estimated tokens | Before disclosure | After disclosure | Bytes before → after |
 |---|---:|---:|---:|---:|
-| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,351.25 | 14,803 → 13,408 |
-| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,590.75 | 45,289 → 34,405 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 32,763.75 | 135,888 → 131,117 |
-| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 35,404.5 | 146,269 → 141,680 |
+| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,357 | 14,803 → 13,431 |
+| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,603.5 | 45,289 → 34,456 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 32,807 | 135,888 → 131,290 |
+| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 35,387.25 | 146,269 → 141,611 |
 
-The routing inventory falls about 24.0% from the previous native candidate.
+The routing inventory falls about 23.9% from the previous native candidate.
 Complete bundled workflow inventories fall less, because worker dispatch,
 verification and publication instructions still apply. The bug-fix profile
 includes how, why, TDD, source-control investigation and synthesis prompts,
@@ -52,12 +52,14 @@ the fixed profile or claimed covered by its total.
 
 ## What the counts include and leave unknown
 
-Five canonical skill files remain byte-identical to `7db3e80`: the four user-only
-entries and `setup-huguesstack`. The other 45 drop only the inherited Cursor
-`disable-model-invocation: true` line under the host invocation table. Their
-combined whole-file size is 189,086 bytes; bodies excluding frontmatter and
-delimiters are unchanged at 175,378 bytes. The mode file is 20,774 bytes,
-including its 20,396-byte body. Model-invocable descriptions enter startup
+Three canonical skill files remain byte-identical to `7db3e80`: the user-only
+automate-me, make-bot-ui and recall entries. Forty-five drop the inherited Cursor
+`disable-model-invocation: true` line under the host invocation table. Nine,
+including reflect and `setup-huguesstack`, replace Cursor model-role wiring with
+project-local `.huguesstack/models.md` and `inherit-parent` defaults. Their
+combined whole-file size is 188,701 bytes; bodies excluding frontmatter and
+delimiters total 174,970 bytes. The mode file is 20,824 bytes, including its
+20,446-byte body. Model-invocable descriptions enter startup
 context on Claude Code, where manual-only ones did not, so the declared startup
 metadata of 46 skills is now real exposure; its runtime size remains unobserved.
 The reduction comes from avoiding unrelated adapter reads, not shrinking or
@@ -65,8 +67,8 @@ omitting the procedures. Reducing the mode further by making its own mandatory
 sections optional would change its agreed full-body loading contract.
 
 The old 9,182-versus-9,111 comparison counted only mode entry plus unconditional
-adapters, before a reply or task. That narrower read set is now 25,246 bytes,
-about 6,302 estimated tokens. It must not replace the routing-reply row above,
+adapters, before a reply or task. That narrower read set is now 25,980 bytes,
+about 6,485 estimated tokens. It must not replace the routing-reply row above,
 which also includes the selected bug-fix playbook and mandatory unslop dependency.
 
 Startup metadata is unchanged by this phase split. The table counts all declared
@@ -80,8 +82,8 @@ workers can load it again. The scenarios state five workers for the bug fix,
 including one mode worker, and fifteen for the feature, including eight mode
 workers. A separately reported mode-worker floor counts the required mode,
 agent and applicable shared guidance once per fresh mode worker. It falls from
-9,403.5 to 7,530.75 estimated tokens for the bug-fix worker, and from 75,228 to
-60,246 for the eight feature workers. These partial floors exclude other worker
+9,403.5 to 7,784 estimated tokens for the bug-fix worker, and from 75,228 to
+62,272 for the eight feature workers. These partial floors exclude other worker
 skills, role inputs and evidence; they are not additive to the unique inventories.
 
 External control/deslop/agent-writing instructions, consumer configuration,

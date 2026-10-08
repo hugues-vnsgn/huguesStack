@@ -20,11 +20,11 @@ Run:
 /setup-huguesstack
 ```
 
-[`/setup-huguesstack`](../../../plugin/skills/setup-huguesstack/SKILL.md) detects the models you have access to, asks for a reasoning budget, shows you each role (code delegates, judgment, the review panels), and asks what you want. Answer the questions. It writes `~/.cursor/rules/pstack-models.mdc`, a small rule every pstack skill reads.
+[`/setup-huguesstack`](../../../plugin/skills/setup-huguesstack/SKILL.md) detects the models you have access to, asks for a reasoning budget, shows you each role (code delegates, judgment, the review panels), and asks what you want. Answer the questions. It writes `.huguesstack/models.md` in your project, a small file every pstack skill reads before it picks a subagent's model.
 
-You only override what you care about. A role with no line in the rule keeps the skill's default. To restore a default, delete that role's line. A rerun of `/setup-huguesstack` keeps any role whose model differs from the default. A rule written before 0.15.3 pins the old default models, so delete those role lines, or delete the file, then run `/setup-huguesstack` again.
+You only override what you care about. A role with no line in the file keeps the skill's default. To restore a default, delete that role's line. A rerun of `/setup-huguesstack` keeps any role whose model differs from the default.
 
-You might be wondering what happens if you use Auto. Set a role to `inherit-parent` or `auto` and pstack omits the subagent `model` field, so the subagent inherits your parent chat model. Both values mean the same thing, and neither is a model slug. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size. Setup also configures `swarm workers`, the default model for every `/swarm` worker unless a race names a model for each arm.
+Every default is `inherit-parent`: pstack omits the subagent `model` field, so the subagent inherits your parent chat model in Claude Code or Codex. Each value also names an effort, such as `inherit-parent xhigh`, which the budget question sets. To move a role off the parent model, pick one of the models setup detected, such as `opus` or `sonnet` in Claude Code. For a panel role the value is a list, and one subagent runs per entry, so the list length sets the panel size. Setup also configures `swarm workers`, the default model for every `/swarm` worker unless a race names a model for each arm.
 
 ## Accept the verification offer, or don't
 

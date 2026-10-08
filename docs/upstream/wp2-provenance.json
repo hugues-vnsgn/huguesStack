@@ -230,14 +230,14 @@
     {
       "source": "pstack/skills/poteto-mode/playbooks/bug-fix.md",
       "destination": "plugin/skills/hugues-mode/playbooks/bug-fix.md",
-      "disposition": "verbatim",
+      "disposition": "adapted",
       "blob_sha": "eeebc42b7477d435d8ac61d631d84822f908f59c",
       "sha256": "018bbc146ae19145caa6c7e70591fee081b64447dda1c1c4b681c9974d928b13"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/feature.md",
       "destination": "plugin/skills/hugues-mode/playbooks/feature.md",
-      "disposition": "verbatim",
+      "disposition": "adapted",
       "blob_sha": "79a6bbbe0ce61c3b5ef9af1ee8e3ccdb0557edc6",
       "sha256": "3a62cc4a8cbcf144bb9dd05f05420a15be0d38b784d3b141bb730a5852f50a62"
     },
@@ -251,7 +251,7 @@
     {
       "source": "pstack/skills/poteto-mode/playbooks/refactoring.md",
       "destination": "plugin/skills/hugues-mode/playbooks/refactoring.md",
-      "disposition": "verbatim",
+      "disposition": "adapted",
       "blob_sha": "df2a863b531906c64f92b9f9d8feb62f8c7a8665",
       "sha256": "50f4f7d3d301551f8b8a57c3303c99958c5ca630ae0d0051823b6987c0eb5b96"
     },
