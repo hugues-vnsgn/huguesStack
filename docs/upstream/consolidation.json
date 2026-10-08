@@ -1291,7 +1291,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/why/references/synthesizer-prompt.md",
       "disposition": "canonical",
-      "destination_sha256": "e1135792ad2529716c66b1488779d5280c3756ff47c405d6b5326b6862e02e8d"
+      "destination_sha256": "733a3e9cf897b1aca56aaddeae01a3832e4bfed024c2f602db2d1bf807d7a73b"
     }
   ],
   "public_skills": [
@@ -1437,12 +1437,11 @@
     "Canonical native bodies replace forwarding entries; stable public names.",
     "Host invocation contract supersedes raw sibling-skill reads; unavailable or denied dependencies hold.",
     "Benny, Cursor manifest and legacy Cursor audit preserved only in provenance.",
-    "Human upstream guide relocated outside runtime; source names translated using two aliases.",
-    "Citation-template placeholder uses example.com; no missing local dependency."
+    "Human upstream guide relocated outside runtime; source names translated using two aliases."
   ],
   "installed_files": {
     ".claude-plugin/plugin.json": {
-      "sha256": "119c2e4b94d10d46da081baf0e0cee233827b89423fe663fa552483a88e025f2",
+      "sha256": "585a0b21e3ed81cb1b8978c21849ed4069ba70b9ffc0caf35e720e5a34a0479b",
       "mode": 420
     },
     "PSTACK-LICENSE": {
@@ -1458,7 +1457,7 @@
       "mode": 420
     },
     "adapters/host-tools.md": {
-      "sha256": "2db949040710af01990bd657bb618c44e00db4402e4a8f420f17dd45a0f4cc89",
+      "sha256": "325e7b66624e632f8f319475099c3c3049cf9f110b2530dd78879ae8a9024adb",
       "mode": 420
     },
     "adapters/host-typescript.md": {
@@ -1478,7 +1477,7 @@
       "mode": 420
     },
     "adapters/host_tools.py": {
-      "sha256": "7a90c9eab8797a922d78e3d96462424ee1426f10dc217985783e3c7b1c64396d",
+      "sha256": "fb6c1574c01281fc1925686af801718a5ae50793b992dced4fb24f11bfe73cfa",
       "mode": 420
     },
     "adapters/mobile-workflows.md": {
@@ -1502,11 +1501,11 @@
       "mode": 420
     },
     "adapters/runtime/payload.json": {
-      "sha256": "29debe67b2b47664f72b64be81f6eb69b30dc5439d8ee347f8c16aff7439026c",
+      "sha256": "45cd2612ac90b3094b6ab4aec14b8ccace843284155da937e1b6906eeae60ed7",
       "mode": 420
     },
     "adapters/runtime/payload.py": {
-      "sha256": "f1bc34dc7f0bd2973a6de127481892f2875de0012fe76b47bd27b4cd6c2d0838",
+      "sha256": "0007b0652c11af83a04f5fd5dcfb4984e510e38010f39f7596159effd2e6b257",
       "mode": 420
     },
     "agents/hugues-agent.md": {
@@ -2258,7 +2257,7 @@
       "mode": 420
     },
     "skills/why/references/synthesizer-prompt.md": {
-      "sha256": "e1135792ad2529716c66b1488779d5280c3756ff47c405d6b5326b6862e02e8d",
+      "sha256": "733a3e9cf897b1aca56aaddeae01a3832e4bfed024c2f602db2d1bf807d7a73b",
       "mode": 420
     }
   }

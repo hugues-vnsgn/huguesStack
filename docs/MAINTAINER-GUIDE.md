@@ -10,7 +10,7 @@ Use a fresh Claude Code session in the intended consumer repository:
 claude --plugin-dir /absolute/path/to/huguesStack/plugin
 ```
 
-Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack and still carries version 0.2.0. Identify this unreleased candidate by its checkout path and exact commit as well as the cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
+Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack and carries prerelease version 0.3.0-rc.1, because the native layout, payload schema 2 and bindings are incompatible with 0.2.0. Identify this unreleased candidate by its checkout path and exact commit as well as the cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
 
 For Codex, use an already-authorized supported native invocation. If discovery or invocation is unavailable, disabled, denied or unknown, hold the dependent step. Provide a manual handoff only when the host requires explicit user invocation; never substitute a direct file read. These instructions authorize no host configuration changes or installations.
 
@@ -61,7 +61,7 @@ Opening a PR retains ready-PR and stack/base mechanics. Prepare local commits/bo
 
 ## Change and validate the plugin
 
-Edit canonical skills or owned adapters, then run `python3 scripts/seal_payload.py` and update retained-source receipts for affected files. Review these changes and run all checks; sealing is not behavioral approval. The upstream archive is immutable provenance. `render_core.py` is retired. Mobile redesign remains separate from this consolidation.
+Edit canonical skills or owned adapters, then run `python3 scripts/seal_payload.py`, naming each changed canonical file with `--accept <repository path>`, and update retained-source receipts for affected files. Review these changes and run all checks; sealing is not behavioral approval. The upstream archive is immutable provenance. `render_core.py` is retired. Mobile redesign remains separate from this consolidation.
 
 ```sh
 python3 -m unittest discover -s tests -v

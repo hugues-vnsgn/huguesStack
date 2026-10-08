@@ -1,13 +1,19 @@
 """Resolve the approved installed payload, independent of consumer Git refs."""
 import hashlib
 from .json_input import load_json
+import os
 from pathlib import Path, PurePosixPath
+import re
 import shlex
 import stat
 
 PIN = 'huguesstack-native-v1'
 ANCHORS = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adapters/host_tools.py'}
-MANIFEST_SHA256 = '29debe67b2b47664f72b64be81f6eb69b30dc5439d8ee347f8c16aff7439026c'
+# Created after install by the bundled Bun bootstrap or the host OS; never workflow inputs.
+GENERATED_TREES = {'skills/hugues-mode/scripts/node_modules'}
+HOST_METADATA = {'.DS_Store'}
+SKILL_BODY = re.compile(r'(?<![\w.-])skills/[^/\s]+/+SKILL\.md(?![\w./-])')
+MANIFEST_SHA256 = '45cd2612ac90b3094b6ab4aec14b8ccace843284155da937e1b6906eeae60ed7'
 
 
 def digest(path):
@@ -28,9 +34,22 @@ def checked_file(root, relative):
     return path
 
 
+def mode_matches(actual, approved):
+    # Installs differ in umask and archive modes; only world-write and the executable bit matter.
+    return not actual & stat.S_IWOTH and bool(actual & stat.S_IXUSR) == bool(approved & stat.S_IXUSR)
+
+
+def names_skill_body(text):
+    return bool(SKILL_BODY.search(text))
+
+
+def unreadable(error):
+    raise error
+
+
 def verify(root):
     for name in ANCHORS:
-        if stat.S_IMODE(checked_file(root, name).stat().st_mode) != 0o644:
+        if not mode_matches(stat.S_IMODE(checked_file(root, name).stat().st_mode), 0o644):
             raise ValueError('installed trust anchor mode drift: ' + name)
     manifest = checked_file(root, 'adapters/runtime/payload.json')
     if digest(manifest) != MANIFEST_SHA256:
@@ -40,8 +59,8 @@ def verify(root):
         raise ValueError('installed payload revision differs')
     for row in rows['files']:
         path = checked_file(root, row['path'])
-        mode = '100' + format(stat.S_IMODE(path.stat().st_mode), '03o')
-        if digest(path) != row['sha256'] or mode != row['mode']:
+        if (digest(path) != row['sha256']
+                or not mode_matches(stat.S_IMODE(path.stat().st_mode), int(row['mode'][-3:], 8))):
             raise ValueError('installed workflow bytes/mode drift: ' + row['path'])
     if set(inventory(root, allow_runtime_cache=True)) != {row['path'] for row in rows['files']} | ANCHORS:
         raise ValueError('installed payload inventory differs')
@@ -50,15 +69,24 @@ def verify(root):
 
 def inventory(root, allow_runtime_cache=False):
     files = []
-    for path in root.rglob('*'):
-        relative = path.relative_to(root).as_posix()
-        # Interpreter caches are generated, never workflow inputs.
-        if (allow_runtime_cache and relative.startswith('adapters/runtime/__pycache__/')
-                and path.suffix == '.pyc' and path.is_file() and not path.is_symlink()):
-            continue
-        if path.is_symlink() or not (path.is_dir() or path.is_file()):
-            raise ValueError('unsafe installed payload entry: ' + relative)
-        if path.is_file():
+    for directory, folders, names in os.walk(root, onerror=unreadable):
+        base = Path(directory)
+        for name in list(folders):
+            path = base / name
+            relative = path.relative_to(root).as_posix()
+            if path.is_symlink():
+                raise ValueError('unsafe installed payload entry: ' + relative)
+            if allow_runtime_cache and relative in GENERATED_TREES:
+                folders.remove(name)
+        for name in names:
+            path = base / name
+            relative = path.relative_to(root).as_posix()
+            if path.is_symlink() or not path.is_file():
+                raise ValueError('unsafe installed payload entry: ' + relative)
+            # Interpreter caches and host metadata are generated, never workflow inputs.
+            if allow_runtime_cache and (name in HOST_METADATA or (
+                    relative.startswith('adapters/runtime/__pycache__/') and path.suffix == '.pyc')):
+                continue
             files.append(relative)
     return sorted(files)
 
@@ -87,7 +115,7 @@ def resolve_source(rows, source):
 def workflow(root, source):
     rows = verify(root)
     source = resolve_source(rows, source)
-    if source.endswith('/SKILL.md'):
+    if names_skill_body(source) or PurePosixPath(source).name == 'SKILL.md':
         raise ValueError('native skill invocation required; a guarded file read grants no invocation permission')
     known = {row['path'] for row in rows['files']}
     if source not in known or not source.endswith('.md'):
@@ -101,7 +129,6 @@ def command(root, binding, verb, operand):
 
 
 def translate(root, binding, text):
-    import re
     rows = verify(root)
     known = {row['path'] for row in rows['files'] if row['path'].endswith('.md')}
     known |= {old for old, new in rows['legacy_paths'].items() if new in known}
@@ -120,8 +147,7 @@ def translate(root, binding, text):
             if 'pstack/' in value or 'skills/' in value:
                 raise ValueError('unresolved quoting in plan reference')
             return value
-        if any(pattern.search(value) for name in known if name.endswith('/SKILL.md')
-               for pattern in [re.compile(r'(?<![\w./:-])(?:origin/main:)?' + re.escape(name) + r'(?![\w./-])')]):
+        if names_skill_body(value) or any(names_skill_body(word) for word in words):
             raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
         if words and words[-1] in known and words == shlex.split(command(root, binding, 'read-workflow', words[-1])):
             return value

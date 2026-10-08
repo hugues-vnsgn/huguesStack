@@ -19,3 +19,5 @@ class HistoricalRestoration(unittest.TestCase):
                                     cwd=folder, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn('Ran 50 tests', result.stderr)
+            # A bare OK summary: skipped nested cases must not count as passed contracts.
+            self.assertRegex(result.stderr, r'\nOK\n*\Z')

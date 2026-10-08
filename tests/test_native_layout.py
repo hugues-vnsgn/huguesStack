@@ -72,7 +72,7 @@ class NativeInstalled(InstalledFixture, unittest.TestCase):
             with self.subTest(name=name):
                 path = self.plugin / name
                 mode = path.stat().st_mode & 0o777
-                path.chmod(0o600)
+                path.chmod(0o646)
                 self.assertEqual(self.run_tool('bind').returncode, 2)
                 path.chmod(mode)
 
@@ -141,14 +141,14 @@ class NativeIntegrity(unittest.TestCase):
     def test_sealing_does_not_approve_lost_workflow_gates(self):
         path = self.root / 'plugin/skills/architect/SKILL.md'
         path.write_text(path.read_text().replace('at least two structurally distinct candidates', 'one candidate'))
-        seal_payload.seal(self.root)
+        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
         self.rejected()
 
     def test_sealing_does_not_approve_lost_invocation_boundary(self):
         path = self.root / 'plugin/skills/architect/SKILL.md'
         self.assertIn('The host contract supersedes inherited sibling-body reads.', path.read_text())
         path.write_text(path.read_text().replace('The host contract supersedes inherited sibling-body reads.', 'read any skill body'))
-        seal_payload.seal(self.root)
+        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
         self.rejected()
 
     def test_native_policy_mutation_is_rejected_even_after_sealing(self):
@@ -160,7 +160,7 @@ class NativeIntegrity(unittest.TestCase):
     def test_public_name_cannot_change_after_sealing(self):
         path = self.root / 'plugin/skills/hugues-mode/SKILL.md'
         path.write_text(path.read_text().replace('name: hugues-mode', 'name: poteto-mode'))
-        seal_payload.seal(self.root)
+        seal_payload.seal(self.root, accept=['plugin/skills/hugues-mode/SKILL.md'])
         self.rejected()
 
     def test_role_prompt_mapping_cannot_change_after_sealing(self):
@@ -178,28 +178,47 @@ class NativeIntegrity(unittest.TestCase):
         a, b = rows['pstack/skills/bro/SKILL.md'], rows['pstack/skills/benchmark-checklist/SKILL.md']
         a['destination'], b['destination'] = b['destination'], a['destination']
         path.write_text(json.dumps(data))
-        seal_payload.seal(self.root)
+        seal_payload.seal(self.root, accept=['plugin/skills/bro/SKILL.md', 'plugin/skills/benchmark-checklist/SKILL.md'])
         self.rejected()
 
     def test_manual_only_cannot_be_removed_from_both_native_metadata_files(self):
         path = self.root / 'plugin/skills/architect/SKILL.md'
         path.write_text(path.read_text().replace('disable-model-invocation: true\n', ''))
         (path.parent / 'agents/openai.yaml').write_text('policy:\n  allow_implicit_invocation: true\n')
-        seal_payload.seal(self.root)
+        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
         self.rejected()
 
     def test_manual_only_comment_cannot_override_effective_false(self):
         path = self.root / 'plugin/skills/architect/SKILL.md'
         path.write_text(path.read_text().replace('disable-model-invocation: true\n',
             'disable-model-invocation: false\n# Previous setting: disable-model-invocation: true\n'))
-        seal_payload.seal(self.root)
+        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
         self.rejected()
 
     def test_duplicate_native_invocation_field_is_rejected(self):
         path = self.root / 'plugin/skills/architect/SKILL.md'
         path.write_text(path.read_text().replace('disable-model-invocation: true\n',
             'disable-model-invocation: true\ndisable-model-invocation: false\n'))
-        seal_payload.seal(self.root)
+        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
+        self.rejected()
+
+    def test_seal_refuses_unaccepted_canonical_change_before_any_write(self):
+        path = self.root / 'plugin/skills/hugues-mode/scripts/check-plan.mjs'
+        path.write_text(path.read_text() + '\n// appended\n')
+        receipt = (self.root / 'docs/upstream/consolidation.json').read_bytes()
+        with self.assertRaisesRegex(ValueError, 'check-plan.mjs'):
+            seal_payload.seal(self.root)
+        self.assertEqual((self.root / 'docs/upstream/consolidation.json').read_bytes(), receipt)
+        self.rejected()
+        seal_payload.seal(self.root, accept=['plugin/skills/hugues-mode/scripts/check-plan.mjs'])
+        self.rejected()
+
+    def test_helper_input_receipt_cannot_go_stale(self):
+        path = self.root / 'docs/HELPER-INPUTS.json'
+        data = json.loads(path.read_text())
+        row = next(r for r in data['files'] if r['installed'] and r['installed'].endswith('/bun.lock'))
+        row['same_bytes_as_upstream'] = False
+        path.write_text(json.dumps(data))
         self.rejected()
 
     def test_seal_rejects_escaping_destination_before_any_write(self):

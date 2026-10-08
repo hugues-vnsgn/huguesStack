@@ -243,6 +243,15 @@ if not historical:
         print('\n'.join(errors), file=sys.stderr)
         sys.exit(1)
 
+# Upstream fill-in templates write `(url)` as a placeholder, not a link. Exempt
+# only that target, only in canonical files still byte-identical to upstream.
+placeholder_links = set()
+if core_validated:
+    for row in load(root / 'docs/upstream/consolidation.json')['files']:
+        if (row['destination'] == 'plugin/skills/why/references/synthesizer-prompt.md'
+                and row['destination_sha256'] == row['source_sha256']):
+            placeholder_links.add((row['destination'], 'url'))
+
 # This small link checker covers authored inline and full/collapsed references.
 def prose(text):
     text = re.sub(r'^(`{3,}|~{3,}).*?^\1[^\n]*$', '', text, flags=re.M | re.S)
@@ -287,6 +296,8 @@ for path in sorted(root.rglob('*.md')):
         if not inside(target, root):
             fail(f'{relative}: link escapes root {value}')
         elif not target.exists():
+            if (relative.as_posix(), value) in placeholder_links:
+                continue
             if (str(relative), value) in deferred_links:
                 deferred_warnings.append(f'DEFERRED: {relative} -> {value} (pstack 0.15.9 helper deferred to 0.2; source bytes verified)')
             else:

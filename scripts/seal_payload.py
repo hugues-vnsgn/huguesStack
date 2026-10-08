@@ -1,3 +1,4 @@
+import argparse
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
@@ -16,7 +17,7 @@ def encode(data):
     return json.dumps(data, indent=2, ensure_ascii=False) + '\n'
 
 
-def seal(root=ROOT):
+def seal(root=ROOT, accept=()):
     if root.is_symlink() or not root.is_dir():
         raise ValueError('unsafe repository root')
     root = root.resolve()
@@ -34,6 +35,12 @@ def seal(root=ROOT):
                 or str(relative) != name or not (root / name).is_file()
                 or not (root / name).resolve().is_relative_to(root)):
             raise ValueError('unsafe canonical destination')
+    # Resealing must not silently approve a changed canonical body: name each reviewed change.
+    changed = {row['destination'] for row in receipt['files'] if row['destination']
+               and digest(root / row['destination']) != row['destination_sha256']}
+    if changed - set(accept):
+        raise ValueError('canonical destination changed; review it, then pass --accept: '
+                         + ', '.join(sorted(changed - set(accept))))
     for name in ANCHORS | {'adapters/runtime/__init__.py', 'adapters/runtime/json_input.py',
                            'adapters/runtime/activity.py'}:
         if stat.S_IMODE((plugin / name).stat().st_mode) != 0o644:
@@ -69,4 +76,7 @@ def seal(root=ROOT):
 
 
 if __name__ == '__main__':
-    seal()
+    parser = argparse.ArgumentParser(description='Seal the installed payload manifest and receipts.')
+    parser.add_argument('--accept', action='append', default=[], metavar='DESTINATION',
+                        help='repository path of a reviewed canonical change; repeat per file')
+    seal(accept=parser.parse_args().accept)

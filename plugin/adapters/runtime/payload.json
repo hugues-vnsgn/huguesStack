@@ -134,7 +134,7 @@
   "files": [
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "119c2e4b94d10d46da081baf0e0cee233827b89423fe663fa552483a88e025f2",
+      "sha256": "585a0b21e3ed81cb1b8978c21849ed4069ba70b9ffc0caf35e720e5a34a0479b",
       "mode": "100644"
     },
     {
@@ -154,7 +154,7 @@
     },
     {
       "path": "adapters/host-tools.md",
-      "sha256": "2db949040710af01990bd657bb618c44e00db4402e4a8f420f17dd45a0f4cc89",
+      "sha256": "325e7b66624e632f8f319475099c3c3049cf9f110b2530dd78879ae8a9024adb",
       "mode": "100644"
     },
     {
@@ -1139,7 +1139,7 @@
     },
     {
       "path": "skills/why/references/synthesizer-prompt.md",
-      "sha256": "e1135792ad2529716c66b1488779d5280c3756ff47c405d6b5326b6862e02e8d",
+      "sha256": "733a3e9cf897b1aca56aaddeae01a3832e4bfed024c2f602db2d1bf807d7a73b",
       "mode": "100644"
     }
   ]

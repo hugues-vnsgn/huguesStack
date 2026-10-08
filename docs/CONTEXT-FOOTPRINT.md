@@ -33,7 +33,7 @@ assumptions and mandatory transitive inputs are in the
 |---|---:|---:|---:|---:|
 | Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,700 | 14,803 → 14,803 |
 | Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,427.5 | 45,289 → 33,752 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 32,687 | 135,888 → 130,810 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 32,683 | 135,888 → 130,794 |
 | Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 35,393.5 | 146,269 → 141,636 |
 
 The routing inventory falls about 25.5% from the previous native candidate.
@@ -93,9 +93,12 @@ only as provenance. The installed helpers are unchanged by this disclosure pass.
 Eighteen remain byte-identical to upstream. The Node plan validator changed
 earlier to accept bound workflow reads and is exercised by current installed
 Python/Node tests. The Bun/TypeScript helpers and dependency files did not change
-bytes; their current runtime validation still did not run because the harmless
-offline sandbox preflight returned `EPERM`. That helper validation remains unrun;
-no current helper runtime result is inferred from separate prior-layout trials.
+bytes. Their disclosure-pass runtime validation did not run because the harmless
+offline sandbox preflight returned `EPERM`. The later review-fix pass ran it on a
+scratch install of the candidate: Bun 1.4.2 installed the locked dependencies
+through the session proxy, 52 of 52 `bun test orch watch-pr` cases passed and
+strict `tsc --noEmit` passed for watch-pr. No result is inferred from prior-layout
+trials, and a consumer install on another machine remains unobserved.
 
 Python adapter behavior changed during consolidation and has its own current
 tests. This disclosure pass updates its bound inventory/hash constants. Source

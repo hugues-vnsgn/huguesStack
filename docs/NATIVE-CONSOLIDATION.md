@@ -67,7 +67,13 @@ signature system against replacement of all code and trust anchors.
 
 Run `python3 scripts/seal_payload.py` after intentional edits, review its diff,
 update source-provenance receipts for changed retained families, then run all
-checks. Hash regeneration cannot approve lost workflow gates. Never regenerate
+checks. Sealing refuses a changed canonical destination unless each reviewed
+file is named with `--accept <repository path>`; an edit is not re-approved by
+hash regeneration alone. `docs/HELPER-INPUTS.json` is checked against the
+installed helpers, so its byte-identity claims cannot go stale. The receipts live
+in this repository: `--accept` makes a canonical change deliberate and visible in
+review, it is not an external signature. Hash regeneration cannot approve lost
+workflow gates. Never regenerate
 receipts as a consumer workaround for drift. Old 0.2.0 program bindings fail;
 review and explicitly rebind migrated programs.
 

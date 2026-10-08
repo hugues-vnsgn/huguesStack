@@ -21,7 +21,12 @@ installation path and every plugin file's hash and full permission mode. The
 manifest covers the entire installed inventory except the three trust anchors
 (manifest, payload verifier and bootstrap); the bootstrap binds runtime source
 and the saved binding also covers those anchors. Unexpected files hold. Only
-runtime Python bytecode caches are excluded and they are never executed.
+runtime Python bytecode caches, `.DS_Store` host metadata files and the
+`skills/hugues-mode/scripts/node_modules/` tree that the Bun bootstrap installs
+are excluded; none is ever a workflow input. Installed modes are compared by
+what matters for safety: a world-writable file or a changed executable bit
+holds, while group-write from a `002` umask or archive extraction does not.
+Windows permission modes are not modelled; installed checks there are unobserved.
 The upstream revision is provenance, not the installed revision. Record the
 candidate commit separately. A 0.2.0 binding cannot be reused after migration;
 review and create a new binding explicitly.

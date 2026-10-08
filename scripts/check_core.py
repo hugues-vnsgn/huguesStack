@@ -377,6 +377,20 @@ def check(root=ROOT):
             installed[relative] = {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
                                    'mode': stat.S_IMODE(path.stat().st_mode)}
     require(installed == receipt['installed_files'], 'installed inventory/bytes/mode differs')
+    helpers = upstream.load(root / 'docs/HELPER-INPUTS.json')
+    require(helpers['source_revision'] == PIN and {r['source'] for r in helpers['files']} ==
+            {p for p in expected if p.startswith('pstack/skills/poteto-mode/scripts/')},
+            'helper input coverage differs')
+    for row in helpers['files']:
+        require(row['source_sha256'] == expected[row['source']]['sha256'], 'helper source differs: ' + row['source'])
+        if row['installed'] is None:
+            require(row['candidate_sha256'] is None and source_map[row['source']] is None,
+                    'provenance-only helper differs: ' + row['source'])
+            continue
+        require(row['installed'] == source_map[row['source']], 'helper destination differs: ' + row['source'])
+        actual = installed[row['installed'].removeprefix('plugin/')]['sha256']
+        require(actual == row['candidate_sha256'] and row['same_bytes_as_upstream'] ==
+                (actual == row['source_sha256']), 'helper input receipt is stale: ' + row['installed'])
     bootstrap = ast.parse((root / 'plugin/adapters/host_tools.py').read_text())
     anchor = next(ast.literal_eval(n.value) for n in bootstrap.body if isinstance(n, ast.Assign)
                   and any(isinstance(t, ast.Name) and t.id == 'RUNTIME_SHA256' for t in n.targets))
