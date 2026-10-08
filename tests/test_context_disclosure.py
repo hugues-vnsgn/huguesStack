@@ -93,8 +93,11 @@ class ContextDisclosure(unittest.TestCase):
     def test_source_budgets_recompute_without_changing_canonical_bodies(self):
         measured = measure_context.measure(ROOT)
         self.assertEqual(measured, json.loads((ROOT / 'docs/CONTEXT-BUDGET.json').read_text()))
-        self.assertEqual(measured['canonical_skill_bodies']['unchanged_files'], 50)
-        self.assertEqual(measured['native_frontmatter']['native_before'], measured['native_frontmatter']['candidate'])
+        # The host invocation table drops inherited manual-only metadata from 45 skill bodies;
+        # the four user-only entries and setup-huguesstack stay byte-identical.
+        self.assertEqual(measured['canonical_skill_bodies']['unchanged_files'], 5)
+        self.assertLess(measured['native_frontmatter']['candidate']['bytes'],
+                        measured['native_frontmatter']['native_before']['bytes'])
         for profile in measured['scenarios'].values():
             self.assertLess(profile['candidate']['bytes'], profile['native_before']['bytes'])
         routing = measured['scenarios']['initial_mode_routing']

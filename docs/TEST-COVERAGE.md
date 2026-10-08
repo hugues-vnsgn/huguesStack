@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The candidate collects **348 top-level unittest cases**. One is a driver that
+The candidate collects **351 top-level unittest cases**. One is a driver that
 separately executes **50 frozen 0.2.0 restoration cases**. Do not add the driver
 and its children as independent coverage, or describe historical passes as current
 native workflow proof. Subtests are not added to case totals.
@@ -12,10 +12,10 @@ native workflow proof. Subtests are not added to case totals.
 | Historical 0.2.0 restoration driver | 1 | Executes 50 cases inside a separate hash-bound archive |
 | Current source/provenance checks | 44 | test_upstream_sync (33), test_retained_provenance (11) |
 | Current installed adapters and regressions | 97 | test_host_adapters (72), test_review_regressions (12), test_rereview_regressions (13) |
-| Current native-layout contracts | 31 | test_native_layout; canonical source, permissions, invocation boundaries, seal acceptance, helper receipt and budgets |
+| Current native-layout contracts | 34 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt and budgets |
 | Current progressive-disclosure contracts | 8 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories and bound resources |
 | Current installed-tolerance regressions | 9 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes and raw skill-read spellings |
-| Total collected | 348 | Current, mixed and historical scopes remain distinct |
+| Total collected | 351 | Current, mixed and historical scopes remain distinct |
 
 The 131 historical modules are test_wp2_contract (45), test_wp3_contract (15),
 test_retained_design (7), test_retained_research (8), test_retained_verification (6),
@@ -26,8 +26,8 @@ candidate layout. Its 50 restored-contract cases remain historical evidence.
 Main collected 349 cases. Moving those 50 behind one driver and adding 29
 native-layout plus eight disclosure cases gives 337, without dropping the frozen
 50 executions or counting them twice. The preceding native candidate had 329.
-The review-fix pass adds two native-layout and nine installed-tolerance cases,
-giving 348. The historical driver now also fails when any nested case is skipped.
+The review-fix pass adds five native-layout and nine installed-tolerance cases,
+giving 351. The historical driver now also fails when any nested case is skipped.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.
@@ -45,8 +45,8 @@ The active/pinned-chat gate stays separate. No real transcript was read and no
 real worktree was deleted.
 
 Native-layout cases compare all 50 public names and modes, archive/source identity,
-canonical mapping, workflow phase/cardinality/fallback constraints, immutable
-manual-only policy, consumer boundaries and a measured source-context budget.
+canonical mapping, workflow phase/cardinality/fallback constraints, the
+reviewed host invocation table, consumer boundaries and a measured source-context budget.
 Hash resealing cannot approve a lost phase gate or changed invocation policy.
 Invocation metadata checks use effective fields, rejecting duplicate fields and
 comment decoys. Plans containing only bound workflow reads pass the plan gate

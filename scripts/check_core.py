@@ -15,6 +15,11 @@ PIN = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
 TREE = '54dfdd87fd191ddda7fce01dd354d220adaeeacc'
 EXCLUDED = set()
 ALIASES = {'poteto-mode': 'hugues-mode', 'setup-pstack': 'setup-huguesstack'}
+# Reviewed host invocation table. Upstream marks 49 skills manual-only for Cursor; on
+# Claude Code and Codex that blocks every skill-to-skill call, so only entry points that
+# mine personal history or expose services stay user-only. Every other skill is a
+# model-invocable dependency.
+USER_ONLY = {'automate-me', 'make-bot-ui', 'recall', 'reflect'}
 AGENTS = {
     'poteto-agent': {'source': 'pstack/agents/poteto-agent.md',
                      'entrypoint': 'plugin/agents/hugues-agent.md'},
@@ -315,6 +320,8 @@ def check(root=ROOT):
     names = {ALIASES.get(Path(name).parts[2], Path(name).parts[2]) for name in expected
              if len(Path(name).parts) == 4 and name.endswith('/SKILL.md')}
     require(set(receipt['public_skills']) == names and len(names) == 50, 'public skill inventory differs')
+    require(receipt.get('host_invocation', {}).get('user_only') == sorted(USER_ONLY),
+            'host invocation receipt differs')
     declarations = list((root / 'plugin').rglob('SKILL.md'))
     require({p.relative_to(root).as_posix() for p in declarations} ==
             {f'plugin/skills/{name}/SKILL.md' for name in names}, 'registered skill inventory differs')
@@ -326,8 +333,7 @@ def check(root=ROOT):
         manual = fields['disable-model-invocation']
         upstream_name = next((old for old, new in ALIASES.items() if new == name), name)
         original_fields = native_frontmatter(original_bodies[f'pstack/skills/{upstream_name}/SKILL.md'].decode())
-        require(manual == original_fields['disable-model-invocation'],
-                'manual-only invocation changed: ' + name)
+        require(manual == (name in USER_ONLY), 'host invocation table differs: ' + name)
         require(fields.get('paths') == original_fields.get('paths'), 'native path scope differs: ' + name)
         require((path.parent / 'agents/openai.yaml').read_text() ==
                 'policy:\n  allow_implicit_invocation: ' + str(not manual).lower() + '\n',

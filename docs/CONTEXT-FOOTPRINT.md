@@ -31,12 +31,12 @@ assumptions and mandatory transitive inputs are in the
 
 | Scenario | Released 0.2.0, estimated tokens | Before disclosure | After disclosure | Bytes before → after |
 |---|---:|---:|---:|---:|
-| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,700 | 14,803 → 14,803 |
-| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,427.5 | 45,289 → 33,752 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 32,683 | 135,888 → 130,794 |
-| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 35,393.5 | 146,269 → 141,636 |
+| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,351.25 | 14,803 → 13,408 |
+| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,590.75 | 45,289 → 34,405 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 32,763.75 | 135,888 → 131,117 |
+| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 35,404.5 | 146,269 → 141,680 |
 
-The routing inventory falls about 25.5% from the previous native candidate.
+The routing inventory falls about 24.0% from the previous native candidate.
 Complete bundled workflow inventories fall less, because worker dispatch,
 verification and publication instructions still apply. The bug-fix profile
 includes how, why, TDD, source-control investigation and synthesis prompts,
@@ -52,9 +52,14 @@ the fixed profile or claimed covered by its total.
 
 ## What the counts include and leave unknown
 
-All 50 canonical skill files remain byte-identical to `7db3e80`. Their combined
-whole-file size is 190,481 bytes; bodies excluding frontmatter and delimiters
-are 175,378 bytes. The mode file is 20,805 bytes, including its 20,396-byte body.
+Five canonical skill files remain byte-identical to `7db3e80`: the four user-only
+entries and `setup-huguesstack`. The other 45 drop only the inherited Cursor
+`disable-model-invocation: true` line under the host invocation table. Their
+combined whole-file size is 189,086 bytes; bodies excluding frontmatter and
+delimiters are unchanged at 175,378 bytes. The mode file is 20,774 bytes,
+including its 20,396-byte body. Model-invocable descriptions enter startup
+context on Claude Code, where manual-only ones did not, so the declared startup
+metadata of 46 skills is now real exposure; its runtime size remains unobserved.
 The reduction comes from avoiding unrelated adapter reads, not shrinking or
 omitting the procedures. Reducing the mode further by making its own mandatory
 sections optional would change its agreed full-body loading contract.

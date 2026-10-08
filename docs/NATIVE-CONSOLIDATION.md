@@ -38,6 +38,16 @@ fallback: unavailable, owner-disabled, denied or unknown invocation stops its
 dependent phase. A manual handoff is needed only when the host requires explicit
 user invocation; it is not a proven universal limitation in this setup.
 
+Upstream Cursor metadata marks 49 skills manual-only. On Claude Code and Codex that
+blocks every skill-to-skill call and, per the Claude Code skill documentation,
+also blocks preloading into a subagent. A reviewed host invocation table replaces
+it: `automate-me`, `make-bot-ui`, `recall` and `reflect` stay user-only, and the
+other 46 skills are model-invocable dependencies. Their descriptions therefore
+enter startup context. `hugues-agent` preloads `hugues-mode` through the Claude Code
+agent `skills` field and invokes it natively when the preload is absent; whether
+the plugin-scoped name `hugues-stack:hugues-mode` resolves is unobserved. Generated
+project verification skills are model-invocable so proof steps can drive them.
+
 The host adapter takes precedence over inherited sibling-read wording. It also
 prevents unconditional traversal of navigation links. A figure-it-out consultation
 of mode principles must not restart mode routing. This is an instruction contract,
@@ -90,10 +100,11 @@ mutations, native-body read rejection, public names, workflow phase contracts,
 owned links and parser/audit safety. Context budgets are measured source bytes
 and characters, with characters/4 as an explicit token estimate; they are not
 observed host prompt usage. Initial bug-fix routing, including its full playbook,
-todos and required unslop reply guidance, is now 33,752 bytes versus 45,289 before
-disclosure, about 8,428 versus 11,308 estimated tokens. The larger workflow inventories include their required
-transitive skills and resources. Native frontmatter remains 14,803 bytes, and all
-50 canonical skill bodies are unchanged by disclosure. These are source budgets;
+todos and required unslop reply guidance, is now 34,405 bytes versus 45,289 before
+disclosure, about 8,591 versus 11,308 estimated tokens. The larger workflow inventories include their required
+transitive skills and resources. Native frontmatter is 13,408 bytes after the host
+invocation table removed 45 inherited manual-only lines; workflow bodies excluding
+frontmatter are unchanged. These are source budgets;
 actual startup exposure, full execution cost and runtime savings remain unknown.
 
 Live discovery/invocation, disabled-skill and planning behavior remain

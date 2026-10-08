@@ -12,6 +12,17 @@ custom runtime registry or custom host loader. `poteto-mode` maps to `hugues-mod
 `poteto-agent` to `hugues-agent`, `Comment Sicko` to `hugues-comment-sicko`,
 and `setup-pstack` to `setup-huguesstack`; other public names are unchanged.
 
+Only `automate-me`, `make-bot-ui`, `recall` and `reflect` are user-only entry
+points; they mine personal history or expose services. Every other bundled skill,
+including `hugues-mode` and each `principle-*`, is model-invocable: when a step
+names it, invoke it through the native skill tool rather than asking the user.
+
+Inherited Cursor worker wording translates before any dispatch: `poteto-agent` is
+the registered `hugues-agent`, `generalPurpose` is Claude Code's `general-purpose`
+agent, `run_in_background: true` is the host's background option, and Cursor model
+slugs are role defaults to resolve against models the native tool exposes. Read
+[workers and models](host-workers.md) before the dispatch itself.
+
 Invoke each bundled, consumer or external skill through the host's supported native mechanism. Respect
 manual-only selection, owner-disabled entries and native denials; never use a file read as an invocation fallback.
 Unavailable, disabled, denied or unknown invocation stops the dependent step.

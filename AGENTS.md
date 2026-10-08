@@ -87,7 +87,7 @@ stop and report it to the owner.
 ## Publishing
 
 Pushing, opening a PR, merging and releasing each need the owner's go-ahead for
-the current task. For PR-bound changes, read and apply
-[the project Astra High review policy](plugin/policies/astra-pr-review.md). This
-file activates that policy for this repository only; installing the plugin does
-not impose it on consumer projects.
+the current task. The [Astra High review policy](plugin/policies/astra-pr-review.md)
+is suspended for this repository: PR-bound changes need no Astra review until the
+owner re-activates it here. Installing the plugin never imposes it on consumer
+projects.

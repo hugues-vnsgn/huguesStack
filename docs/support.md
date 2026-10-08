@@ -63,8 +63,8 @@ PRs [#1](https://github.com/hugues-vnsgn/huguesStack/pull/1),
 [#7](https://github.com/hugues-vnsgn/huguesStack/pull/7) and
 combined [#13](https://github.com/hugues-vnsgn/huguesStack/pull/13) are merged.
 [#2](https://github.com/hugues-vnsgn/huguesStack/pull/2) remains an open deferred
-draft. Historical Opus/Fable reviews keep their original scope; new PR reviews
-use independent **GPT-6 Astra High**, with actual final-head evidence. Read the
+draft. Historical Opus/Fable and Astra reviews keep their original scope. The
+Astra High PR policy is suspended for new PRs until the owner re-activates it. Read the
 [PR review policy](../plugin/skills/hugues-mode/references/pr-review-policy.md).
 Same-host review provides process independence, not cross-host proof.
 

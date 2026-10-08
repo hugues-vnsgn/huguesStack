@@ -153,7 +153,7 @@ class NativeIntegrity(unittest.TestCase):
 
     def test_native_policy_mutation_is_rejected_even_after_sealing(self):
         path = self.root / 'plugin/skills/architect/agents/openai.yaml'
-        path.write_text('policy:\n  allow_implicit_invocation: true\n')
+        path.write_text('policy:\n  allow_implicit_invocation: false\n')
         seal_payload.seal(self.root)
         self.rejected()
 
@@ -182,24 +182,47 @@ class NativeIntegrity(unittest.TestCase):
         self.rejected()
 
     def test_manual_only_cannot_be_removed_from_both_native_metadata_files(self):
-        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path = self.root / 'plugin/skills/reflect/SKILL.md'
         path.write_text(path.read_text().replace('disable-model-invocation: true\n', ''))
         (path.parent / 'agents/openai.yaml').write_text('policy:\n  allow_implicit_invocation: true\n')
+        seal_payload.seal(self.root, accept=['plugin/skills/reflect/SKILL.md'])
+        self.rejected()
+
+    def test_dependency_skill_cannot_become_manual_only(self):
+        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path.write_text(path.read_text().replace('\n---\n', '\ndisable-model-invocation: true\n---\n', 1))
+        (path.parent / 'agents/openai.yaml').write_text('policy:\n  allow_implicit_invocation: false\n')
         seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
+        self.rejected()
+
+    def test_verbatim_port_may_only_drop_the_inherited_manual_only_line(self):
+        path = self.root / 'plugin/skills/principle-fix-root-causes/SKILL.md'
+        path.write_text(path.read_text() + 'Extra rule.\n')
+        seal_payload.seal(self.root, accept=['plugin/skills/principle-fix-root-causes/SKILL.md'])
+        result = subprocess.run([sys.executable, str(self.root / 'scripts/upstream-diff.py'), 'check',
+                                 '--root', str(self.root)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn('verbatim destination differs', result.stderr)
+
+    def test_host_invocation_receipt_cannot_add_a_user_only_entry(self):
+        path = self.root / 'docs/upstream/consolidation.json'
+        data = json.loads(path.read_text())
+        data['host_invocation']['user_only'] = sorted(data['host_invocation']['user_only'] + ['architect'])
+        path.write_text(json.dumps(data))
         self.rejected()
 
     def test_manual_only_comment_cannot_override_effective_false(self):
-        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path = self.root / 'plugin/skills/reflect/SKILL.md'
         path.write_text(path.read_text().replace('disable-model-invocation: true\n',
             'disable-model-invocation: false\n# Previous setting: disable-model-invocation: true\n'))
-        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
+        seal_payload.seal(self.root, accept=['plugin/skills/reflect/SKILL.md'])
         self.rejected()
 
     def test_duplicate_native_invocation_field_is_rejected(self):
-        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path = self.root / 'plugin/skills/reflect/SKILL.md'
         path.write_text(path.read_text().replace('disable-model-invocation: true\n',
             'disable-model-invocation: true\ndisable-model-invocation: false\n'))
-        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
+        seal_payload.seal(self.root, accept=['plugin/skills/reflect/SKILL.md'])
         self.rejected()
 
     def test_seal_refuses_unaccepted_canonical_change_before_any_write(self):

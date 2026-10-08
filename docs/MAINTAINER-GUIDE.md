@@ -35,7 +35,7 @@ Pinned defaults remain defaults. Optional project-local `.huguesstack/models.md`
 
 Budgets remain unlimited/max, large/xhigh, medium/high and small/medium. Panel lists launch one worker per entry, aliases included. Explicit auto/inherit-parent aliases omit model overrides; they never silently replace all defaults. Rejected slugs follow the core fallback using confirmed capabilities. Report actual models/efforts, blocked seats and process independence separately from family diversity.
 
-Generic interrogate keeps its pinned Claude/GPT/Grok panel or configured list, sends the same prompt/rubric, synthesizes adjudicated findings and does not auto-fix. PR-bound huguesStack work adds the [two-seat Astra High policy](../plugin/policies/astra-pr-review.md): exact candidate head, fixes, checks and fresh re-review. Launch acceptance does not attest to backend settings or completion.
+Generic interrogate keeps its pinned Claude/GPT/Grok panel or configured list, sends the same prompt/rubric, synthesizes adjudicated findings and does not auto-fix. The [two-seat Astra High policy](../plugin/policies/astra-pr-review.md) is suspended for huguesStack PRs; re-activating it in AGENTS.md restores its exact-head review, fix and fresh re-review gate.
 
 ## Prove the actual mobile behavior
 

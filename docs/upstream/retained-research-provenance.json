@@ -11,12 +11,13 @@
       "blob_sha": "cd22fff659f14822ad2f485f711a355b6da0668d",
       "sha256": "d31805589c7f6a63a6db6c9fadebbd79fb9660682cf1654e9b2e5e1e7cd30bc0",
       "mode": "100644",
-      "destination_sha256": "b00b794cccd0c15c5f963308fb5c806425837e56202a660f29572358f51bf409",
+      "destination_sha256": "60f9c8e16ae53134313254c5df5b7b6661c2fadd3aad4734df5fde4487103da0",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native consolidation: one canonical body, native invocation boundary and relocated references."
+        "Native consolidation: one canonical body, native invocation boundary and relocated references.",
+        "Host invocation table: model-invocable on Claude Code and Codex; inherited Cursor manual-only metadata removed."
       ]
     },
     {
@@ -52,12 +53,13 @@
       "blob_sha": "daac2c734a8f8fe43d30663054d694066f2b41ec",
       "sha256": "2a852ec8680920109d2b56538b027c52867896a597250ac5d18a13e0b42e5b06",
       "mode": "100644",
-      "destination_sha256": "567b3d9df8c0cf257417c399d72b83165c8540ca9a8265ddecbcf56485e7808a",
+      "destination_sha256": "ea7781bc488bb277bdba4bab6ddffb7166e20908b559e28a57464d044cab2bcc",
       "retained_contracts": [
         "Read the complete pinned skill and its phase-required references; immutable source, effective loader and behavior checks enforce the contract."
       ],
       "deviations": [
-        "Native consolidation: one canonical body, native invocation boundary and relocated references."
+        "Native consolidation: one canonical body, native invocation boundary and relocated references.",
+        "Host invocation table: model-invocable on Claude Code and Codex; inherited Cursor manual-only metadata removed."
       ]
     },
     {

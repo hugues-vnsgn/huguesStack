@@ -8,7 +8,6 @@ Use this structure when writing a consumer-local skill. Replace angle-bracket pr
 ---
 name: verify-<app>
 description: "Verify <agreed user journey> on <named targets> and retain its evidence."
-disable-model-invocation: true
 ---
 
 # Verify <app>

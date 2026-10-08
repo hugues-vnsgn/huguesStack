@@ -13,3 +13,4 @@ and a PR-ready body can be prepared under local-work authority. Publication wait
 for explicit scope. Only this huguesStack repository’s AGENTS.md activates its
 Astra High PR profile. Installing the plugin does not impose it on consumers.
 Consumer policies and generic interrogate defaults remain in force.
+That AGENTS.md currently suspends the profile, so no Astra review gate applies.
