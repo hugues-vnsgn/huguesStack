@@ -66,9 +66,11 @@ with one plan operand. Markdown references and reads become quoted, binding-guar
 `read-workflow` commands; no direct installed-file read is emitted. Other Git
 revisions, unknown consumer-owned `pstack/...` paths, and prefixed paths remain
 unchanged. Unsupported commands that contain a bundled operand block translation
-instead of being partially rewritten. A literal `skills/<name>/SKILL.md` operand
-blocks translation at every Git revision and in every supported shell form,
-including as the plan-check helper's operand. Bundled input commands accept
+instead of being partially rewritten. A line naming a path to any `SKILL.md`,
+bundled or consumer-owned, blocks translation in every letter case, after `.`, `..`
+and repeated slashes resolve, at every Git revision and in every supported shell
+form, including as the plan-check helper's operand; name the skill to apply
+instead. A bare `SKILL.md` in prose names no file. Bundled input commands accept
 literal operands and ordinary quoting for spaces; shell operators, substitutions, globs, brace or
 tilde syntax hold, including quoted operands containing those syntax characters.
 Use a plain literal plan path. Line continuations and heredoc syntax are outside

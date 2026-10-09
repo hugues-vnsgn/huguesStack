@@ -3,6 +3,7 @@ import hashlib
 from .json_input import load_json
 import os
 from pathlib import Path, PurePosixPath
+import posixpath
 import re
 import shlex
 import stat
@@ -12,8 +13,10 @@ ANCHORS = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adap
 # Created after install by the bundled Bun bootstrap or the host OS; never workflow inputs.
 GENERATED_TREES = {'skills/hugues-mode/scripts/node_modules'}
 HOST_METADATA = {'.DS_Store'}
-SKILL_BODY = re.compile(r'(?<![\w.-])skills/[^/\s]+/+SKILL\.md(?![\w./-])')
-MANIFEST_SHA256 = '9754da5a95bb8fef3626fc7a682ae142b656b4c2c2b6ebe31961356712f0b03f'
+# A run of path characters names a file when it holds a slash or follows a Git revision's colon;
+# a bare SKILL.md in prose names none.
+PATH_RUN = re.compile(r'(:?)([\w./-]+)')
+MANIFEST_SHA256 = '4f7d9b5d6021a36b753ee7ecbb837da19d4a651e9d5d92cda824bf16db9e3a2c'
 
 
 def digest(path):
@@ -39,8 +42,15 @@ def mode_matches(actual, approved):
     return not actual & stat.S_IWOTH and bool(actual & stat.S_IXUSR) == bool(approved & stat.S_IXUSR)
 
 
+def is_skill_body(path):
+    # . and .. move between skill folders, and case-insensitive hosts open SKILL.MD as SKILL.md.
+    return posixpath.basename(posixpath.normpath(path)).lower() == 'skill.md'
+
+
 def names_skill_body(text):
-    return bool(SKILL_BODY.search(text))
+    unquoted = re.sub(r'[\'"`\\]', '', text)
+    return any((revision or '/' in run) and is_skill_body(run)
+               for revision, run in PATH_RUN.findall(unquoted))
 
 
 def unreadable(error):
@@ -115,7 +125,7 @@ def resolve_source(rows, source):
 def workflow(root, source):
     rows = verify(root)
     source = resolve_source(rows, source)
-    if names_skill_body(source) or PurePosixPath(source).name == 'SKILL.md':
+    if is_skill_body(source) or names_skill_body(source):
         raise ValueError('native skill invocation required; a guarded file read grants no invocation permission')
     known = {row['path'] for row in rows['files']}
     if source not in known or not source.endswith('.md'):
@@ -140,15 +150,19 @@ def translate(root, binding, text):
     if joined != text or '<<' in text:
         raise ValueError('continued commands and heredocs are not supported in bundled plans')
 
+    def refuse_skill_body(value):
+        if names_skill_body(value):
+            raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
+
     def fragment(value):
+        # Ahead of parsing and every form-specific branch, so no early return skips it.
+        refuse_skill_body(value)
         try:
             words = shlex.split(value)
         except ValueError:
             if 'pstack/' in value or 'skills/' in value:
                 raise ValueError('unresolved quoting in plan reference')
             return value
-        if names_skill_body(value) or any(names_skill_body(word) for word in words):
-            raise ValueError('native skill invocation required; plan cannot substitute raw skill reads')
         if words and words[-1] in known and words == shlex.split(command(root, binding, 'read-workflow', words[-1])):
             return value
         bundled = any(pattern.search(content) for pattern in operands
@@ -177,6 +191,8 @@ def translate(root, binding, text):
     nonempty = 0
     for line in text.splitlines(keepends=True):
         nonempty += bool(line.strip())
+        # Whole line too: splitting it into code spans must not split a path apart.
+        refuse_skill_body(line)
         if '`' in line:
             inline = r'(?<!`)`([^`\n]+)`(?!`)'
             surrounding = re.sub(inline, '', line).strip()
