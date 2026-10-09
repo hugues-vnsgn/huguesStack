@@ -1,4 +1,4 @@
-## Unreleased native consolidation
+## Native consolidation
 
 All 161 pstack 0.15.9 source files are preserved byte-for-byte with their modes in
 `provenance/upstream/pstack-0.15.9.tar.gz`. Canonical native bodies retain all 50 top-level skills,
@@ -6,7 +6,7 @@ both upstream agents, 23 generic playbooks and four mobile routes. The runtime
 core mirror and generated body loaders are retired. The current ledger and
 [consolidation map](consolidation.json) distinguish adapted runtime files from
 provenance-only assets. Historical releases and source snapshots remain unchanged.
-See [migration contracts](../NATIVE-CONSOLIDATION.md). A pin upgrade is separate.
+See [migration contracts](../NATIVE-CONSOLIDATION.md). The ledger target `0.2` means release `0.2.0`; this consolidation ships as `0.3.0` without moving any ledger target. A pin upgrade is separate.
 
 A later native restoration made 46 of the 50 skills model-invocable, so every
 description entered the host's per-turn skill list. The skill-list-budget work

@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The candidate collects **385 top-level unittest cases**. One is a driver that
+Version 0.3.0 collects **385 top-level unittest cases**. One is a driver that
 separately executes **50 frozen 0.2.0 restoration cases**. Do not add the driver
 and its children as independent coverage, or describe historical passes as current
 native workflow proof. Subtests are not added to case totals.
@@ -22,7 +22,7 @@ test_retained_design (7), test_retained_research (8), test_retained_verification
 test_retained_integration (26) and test_lane_evidence (24). Their root is
 `release_root()`. No frozen archive was modified to make a current test pass.
 The newly retained 0.2.0 archive is the original `509cbec` Git tree, not the
-candidate layout. Its 50 restored-contract cases remain historical evidence.
+0.3.0 layout. Its 50 restored-contract cases remain historical evidence.
 Main collected 349 cases. Moving those 50 behind one driver and adding 29
 native-layout plus eight disclosure cases gives 337, without dropping the frozen
 50 executions or counting them twice. The preceding native candidate had 329.
@@ -60,7 +60,8 @@ pinned `a67df90` read-set fixture is rejected), giving 381. Its fix round adds t
 more read-only router cases (the scope words that positive rewrites had dropped, and
 the per-host registered `hugues-agent` name and question tool), giving 383.
 The skill-path normalization fix adds two installed-tolerance cases (normalized
-paths, and open quotes or split code spans), giving 385.
+paths, and open quotes or split code spans), giving 385. The 0.3.0 release adds
+no case, so the total stays 385.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.
@@ -90,10 +91,14 @@ comment decoys. Plans containing only bound workflow reads pass the plan gate
 without an incidental consumer Git read; missing binding markers still fail.
 The budget uses bytes and characters/4; it is not measured host context.
 
-Current host discovery/invocation, complete persisted-transcript compatibility,
-worker dispatch, mobile device journeys and forge/cloud/loop execution remain
-unverified. Earlier native observations are bound to their original revisions.
-Historical Bun/TypeScript helper results remain separate from any new candidate
+Complete persisted-transcript compatibility, completed worker dispatch, Codex
+invocation, mobile device journeys and forge/cloud/loop execution remain
+unverified. Claude Code discovery and the router's firing were observed in the
+[skill-list host validation](skill-list-host-validation.md), the
+[router eval](hugues-mode-router-eval.md) and the
+[router interactive check](router-interactive-check.md), each bound to its own
+commit. Earlier native observations are bound to their original revisions.
+Historical Bun/TypeScript helper results remain separate from any new
 run recorded in the implementation evidence.
 Their source and dependency inputs remain unchanged; the Node plan checker did
 change and has current Python/Node integration coverage. The disclosure-pass

@@ -1,7 +1,7 @@
 # Source and workflow contracts
 
-The 0.2.0 pinned-core restoration remains a historical release. This unreleased
-candidate consolidates its full skill bodies into native entries; see
+The 0.2.0 pinned-core restoration remains a historical release. Version 0.3.0
+consolidates its full skill bodies into native entries; see
 [native consolidation](NATIVE-CONSOLIDATION.md) for layout, migration and limits.
 
 The upstream archive retains 161 files from pstack 0.15.9 at
@@ -20,7 +20,7 @@ activity, unknown PR state and unsupported inputs retain conservative exit-2
 holds; the active/pinned-chat gate is separate and no helper deletes anything.
 The bootstrap executes verified source buffers, not bytecode caches.
 
-The candidate collects 385 tests, including one driver for 50 historical 0.2.0 cases.
+Version 0.3.0 collects 385 tests, including one driver for 50 historical 0.2.0 cases.
 Current and historical suite totals are maintained in [test accounting](TEST-COVERAGE.md).
 The 0.1.0 archive and its tests are unchanged. The 50 old restoration-contract
 cases also run against a hash-bound 0.2.0 archive and are historical only.
@@ -29,6 +29,6 @@ workflow gates and invocation boundaries. Installed adapter tests exercise real
 Python/Node helpers in disposable consumers with synthetic activity only.
 
 The prior 52 Bun tests and strict watch-pr TypeScript result at `37eb703` remain
-historical evidence. Current candidate helper checks must record their own run.
+historical evidence. Current helper checks must record their own run.
 No installation, native host, device, cloud, forge or loop execution is implied.
 Source equality and passing static tests do not establish runtime parity.
