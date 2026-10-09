@@ -11,13 +11,16 @@ byte equality. Public native names, workflow phase order, role cardinality,
 feature arena, fallback, whole-map maintenance and mobile applicability remain
 checked separately from source identity.
 
-The complete installed inventory and permission modes are bound. Native skill
-reads cannot be disguised as guarded resource reads. Missing/empty/malformed
+The complete installed inventory and permission modes are bound. Skill reads
+cannot be disguised as guarded resource reads: the helper refuses every
+SKILL.md, and an agent reads a bundled user-only skill's file with the host's
+own file-read tool instead.
+Missing/empty/malformed
 activity, unknown PR state and unsupported inputs retain conservative exit-2
 holds; the active/pinned-chat gate is separate and no helper deletes anything.
 The bootstrap executes verified source buffers, not bytecode caches.
 
-The candidate collects 351 tests, including one driver for 50 historical 0.2.0 cases.
+The candidate collects 372 tests, including one driver for 50 historical 0.2.0 cases.
 Current and historical suite totals are maintained in [test accounting](TEST-COVERAGE.md).
 The 0.1.0 archive and its tests are unchanged. The 50 old restoration-contract
 cases also run against a hash-bound 0.2.0 archive and are historical only.

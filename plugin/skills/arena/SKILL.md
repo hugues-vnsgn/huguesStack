@@ -1,13 +1,14 @@
 ---
 name: arena
 description: "Spawn N parallel candidates at the same task, pick a base, graft the strongest parts of the losers into it. Use for /arena, 'arena this', 'throw it in the arena', or when one attempt at a non-trivial artifact would lock in the wrong shape."
+disable-model-invocation: true
 ---
 
 ## Host invocation contract
 
 Before these workflow steps, apply the [host contract](../../adapters/host.md)
 and [mobile applicability](../../adapters/mobile.md#applicability).
-The host contract supersedes inherited sibling-body reads.
+The host contract governs how this skill reaches any sibling dependency.
 
 # Arena
 

@@ -1,13 +1,14 @@
 ---
 name: maintain-verification-skill
 description: "Periodic pass that keeps a project's verification skill and feature map honest: parallel source readers per feature, one live session driving every feature, at most one PR of proven corrections. Use for /maintain-verification-skill or \"audit the verify skill\"."
+disable-model-invocation: true
 ---
 
 ## Host invocation contract
 
 Before these workflow steps, apply the [host contract](../../adapters/host.md)
 and [mobile applicability](../../adapters/mobile.md#applicability).
-The host contract supersedes inherited sibling-body reads.
+The host contract governs how this skill reaches any sibling dependency.
 
 # Maintain a verification skill
 

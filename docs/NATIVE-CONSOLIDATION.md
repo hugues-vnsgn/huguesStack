@@ -32,26 +32,35 @@ provenance-only. The installed artifact includes the original MIT notice.
 
 ## Invocation and resources
 
-Use native skill invocation. Read ordinary owned references only when the
-current phase needs them. A public or consumer skill is not a reference-file
-fallback: unavailable, owner-disabled, denied or unknown invocation stops its
-dependent phase. A manual handoff is needed only when the host requires explicit
-user invocation; it is not a proven universal limitation in this setup.
+Use native skill invocation for `hugues-mode`, `setup-huguesstack` and any
+consumer or external skill. Read ordinary owned references only when the
+current phase needs them. None of those is a reference-file fallback:
+unavailable, owner-disabled, denied or unknown invocation stops its dependent
+phase. A manual handoff is
+needed only when the host requires explicit user invocation; it is not a
+proven universal limitation in this setup.
 
-Upstream Cursor metadata marks 49 skills manual-only. On Claude Code and Codex that
-blocks every skill-to-skill call and, per the Claude Code skill documentation,
-also blocks preloading into a subagent. A reviewed host invocation table replaces
-it: `automate-me`, `make-bot-ui`, `recall` and `reflect` stay user-only, and the
-other 46 skills are model-invocable dependencies. Their descriptions therefore
-enter startup context. `hugues-agent` preloads `hugues-mode` through the Claude Code
-agent `skills` field and invokes it natively when the preload is absent; whether
-the plugin-scoped name `hugues-stack:hugues-mode` resolves is unobserved. Generated
-project verification skills are model-invocable so proof steps can drive them.
+Upstream Cursor metadata marks 49 skills manual-only; `poteto-mode` is the one
+exception. huguesStack restores that design instead of the earlier native
+table that made 46 skills model-invocable: only `hugues-mode` and
+`setup-huguesstack` are model-invocable now, so only their descriptions enter
+startup context on Claude Code. The other 48 bundled skills are user-only; the
+owner can still type any of them by name, and the mode reaches each one as its
+router's reference: the agent reads its SKILL.md in full with the host's own
+file-read tool instead of invoking it natively. The installed helper takes no
+part in that read. `hugues-agent` preloads `hugues-mode` through the Claude Code agent
+`skills` field and invokes it natively when the preload is absent; whether the
+plugin-scoped name `hugues-stack:hugues-mode` resolves is unobserved. Generated
+project verification skills stay consumer-local and model-invocable so proof
+steps can drive them; that tier is unrelated to the bundled table above.
 
-The host adapter takes precedence over inherited sibling-read wording. It also
-prevents unconditional traversal of navigation links. A figure-it-out consultation
-of mode principles must not restart mode routing. This is an instruction contract,
-not a filesystem security boundary or proof of every possible runtime trace.
+The host adapter's native-only rule takes precedence over inherited
+sibling-read wording for `hugues-mode`, `setup-huguesstack` and consumer or
+external skills; a bundled user-only skill keeps that inherited wording, read
+in full as the mode's reference. The adapter also prevents unconditional
+traversal of navigation links. A figure-it-out consultation of mode principles
+must not restart mode routing. This is an instruction contract, not a
+filesystem security boundary or proof of every possible runtime trace.
 
 The shared contract now loads specialized adapter references only before their
 named phases. Mobile applicability is a small separate entry; explicit mobile
@@ -59,11 +68,17 @@ work must load the complete mobile rules before routing or execution. All prior
 adapter requirements are retained. See [progressive disclosure](CONTEXT-FOOTPRINT.md)
 for the partition and comparable required-read inventories.
 
-The installed `read-workflow` helper refuses public `SKILL.md` files and their
-legacy aliases. `translate-plan` also rejects such reads. Plans must name native
-skill invocation explicitly; owned playbook/reference rereads stay binding-guarded.
-The translator preserves consumer-owned Git reads and supports only its documented
-bounded literal shapes. It does not become a host dispatcher or shell interpreter.
+The installed `read-workflow` helper refuses every `SKILL.md`, bundled or not,
+and their legacy aliases. `translate-plan` also rejects such reads. A plan names
+the bundled skill to apply, never a path to read: the agent reads a user-only
+skill's file with the host's own file-read tool, and reaches `hugues-mode`,
+`setup-huguesstack` and consumer or external skills natively. Owned
+playbook/reference rereads stay binding-guarded. PR 1 fix rounds 1 and 2 briefly
+let the helper read bundled skill bodies; each review found another branch that
+slipped past the skill-body guard, and round 3 restored the `a67df90` runtime
+(its `payload.py` differs only by the resealed manifest digest). The translator
+preserves consumer-owned Git reads and supports only its documented bounded
+literal shapes. It does not become a host dispatcher or shell interpreter.
 
 ## Integrity and cleanup
 
@@ -96,17 +111,26 @@ Only synthetic transcripts and disposable Git consumers are used in current test
 
 See [test accounting](TEST-COVERAGE.md) for current versus historical totals.
 Current checks exercise actual installed helpers, negative inventory/mode/body
-mutations, native-body read rejection, public names, workflow phase contracts,
-owned links and parser/audit safety. Context budgets are measured source bytes
-and characters, with characters/4 as an explicit token estimate; they are not
-observed host prompt usage. Initial bug-fix routing, including its full playbook,
-todos and required unslop reply guidance, is now 34,456 bytes versus 45,289 before
-disclosure, about 8,604 versus 11,308 estimated tokens. The larger workflow inventories include their required
-transitive skills and resources. Native frontmatter is 13,431 bytes after the host
-invocation table removed 45 inherited manual-only lines and the setup description
-named the native model-role file. Workflow bodies excluding frontmatter change only
-where nine skills replace Cursor model-role wiring. These are source budgets;
-actual startup exposure, full execution cost and runtime savings remain unknown.
+mutations, skill-body read rejection for every bundled skill, consumer and
+external path, public names, workflow phase contracts, owned links and
+parser/audit safety. The helper never returns a `SKILL.md`; a bundled user-only
+skill's file is read by the agent's own file-read tool. Context budgets are measured
+source bytes and characters, with characters/4 as an explicit token estimate;
+they are not observed host prompt usage.
+
+The following figures are historical: measured at this consolidation's own
+`7db3e80` disclosure pass, not recomputed since. Initial bug-fix routing,
+including its full playbook, todos and required unslop reply guidance, was
+then 34,456 bytes versus 45,289 before disclosure, about 8,604 versus 11,308
+estimated tokens. The larger workflow inventories include their required
+transitive skills and resources. Native frontmatter was 13,431 bytes after
+the host invocation table removed 45 inherited manual-only lines and the
+setup description named the native model-role file. Workflow bodies
+excluding frontmatter changed only where nine skills replaced Cursor
+model-role wiring. These were source budgets, not actual startup exposure,
+full execution cost or runtime savings, and they predate PR 1's restoration
+of pstack's user-only tiering; see [context footprint](CONTEXT-FOOTPRINT.md)
+and [the budget record](CONTEXT-BUDGET.json) for current figures.
 
 Live discovery/invocation, disabled-skill and planning behavior remain
 UNVERIFIED for this consolidation candidate. Separate prior-layout trials cannot

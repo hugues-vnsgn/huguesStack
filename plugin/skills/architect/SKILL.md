@@ -1,13 +1,14 @@
 ---
 name: architect
 description: "Sketch types, signatures, and module structure before code, then stay in the loop while implementation fills in. Use for /architect, 'architect this', 'design this', or non-trivial work where jumping to code would lock in the wrong shape."
+disable-model-invocation: true
 ---
 
 ## Host invocation contract
 
 Before these workflow steps, apply the [host contract](../../adapters/host.md)
 and [mobile applicability](../../adapters/mobile.md#applicability).
-The host contract supersedes inherited sibling-body reads.
+The host contract governs how this skill reaches any sibling dependency.
 
 # Architect
 

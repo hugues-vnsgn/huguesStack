@@ -1,13 +1,14 @@
 ---
 name: unslop
 description: Cut AI tells from any writing. Must always apply.
+disable-model-invocation: true
 ---
 
 ## Host invocation contract
 
 Before these workflow steps, apply the [host contract](../../adapters/host.md)
 and [mobile applicability](../../adapters/mobile.md#applicability).
-The host contract supersedes inherited sibling-body reads.
+The host contract governs how this skill reaches any sibling dependency.
 
 # Unslop
 

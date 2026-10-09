@@ -1,5 +1,6 @@
 from pathlib import Path
 import shutil
+import textwrap
 import unittest
 ROOT = Path(__file__).resolve().parents[1]
 class NativeLayout(unittest.TestCase):
@@ -32,15 +33,31 @@ class NativeInstalled(InstalledFixture, unittest.TestCase):
         result = self.bound('read-workflow', 'skills/hugues-mode/playbooks/feature.md')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('Mandatory: no skip-with-reason escape', result.stdout)
+        # The helper never reads a skill body. `swarm` is user-only, so an agent reads its
+        # SKILL.md with the host's own file-read tool; `read-workflow` refuses it, through
+        # its legacy pstack-relative alias too, exactly as it refuses a native-only skill.
         for path in ['skills/swarm/SKILL.md', 'pstack/skills/swarm/SKILL.md']:
-            denied = self.bound('read-workflow', path)
-            self.assertEqual(denied.returncode, 2)
-            self.assertIn('native skill invocation', denied.stderr)
+            with self.subTest(path=path):
+                denied = self.bound('read-workflow', path)
+                self.assertEqual(denied.returncode, 2)
+                self.assertEqual(denied.stdout, '')
+                self.assertIn('native skill invocation', denied.stderr)
 
     def test_translate_does_not_bypass_native_skill_invocation(self):
         for text in ['`pstack/skills/swarm/SKILL.md`',
                      'cat skills/swarm/SKILL.md',
                      'git show origin/main:skills/swarm/SKILL.md']:
+            with self.subTest(text=text):
+                plan = self.consumer / 'plan.md'
+                plan.write_text(text)
+                result = self.bound('translate-plan', plan)
+                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.stdout, '')
+                self.assertIn('native skill invocation', result.stderr)
+
+    def test_translate_still_refuses_an_unknown_skill_body(self):
+        for text in ['`pstack/skills/nope/SKILL.md`', 'cat skills/nope/SKILL.md',
+                     'git show origin/main:skills/nope/SKILL.md']:
             with self.subTest(text=text):
                 plan = self.consumer / 'plan.md'
                 plan.write_text(text)
@@ -84,6 +101,7 @@ import sys
 import tempfile
 sys.path.insert(0, str(ROOT / 'scripts'))
 import check_core
+import native_reach_corpus
 import seal_payload
 
 
@@ -146,13 +164,13 @@ class NativeIntegrity(unittest.TestCase):
 
     def test_sealing_does_not_approve_lost_invocation_boundary(self):
         path = self.root / 'plugin/skills/architect/SKILL.md'
-        self.assertIn('The host contract supersedes inherited sibling-body reads.', path.read_text())
-        path.write_text(path.read_text().replace('The host contract supersedes inherited sibling-body reads.', 'read any skill body'))
+        self.assertIn('The host contract governs how this skill reaches any sibling dependency.', path.read_text())
+        path.write_text(path.read_text().replace('The host contract governs how this skill reaches any sibling dependency.', 'read any skill body'))
         seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
         self.rejected()
 
     def test_native_policy_mutation_is_rejected_even_after_sealing(self):
-        path = self.root / 'plugin/skills/architect/agents/openai.yaml'
+        path = self.root / 'plugin/skills/setup-huguesstack/agents/openai.yaml'
         path.write_text('policy:\n  allow_implicit_invocation: false\n')
         seal_payload.seal(self.root)
         self.rejected()
@@ -189,10 +207,10 @@ class NativeIntegrity(unittest.TestCase):
         self.rejected()
 
     def test_dependency_skill_cannot_become_manual_only(self):
-        path = self.root / 'plugin/skills/architect/SKILL.md'
+        path = self.root / 'plugin/skills/setup-huguesstack/SKILL.md'
         path.write_text(path.read_text().replace('\n---\n', '\ndisable-model-invocation: true\n---\n', 1))
         (path.parent / 'agents/openai.yaml').write_text('policy:\n  allow_implicit_invocation: false\n')
-        seal_payload.seal(self.root, accept=['plugin/skills/architect/SKILL.md'])
+        seal_payload.seal(self.root, accept=['plugin/skills/setup-huguesstack/SKILL.md'])
         self.rejected()
 
     def test_verbatim_port_may_only_drop_the_inherited_manual_only_line(self):
@@ -262,6 +280,57 @@ class NativeIntegrity(unittest.TestCase):
         self.rejected()
         with self.assertRaises(ValueError):
             seal_payload.seal(self.root)
+
+    def test_native_reach_lint_flags_every_reviewed_contradiction(self):
+        # Root cause of PR 1 fix rounds 1 to 4: the rule for reaching a user-only skill was
+        # restated across many files, so each round's review found another spelling of the
+        # same contradiction. native_reach_corpus holds every spelling found so far. The lint
+        # must flag each one however the line is wrapped, listed or embedded.
+        def variants(text):
+            flat = ' '.join(text.split())
+            yield 'as written', text
+            yield 'wrapped', textwrap.fill(flat, 36)
+            yield 'wrapped inside hyphenated names', textwrap.fill(flat, 23)
+            yield 'list item', '- ' + flat
+            yield 'embedded in a paragraph', 'An unrelated opening sentence.\n\n' + text + '\n\nAn unrelated closing one.'
+        self.assertGreaterEqual(len(native_reach_corpus.CONTRADICTIONS), 45)
+        for label, text in native_reach_corpus.CONTRADICTIONS:
+            for shape, variant in variants(text):
+                with self.subTest(label=label, shape=shape):
+                    self.assertTrue(check_core.native_reach_violations(variant))
+
+    def test_native_reach_lint_rejects_a_reintroduced_contradiction_in_the_package(self):
+        # The lint must run inside check(): reintroduce one contradiction, reseal so no
+        # integrity check fires first, and the failure must come from the lint itself.
+        path = self.root / 'plugin/adapters/host-special-skills.md'
+        text = path.read_text()
+        self.assertIn("by reading automate-me's SKILL.md in\nfull as the scoped bundled reference", text)
+        path.write_text(text.replace("by reading automate-me's SKILL.md in\nfull as the scoped bundled reference",
+                                     'through the native automate-me entry'))
+        seal_payload.seal(self.root)
+        with self.assertRaisesRegex(ValueError, 'promised native reach'):
+            check_core.check(self.root)
+
+    def test_native_reach_lint_is_quiet_on_correct_text_and_on_the_package(self):
+        for label, text in native_reach_corpus.CLEAN:
+            with self.subTest(label=label):
+                self.assertEqual(check_core.native_reach_violations(text), [])
+        self.assertEqual(check_core.native_reach_errors(self.root), [])
+        # A skill may name itself, and frontmatter states a tier rather than an instruction.
+        self.assertEqual(check_core.native_reach_violations('Invoke tdd natively.', own='tdd'), [])
+        skill = self.root / 'plugin/skills/tdd/SKILL.md'
+        skill.write_text(skill.read_text().replace('\n---\n', '\ninvoke swarm natively\n---\n', 1))
+        self.assertEqual(check_core.native_reach_errors(self.root), [])
+        skill.write_text(skill.read_text() + '\nInvoke swarm natively.\n')
+        self.assertEqual(len(check_core.native_reach_errors(self.root)), 1)
+
+    def test_native_reach_allowlist_is_one_live_reviewed_sentence(self):
+        # The only exemption: the TypeScript route says `paths` auto-load is disabled. An entry
+        # that no plugin file carries any more must be deleted, not left behind.
+        self.assertEqual(len(check_core.NATIVE_REACH_ALLOWLIST), 1)
+        carried = {clause for path in (self.root / 'plugin').rglob('*.md')
+                   for clause in check_core.markdown_clauses(path.read_text())}
+        self.assertEqual(check_core.NATIVE_REACH_ALLOWLIST - carried, set())
 
     def test_mode_principles_consultation_cannot_restart_routing(self):
         path = self.root / 'plugin/adapters/host.md'

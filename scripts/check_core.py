@@ -15,11 +15,30 @@ PIN = 'e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a'
 TREE = '54dfdd87fd191ddda7fce01dd354d220adaeeacc'
 EXCLUDED = set()
 ALIASES = {'poteto-mode': 'hugues-mode', 'setup-pstack': 'setup-huguesstack'}
-# Reviewed host invocation table. Upstream marks 49 skills manual-only for Cursor; on
-# Claude Code and Codex that blocks every skill-to-skill call, so only entry points that
-# mine personal history or expose services stay user-only. Every other skill is a
-# model-invocable dependency.
-USER_ONLY = {'automate-me', 'make-bot-ui', 'recall', 'reflect'}
+# Reviewed host invocation table. pstack's router read every other skill as a file;
+# huguesStack restores that design. Only `hugues-mode` (the router) and
+# `setup-huguesstack` stay model-invocable, so their descriptions are the only ones
+# paid for in the host's per-turn skill list. Every other bundled skill is user-only:
+# the owner can still type it by name, and the mode reaches it by reading its
+# SKILL.md in full (the scoped host adapter rule), never by native invocation.
+USER_ONLY = {
+    'architect', 'arena', 'automate-me', 'benchmark-checklist', 'blast-radius', 'bro',
+    'correct', 'create-verification-skill', 'figure-it-out', 'how', 'interrogate',
+    'maintain-verification-skill', 'make-bot-ui', 'no-comments',
+    'principle-attack-the-premise', 'principle-boundary-discipline', 'principle-build-the-lever',
+    'principle-encode-lessons-in-structure', 'principle-exhaust-the-design-space',
+    'principle-experience-first', 'principle-explain-the-number', 'principle-fix-root-causes',
+    'principle-foundational-thinking', 'principle-guard-the-context-window',
+    'principle-laziness-protocol', 'principle-make-operations-idempotent',
+    'principle-migrate-callers-then-delete-legacy-apis', 'principle-minimize-reader-load',
+    'principle-model-the-domain', 'principle-never-block-on-the-human',
+    'principle-outcome-oriented-execution', 'principle-prove-it-works',
+    'principle-redesign-from-first-principles', 'principle-separate-before-serializing-shared-state',
+    'principle-sequence-verifiable-units', 'principle-subtract-before-you-add',
+    'principle-test-behavior-not-implementation', 'principle-type-system-discipline',
+    'recall', 'reflect', 'show-me-your-work', 'swarm', 'tdd', 'teach', 'technical-writing',
+    'typescript-best-practices', 'unslop', 'why',
+}
 AGENTS = {
     'poteto-agent': {'source': 'pstack/agents/poteto-agent.md',
                      'entrypoint': 'plugin/agents/hugues-agent.md'},
@@ -168,6 +187,9 @@ def adapter_errors(texts):
             errors.append('missing phase prerequisite: ' + name)
     for marker in ['Before the triggering action, read its complete reference',
                    'never use a file read as an invocation fallback', 'never restart task routing',
+                   'Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill',
+                   "only through the host's supported native mechanism",
+                   'owner-disabled entries and native denials',
                    'No translation grants new authority', 'A constraint\ncan block execution',
                    'copy its ordered todos verbatim']:
         if marker.casefold() not in host.casefold():
@@ -213,6 +235,147 @@ def adapter_errors(texts):
         for marker in markers:
             if marker.casefold() not in effective[path].casefold():
                 errors.append(path + ': lost override boundary: ' + marker)
+    return errors
+
+
+# Native-reach lint. A user-only skill cannot be invoked by a model, so agent-facing text
+# must never tell an agent to reach one natively or through the host; the agent reads its
+# SKILL.md instead (host.md states that rule once). Reviews of PR 1 found the same
+# contradiction in rounds one to four, each time in a spelling the previous lint missed, so
+# the lint works on whole clauses and on these kinds of evidence, each independent of the
+# others:
+#   * a skill named in the USER_ONLY table (the only list; never a second copy);
+#   * a class word that stands for user-only skills ("principles", "bundled", "dependency");
+#   * a phrase that promises native reach without naming any skill ("native context");
+#   * a reach word aimed at skills with no class named at all ("native invocation for
+#     skills"), where a "consumer" elsewhere in the clause qualifies something else;
+#   * a read told to cover any bundled skill, which includes the two native-only ones.
+# Known limit, pinned in tests/native_reach_corpus.py: a prohibition that names no skill and
+# no class ("never substitute direct body reads") is not caught, because the same words are
+# correct in host.md's "for those skills" form and in a consumer project-skill template.
+NATIVE_REACH_TRIGGER = re.compile(
+    r'\binvo[ck]\w*|\bnatively\b|\bauto-?load\w*|\bskill tool\b'
+    r'|\bnative[\s-]+(?:invo\w*|skill|context|host|mechanism|entry)\b'
+    r'|\bnative\s+\S+\s+(?:skill|entry)\b'
+    # Reach left to the host: "let the host load X", "host loading", "loaded by the host".
+    r'|\b(?:host|harness)(?:\'s)?[\s-]+(?:auto-?)?(?:load|inject|attach|activat|surfac)\w*'
+    r'|\b(?:load|inject|attach|activat|surfac)\w*\s+(?:\w+\s+){0,3}?(?:by|through|via)\s+the\s+(?:host|harness)\b'
+    r'|\b(?:host|harness)\s+(?:to\s+)?(?:load|inject|attach|activate|surface)\b', re.I)
+# Names of a tier or a policy field state a property, never an instruction to invoke.
+NATIVE_REACH_PROPERTY = re.compile(
+    r'(?:disable-)?model-invoc\w*|allow_implicit_invocation|implicit[\s-]+invoc\w*', re.I)
+NATIVE_REACH_UNSCOPED = re.compile(r'\bnative[\s-]+(?:skill|context)\b|\bskill invocations?\b', re.I)
+# "bundled" and the principle family are always user-only, so no qualifier excuses them.
+NATIVE_REACH_STRONG_CLASS = re.compile(
+    r'\bprinciples?\b|\bprinciple-\*|\bbundled\b|\buser-only\b', re.I)
+# The object of a reach word is "skills" and nothing narrows it: no consumer, external,
+# project, native-only or "those" in front. Only determiners may sit between, so this is
+# independent of a "consumer" that appears elsewhere in the clause.
+NATIVE_REACH_BARE_SKILLS = re.compile(
+    r'\b(?:invocation|invoke|invoking|invokes|natively|load|loading|loads)\s+(?:(?:of|for)\s+)?'
+    r'(?:(?:all|any|every|each|the|other|these|your)\s+)*skills?\b', re.I)
+# A read told to cover "any bundled skill" also covers the two native-only bundled skills.
+NATIVE_REACH_OVERBROAD_READ = re.compile(
+    r'\bread(?:s|ing)?\s+(?:(?:any|every|each|all)\s+(?:other\s+)?)bundled\s+skills?\b', re.I)
+# These also describe consumer and external skills, so a clause that scopes itself to
+# "consumer" or "external" skills (the native-only tier) is excused.
+NATIVE_REACH_WEAK_CLASS = re.compile(
+    r'\b(?:public|other)\s+leaf\b|\bleaf\s+(?:skill|principle)s?\b|\bleaves\b|\bpublic skills?\b'
+    r'|\bdependenc(?:y|ies)\b|\bsibling\s+(?:skills?|bodies|body)\b', re.I)
+NATIVE_REACH_SCOPE = re.compile(r'\b(?:consumer|external)\b', re.I)
+# Skill names that are also ordinary English words count only when formatted as a name
+# (`code`, **bold**, /slash, [link]), followed by "skill", or placed directly beside the
+# invocation word ("invoke swarm", "swarm natively"); every other name matches bare.
+PLAIN_WORD_SKILLS = {'architect', 'arena', 'bro', 'correct', 'how', 'interrogate', 'recall',
+                     'reflect', 'swarm', 'teach', 'why'}
+# Clauses reviewed and confirmed NOT to instruct native reach, though a trigger and a user-only
+# name both land in them: each one says native reach is disabled, never that an agent should
+# rely on it. Whitespace-normalized exact match on one clause.
+NATIVE_REACH_ALLOWLIST = {
+    "`disable-model-invocation: true` disables typescript-best-practices' preserved `paths` "
+    "auto-load, so reading or editing those files reads its SKILL.md in full first, as the "
+    "scoped bundled reference, then principle-type-system-discipline's the same way.",
+}
+MARKDOWN_BLOCK_START = re.compile(r'^\s*(?:[-*+]|\d+[.)])\s|^\s*#|^\s*\||^\s*```')
+SENTENCE_BREAK = re.compile(r'(?<=[.!?])\s+')
+FRONTMATTER = re.compile(r'\A---\r?\n.*?\r?\n---(?:\r?\n|\Z)', re.S)
+
+
+def markdown_clauses(text):
+    """Yield each clause of authored prose: one Markdown block (paragraph, list item, table
+    row, heading or code line) at a time, wrapped lines rejoined, then one sentence at a
+    time, then split at semicolons. A hyphen at a line end joins to the next word."""
+    blocks, current = [], []
+    for line in text.splitlines():
+        if not line.strip() or MARKDOWN_BLOCK_START.match(line):
+            if current:
+                blocks.append(current)
+            current = []
+        if line.strip():
+            current.append(line.strip())
+    if current:
+        blocks.append(current)
+    for block in blocks:
+        joined = re.sub(r'(?<=\w)-\s+(?=\w)', '-', ' '.join(block))
+        for sentence in SENTENCE_BREAK.split(' '.join(joined.split())):
+            for clause in sentence.split(';'):
+                if clause.strip():
+                    yield clause.strip()
+
+
+def skill_name_pattern(name):
+    escaped = re.escape(name)
+    if name in PLAIN_WORD_SKILLS:
+        article = r'(?:(?:the|each|every|any|a|an)\s+)?'
+        return (r'`/?' + escaped + r'`|\*\*' + escaped + r'\*\*|(?<![\w-])/' + escaped
+                + r'(?![\w-])|\[' + escaped + r'\]|(?<![\w-])' + escaped + r' skills?\b|\bskill '
+                + escaped + r'\b'
+                + r'|\binvo[ck]\w*\s+' + article + escaped + r'(?![\w-])'
+                + r'|(?<![\w-])' + escaped + r'\s+natively\b'
+                + r'|\bnative(?:ly)?[\s-]+' + article + escaped + r'(?![\w-])')
+    return r'(?<![\w-])' + escaped + r'(?![\w-])'
+
+
+def native_reach_violations(text, own=None):
+    """Return the clauses of `text` that tell an agent to reach a user-only skill natively.
+    `own` is the skill whose files hold the text: a skill may name itself. The unit is one
+    clause, so a reach word and a skill (or class word) split across clauses are not tied
+    together; that is why host.md states the rule once and the corpus in
+    tests/native_reach_corpus.py pins every spelling reviewers have found so far."""
+    names = sorted((n for n in USER_ONLY if n != own), key=len, reverse=True)
+    found = []
+    for clause in markdown_clauses(text):
+        stated = NATIVE_REACH_PROPERTY.sub(' ', clause)
+        if clause in NATIVE_REACH_ALLOWLIST:
+            continue
+        if NATIVE_REACH_OVERBROAD_READ.search(stated):
+            found.append(clause)
+            continue
+        if not NATIVE_REACH_TRIGGER.search(stated):
+            continue
+        if NATIVE_REACH_BARE_SKILLS.search(stated):
+            found.append(clause)
+            continue
+        scoped = bool(NATIVE_REACH_SCOPE.search(stated))
+        named = any(re.search(skill_name_pattern(n), stated) for n in names)
+        if (named or NATIVE_REACH_STRONG_CLASS.search(stated)
+                or (not scoped and (NATIVE_REACH_WEAK_CLASS.search(stated)
+                                    or NATIVE_REACH_UNSCOPED.search(stated)))):
+            found.append(clause)
+    return found
+
+
+def native_reach_errors(root):
+    """Fail when agent-facing text under plugin/ instructs reaching a USER_ONLY skill through
+    native invocation, native context or auto-load. Frontmatter is metadata, not an
+    instruction, so it is skipped; the tier it declares is checked against USER_ONLY elsewhere."""
+    errors = []
+    skills = root / 'plugin/skills'
+    for path in sorted((root / 'plugin').rglob('*.md')):
+        text = FRONTMATTER.sub('', path.read_text(), count=1)
+        own = path.relative_to(skills).parts[0] if path.is_relative_to(skills) else None
+        for clause in native_reach_violations(text, own):
+            errors.append(path.relative_to(root).as_posix() + ': ' + clause)
     return errors
 
 
@@ -338,7 +501,7 @@ def check(root=ROOT):
                 'policy:\n  allow_implicit_invocation: ' + str(not manual).lower() + '\n',
                 'native invocation policy differs: ' + name)
         if not name.startswith('principle-'):
-            require('The host contract supersedes inherited sibling-body reads.' in text
+            require('The host contract governs how this skill reaches any sibling dependency.' in text
                     and '[host contract](../../adapters/host.md)' in text,
                     'native dependency boundary missing: ' + name)
     for relative in ['skills/hugues-mode/playbooks/mobile-proof.md',
@@ -373,6 +536,8 @@ def check(root=ROOT):
     require(not cursor_models, 'Cursor model wiring in installed skills: ' + ', '.join(cursor_models))
     texts = {p: (root / p).read_text() for p in [*ADAPTERS, *ADAPTER_RESOURCES, PROJECT_POLICY]}
     require(not adapter_errors(texts), 'adapter behavior differs: ' + '; '.join(adapter_errors(texts)))
+    reach_errors = native_reach_errors(root)
+    require(not reach_errors, 'user-only skill promised native reach: ' + '; '.join(reach_errors))
     mobile = {name: (root / f'plugin/skills/hugues-mode/playbooks/{name}.md').read_text()
               for name in ['kmp-bridge-change', 'cmp-two-target-change']}
     require(not mobile_route_errors(mobile), 'mobile workflow gates differ')

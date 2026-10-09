@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The candidate collects **351 top-level unittest cases**. One is a driver that
+The candidate collects **372 top-level unittest cases**. One is a driver that
 separately executes **50 frozen 0.2.0 restoration cases**. Do not add the driver
 and its children as independent coverage, or describe historical passes as current
 native workflow proof. Subtests are not added to case totals.
@@ -12,10 +12,10 @@ native workflow proof. Subtests are not added to case totals.
 | Historical 0.2.0 restoration driver | 1 | Executes 50 cases inside a separate hash-bound archive |
 | Current source/provenance checks | 44 | test_upstream_sync (33), test_retained_provenance (11) |
 | Current installed adapters and regressions | 97 | test_host_adapters (72), test_review_regressions (12), test_rereview_regressions (13) |
-| Current native-layout contracts | 34 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt and budgets |
-| Current progressive-disclosure contracts | 8 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories and bound resources |
-| Current installed-tolerance regressions | 9 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes and raw skill-read spellings |
-| Total collected | 351 | Current, mixed and historical scopes remain distinct |
+| Current native-layout contracts | 39 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt, budgets and the native-reach lint (a corpus of 45 reviewed contradictions in five line shapes each, 16 correct sentences, the package wiring and a one-entry allowlist) |
+| Current progressive-disclosure contracts | 11 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories, the skill-list budget (including its pinned pre-PR `a67df90` point), YAML-description quoting and bound resources |
+| Current installed-tolerance regressions | 22 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes, every spelling of a raw skill read, every revision/syntax a skill-body guard must still check, the plan-check helper's operand, and a rejection matrix of 1,840 cases (306 `read-workflow`, 1,484 `translate-plan` and 50 in-plan cases) over all 50 bundled skills, their legacy aliases, consumer and external paths, with symlink and traversal cases and positive controls |
+| Total collected | 372 | Current, mixed and historical scopes remain distinct |
 
 The 131 historical modules are test_wp2_contract (45), test_wp3_contract (15),
 test_retained_design (7), test_retained_research (8), test_retained_verification (6),
@@ -28,6 +28,30 @@ native-layout plus eight disclosure cases gives 337, without dropping the frozen
 50 executions or counting them twice. The preceding native candidate had 329.
 The review-fix pass adds five native-layout and nine installed-tolerance cases,
 giving 351. The historical driver now also fails when any nested case is skipped.
+Restoring pstack's router design adds one skill-list budget disclosure case,
+giving 352. PR 1 fix round 1 adds one native-layout case (an unknown skill body
+still refuses translation), one disclosure case (YAML-description quoting) and
+two installed-tolerance cases (a bundled skill's exact SKILL.md path now
+translates and reads; round 3 reversed both), giving 356. PR 1 fix round 2 adds two native-layout
+cases (the native-reach lint rejects a reintroduced contradiction, and passes
+the reviewed auto-load-disabled sentence), one disclosure case (the pinned
+`a67df90` pre-PR skill-list point recomputes to 46 skills and the Issue's
+cited character count) and four installed-tolerance cases (a skill-body guard
+still fires at every Git revision and unsupported shell form, and
+`hugues-mode`/`setup-huguesstack` stay native-only for both `read-workflow`
+and `translate-plan`), giving 363. PR 1 fix round 3 takes the helper relaxation
+back out: the cases that translated and read a bundled SKILL.md become
+refusals, and seven installed-tolerance cases are added (the six-case
+rejection matrix over every bundled skill, alias, consumer and external path
+and plan form, and a consumer-symlink case) with two native-layout cases (the
+reworked native-reach lint now has a reviewed-contradiction corpus, a
+package-wiring case, a correct-sentence case and an allowlist case, replacing
+two), giving 372. PR 1 fix round 4 adds no case: it adds ten contradictions
+and four correct sentences to the lint corpus (the mobile-workflows sentence,
+the fresh-worker read of "any bundled skill", and host-loading spellings), widens
+the lint to catch them and records its limits in the corpus file, and extends
+the adapter-partition case to the mobile adapter's recorded replacement, so the
+total stays 372.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.
@@ -35,8 +59,12 @@ Bindings cover canonical files, metadata, adapters, policies, runtime code and
 permission modes. Tests reject missing/extra files, symlinks, world-writable files,
 changed executable bits, bootstrap execution before verification, poisoned
 bytecode caches, consumer path ownership errors and unsupported shell shapes.
-Public SKILL.md reads and aliases, in any path or quoting spelling, are explicitly rejected in favor of native invocation; tests do not simulate a
-successful host permission decision.
+No SKILL.md is returned by `read-workflow` or translated by `translate-plan`:
+every spelling (a bundled skill's exact path or legacy alias, a wrong prefix,
+an absolute path, a consumer, external or model-invocable skill, at any Git
+revision or shell form) is rejected, so no helper read can stand in for a
+native invocation or for the agent's own file read of a user-only skill.
+Tests do not simulate a successful host permission decision.
 
 The unchanged activity parser is exercised with synthetic Claude/Codex records,
 relative contexts, malformed/unsupported inputs, empty sources, duplicate/deep

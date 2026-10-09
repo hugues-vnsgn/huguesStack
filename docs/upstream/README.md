@@ -8,6 +8,16 @@ core mirror and generated body loaders are retired. The current ledger and
 provenance-only assets. Historical releases and source snapshots remain unchanged.
 See [migration contracts](../NATIVE-CONSOLIDATION.md). A pin upgrade is separate.
 
+A later native restoration made 46 of the 50 skills model-invocable, so every
+description entered the host's per-turn skill list. The skill-list-budget work
+reverses that: it returns to pstack's own router design, where only
+`poteto-mode` (here `hugues-mode`) was model-invocable and read every other
+skill as a file. Only `hugues-mode` and `setup-huguesstack` stay
+model-invocable now; the other 48 bundled skills are user-only again, which is
+the host invocation table's `user_only` list in [consolidation.json](consolidation.json).
+This is an invocation-exposure change only: no upstream responsibility,
+destination or disposition moves.
+
 # Upstream sync
 
 WP5 pins [cursor/plugins pstack 0.15.9](https://github.com/cursor/plugins/tree/e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a/pstack)

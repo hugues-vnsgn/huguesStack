@@ -12,10 +12,14 @@ custom runtime registry or custom host loader. `poteto-mode` maps to `hugues-mod
 `poteto-agent` to `hugues-agent`, `Comment Sicko` to `hugues-comment-sicko`,
 and `setup-pstack` to `setup-huguesstack`; other public names are unchanged.
 
-Only `automate-me`, `make-bot-ui`, `recall` and `reflect` are user-only entry
-points; they mine personal history or expose services. Every other bundled skill,
-including `hugues-mode` and each `principle-*`, is model-invocable: when a step
-names it, invoke it through the native skill tool rather than asking the user.
+Only `hugues-mode` and `setup-huguesstack` are model-invocable; their
+descriptions enter the host's skill list. Every other bundled skill, including
+each `principle-*`, is user-only: the owner can still type it by name. An agent
+reads its SKILL.md in full as the scoped bundled reference, with the host's own
+file-read tool and resolved as an owned resource below. The installed helpers
+never read a skill body. A missing or unreadable path holds the dependent step.
+A native denial on such a skill does not stop the host's file read; the owner's real
+control over those skills is enabling or disabling the plugin as a whole.
 
 Inherited Cursor worker wording translates before any dispatch: `poteto-agent` is
 the registered `hugues-agent`, `generalPurpose` is Claude Code's `general-purpose`
@@ -23,9 +27,11 @@ agent, `run_in_background: true` is the host's background option, and Cursor mod
 slugs are role defaults to resolve against models the native tool exposes. Read
 [workers and models](host-workers.md) before the dispatch itself.
 
-Invoke each bundled, consumer or external skill through the host's supported native mechanism. Respect
-manual-only selection, owner-disabled entries and native denials; never use a file read as an invocation fallback.
-Unavailable, disabled, denied or unknown invocation stops the dependent step.
+Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill (the
+native-only skills) only through the host's supported native mechanism. Respect
+manual-only selection, owner-disabled entries and native denials; for those skills, never use a file read as an invocation fallback.
+For a native-only skill, unavailable, disabled, denied or unknown invocation stops
+the dependent step.
 When supported execution requires explicit user invocation, provide the exact
 native command and wait; do not imply this handoff is always required. A model's
 printed slash or dollar command is not proof that a native invocation occurred.
@@ -33,11 +39,14 @@ An available file or a successful binding check establishes no skill permission.
 Read ordinary references owned by the invoked skill only when its phase needs them.
 Resolve relative resources from their owning file or the stated mode root, never
 from the consumer cwd. Do not recursively traverse navigation links or eagerly
-invoke all linked skills. This contract overrides inherited raw sibling-read wording.
+invoke all linked skills. This native-mechanism requirement overrides inherited
+raw sibling-read wording for the native-only skills alone; a bundled user-only
+skill keeps that read wording (the scoped bundled reference above).
 For a principles consultation from figure-it-out, use already-loaded mode context
-or a supported native invocation scoped to principles only: never restart task routing.
-A fresh worker must obtain its own native context; a parent's claim of permission
-is insufficient. Missing capability holds the phase without scanning user settings.
+or read the needed principle's SKILL.md in full: never restart task routing.
+A fresh worker reads any bundled user-only skill itself. It starts its own native
+invocation of any native-only skill; a parent's claim of permission is
+insufficient. Missing capability holds the phase without scanning user settings.
 
 The mode applies the pinned router, including figure-it-out for large,
 cross-cutting or unmatched work and Orchestrate for standing programs. For a

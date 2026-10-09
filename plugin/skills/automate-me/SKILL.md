@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Before these workflow steps, apply the [host contract](../../adapters/host.md)
 and [mobile applicability](../../adapters/mobile.md#applicability).
-The host contract supersedes inherited sibling-body reads.
+The host contract governs how this skill reaches any sibling dependency.
 
 # Automate me
 
@@ -66,7 +66,7 @@ Group the combined signals into sections. Common ones (use only what applies):
 - **Process**: git worktrees, commits, PRs, review/merge tooling.
 - **Skills**: skill-authoring habits, fix-the-skill-first, proposing new skills.
 
-The **hugues-mode** skill shows the shape. Read it for granularity. Don't copy its content. The user's rules are not the same as hugues-mode's.
+The **hugues-mode** skill shows the shape. Take its granularity from the loaded mode, invoking it natively first if it is not in context; a file read is no substitute. Don't copy its content. The user's rules are not the same as hugues-mode's.
 
 ### 4. Draft the skill
 

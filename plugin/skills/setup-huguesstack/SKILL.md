@@ -1,13 +1,13 @@
 ---
 name: setup-huguesstack
-description: Configure which models pstack uses per role and at what reasoning budget. Detects the models your host's agent tool accepts and writes a project model-role file that overrides the skill defaults. Use for /setup-huguesstack, "configure pstack models", "pstack budget", or changing pstack's model choices.
+description: Configure huguesStack's model and reasoning budget per role. Use for /setup-huguesstack or changing which models huguesStack uses.
 ---
 
 ## Host invocation contract
 
 Before these workflow steps, apply the [host contract](../../adapters/host.md)
 and [mobile applicability](../../adapters/mobile.md#applicability).
-The host contract supersedes inherited sibling-body reads.
+The host contract governs how this skill reaches any sibling dependency.
 
 # Setup pstack
 
@@ -95,4 +95,4 @@ Tell the user the file was written and that each skill reads it at its next role
 
 ### 7. Offer a verification skill (optional)
 
-Check whether the project has a way to drive the real app for proof (a `verify-*` skill, or an existing harness). If not, offer once: "want a project-local verification skill, so agents can drive the app the way a user does and prove changes work? I can generate one with /create-verification-skill." On yes, invoke `/create-verification-skill` (resolves wherever pstack is installed: workspace, user, or plugin). On no, move on without pushing.
+Check whether the project has a way to drive the real app for proof (a `verify-*` skill, or an existing harness). If not, offer once: "want a project-local verification skill, so agents can drive the app the way a user does and prove changes work? I can generate one with /create-verification-skill." On yes, read `create-verification-skill`'s SKILL.md in full as the bundled reference and follow it, resolved from its own file or the plugin root, never the consumer workspace. On no, move on without pushing.

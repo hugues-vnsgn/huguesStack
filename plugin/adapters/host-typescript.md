@@ -1,7 +1,10 @@
 # TypeScript invocation scope
 
-TypeScript paths remain `**/*.ts` and `**/*.tsx`; apply its registered guidance
-when reading or editing those files and invoke principle-type-system-discipline first.
-The original path metadata is preserved in the canonical entry. If a host ignores it,
-select the skill explicitly by the actual file type. Mobile specialization adds
+TypeScript paths remain `**/*.ts` and `**/*.tsx`; `disable-model-invocation: true`
+disables typescript-best-practices' preserved `paths` auto-load, so reading or
+editing those files reads its SKILL.md in full first, as the scoped bundled
+reference, then principle-type-system-discipline's the same way.
+The path metadata stays on the canonical entry as provenance only, never a
+working auto-load; select the skill explicitly by the actual file type on every
+host. Mobile specialization adds
 applicable guidance through the mobile adapter without deleting other languages.

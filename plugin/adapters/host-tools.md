@@ -1,8 +1,8 @@
 # Installed planning and worktree audit commands
 
 These are mechanical translations of bundled operands in the canonical playbooks.
-Invoke the selected native skill first and preserve its todo order, verification rules,
-explicit execution go and active/pinned-chat gate. Python 3 and Git must already
+Reach the selected skill first, as [host.md](host.md) directs, and preserve its todo order,
+verification rules, explicit execution go and active/pinned-chat gate. Python 3 and Git must already
 be available; plan validation also needs Node. Missing tools block the gate.
 The adapters do not install dependencies, fetch, query a forge or delete anything.
 
@@ -37,13 +37,14 @@ Reread an owned playbook through the saved binding:
 python3 "<plugin>/adapters/host_tools.py" read-workflow --binding "<program>/plugin-binding.json" skills/hugues-mode/playbooks/feature.md
 ```
 
-Public `SKILL.md` reads are rejected, including legacy aliases. Invoke the skill
-through the host's supported native mechanism. A helper cannot grant invocation
-permission or report an owner-disabled skill as enabled. If required native
-invocation is unavailable or denied, hold the dependent phase. Manual handoff is
-conditional on host behavior, not a universal requirement. Owned references and
-playbooks are ordinary resources; never move a disabled sibling body into them
-as an invocation workaround.
+The helper never reads a skill body: `read-workflow` rejects every `SKILL.md`,
+including a bundled skill's own, a legacy alias and any consumer or external
+skill's. Read a bundled user-only skill's `SKILL.md` with the host's own
+file-read tool, resolved per [host.md](host.md); a plan names the skill to apply,
+never a path to read. A helper cannot grant invocation permission or report an
+owner-disabled skill as enabled; the reach and denial rules are in [host.md](host.md).
+Owned references and playbooks are ordinary resources; never move a skill body
+into them as an invocation workaround.
 
 Translate the filled bundled references in multi-phase-plan, autopilot-full and
 autopilot-stack before handing the plan to another worker:
@@ -65,8 +66,10 @@ with one plan operand. Markdown references and reads become quoted, binding-guar
 `read-workflow` commands; no direct installed-file read is emitted. Other Git
 revisions, unknown consumer-owned `pstack/...` paths, and prefixed paths remain
 unchanged. Unsupported commands that contain a bundled operand block translation
-instead of being partially rewritten. Bundled input commands accept literal operands
-and ordinary quoting for spaces; shell operators, substitutions, globs, brace or
+instead of being partially rewritten. A literal `skills/<name>/SKILL.md` operand
+blocks translation at every Git revision and in every supported shell form,
+including as the plan-check helper's operand. Bundled input commands accept
+literal operands and ordinary quoting for spaces; shell operators, substitutions, globs, brace or
 tilde syntax hold, including quoted operands containing those syntax characters.
 Use a plain literal plan path. Line continuations and heredoc syntax are outside
 this translator's input contract and hold before individual fragments are processed.
