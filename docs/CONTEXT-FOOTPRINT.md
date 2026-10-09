@@ -142,6 +142,9 @@ source evidence, generated prompts, tool output, retries and native host
 overhead have unknown size. Every modeled dependency is counted even if its
 invocation would hold in a real host. Complete execution totals remain null.
 No live session established the intended on-demand behavior or token savings.
+The [router eval](hugues-mode-router-eval.md) ran five tasks in Claude Code and
+observed the router firing in none of the four that the Issue expects it to fire
+on, on `main` and on the branch alike, and staying quiet on the casual task.
 
 ## Helper inputs and evidence limits
 
