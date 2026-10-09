@@ -41,16 +41,10 @@ The helper never reads a skill body: `read-workflow` rejects every `SKILL.md`,
 including a bundled skill's own, a legacy alias and any consumer or external
 skill's. Read a bundled user-only skill's `SKILL.md` with the host's own
 file-read tool, resolved per [host.md](host.md); a plan names the skill to apply,
-never a path to read. Reach `hugues-mode`, `setup-huguesstack` and each consumer
-or external skill through the host's supported native mechanism. A helper
-cannot grant invocation permission or report an owner-disabled skill as
-enabled. If required native invocation is unavailable or denied, hold the
-dependent phase. Manual handoff is conditional on host behavior, not a
-universal requirement. A native denial on a bundled user-only skill does not
-stop the host's file read; the owner's real control over those skills is
-enabling or disabling the plugin as a whole. Owned references and playbooks
-are ordinary resources; never move a skill body into them as an invocation
-workaround.
+never a path to read. A helper cannot grant invocation permission or report an
+owner-disabled skill as enabled; the reach and denial rules are in [host.md](host.md).
+Owned references and playbooks are ordinary resources; never move a skill body
+into them as an invocation workaround.
 
 Translate the filled bundled references in multi-phase-plan, autopilot-full and
 autopilot-stack before handing the plan to another worker:

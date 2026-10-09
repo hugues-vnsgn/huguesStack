@@ -18,6 +18,8 @@ each `principle-*`, is user-only: the owner can still type it by name. An agent
 reads its SKILL.md in full as the scoped bundled reference, with the host's own
 file-read tool and resolved as an owned resource below. The installed helpers
 never read a skill body. A missing or unreadable path holds the dependent step.
+A native denial on such a skill does not stop the host's file read; the owner's real
+control over those skills is enabling or disabling the plugin as a whole.
 
 Inherited Cursor worker wording translates before any dispatch: `poteto-agent` is
 the registered `hugues-agent`, `generalPurpose` is Claude Code's `general-purpose`
@@ -28,7 +30,8 @@ slugs are role defaults to resolve against models the native tool exposes. Read
 Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill (the
 native-only skills) only through the host's supported native mechanism. Respect
 manual-only selection, owner-disabled entries and native denials; for those skills, never use a file read as an invocation fallback.
-Unavailable, disabled, denied or unknown invocation stops the dependent step.
+For a native-only skill, unavailable, disabled, denied or unknown invocation stops
+the dependent step.
 When supported execution requires explicit user invocation, provide the exact
 native command and wait; do not imply this handoff is always required. A model's
 printed slash or dollar command is not proof that a native invocation occurred.
@@ -41,7 +44,7 @@ raw sibling-read wording for the native-only skills alone; a bundled user-only
 skill keeps that read wording (the scoped bundled reference above).
 For a principles consultation from figure-it-out, use already-loaded mode context
 or read the needed principle's SKILL.md in full: never restart task routing.
-A fresh worker reads any bundled skill itself. It starts its own native
+A fresh worker reads any bundled user-only skill itself. It starts its own native
 invocation of any native-only skill; a parent's claim of permission is
 insufficient. Missing capability holds the phase without scanning user settings.
 

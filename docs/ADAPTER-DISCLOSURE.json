@@ -37,9 +37,18 @@
     },
     {
       "paragraph": 4,
-      "slice": [218, 886],
+      "slice": [218, 296],
       "destination": "plugin/adapters/host.md",
-      "sha256": "0225df356453952cb565d219d3d8c5f40bef7e20c43a74eec0aedb0edcf4fd9f"
+      "sha256": "7e5dd18594c351d94aae01f47218102e9213d6ce3f9435b3d9f1ab969b077bdc",
+      "disposition": "replaced",
+      "reason": "'Unavailable, disabled, denied or unknown invocation stops the dependent step' read as a rule for every skill, but a native denial on a bundled user-only skill does not stop its file read; PR 1 fix round 4 scopes the sentence to the native-only skills and states the user-only half once, in the tier paragraph.",
+      "replacement": "For a native-only skill, unavailable, disabled, denied or unknown invocation stops\nthe dependent step."
+    },
+    {
+      "paragraph": 4,
+      "slice": [296, 886],
+      "destination": "plugin/adapters/host.md",
+      "sha256": "042531ad133d16a1fdd8709a346d40c2c320dadfdc2ace3095c994aee1e222dc"
     },
     {
       "paragraph": 4,
@@ -56,8 +65,8 @@
       "destination": "plugin/adapters/host.md",
       "sha256": "74195c3c6c409ed21724d998466d87b7355c4758c735a52616d2762161501cda",
       "disposition": "replaced",
-      "reason": "A figure-it-out principles consultation naming 'a supported native invocation scoped to principles only' and a fresh worker needing to 'obtain its own native context' both assumed principles stay model-invocable, which disable-model-invocation: true now forbids; PR 1 fix round 2 read the principle's SKILL.md in full instead, and round 3 splits the fresh-worker sentence so the read of a bundled skill and the native invocation of a native-only skill are separate duties, with no unscoped 'native context'.",
-      "replacement": "For a principles consultation from figure-it-out, use already-loaded mode context\nor read the needed principle's SKILL.md in full: never restart task routing.\nA fresh worker reads any bundled skill itself. It starts its own native\ninvocation of any native-only skill; a parent's claim of permission is\ninsufficient. Missing capability holds the phase without scanning user settings."
+      "reason": "A figure-it-out principles consultation naming 'a supported native invocation scoped to principles only' and a fresh worker needing to 'obtain its own native context' both assumed principles stay model-invocable, which disable-model-invocation: true now forbids; PR 1 fix round 2 read the principle's SKILL.md in full instead, and round 3 splits the fresh-worker sentence so the read of a bundled skill and the native invocation of a native-only skill are separate duties, with no unscoped 'native context'; round 4 limits that read to bundled user-only skills, because hugues-mode and setup-huguesstack are bundled but native-only.",
+      "replacement": "For a principles consultation from figure-it-out, use already-loaded mode context\nor read the needed principle's SKILL.md in full: never restart task routing.\nA fresh worker reads any bundled user-only skill itself. It starts its own native\ninvocation of any native-only skill; a parent's claim of permission is\ninsufficient. Missing capability holds the phase without scanning user settings."
     },
     {
       "paragraph": 5,
@@ -218,5 +227,14 @@
   ],
   "mobile_source": "plugin/adapters/mobile.md",
   "mobile_destination": "plugin/adapters/mobile-workflows.md",
-  "mobile_sha256": "11a718eeaa16d23528b72f2791e5b80e360398c5fa85069af6b03904c2c5f228"
+  "mobile_sha256": "11a718eeaa16d23528b72f2791e5b80e360398c5fa85069af6b03904c2c5f228",
+  "mobile_fragments": [
+    {
+      "slice": [4086, 4202],
+      "sha256": "ed8f2484bf9d78f7c01fb5262007d87d5e99e249197f1731bae7b494c751ba77",
+      "disposition": "replaced",
+      "reason": "'use supported native invocation for skills; never substitute direct body reads for unavailable or denied invocation' was unscoped, loaded on every mobile task, and sent an agent to native invocation of a bundled user-only skill such as tdd, which is refused; PR 1 fix round 4 scopes it to consumer and external skills and points a bundled user-only skill at host.md.",
+      "replacement": "use supported native invocation for consumer and external skills; never substitute\ndirect body reads for unavailable or denied invocation of those. A bundled user-only\nskill is read as [host.md](host.md) says."
+    }
+  ]
 }

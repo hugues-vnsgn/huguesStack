@@ -27,6 +27,19 @@ class ContextDisclosure(unittest.TestCase):
         self.assertIn('never use a file read as an invocation fallback', host)
         self.assertIn("reads its SKILL.md in full as the scoped bundled reference, with the host's own", host)
         self.assertIn('never read a skill body', host)
+        # The two halves of the user-only read, each stated once and only in host.md: a native
+        # denial does not stop the read, and "invocation stops the step" is scoped to the
+        # native-only skills. A fresh worker's read covers user-only skills, never the
+        # native-only two.
+        self.assertEqual(host.count("A native denial on such a skill does not stop the host's file read"), 1)
+        self.assertEqual(host.count('For a native-only skill, unavailable, disabled, denied or unknown invocation stops'), 1)
+        self.assertNotIn('\nUnavailable, disabled, denied or unknown invocation stops', host)
+        self.assertIn('A fresh worker reads any bundled user-only skill itself.', host)
+        self.assertNotIn('reads any bundled skill', host)
+        tools = (ROOT / 'plugin/adapters/host-tools.md').read_text()
+        self.assertNotIn('native denial', tools)
+        self.assertNotIn('enabling or disabling the plugin', tools)
+        self.assertIn('the reach and denial rules are in [host.md](host.md)', tools)
         self.assertNotIn('supersedes the native-only', host)
         self.assertNotIn('The native-only rule above governs', host)
         self.assertIn('never restart task routing', host)
@@ -70,9 +83,24 @@ class ContextDisclosure(unittest.TestCase):
             self.assertNotIn(fragment, host_text)
         self.assertNotIn('Invoke each bundled, consumer or external skill', host_text)
         self.assertNotIn('This contract overrides inherited raw sibling-read wording.', host_text)
+        # mobile_sha256 pins the baseline file; the destination is that baseline with every
+        # recorded replacement applied and nothing else changed.
+        original_mobile = baseline[receipt['mobile_source']]
+        self.assertEqual(hashlib.sha256(original_mobile.encode()).hexdigest(), receipt['mobile_sha256'])
+        expected_mobile, cursor = [], 0
+        for row in receipt['mobile_fragments']:
+            start, end = row['slice']
+            fragment = original_mobile[start:end]
+            self.assertGreaterEqual(start, cursor)
+            self.assertEqual(hashlib.sha256(fragment.encode()).hexdigest(), row['sha256'])
+            self.assertEqual(row['disposition'], 'replaced')
+            self.assertTrue(row.get('reason'), 'a replaced fragment needs a reason')
+            expected_mobile += [original_mobile[cursor:start], row['replacement']]
+            cursor = end
+        expected_mobile.append(original_mobile[cursor:])
         mobile = (ROOT / receipt['mobile_destination']).read_bytes()
-        self.assertEqual(mobile, baseline[receipt['mobile_source']].encode())
-        self.assertEqual(hashlib.sha256(mobile).hexdigest(), receipt['mobile_sha256'])
+        self.assertEqual(mobile, ''.join(expected_mobile).encode())
+        self.assertNotIn(b'native invocation for skills', mobile)
 
     def adapter_texts(self):
         return {p: (ROOT / p).read_text() for p in

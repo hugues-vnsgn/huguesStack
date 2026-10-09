@@ -12,7 +12,7 @@ native workflow proof. Subtests are not added to case totals.
 | Historical 0.2.0 restoration driver | 1 | Executes 50 cases inside a separate hash-bound archive |
 | Current source/provenance checks | 44 | test_upstream_sync (33), test_retained_provenance (11) |
 | Current installed adapters and regressions | 97 | test_host_adapters (72), test_review_regressions (12), test_rereview_regressions (13) |
-| Current native-layout contracts | 39 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt, budgets and the native-reach lint (a corpus of 35 reviewed contradictions in five line shapes each, 12 correct sentences, the package wiring and a one-entry allowlist) |
+| Current native-layout contracts | 39 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt, budgets and the native-reach lint (a corpus of 45 reviewed contradictions in five line shapes each, 16 correct sentences, the package wiring and a one-entry allowlist) |
 | Current progressive-disclosure contracts | 11 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories, the skill-list budget (including its pinned pre-PR `a67df90` point), YAML-description quoting and bound resources |
 | Current installed-tolerance regressions | 22 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes, every spelling of a raw skill read, every revision/syntax a skill-body guard must still check, the plan-check helper's operand, and a rejection matrix of 1,840 cases (306 `read-workflow`, 1,484 `translate-plan` and 50 in-plan cases) over all 50 bundled skills, their legacy aliases, consumer and external paths, with symlink and traversal cases and positive controls |
 | Total collected | 372 | Current, mixed and historical scopes remain distinct |
@@ -46,7 +46,12 @@ rejection matrix over every bundled skill, alias, consumer and external path
 and plan form, and a consumer-symlink case) with two native-layout cases (the
 reworked native-reach lint now has a reviewed-contradiction corpus, a
 package-wiring case, a correct-sentence case and an allowlist case, replacing
-two), giving 372.
+two), giving 372. PR 1 fix round 4 adds no case: it adds ten contradictions
+and four correct sentences to the lint corpus (the mobile-workflows sentence,
+the fresh-worker read of "any bundled skill", and host-loading spellings), widens
+the lint to catch them and records its limits in the corpus file, and extends
+the adapter-partition case to the mobile adapter's recorded replacement, so the
+total stays 372.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.

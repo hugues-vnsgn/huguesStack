@@ -282,7 +282,7 @@ class NativeIntegrity(unittest.TestCase):
             seal_payload.seal(self.root)
 
     def test_native_reach_lint_flags_every_reviewed_contradiction(self):
-        # Root cause of PR 1 fix rounds 1 to 3: the rule for reaching a user-only skill was
+        # Root cause of PR 1 fix rounds 1 to 4: the rule for reaching a user-only skill was
         # restated across many files, so each round's review found another spelling of the
         # same contradiction. native_reach_corpus holds every spelling found so far. The lint
         # must flag each one however the line is wrapped, listed or embedded.
@@ -293,7 +293,7 @@ class NativeIntegrity(unittest.TestCase):
             yield 'wrapped inside hyphenated names', textwrap.fill(flat, 23)
             yield 'list item', '- ' + flat
             yield 'embedded in a paragraph', 'An unrelated opening sentence.\n\n' + text + '\n\nAn unrelated closing one.'
-        self.assertGreaterEqual(len(native_reach_corpus.CONTRADICTIONS), 30)
+        self.assertGreaterEqual(len(native_reach_corpus.CONTRADICTIONS), 45)
         for label, text in native_reach_corpus.CONTRADICTIONS:
             for shape, variant in variants(text):
                 with self.subTest(label=label, shape=shape):

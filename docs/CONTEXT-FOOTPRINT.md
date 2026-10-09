@@ -36,11 +36,11 @@ assumptions and mandatory transitive inputs are in the
 | Scenario | Released 0.2.0, estimated tokens | Before disclosure | After disclosure | Bytes before → after |
 |---|---:|---:|---:|---:|
 | Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,685.5 | 14,803 → 14,745 |
-| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,752.25 | 45,289 → 35,051 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,325.25 | 135,888 → 133,363 |
-| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,021.75 | 146,269 → 144,149 |
+| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,800.75 | 45,289 → 35,245 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,373.75 | 135,888 → 133,557 |
+| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,070.25 | 146,269 → 144,343 |
 
-The routing inventory falls about 22.6% from the previous native candidate.
+The routing inventory falls about 22.2% from the previous native candidate.
 Complete bundled workflow inventories fall less, because worker dispatch,
 verification and publication instructions still apply. The bug-fix profile
 includes how, why, TDD, source-control investigation and synthesis prompts,
@@ -88,9 +88,9 @@ the actual commit this restoration branched from and the exact revision the
 Issue's Problem Statement cites (46 model-invocable skills, 9,844 description
 characters, close to but not forced to equal the owner's earlier informally
 recorded 9,869, since that number was recorded rather than recomputed from
-pinned bytes). The other 48 skills are user-only: typed by
-name, and read in full by the mode as its router reference, never by native
-invocation. [Host validation](skill-list-host-validation.md) observed, at
+pinned bytes). The other 48 skills are user-only: the owner types one by
+name, and the mode reads it in full as its router reference. The agent never
+invokes one natively; the owner still can. [Host validation](skill-list-host-validation.md) observed, at
 code commit `2559b5d`, that Claude Code's attached skill list grows by exactly
 two when the plugin loads, that exactly two huguesStack entries reach Codex's
 rendered skills block (which cuts the router's description at 243 of its 312
@@ -103,8 +103,8 @@ its own mandatory sections optional would change its agreed full-body loading
 contract.
 
 The old 9,182-versus-9,111 comparison counted only mode entry plus unconditional
-adapters, before a reply or task. That narrower read set is now 26,530 bytes,
-about 6,622.5 estimated tokens, mostly the longer router description. It must
+adapters, before a reply or task. That narrower read set is now 26,724 bytes,
+about 6,671.0 estimated tokens, mostly the longer router description. It must
 not replace the routing-reply row above, which also includes the selected
 bug-fix playbook and mandatory unslop dependency.
 
@@ -119,8 +119,8 @@ workers can load it again. The scenarios state five workers for the bug fix,
 including one mode worker, and fifteen for the feature, including eight mode
 workers. A separately reported mode-worker floor counts the required mode,
 agent and applicable shared guidance once per fresh mode worker. It falls from
-9,403.5 to 8,109.75 estimated tokens for the bug-fix worker, and from 75,228 to
-64,878.0 for the eight feature workers. These partial floors exclude other worker
+9,403.5 to 8,158.25 estimated tokens for the bug-fix worker, and from 75,228 to
+65,266.0 for the eight feature workers. These partial floors exclude other worker
 skills, role inputs and evidence; they are not additive to the unique inventories.
 
 External control/deslop/agent-writing instructions, consumer configuration,

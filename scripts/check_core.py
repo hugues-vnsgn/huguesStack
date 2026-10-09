@@ -239,23 +239,44 @@ def adapter_errors(texts):
 
 
 # Native-reach lint. A user-only skill cannot be invoked by a model, so agent-facing text
-# must never tell an agent to reach one natively; the agent reads its SKILL.md instead
-# (host.md states that rule once). Reviews of PR 1 found the same contradiction in rounds
-# one, two and three, each time in a spelling the previous lint missed, so the lint works on
-# whole clauses and on three kinds of evidence, each independent of the others:
+# must never tell an agent to reach one natively or through the host; the agent reads its
+# SKILL.md instead (host.md states that rule once). Reviews of PR 1 found the same
+# contradiction in rounds one to four, each time in a spelling the previous lint missed, so
+# the lint works on whole clauses and on these kinds of evidence, each independent of the
+# others:
 #   * a skill named in the USER_ONLY table (the only list; never a second copy);
 #   * a class word that stands for user-only skills ("principles", "bundled", "dependency");
-#   * a phrase that promises native reach without naming any skill ("native context").
+#   * a phrase that promises native reach without naming any skill ("native context");
+#   * a reach word aimed at skills with no class named at all ("native invocation for
+#     skills"), where a "consumer" elsewhere in the clause qualifies something else;
+#   * a read told to cover any bundled skill, which includes the two native-only ones.
+# Known limit, pinned in tests/native_reach_corpus.py: a prohibition that names no skill and
+# no class ("never substitute direct body reads") is not caught, because the same words are
+# correct in host.md's "for those skills" form and in a consumer project-skill template.
 NATIVE_REACH_TRIGGER = re.compile(
     r'\binvo[ck]\w*|\bnatively\b|\bauto-?load\w*|\bskill tool\b'
     r'|\bnative[\s-]+(?:invo\w*|skill|context|host|mechanism|entry)\b'
-    r'|\bnative\s+\S+\s+(?:skill|entry)\b', re.I)
+    r'|\bnative\s+\S+\s+(?:skill|entry)\b'
+    # Reach left to the host: "let the host load X", "host loading", "loaded by the host".
+    r'|\b(?:host|harness)(?:\'s)?[\s-]+(?:auto-?)?(?:load|inject|attach|activat|surfac)\w*'
+    r'|\b(?:load|inject|attach|activat|surfac)\w*\s+(?:\w+\s+){0,3}?(?:by|through|via)\s+the\s+(?:host|harness)\b'
+    r'|\b(?:host|harness)\s+(?:to\s+)?(?:load|inject|attach|activate|surface)\b', re.I)
 # Names of a tier or a policy field state a property, never an instruction to invoke.
 NATIVE_REACH_PROPERTY = re.compile(
     r'(?:disable-)?model-invoc\w*|allow_implicit_invocation|implicit[\s-]+invoc\w*', re.I)
 NATIVE_REACH_UNSCOPED = re.compile(r'\bnative[\s-]+(?:skill|context)\b|\bskill invocations?\b', re.I)
 # "bundled" and the principle family are always user-only, so no qualifier excuses them.
-NATIVE_REACH_STRONG_CLASS = re.compile(r'\bprinciples?\b|\bprinciple-\*|\bbundled\b', re.I)
+NATIVE_REACH_STRONG_CLASS = re.compile(
+    r'\bprinciples?\b|\bprinciple-\*|\bbundled\b|\buser-only\b', re.I)
+# The object of a reach word is "skills" and nothing narrows it: no consumer, external,
+# project, native-only or "those" in front. Only determiners may sit between, so this is
+# independent of a "consumer" that appears elsewhere in the clause.
+NATIVE_REACH_BARE_SKILLS = re.compile(
+    r'\b(?:invocation|invoke|invoking|invokes|natively|load|loading|loads)\s+(?:(?:of|for)\s+)?'
+    r'(?:(?:all|any|every|each|the|other|these|your)\s+)*skills?\b', re.I)
+# A read told to cover "any bundled skill" also covers the two native-only bundled skills.
+NATIVE_REACH_OVERBROAD_READ = re.compile(
+    r'\bread(?:s|ing)?\s+(?:(?:any|every|each|all)\s+(?:other\s+)?)bundled\s+skills?\b', re.I)
 # These also describe consumer and external skills, so a clause that scopes itself to
 # "consumer" or "external" skills (the native-only tier) is excused.
 NATIVE_REACH_WEAK_CLASS = re.compile(
@@ -325,7 +346,15 @@ def native_reach_violations(text, own=None):
     found = []
     for clause in markdown_clauses(text):
         stated = NATIVE_REACH_PROPERTY.sub(' ', clause)
-        if not NATIVE_REACH_TRIGGER.search(stated) or clause in NATIVE_REACH_ALLOWLIST:
+        if clause in NATIVE_REACH_ALLOWLIST:
+            continue
+        if NATIVE_REACH_OVERBROAD_READ.search(stated):
+            found.append(clause)
+            continue
+        if not NATIVE_REACH_TRIGGER.search(stated):
+            continue
+        if NATIVE_REACH_BARE_SKILLS.search(stated):
+            found.append(clause)
             continue
         scoped = bool(NATIVE_REACH_SCOPE.search(stated))
         named = any(re.search(skill_name_pattern(n), stated) for n in names)
