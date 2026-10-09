@@ -1,8 +1,8 @@
-# Native skill consolidation candidate
+# Native skill consolidation
 
-This unreleased candidate consolidates the 0.2.0 layout at `4ae13bb` without
+Version 0.3.0 consolidates the 0.2.0 layout at `4ae13bb` without
 changing the public set of 50 skills, 23 generic playbooks, four mobile playbooks,
-two agents or 15 specialized worker roles. No release, installation or live host
+two agents or 15 specialized worker roles. No installation or live host
 execution is implied by this document.
 
 ## Layout and ownership
@@ -135,10 +135,16 @@ full execution cost or runtime savings, and they predate PR 1's restoration
 of pstack's user-only tiering; see [context footprint](CONTEXT-FOOTPRINT.md)
 and [the budget record](CONTEXT-BUDGET.json) for current figures.
 
-Live discovery/invocation, disabled-skill and planning behavior remain
-UNVERIFIED for this consolidation candidate. Separate prior-layout trials cannot
-validate this source revision. No native host session was run against this candidate. Generic workflow content and mobile scope rules are retained; mobile
-redesign and optional automatic cross-skill composition are separate future work.
+Live Codex invocation, disabled-skill and planning behavior remain UNVERIFIED
+for this consolidation. Separate prior-layout trials cannot validate this source
+revision. Claude Code sessions on this layout are bounded: the
+[skill-list host validation](skill-list-host-validation.md) and the
+[router interactive check](router-interactive-check.md) observed it discovering
+the plugin, listing exactly two of its skills and invoking `hugues-mode` natively
+in one session. No workflow ran to completion, and the audit's compatibility with
+persisted transcripts remains unverified. Generic workflow content and mobile
+scope rules are retained; mobile redesign and optional automatic cross-skill
+composition are separate future work.
 
 Implementation review can proceed on this finite contract. A green static suite
 does not establish full runtime parity, unattended execution, native transcript

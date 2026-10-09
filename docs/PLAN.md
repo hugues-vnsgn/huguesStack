@@ -1,9 +1,9 @@
 # Historical 0.2.0 restoration plan
 
-This records the earlier PR #15 restoration scope. The current unreleased work
-is [native skill consolidation](NATIVE-CONSOLIDATION.md), with canonical bodies
-and archived upstream provenance. The publication authority recorded below
-belongs to that earlier task; it does not authorize publication of this candidate.
+This records the earlier PR #15 restoration scope. The current layout, released
+as 0.3.0, is [native skill consolidation](NATIVE-CONSOLIDATION.md), with canonical
+bodies and archived upstream provenance. The publication authority recorded below
+belongs to that earlier task; it does not extend to 0.3.0.
 
 The owner's 4 October source documents remain preserved in their original task folder and private planning snapshot. This public working plan records the subsequently approved pinned-core restoration. The original calendar ends **9 October, GMT+7**; no new deadline is introduced.
 

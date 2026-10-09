@@ -2,14 +2,16 @@
 
 huguesStack gives Claude Code and Codex a set of workflows for investigating, changing and checking code. It adds guidance for Swift/iOS, Kotlin/Android, Kotlin Multiplatform (KMP) shared logic and Compose Multiplatform (CMP) shared UI. Your app stays in its own repository.
 
-This **unreleased native-layout candidate** keeps 50 public skills, 23 generic
-playbooks, two agents and four mobile playbooks. Each skill now owns one canonical
-`SKILL.md`. Exact pstack 0.15.9 source remains in a provenance archive outside
-runtime discovery. The published 0.2.0 release and its evidence are unchanged.
+Version **0.3.0** keeps 50 public skills, 23 generic playbooks, two agents and
+four mobile playbooks. Each skill owns one canonical `SKILL.md`. Exact pstack
+0.15.9 source remains in a provenance archive outside runtime discovery. Only
+`hugues-mode` and `setup-huguesstack` appear in the host's skill list; the router
+reads the other 48 skills as files. The published 0.1.0 and 0.2.0 releases and
+their evidence are unchanged.
 
 ## Start with Claude Code
 
-For an already installed, signed-in CLI, load this candidate for one session from
+For an already installed, signed-in CLI, load this checkout for one session from
 your app directory (replace the absolute path):
 
 ```sh
@@ -17,8 +19,10 @@ claude --plugin-dir "/absolute/path/to/huguesStack/plugin"
 ```
 
 Confirm native discovery, then invoke `/hugues-stack:hugues-mode` with a small
-read-only request. Session-only package loading is documented host behavior;
-complete execution of this candidate has not been observed.
+read-only request. Session-only package loading is documented host behavior, and
+one interactive session of this layout loaded the plugin that way and fired the
+router. Complete execution of a workflow has not been observed; see the
+[interactive check](docs/router-interactive-check.md).
 
 ## Start with Codex
 
@@ -32,7 +36,7 @@ explains the boundary and a first-task workflow.
 
 The workflows ask the agent to inspect the project, keep a task checklist, use focused workers where required, verify the result and report missing evidence. Mobile changes need checks on the affected targets. huguesStack does not supply Xcode, Android tooling, model access or device control.
 
-The earlier 0.2.0 bounded trial confirmed Claude command discovery, but complete planning was blocked by isolated host startup/authentication. It did not establish full Claude/Codex workflow execution, native transcript compatibility, mobile behavior or unattended cleanup. Read the [0.2.0 release notes](docs/RELEASE-0.2.0.md) for the evidence and limits.
+The earlier 0.2.0 bounded trial confirmed Claude command discovery, but complete planning was blocked by isolated host startup/authentication. It did not establish full Claude/Codex workflow execution, native transcript compatibility, mobile behavior or unattended cleanup. Read the [0.3.0 release notes](docs/RELEASE-0.3.0.md) and the [0.2.0 release notes](docs/RELEASE-0.2.0.md) for the evidence and limits.
 
 ## Reference and maintenance
 

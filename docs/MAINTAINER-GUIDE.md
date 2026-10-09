@@ -1,6 +1,6 @@
 # huguesStack maintainer reference
 
-This reference describes the unreleased native consolidation of 0.2.0. Start with the [developer guide](DEVELOPER-GUIDE.md) for the current layout and invocation limits. Published release evidence remains bound to its original revision. The source pin remains pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`.
+This reference describes the native consolidation shipped in 0.3.0. Start with the [developer guide](DEVELOPER-GUIDE.md) for the current layout and invocation limits. Published release evidence remains bound to its original revision. The source pin remains pstack 0.15.9 at `e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a`.
 
 ## Load the intended checkout
 
@@ -10,7 +10,7 @@ Use a fresh Claude Code session in the intended consumer repository:
 claude --plugin-dir /absolute/path/to/huguesStack/plugin
 ```
 
-Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack and carries prerelease version 0.3.0-rc.1, because the native layout, payload schema 2 and bindings are incompatible with 0.2.0. Identify this unreleased candidate by its checkout path and exact commit as well as the cache/version label. Bounded development Claude discovery has been observed at its recorded head; a later checkout still needs its own invocation evidence.
+Verify discovery of hugues-mode and use the registered command the host exposes. The manifest name is hugues-stack and carries version 0.3.0, a new minor version because the native layout, payload schema 2 and bindings are incompatible with 0.2.0. Verify the checkout path and exact commit as well as the cache/version label. Claude discovery and router invocation were observed once, at commit `0988b56` (see the [interactive check](router-interactive-check.md)); a later checkout still needs its own invocation evidence.
 
 For Codex, use an already-authorized supported native invocation. If discovery or invocation is unavailable, disabled, denied or unknown, hold the dependent step. Provide a manual handoff only when the host requires explicit user invocation; never substitute a direct file read. These instructions authorize no host configuration changes or installations.
 

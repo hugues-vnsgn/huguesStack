@@ -1,7 +1,7 @@
-# Use the native consolidation candidate
+# Use huguesStack 0.3.0
 
-This is an unreleased adaptation of huguesStack 0.2.0. Your app stays in its own
-repository. Skills are instruction files for specific jobs; playbooks order the
+This guide is for version 0.3.0, the native layout that follows 0.2.0. Your app
+stays in its own repository. Skills are instruction files for specific jobs; playbooks order the
 steps of a larger task. Start with `hugues-mode` and describe the result you want.
 It retains the generic workflows and applicable Swift/iOS, Kotlin/Android,
 KMP and CMP proof rules.
@@ -17,8 +17,8 @@ performs no installation or authentication setup.
 
 ## Install in Claude Code
 
-This candidate is not published. Keep the existing release while reviewing it.
-For a session-only candidate load, start from your app directory:
+Version 0.3.0 loads for one session from a checkout of its `v0.3.0` tag. Keep an
+existing 0.2.0 install while you check it. Start from your app directory:
 
 ```sh
 claude --plugin-dir "/absolute/path/to/huguesStack/plugin"
@@ -28,14 +28,15 @@ Check native discovery before invoking `/hugues-stack:hugues-mode`. A package
 manifest check is not evidence that invocation succeeded. Do not modify global
 settings to force discovery or bypass an owner-disabled skill.
 
-For the unchanged published release, use its [0.2.0 release notes](RELEASE-0.2.0.md)
+For the earlier release, use its [0.2.0 release notes](RELEASE-0.2.0.md)
 and instructions at that tag. Its historical manual-loading instructions do not
-apply to this candidate's native invocation contract.
+apply to this version's native invocation contract. The [0.3.0 release
+notes](RELEASE-0.3.0.md) list what changed and what is unobserved.
 
 ## Use Codex
 
 Codex supports explicit skill invocation and project-native discovery. This
-candidate supplies canonical skills plus `agents/openai.yaml` invocation metadata.
+version supplies canonical skills plus `agents/openai.yaml` invocation metadata.
 Its exact package installation route has not been validated in a live Codex session.
 Use your host's supported native discovery route, and check that `hugues-mode`
 is available before invoking `$hugues-mode`. Keep the complete resource layout.
@@ -118,7 +119,7 @@ read so the author can correct the plan explicitly.
 
 ## Removing it
 
-A session-only Claude candidate load ends with that session. Persistent installs
+A session-only Claude load ends with that session. Persistent installs
 must be removed through the host mechanism that installed them, under your scope.
 Keep checkouts or evidence still referenced by unfinished tasks; this guide does
 not delete worktrees, active/pinned chats or user data.
@@ -136,6 +137,10 @@ deletion authority, and active/pinned-chat verification is a separate gate.
 Current source, contract, integrity and helper checks are described in
 [test accounting](TEST-COVERAGE.md) and [migration notes](NATIVE-CONSOLIDATION.md).
 They use disposable local consumers and synthetic activity. The earlier bounded
-host trials were blocked before complete planning/invocation; this candidate adds
-no new live-host evidence. Native runtime parity, persisted-transcript coverage,
-mobile devices and live forge/cloud/loop workflows remain unverified.
+host trials were blocked before complete planning/invocation. Three bounded
+receipts cover this layout: the [skill-list host validation](skill-list-host-validation.md),
+the [router eval](hugues-mode-router-eval.md) and the [router interactive
+check](router-interactive-check.md), whose one Claude Code session fired the
+router and spawned arena candidates but stopped before any finished. Complete
+workflow execution, native runtime parity, persisted-transcript coverage, mobile
+devices and live forge/cloud/loop workflows remain unverified.

@@ -154,6 +154,9 @@ The [router eval](hugues-mode-router-eval.md) ran the Issue's five tasks in Clau
 Code with `claude-opus-5-5` at high effort. The router fired on the branch for
 three of the four tasks it should fire on and on `main` for none, and it stayed
 quiet on the casual task on both. Each cell is one sample.
+One interactive session on `main` at `0988b56`, recorded in the
+[router interactive check](router-interactive-check.md), read the router's
+adapters, playbooks and bundled skills as files. It measured no tokens.
 
 ## Helper inputs and evidence limits
 
