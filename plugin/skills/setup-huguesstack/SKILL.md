@@ -64,7 +64,7 @@ Every real slug written for the current host must be in the detected set. The ot
 
 ### 5. Write the file
 
-Write `.huguesstack/models.md` with a `# budget` line naming the chosen label and its target effort, and one line per role, using the same labels hugues-mode uses. Overwrite the whole file so re-runs stay idempotent. Shape:
+Write `.huguesstack/models.md` with a `# budget` line naming the chosen label and its target effort, and one line per role, using the role labels in [workers and models](../../adapters/host-workers.md#model-defaults-and-role-labels). Overwrite the whole file so re-runs stay idempotent. Shape:
 
 ```
 # huguesStack model roles. One line per role. Delete a line to fall back to the skill default (`inherit-parent`).

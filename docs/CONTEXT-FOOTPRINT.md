@@ -35,12 +35,12 @@ assumptions and mandatory transitive inputs are in the
 
 | Scenario | Released 0.2.0, estimated tokens | Before disclosure | After disclosure | Bytes before → after |
 |---|---:|---:|---:|---:|
-| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,685.5 | 14,803 → 14,745 |
-| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,800.75 | 45,289 → 35,245 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,373.75 | 135,888 → 133,557 |
-| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,070.25 | 146,269 → 144,343 |
+| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,648 | 14,803 → 14,595 |
+| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,601.75 | 45,289 → 34,449 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,527.75 | 135,888 → 134,173 |
+| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,224.25 | 146,269 → 144,959 |
 
-The routing inventory falls about 22.2% from the previous native candidate.
+The routing inventory falls about 23.9% from the previous native candidate.
 Complete bundled workflow inventories fall less, because worker dispatch,
 verification and publication instructions still apply. The bug-fix profile
 includes how, why, TDD, source-control investigation and synthesis prompts,
@@ -70,10 +70,16 @@ marker ("The host contract governs how this skill reaches any sibling
 dependency.", replacing wording that read as a blanket override of the scoped
 bundled-reference rule) touches every one of the 26 non-principle bodies. PR 1
 fix round 2 also reworded part of setup-huguesstack's own body (item 3's
-`create-verification-skill` resolution fix). The
-50 files' combined whole-file size is 192,669 bytes; bodies excluding
-frontmatter and delimiters total 177,624 bytes. The mode file is 20,961
-bytes, including its 20,460-byte body. Only `hugues-mode` and
+`create-verification-skill` resolution fix). The router rewrite (issue #22)
+edits `hugues-mode` and one line of `setup-huguesstack`, both already among
+the 26, so the 24 byte-identical files are unchanged. The
+50 files' combined whole-file size is 191,943 bytes; bodies excluding
+frontmatter and delimiters total 177,048 bytes. The mode file is 20,165
+bytes, including its 19,814-byte body, about 2,864 words; it was 20,961
+bytes and about 3,023 words before the rewrite. The rewrite drops the four
+Cursor-only frontmatter fields, moves the model-defaults paragraph into
+[the worker reference](../plugin/adapters/host-workers.md#model-defaults-and-role-labels)
+and adds the four mobile routes to the Playbooks list. Only `hugues-mode` and
 `setup-huguesstack` are model-invocable now, so only their 442 characters of
 description enter startup context on Claude Code; the
 [skill-list measurement](CONTEXT-BUDGET.json) tracks this directly. It
@@ -105,10 +111,14 @@ its own mandatory sections optional would change its agreed full-body loading
 contract.
 
 The old 9,182-versus-9,111 comparison counted only mode entry plus unconditional
-adapters, before a reply or task. That narrower read set is now 26,724 bytes,
-about 6,671.0 estimated tokens, mostly the longer router description. It must
-not replace the routing-reply row above, which also includes the selected
-bug-fix playbook and mandatory unslop dependency.
+adapters, before a reply or task. That narrower read set is now 25,928 bytes,
+about 6,472.0 estimated tokens. At `main` (`a67df90`, pinned in
+[the pre-PR baseline](CONTEXT-BASELINE-PRE-PR.json)) it was 25,980 bytes. The
+skill-list tiering grew it to 26,724 bytes, 744 more than `main`, through the
+longer router description and the scoped bundled-reference rule in the host
+adapter. The router rewrite takes 796 bytes back, which leaves it 52 bytes
+under `main`. It must not replace the routing-reply row above, which also
+includes the selected bug-fix playbook and mandatory unslop dependency.
 
 Startup metadata is unchanged by this phase split. The table counts all declared
 frontmatter as an upper bound; actual host exposure, suppression and framing
@@ -121,8 +131,10 @@ workers can load it again. The scenarios state five workers for the bug fix,
 including one mode worker, and fifteen for the feature, including eight mode
 workers. A separately reported mode-worker floor counts the required mode,
 agent and applicable shared guidance once per fresh mode worker. It falls from
-9,403.5 to 8,158.25 estimated tokens for the bug-fix worker, and from 75,228 to
-65,266.0 for the eight feature workers. These partial floors exclude other worker
+9,403.5 to 8,312.25 estimated tokens for the bug-fix worker, and from 75,228 to
+66,498.0 for the eight feature workers. The model-defaults paragraph now sits in
+the worker reference that a fresh worker also reads, which is why this floor is
+154 tokens (one worker) above its value before the router rewrite. These partial floors exclude other worker
 skills, role inputs and evidence; they are not additive to the unique inventories.
 
 External control/deslop/agent-writing instructions, consumer configuration,

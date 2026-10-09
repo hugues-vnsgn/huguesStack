@@ -46,16 +46,29 @@ def pre_pr_main_baseline(root):
     pre-PR comparison for the skill-list budget, only for the other measurements on this
     page that it was already pinned for."""
     receipt = json.loads((root / 'docs/CONTEXT-BASELINE-PRE-PR.json').read_text())
+    return pinned_texts(root, receipt, 'pre-PR baseline'), receipt['revision']
+
+
+def pre_pr_main_mode_read_set(root):
+    """The router's initial read set as `main` (`a67df90`) had it: the full router body plus
+    the two unconditional adapters, sha256-pinned in the same receipt as the frontmatter
+    fixture above. The frontmatter fixture holds only frontmatter blocks, so it cannot
+    answer how large the router's initial read was before the router rewrite."""
+    receipt = json.loads((root / 'docs/CONTEXT-BASELINE-PRE-PR.json').read_text())
+    return pinned_texts(root, receipt['mode_read_set'], 'pre-PR mode read set'), receipt['revision']
+
+
+def pinned_texts(root, receipt, label):
     path = root / receipt['archive']
     if hashlib.sha256(path.read_bytes()).hexdigest() != receipt['archive_sha256']:
-        raise ValueError('pre-PR baseline archive drift')
+        raise ValueError(label + ' archive drift')
     texts = archive_texts(path)
     if set(texts) != set(receipt['files']):
-        raise ValueError('pre-PR baseline inventory drift')
+        raise ValueError(label + ' inventory drift')
     for name, text in texts.items():
         if hashlib.sha256(text.encode()).hexdigest() != receipt['files'][name]['sha256']:
-            raise ValueError('pre-PR baseline bytes drift: ' + name)
-    return texts, receipt['revision']
+            raise ValueError(label + ' bytes drift: ' + name)
+    return texts
 
 
 def description_text(raw):
@@ -91,6 +104,7 @@ def measure(root=ROOT):
     release = archive_texts(root / 'tests/fixtures/release-0.2.0.tar.gz')
     before, before_revision = native_baseline(root)
     pre_pr_main, pre_pr_main_revision = pre_pr_main_baseline(root)
+    pre_pr_mode, _ = pre_pr_main_mode_read_set(root)
     current = {p.relative_to(root).as_posix(): p.read_text()
                for p in (root / 'plugin').rglob('*') if p.is_file() and
                (p.suffix == '.md' or p.name == 'openai.yaml')}
@@ -160,6 +174,7 @@ def measure(root=ROOT):
             'baseline_paths': old_paths, 'candidate_paths': new_paths,
             'baseline': metrics([release[p] for p in old_paths]),
             'native_before': metrics([before[p] for p in new_paths]),
+            'pre_pr_main': metrics([pre_pr_mode[p] for p in new_paths]),
             'candidate': metrics([current[p] for p in new_paths])},
         'native_frontmatter': {'scope': 'All 50 declared frontmatter blocks, an upper bound; actual native startup exposure is unknown.',
             'baseline': frontmatter(release, original_declarations),
