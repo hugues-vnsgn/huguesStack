@@ -203,5 +203,23 @@
       "sha256": "b495f65d53dcfbdaadc3fea2bd401882e96ba89846a7fc5a1437a8e6bd2ed79c",
       "mode": 420
     }
+  },
+  "mode_read_set": {
+    "archive": "tests/fixtures/context-baseline-a67df90-mode-read-set.tar.gz",
+    "archive_sha256": "b7c5a4bcf44a5c24fb966487ef6e3b7cc832f6275dc477204247a2fde8a614d6",
+    "files": {
+      "plugin/adapters/host.md": {
+        "sha256": "30dcd6620977958653f3e1ad51b4adb7fda3c5e2db799f0cc42866b8aca07f63",
+        "mode": 420
+      },
+      "plugin/adapters/mobile.md": {
+        "sha256": "29e939e30177d5734e5e64718bacabcd2eb7b6698f005b208ee9622c5f5f5825",
+        "mode": 420
+      },
+      "plugin/skills/hugues-mode/SKILL.md": {
+        "sha256": "5b832b92c1033dcf553350c23e2a9726130b14e02fae57452459d754044b478f",
+        "mode": 420
+      }
+    }
   }
 }

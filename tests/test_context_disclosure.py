@@ -228,6 +228,34 @@ class ContextDisclosure(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'pre-PR baseline archive drift'):
                 measure_context.pre_pr_main_baseline(root)
 
+    def test_router_initial_read_set_is_smaller_than_main(self):
+        # `main` is a67df90: the fixture pins its router body and both unconditional adapters.
+        # The candidate side is recomputed here from the files, not read back from the record.
+        measured = measure_context.measure(ROOT)
+        read_set = measured['mode_initial_read_set']
+        main, revision = measure_context.pre_pr_main_mode_read_set(ROOT)
+        self.assertEqual(revision, 'a67df901162cc2add4aabb9e2a3843134696c490')
+        self.assertEqual(set(main), set(read_set['candidate_paths']))
+        candidate = sum((ROOT / path).stat().st_size for path in read_set['candidate_paths'])
+        before = sum(len(text.encode()) for text in main.values())
+        self.assertEqual(read_set['candidate']['bytes'], candidate)
+        self.assertEqual(read_set['pre_pr_main']['bytes'], before)
+        self.assertLess(candidate, before)
+        router = 'plugin/skills/hugues-mode/SKILL.md'
+        self.assertLess((ROOT / router).stat().st_size, len(main[router].encode()))
+
+    def test_pre_pr_mode_read_set_drift_is_rejected(self):
+        with tempfile.TemporaryDirectory(prefix='pre-pr-mode-read-set-') as directory:
+            root = Path(directory)
+            (root / 'docs').mkdir()
+            receipt = ROOT / 'docs/CONTEXT-BASELINE-PRE-PR.json'
+            shutil.copyfile(receipt, root / 'docs/CONTEXT-BASELINE-PRE-PR.json')
+            name = json.loads(receipt.read_text())['mode_read_set']['archive']
+            (root / name).parent.mkdir(parents=True)
+            (root / name).write_bytes((ROOT / name).read_bytes() + b'drift')
+            with self.assertRaisesRegex(ValueError, 'pre-PR mode read set archive drift'):
+                measure_context.pre_pr_main_mode_read_set(root)
+
     def test_skill_list_description_excludes_yaml_quoting(self):
         # A host that YAML-parses the frontmatter never sees the surrounding quote
         # characters themselves; the measured character count must not either.

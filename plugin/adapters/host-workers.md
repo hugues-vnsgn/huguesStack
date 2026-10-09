@@ -12,6 +12,12 @@ applicable principle's SKILL.md in full as the scoped bundled reference below.
 If the host cannot preserve required context isolation or parallelism, mark
 that phase blocked.
 
+**`hugues-agent` by host.** Claude Code registers it as `hugues-stack:hugues-agent`, the
+`subagent_type` to pass. Codex has no registered name observed here: the fresh worker
+takes the role instructions of `agents/hugues-agent.md` through its supported
+fresh-worker mechanism. The `poteto-agent` mapping above stays for playbooks that
+still say it.
+
 [host.md](host.md) states how each skill is reached. A bundled user-only
 skill, including every `principle-*` entry and a routed dependency such as
 arena below, is its scoped bundled reference: a worker reads that SKILL.md in
@@ -68,3 +74,13 @@ selection; deleting a role restores its pinned default. Write only after the
 skill's confirmation and current filesystem authority. Keep every role and panel,
 the four budget choices and availability validation. This file is guidance;
 restoring the plugin does not execute setup or change any user's configuration.
+
+## Model defaults and role labels
+
+**Defaults for every agent-tool call.** `run_in_background: true`, agent mode (readonly strips MCP), file pointers instead of inlined context, and an explicit model and effort per role. The defaults are `inherit-parent xhigh` for code and `inherit-parent max` for prose and judgment, and `/setup-huguesstack` configures them.
+
+Code delegates tier by difficulty. The hardest changes (cross-cutting design, gnarly concurrency, subtle algorithms) go to your strongest judgment model (default `inherit-parent max`), whether the task needs judgment on vague intent or is a precisely specified sequence of steps to execute to the letter. Trivial mechanical edits go to your fast code model.
+
+Per-role lines in `.huguesstack/models.md`, written by `/setup-huguesstack`, override these defaults and the model choices in the routed skills (`how`, `why`, `arena`, `swarm`, `architect`, `interrogate`, `reflect`). A role with no line keeps its default, and a role value of `inherit-parent` runs that role on the parent chat model (omit the agent tool's `model`).
+
+**Role labels.** `setup-huguesstack` writes these labels and the router's playbooks read them. A code playbook's configured model comes from its line: `feature, refactoring`, `bug-fix`, `perf-issue` or `hillclimb`. The hardest changes read `hardest tasks`. Prose and judgment read `judgment and prose`.

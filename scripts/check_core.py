@@ -39,6 +39,26 @@ USER_ONLY = {
     'recall', 'reflect', 'show-me-your-work', 'swarm', 'tdd', 'teach', 'technical-writing',
     'typescript-best-practices', 'unslop', 'why',
 }
+# Cursor fields that neither Claude Code nor Codex reads from a skill's frontmatter.
+# The router carried them until the router rewrite; no skill may bring them back.
+DEAD_FRONTMATTER = {'mode', 'icon', 'color', 'reminder'}
+ROUTER = 'plugin/skills/hugues-mode/SKILL.md'
+# Router sections that sibling files point at by name. Each row is the file, the router
+# section it names, and the words it names it with. A rename or removal of a section, or a
+# sibling that stops saying these words, fails the check, so the table cannot rot silently.
+ROUTER_SECTION_POINTERS = (
+    ('plugin/skills/figure-it-out/SKILL.md', 'Principles', 'Principles section of the **hugues-mode** skill'),
+    ('plugin/agents/hugues-agent.md', 'Subagents', "hugues-mode's Subagents section"),
+    ('plugin/agents/hugues-agent.md', 'Principles', 'inline Principles index'),
+    ('plugin/skills/hugues-mode/playbooks/multi-phase-plan.md', 'Subagents', 'per the Subagents section'),
+    ('plugin/skills/hugues-mode/playbooks/autopilot-full.md', 'Subagents', "hugues-mode's Subagents section"),
+    ('plugin/skills/hugues-mode/playbooks/bug-fix.md', 'Non-negotiables', '(Non-negotiables)'),
+    ('plugin/skills/hugues-mode/playbooks/investigation.md', 'Autonomy', '(see Autonomy)'),
+    ('plugin/skills/hugues-mode/playbooks/worktree-cleanup.md', 'Autonomy', 'Per Autonomy,'),
+)
+# Every section of the router that is kept by name, whether or not a sibling points at it.
+ROUTER_SECTIONS = ('Non-negotiables', 'Principles', 'Autonomy', 'Subagents',
+                   'Writing the reply', 'Comments', 'Playbooks')
 AGENTS = {
     'poteto-agent': {'source': 'pstack/agents/poteto-agent.md',
                      'entrypoint': 'plugin/agents/hugues-agent.md'},
@@ -379,6 +399,25 @@ def native_reach_errors(root):
     return errors
 
 
+def router_section_errors(root):
+    """The router keeps every section a sibling points at, and its Principles index keeps
+    one entry per principle skill: after the skill-list tiering that index is the only
+    pointer to the 24 user-only principles."""
+    router = (root / ROUTER).read_text()
+    headings = set(re.findall(r'^## (.+?)\s*$', router, re.M))
+    errors = ['router section missing: ' + name for name in ROUTER_SECTIONS if name not in headings]
+    for path, name, words in ROUTER_SECTION_POINTERS:
+        if words not in ' '.join((root / path).read_text().split()):
+            errors.append(path + ' no longer says "' + words + '"; update ROUTER_SECTION_POINTERS')
+        elif name not in headings:
+            errors.append(path + ' points at router section "' + name + '", which is missing')
+    index = section(router, 'Principles')
+    for skill in sorted(p.name for p in (root / 'plugin/skills').glob('principle-*')):
+        if not re.search(r'\(\*\*' + re.escape(skill) + r'\*\*\)\. \S', index):
+            errors.append('router Principles index lacks a trigger entry for ' + skill)
+    return errors
+
+
 def current_document_errors(texts):
     errors = []
     plan = texts['docs/PLAN.md']
@@ -493,6 +532,7 @@ def check(root=ROOT):
         fields = native_frontmatter(text)
         require(fields.get('name') == name, 'native name differs: ' + name)
         manual = fields['disable-model-invocation']
+        require(not DEAD_FRONTMATTER & fields.keys(), 'dead frontmatter field: ' + name)
         upstream_name = next((old for old, new in ALIASES.items() if new == name), name)
         original_fields = native_frontmatter(original_bodies[f'pstack/skills/{upstream_name}/SKILL.md'].decode())
         require(manual == (name in USER_ONLY), 'host invocation table differs: ' + name)
@@ -530,6 +570,8 @@ def check(root=ROOT):
                            'setup-pstack', 'poteto-mode', 'tdd']}
     bodies['feature'] = (root / 'plugin/skills/hugues-mode/playbooks/feature.md').read_text()
     require(not behavior_errors(bodies), 'workflow behavior differs: ' + ', '.join(behavior_errors(bodies)))
+    router_errors = router_section_errors(root)
+    require(not router_errors, 'router sections differ: ' + '; '.join(router_errors))
     cursor_models = sorted(p.relative_to(root).as_posix() for p in (root / 'plugin').rglob('*.md')
                            if re.search(r'pstack-models\.mdc|\.cursor/rules|grok-\d|claude-opus-\d-\d-max|gpt-\d\.\d-sol-max',
                                         p.read_text()))

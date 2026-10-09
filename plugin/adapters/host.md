@@ -22,10 +22,11 @@ A native denial on such a skill does not stop the host's file read; the owner's 
 control over those skills is enabling or disabling the plugin as a whole.
 
 Inherited Cursor worker wording translates before any dispatch: `poteto-agent` is
-the registered `hugues-agent`, `generalPurpose` is Claude Code's `general-purpose`
-agent, `run_in_background: true` is the host's background option, and Cursor model
-slugs are role defaults to resolve against models the native tool exposes. Read
-[workers and models](host-workers.md) before the dispatch itself.
+`hugues-agent`, `generalPurpose` is Claude Code's `general-purpose` agent,
+`run_in_background: true` is the host's background option, and Cursor model slugs
+are role defaults to resolve against models the native tool exposes. Read
+[workers and models](host-workers.md), which names each host's registered
+`hugues-agent`, before the dispatch itself.
 
 Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill (the
 native-only skills) only through the host's supported native mechanism. Respect
@@ -55,7 +56,9 @@ Keep every skipped todo with its reason.
 
 ## Tools and authority
 
-Translate AskQuestion, todos, filesystem and Git operations to actual host tools.
+Translate `AskUserQuestion` (`AskQuestion` in inherited Cursor wording), todos,
+filesystem and Git operations to actual host tools. Codex's equivalent is
+unobserved here, so use the question tool it exposes.
 No translation grants new authority. Consumer execution/edits, network data
 transmission, installations, credentials, system settings, pushing, PR publication,
 merging and releases use the user's current scope. Stop the dependent action when
