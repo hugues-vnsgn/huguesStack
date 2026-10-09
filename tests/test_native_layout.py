@@ -102,6 +102,7 @@ import sys
 import tempfile
 sys.path.insert(0, str(ROOT / 'scripts'))
 import check_core
+import measure_context
 import native_reach_corpus
 import seal_payload
 
@@ -432,6 +433,11 @@ class HuguesModeRouter(unittest.TestCase):
             self.assertNotIn(stale, self.text)
         self.assertIn('`AskUserQuestion`', self.text)
         self.assertIn('subagent_type: "hugues-agent"', self.text)
+        # Codex rendered 243 characters of the previous 312-character description and cut the
+        # mobile clause. The whole description must fit under that observed cut.
+        description = measure_context.description_text(check_core.native_frontmatter(self.text)['description'])
+        self.assertLessEqual(len(description), 243)
+        self.assertIn('any mobile task (Swift/iOS, Kotlin/Android, KMP, CMP, simulator or emulator proof)', description)
         # Cursor-only concepts keep their wording; the host adapter translates them.
         for concept in ['Bugbot', '`deslop` skill from the `cursor-team-kit` plugin', '`control-cli`',
                         '`control-ui`', '**create-skill**', 'Cursor restart']:
@@ -443,10 +449,17 @@ class HuguesModeRouter(unittest.TestCase):
         bullet = self.bullet(check_core.section(self.text, 'Playbooks'), '- **Mobile routes.**')
         for route in ['build-doctor', 'mobile-proof', 'kmp-bridge-change', 'cmp-two-target-change']:
             self.assertIn('`playbooks/' + route + '.md`', bullet)
-        self.assertIn('Each composes into the matched core playbook rather than replacing it', bullet)
-        self.assertIn('[mobile workflows adapter](../../adapters/mobile-workflows.md) owns the intent-first rule', bullet)
+        self.assertIn('[mobile workflows adapter](../../adapters/mobile-workflows.md) says how one is chosen', bullet)
         self.assertIn('keeps authority', bullet)
         self.assertIn('[mobile applicability](../../adapters/mobile.md#applicability) still gates loading it', bullet)
+        # The adapter picks the core action first, and only two routes compose into it:
+        # build-doctor and mobile-proof stand alone. The router names the routes and does not
+        # restate that rule, so it cannot contradict the adapter.
+        for restated in ['compose', 'intent', 'matched core playbook', 'rather than replacing']:
+            self.assertNotIn(restated, bullet)
+        adapter = (ROOT / 'plugin/adapters/mobile-workflows.md').read_text()
+        self.assertIn('select\nthe core action playbook', adapter)
+        self.assertIn('Build/toolchain diagnosis uses [build-doctor]', adapter)
 
     def test_autonomy_owns_the_grant_policy_and_the_trigger_points_to_it(self):
         autonomy = check_core.section(self.text, 'Autonomy')
@@ -482,6 +495,44 @@ class HuguesModeRouter(unittest.TestCase):
         setup = (ROOT / 'plugin/skills/setup-huguesstack/SKILL.md').read_text()
         self.assertIn(link, setup)
         self.assertNotIn('the same labels hugues-mode uses', setup)
+
+    def test_rewrites_keep_the_scope_of_the_obligations_they_restate(self):
+        # Each phrase is a scope word a positive rewrite once dropped: it narrows an obligation
+        # to its only case, or widens a style rule to every place text appears.
+        trigger = self.bullet(self.text, '- About to `AskUserQuestion`')
+        self.assertIn('answers from the evidence rather than building a sketch', trigger)
+        shipping = self.bullet(self.text, '- Asked to land or ship a green stack')
+        self.assertIn('Arm a PR only after its independent per-PR verdict', shipping)
+        self.assertIn('land only the contiguous verified run from the root', shipping)
+        controls = self.bullet(self.text, '- Shipping UI / IDE / CLI')
+        self.assertIn('hand to the user only when the narrow Bug fix step 1 exception applies', controls)
+        reply = check_core.section(self.text, 'Writing the reply')
+        self.assertIn('**Join thoughts with periods, commas and parentheses anywhere.**', reply)
+
+    def test_hugues_agent_registered_name_and_question_tool_have_a_host_home(self):
+        host = (ROOT / 'plugin/adapters/host.md').read_text()
+        flat = ' '.join(host.split())
+        # The router names `AskUserQuestion`; the adapter keys its translation on it, keeps the
+        # Cursor spelling for inherited wording, and claims no observed Codex tool name.
+        self.assertIn('Translate `AskUserQuestion` (`AskQuestion` in inherited Cursor wording)', flat)
+        self.assertIn("Codex's equivalent is unobserved here", flat)
+        self.assertNotIn('Translate AskQuestion', host)
+        # host.md points at the one per-host line; the line is keyed on `hugues-agent` and keeps
+        # the `poteto-agent` mapping for playbooks that still say it.
+        self.assertIn("[workers and models](host-workers.md), which names each host's registered `hugues-agent`", flat)
+        self.assertIn('`poteto-agent` is `hugues-agent`', flat)
+        line = next(paragraph for paragraph in self.workers.split('\n\n') if paragraph.startswith('**`hugues-agent` by host.**'))
+        line = ' '.join(line.split())
+        self.assertIn('Claude Code registers it as `hugues-stack:hugues-agent`', line)
+        self.assertIn('Codex has no registered name observed here', line)
+        self.assertIn('`poteto-agent` mapping above stays', line)
+        self.assertIn('A core `poteto-agent` call uses the registered hugues-agent in', ' '.join(self.workers.split()))
+        self.assertEqual(self.workers.count('**`hugues-agent` by host.**'), 1)
+        manifest = json.loads((ROOT / 'plugin/.claude-plugin/plugin.json').read_text())
+        self.assertEqual(manifest['name'], 'hugues-stack')
+        agent = (ROOT / 'plugin/agents/hugues-agent.md').read_text()
+        self.assertIn('\n# Hugues subagent\n', agent)
+        self.assertNotIn('Poteto', agent)
 
     def test_worker_definition_uses_the_native_names(self):
         agent = (ROOT / 'plugin/agents/hugues-agent.md').read_text()

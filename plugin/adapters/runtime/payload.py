@@ -13,7 +13,7 @@ ANCHORS = {'adapters/runtime/payload.json', 'adapters/runtime/payload.py', 'adap
 GENERATED_TREES = {'skills/hugues-mode/scripts/node_modules'}
 HOST_METADATA = {'.DS_Store'}
 SKILL_BODY = re.compile(r'(?<![\w.-])skills/[^/\s]+/+SKILL\.md(?![\w./-])')
-MANIFEST_SHA256 = 'd7605f46017a8d14986a83361ed39653a7fe566a7c8a8c1f53069a1ff3c55e21'
+MANIFEST_SHA256 = '9754da5a95bb8fef3626fc7a682ae142b656b4c2c2b6ebe31961356712f0b03f'
 
 
 def digest(path):

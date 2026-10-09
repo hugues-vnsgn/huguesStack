@@ -51,7 +51,7 @@
       "source_mode": 420,
       "destination": "plugin/agents/hugues-agent.md",
       "disposition": "canonical",
-      "destination_sha256": "005e3bed1ccf6498f7747193ce672f0c6c2bec0d4a980e571e9aea79dd9b8206"
+      "destination_sha256": "8d65de395882b2a61eefecf3bf3f87020487c3c8485f405900e8e970af9b6166"
     },
     {
       "source": "pstack/assets/logo.png",
@@ -507,7 +507,7 @@
       "source_mode": 420,
       "destination": "plugin/skills/hugues-mode/SKILL.md",
       "disposition": "canonical",
-      "destination_sha256": "9279a089f22dec64e98d8bdc20119784c8183236c5d1a2b9945cd3d5f55df960"
+      "destination_sha256": "1e73e9c6697ddba86fd022e1585cd9ad10c31c955d57e8189497eb5137a0f212"
     },
     {
       "source": "pstack/skills/poteto-mode/playbooks/authoring-a-skill.md",
@@ -1519,7 +1519,7 @@
       "mode": 420
     },
     "adapters/host-workers.md": {
-      "sha256": "58c92a98166cae55a90ea4ed67050cb55ca91e4e8134e3cf69cf9cf4259480cf",
+      "sha256": "c560c1ba77420f8fe9014b315f10afeadead38772e282739e1c27840e1167950",
       "mode": 420
     },
     "adapters/host-workflow-tools.md": {
@@ -1527,11 +1527,11 @@
       "mode": 420
     },
     "adapters/host.md": {
-      "sha256": "2755b4bc87d6acd87d76483ee42882cb50cdd0029057f4cd275f5d409ebe125a",
+      "sha256": "d78a47caa845769d7e41f0799342bf0d929dd8673510ea8d61c4b5e372dff12f",
       "mode": 420
     },
     "adapters/host_tools.py": {
-      "sha256": "7875d687704c4db81e51f3526bed95e412b71008694fd8e6d3ebe9e99c5735a1",
+      "sha256": "b025ce1150b05731885a489c35f3714d26a1512a3736641efd45e0818b4979e1",
       "mode": 420
     },
     "adapters/mobile-workflows.md": {
@@ -1555,15 +1555,15 @@
       "mode": 420
     },
     "adapters/runtime/payload.json": {
-      "sha256": "d7605f46017a8d14986a83361ed39653a7fe566a7c8a8c1f53069a1ff3c55e21",
+      "sha256": "9754da5a95bb8fef3626fc7a682ae142b656b4c2c2b6ebe31961356712f0b03f",
       "mode": 420
     },
     "adapters/runtime/payload.py": {
-      "sha256": "eaad4ed0bae9360210e99c1fd8efe8cf84ed467d53d7c2a1e294fa47a006fb7e",
+      "sha256": "6dff22f92e55c36345267f4769c55faea8d9a20dae7d88873dfb3178a8961f19",
       "mode": 420
     },
     "agents/hugues-agent.md": {
-      "sha256": "005e3bed1ccf6498f7747193ce672f0c6c2bec0d4a980e571e9aea79dd9b8206",
+      "sha256": "8d65de395882b2a61eefecf3bf3f87020487c3c8485f405900e8e970af9b6166",
       "mode": 420
     },
     "agents/hugues-comment-sicko.md": {
@@ -1691,7 +1691,7 @@
       "mode": 420
     },
     "skills/hugues-mode/SKILL.md": {
-      "sha256": "9279a089f22dec64e98d8bdc20119784c8183236c5d1a2b9945cd3d5f55df960",
+      "sha256": "1e73e9c6697ddba86fd022e1585cd9ad10c31c955d57e8189497eb5137a0f212",
       "mode": 420
     },
     "skills/hugues-mode/agents/openai.yaml": {

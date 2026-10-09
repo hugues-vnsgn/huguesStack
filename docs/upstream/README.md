@@ -22,10 +22,11 @@ The router rewrite (issue #22) then moves `plugin/skills/hugues-mode/SKILL.md`
 further from pstack's `poteto-mode/SKILL.md`, which stays `port with adaptation`
 in the ledger. The title reads "Hugues mode" with the host invocation contract
 beneath it, and the four Cursor-only frontmatter fields (`mode`, `icon`,
-`color`, `reminder`) are gone. `AskQuestion`, `Task` and `poteto-agent` are
-named for Claude Code and Codex directly, the full-autonomy grant policy moved
-under Autonomy, the four mobile routes joined the Playbooks list, many rules
-are stated as the behavior to do, and the model-defaults paragraph now lives in
+`color`, `reminder`) are gone. `AskQuestion` is now Claude Code's
+`AskUserQuestion` (Codex's question tool is unobserved), `Task` is the host's
+agent tool and `poteto-agent` is `hugues-agent`. The full-autonomy grant policy
+moved under Autonomy, the four mobile routes joined the Playbooks list, many
+rules are stated as the behavior to do, and the model-defaults paragraph now lives in
 [the worker reference](../../plugin/adapters/host-workers.md#model-defaults-and-role-labels).
 Section names, the Principles index and its trigger sentences, and the markers
 `scripts/check_core.py` requires are kept. The next upstream sync of this file

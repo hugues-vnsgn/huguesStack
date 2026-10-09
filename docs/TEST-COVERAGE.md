@@ -1,6 +1,6 @@
 # Python test roots and evidence limits
 
-The candidate collects **381 top-level unittest cases**. One is a driver that
+The candidate collects **383 top-level unittest cases**. One is a driver that
 separately executes **50 frozen 0.2.0 restoration cases**. Do not add the driver
 and its children as independent coverage, or describe historical passes as current
 native workflow proof. Subtests are not added to case totals.
@@ -12,10 +12,10 @@ native workflow proof. Subtests are not added to case totals.
 | Historical 0.2.0 restoration driver | 1 | Executes 50 cases inside a separate hash-bound archive |
 | Current source/provenance checks | 44 | test_upstream_sync (33), test_retained_provenance (11) |
 | Current installed adapters and regressions | 97 | test_host_adapters (72), test_review_regressions (12), test_rereview_regressions (13) |
-| Current native-layout contracts | 46 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt, budgets and the native-reach lint (a corpus of 45 reviewed contradictions in five line shapes each, 16 correct sentences, the package wiring and a one-entry allowlist), plus the router rewrite: router section pointers and the Principles index, the four dead Cursor frontmatter fields through the plugin check, and five read-only cases on the router and the files it points at (title and host tool names, mobile routes, autonomy placement, single-source model defaults, worker definition) |
+| Current native-layout contracts | 48 | test_native_layout; canonical source, permissions, host invocation table, seal acceptance, helper receipt, budgets and the native-reach lint (a corpus of 45 reviewed contradictions in five line shapes each, 16 correct sentences, the package wiring and a one-entry allowlist), plus the router rewrite: router section pointers and the Principles index, the four dead Cursor frontmatter fields through the plugin check, and seven read-only cases on the router and the files it points at (title, host tool names and description, mobile routes, autonomy placement, single-source model defaults, the scope of restated obligations, the registered `hugues-agent` name and question tool per host, worker definition) |
 | Current progressive-disclosure contracts | 13 | test_context_disclosure; retained rules, mandatory phase reads, complete declared source inventories, the skill-list budget (including its pinned pre-PR `a67df90` point), YAML-description quoting, the router's initial read set against `main`'s pinned read set and bound resources |
 | Current installed-tolerance regressions | 22 | test_installed_tolerance; bootstrap dependencies, host metadata, unreadable folders, umask modes, every spelling of a raw skill read, every revision/syntax a skill-body guard must still check, the plan-check helper's operand, and a rejection matrix of 1,840 cases (306 `read-workflow`, 1,484 `translate-plan` and 50 in-plan cases) over all 50 bundled skills, their legacy aliases, consumer and external paths, with symlink and traversal cases and positive controls |
-| Total collected | 381 | Current, mixed and historical scopes remain distinct |
+| Total collected | 383 | Current, mixed and historical scopes remain distinct |
 
 The 131 historical modules are test_wp2_contract (45), test_wp3_contract (15),
 test_retained_design (7), test_retained_research (8), test_retained_verification (6),
@@ -56,7 +56,9 @@ total stays 372. The router rewrite (issue #22) adds seven native-layout cases
 frontmatter fields run through the plugin check, and five read-only cases on the
 rewritten router and the files it points at) and two disclosure cases (the
 router's initial read set recomputes smaller than `main`'s, and drift in the
-pinned `a67df90` read-set fixture is rejected), giving 381.
+pinned `a67df90` read-set fixture is rejected), giving 381. Its fix round adds two
+more read-only router cases (the scope words that positive rewrites had dropped, and
+the per-host registered `hugues-agent` name and question tool), giving 383.
 
 Current adapter cases execute the public installed Python entrypoint in disposable
 external consumer directories, including Node plan validation when available.

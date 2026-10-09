@@ -35,12 +35,12 @@ assumptions and mandatory transitive inputs are in the
 
 | Scenario | Released 0.2.0, estimated tokens | Before disclosure | After disclosure | Bytes before → after |
 |---|---:|---:|---:|---:|
-| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,648 | 14,803 → 14,595 |
-| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,601.75 | 45,289 → 34,449 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,527.75 | 135,888 → 134,173 |
-| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,224.25 | 146,269 → 144,959 |
+| Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,629.5 | 14,803 → 14,521 |
+| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,612.75 | 45,289 → 34,493 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,626.25 | 135,888 → 134,567 |
+| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,322.75 | 146,269 → 145,353 |
 
-The routing inventory falls about 23.9% from the previous native candidate.
+The routing inventory falls about 23.8% from the previous native candidate.
 Complete bundled workflow inventories fall less, because worker dispatch,
 verification and publication instructions still apply. The bug-fix profile
 includes how, why, TDD, source-control investigation and synthesis prompts,
@@ -73,15 +73,15 @@ fix round 2 also reworded part of setup-huguesstack's own body (item 3's
 `create-verification-skill` resolution fix). The router rewrite (issue #22)
 edits `hugues-mode` and one line of `setup-huguesstack`, both already among
 the 26, so the 24 byte-identical files are unchanged. The
-50 files' combined whole-file size is 191,943 bytes; bodies excluding
-frontmatter and delimiters total 177,048 bytes. The mode file is 20,165
-bytes, including its 19,814-byte body, about 2,864 words; it was 20,961
+50 files' combined whole-file size is 191,824 bytes; bodies excluding
+frontmatter and delimiters total 177,003 bytes. The mode file is 20,046
+bytes, including its 19,769-byte body, about 2,845 words; it was 20,961
 bytes and about 3,023 words before the rewrite. The rewrite drops the four
 Cursor-only frontmatter fields, moves the model-defaults paragraph into
 [the worker reference](../plugin/adapters/host-workers.md#model-defaults-and-role-labels)
 and adds the four mobile routes to the Playbooks list. Only `hugues-mode` and
-`setup-huguesstack` are model-invocable now, so only their 442 characters of
-description enter startup context on Claude Code; the
+`setup-huguesstack` are model-invocable now, so only their 366 characters of
+description (236 for the router, 130 for setup) enter startup context on Claude Code; the
 [skill-list measurement](CONTEXT-BUDGET.json) tracks this directly. It
 carries two "before" points, both computed by the same function, neither
 hardcoded: `native_before`, against the `7db3e80`-pinned bytes every other
@@ -99,9 +99,11 @@ name, and the mode reads it in full as its router reference. The agent never
 invokes one natively; the owner still can. [Host validation](skill-list-host-validation.md) observed, at
 code commit `ae51493`, that Claude Code's attached skill list grows by exactly
 two when the plugin loads (a count; which two skills is inferred), that exactly
-two huguesStack entries reach Codex's rendered skills block (which cuts the
-router's description at 243 of its 312 characters), and that `tdd`, a user-only
-skill, still runs when typed by name. It leaves the router description in
+two huguesStack entries reach Codex's rendered skills block (which cut the
+router's then 312-character description at 243 characters; the owner's reordered
+236-character description fits whole, per that receipt's
+[addendum](skill-list-host-validation.md#addendum-the-reordered-router-description-on-codex)),
+and that `tdd`, a user-only skill, still runs when typed by name. It leaves the router description in
 Claude's list and a typed `principle-*` skill unobserved, and it establishes
 those claims, not the byte/character counts themselves. A user-only skill's frontmatter still counts toward the all-50
 upper bound above regardless, since that bound is deliberately over every
@@ -111,13 +113,18 @@ its own mandatory sections optional would change its agreed full-body loading
 contract.
 
 The old 9,182-versus-9,111 comparison counted only mode entry plus unconditional
-adapters, before a reply or task. That narrower read set is now 25,928 bytes,
-about 6,472.0 estimated tokens. At `main` (`a67df90`, pinned in
+adapters, before a reply or task. That narrower read set is now 25,972 bytes,
+about 6,483.0 estimated tokens. At `main` (`a67df90`, pinned in
 [the pre-PR baseline](CONTEXT-BASELINE-PRE-PR.json)) it was 25,980 bytes. The
 skill-list tiering grew it to 26,724 bytes, 744 more than `main`, through the
 longer router description and the scoped bundled-reference rule in the host
-adapter. The router rewrite takes 796 bytes back, which leaves it 52 bytes
-under `main`. It must not replace the routing-reply row above, which also
+adapter. The router rewrite and its fix round take 752 bytes back, which leaves it 8
+bytes under `main`. The fix round restored the scope words the rewrite had
+dropped, named `AskUserQuestion` and the registered `hugues-agent` per host in
+the adapters, cut the mobile bullet to a pointer at the mobile workflows
+adapter, and adopted the owner's 236-character router description, 74 bytes
+shorter in the file than the 312-character one (its two quote characters
+included). It must not replace the routing-reply row above, which also
 includes the selected bug-fix playbook and mandatory unslop dependency.
 
 Startup metadata is unchanged by this phase split. The table counts all declared
@@ -132,9 +139,10 @@ including one mode worker, and fifteen for the feature, including eight mode
 workers. A separately reported mode-worker floor counts the required mode,
 agent and applicable shared guidance once per fresh mode worker. It falls from
 9,403.5 to 8,312.25 estimated tokens for the bug-fix worker, and from 75,228 to
-66,498.0 for the eight feature workers. The model-defaults paragraph now sits in
-the worker reference that a fresh worker also reads, which is why this floor is
-154 tokens (one worker) above its value before the router rewrite. These partial floors exclude other worker
+67,286.0 for the eight feature workers. The model-defaults paragraph and the
+per-host `hugues-agent` line now sit in the worker reference that a fresh worker
+also reads, and the host adapter points at it, which is why this floor is 252.5
+tokens (one worker) above its value before the router rewrite. These partial floors exclude other worker
 skills, role inputs and evidence; they are not additive to the unique inventories.
 
 External control/deslop/agent-writing instructions, consumer configuration,

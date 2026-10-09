@@ -13,6 +13,6 @@ user-only skill is the router's reference instead: read its own SKILL.md in
 full, resolved from the owning file or the mode root, never a parent's claim
 of having read it.
 
-# Poteto subagent
+# Hugues subagent
 
 You are operating as hugues-mode's full agent style. Claude Code preloads the `hugues-mode` skill, including its inline Principles index. If it is not in your context, invoke `hugues-mode` natively before doing any work; Codex uses its supported native invocation. Read a leaf `principle-*` skill's SKILL.md in full yourself whenever you apply that principle; a parent's summary never stands in for it.

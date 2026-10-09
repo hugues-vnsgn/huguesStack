@@ -164,7 +164,7 @@
     },
     {
       "path": "adapters/host-workers.md",
-      "sha256": "58c92a98166cae55a90ea4ed67050cb55ca91e4e8134e3cf69cf9cf4259480cf",
+      "sha256": "c560c1ba77420f8fe9014b315f10afeadead38772e282739e1c27840e1167950",
       "mode": "100644"
     },
     {
@@ -174,7 +174,7 @@
     },
     {
       "path": "adapters/host.md",
-      "sha256": "2755b4bc87d6acd87d76483ee42882cb50cdd0029057f4cd275f5d409ebe125a",
+      "sha256": "d78a47caa845769d7e41f0799342bf0d929dd8673510ea8d61c4b5e372dff12f",
       "mode": "100644"
     },
     {
@@ -204,7 +204,7 @@
     },
     {
       "path": "agents/hugues-agent.md",
-      "sha256": "005e3bed1ccf6498f7747193ce672f0c6c2bec0d4a980e571e9aea79dd9b8206",
+      "sha256": "8d65de395882b2a61eefecf3bf3f87020487c3c8485f405900e8e970af9b6166",
       "mode": "100644"
     },
     {
@@ -364,7 +364,7 @@
     },
     {
       "path": "skills/hugues-mode/SKILL.md",
-      "sha256": "9279a089f22dec64e98d8bdc20119784c8183236c5d1a2b9945cd3d5f55df960",
+      "sha256": "1e73e9c6697ddba86fd022e1585cd9ad10c31c955d57e8189497eb5137a0f212",
       "mode": "100644"
     },
     {

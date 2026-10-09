@@ -12,6 +12,12 @@ applicable principle's SKILL.md in full as the scoped bundled reference below.
 If the host cannot preserve required context isolation or parallelism, mark
 that phase blocked.
 
+**`hugues-agent` by host.** Claude Code registers it as `hugues-stack:hugues-agent`, the
+`subagent_type` to pass. Codex has no registered name observed here: the fresh worker
+takes the role instructions of `agents/hugues-agent.md` through its supported
+fresh-worker mechanism. The `poteto-agent` mapping above stays for playbooks that
+still say it.
+
 [host.md](host.md) states how each skill is reached. A bundled user-only
 skill, including every `principle-*` entry and a routed dependency such as
 arena below, is its scoped bundled reference: a worker reads that SKILL.md in

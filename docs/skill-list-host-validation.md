@@ -259,3 +259,55 @@ does not resolve. No mobile device, build or simulator proof is implied. This
 receipt covers the host skill-list and typed-invocation claims behind Issue user
 stories 1, 2 (Codex only), 3 (for `tdd`), 14 and 15 (both at the render level),
 and 28 (counts, for `tdd`). It says nothing about whether the router fires.
+
+## Addendum: the reordered router description on Codex
+
+9 October 2026, PR 2 fix round 1. The owner chose a reordered router description,
+236 characters with the mobile clause first, to fit inside Codex's cut. This section
+reruns run 5 only, the local Codex render, against the tree that the commit carrying
+this section holds. That commit cannot name its own SHA, so the tested code is named
+by its `plugin/` tree, `d08484abd8fbc16780ac9d75766ac50bcd64dfaf`, which
+`git rev-parse <that commit>:plugin` returns. The script printed `HEAD` as
+`f9368f8e7d23c3df4c98517407fed88b816af368`, the commit under it, and a dirty
+`git status --short`: the fix round was uncommitted during the render. Codex CLI
+`0.161.0`, started 2026-10-09T02:34:50Z, from a scratch directory outside the
+repository that held only a project-local `.agents/skills` link to
+`<worktree>/plugin/skills`, as in run 5. The render command exited 0 with an empty
+stderr. Claude Code was not run, `codex exec` was not run, and no routing eval ran.
+The command was `codex debug prompt-input 'Reply with the single word ACK and nothing
+else.'`, then `extract-quoted.py` over its output.
+
+The block has 8 skill roots and 77 skill entries, as in run 5. Two entries come from
+the huguesStack root. **`hugues-mode`'s description is rendered whole: 236 of 236
+characters**, ending at "...long autonomous run." `setup-huguesstack`'s is whole too
+(130 of 130), so the two descriptions in the skill list total 366 characters. The
+mobile clause (`Swift/iOS, Kotlin/Android, KMP, CMP, simulator or emulator proof`)
+now sits inside what Codex shows the model. This replaces the "cut at 243 of 312" cell
+above for the description now in the tree; the cell above stays as recorded for
+`ae51493`.
+
+The frontmatter holds the description in double quotes. Unquoted, its `work: bug fix`
+reads as a YAML mapping indicator, and PyYAML 6.0.3 rejects the line with "mapping
+values are not allowed here". Codex accepted both forms: a second render of a scratch
+copy with the unquoted line also showed 236 of 236 characters. The scratch copy is
+evidence only and is not in the tree. Whether Claude Code reads either form is
+unobserved, which is why the tree keeps the form every YAML parser accepts. Many
+other skills in this tree quote their descriptions.
+
+| Cell | Host | State |
+|---|---|---|
+| Router description rendered whole (236 of 236) | Codex 0.161.0 | OBSERVED |
+| Router description rendered whole, unquoted scratch copy | Codex 0.161.0 | OBSERVED (not the tree) |
+| Router description as the model sees it in the list | Claude Code | NOT OBSERVED |
+| Claude Code's parse of the quoted description | Claude Code | NOT OBSERVED |
+
+| Artifact | SHA-256 |
+|---|---|
+| `codex-prompt-input.raw.json` (tree render) | `d628fefb86ef47db50332a88de12e9eeeb186b1a942e07ae42df6c65dcc9692a` |
+| `codex-skills-instructions-block.txt` (tree render) | `946908a4284eb050fa1841219318686bc9b71bbbff0ce56dd4ab12d2e6d0c57f` |
+| `run-render.sh` | `0e9e6bc3a2c489aae338f85a5436d6d7472e95198be683cf98dbe5547a4dc972` |
+| `extract-quoted.py` (run 5's `extract.py`, comparing against the YAML-parsed description) | `a24a8b6964e3ab591f21c5dff3828f370e275f0fcc431545b51f297b734c54a9` |
+| `run-render.out.txt` (the script's printed output) | `805fd76170b8dcc160b54c439e2627ffb569a2742f32eca02fa9e45b3e8f4418` |
+| `codex-prompt-input.raw.json` (unquoted scratch copy) | `0215d0f673ff7f0f294d20dbe0c3105d87863ebc7070349c862fdeac1295935d` |
+| `codex-skills-instructions-block.txt` (unquoted scratch copy) | `fd1b4e60ed37696b274e0064e69e547445680e8815fa513db9abe117b44c6df8` |
+| Empty stderr files (both renders, two files) | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
