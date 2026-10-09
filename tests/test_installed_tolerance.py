@@ -1,7 +1,6 @@
 """Installed-payload regressions from the PR 17 review: host files, modes and raw skill reads."""
 import os
-import shlex
-import subprocess
+import runpy
 import unittest
 from unittest.mock import patch
 
@@ -79,17 +78,20 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
                 self.assertEqual(self.run_tool('bind').returncode, 2)
                 path.chmod(original)
 
-    def test_translate_refuses_every_malformed_spelling_of_a_raw_skill_read(self):
-        # None of these spell the exact, literal bundled path `skills/tdd/SKILL.md`, so none
-        # resolves to an approved installed payload entry; native invocation is still required.
+    def plan_result(self, text):
+        plan = self.consumer / 'plan.md'
+        plan.write_text(text + '\n')
+        return self.bound('translate-plan', plan)
+
+    def test_translate_refuses_every_spelling_of_a_raw_skill_read(self):
         for text in ['cat /abs/plugin/skills/tdd/SKILL.md',
                      'cat plugin/skills/tdd/SKILL.md',
+                     "cat skills/tdd/SK''ILL.md",
+                     'cat "skills/tdd/SKILL.md"',
                      "`cat 'plugin/skills/tdd/SKILL.md'`",
                      'Read (plugin/skills/tdd/SKILL.md) first.']:
             with self.subTest(text=text):
-                plan = self.consumer / 'plan.md'
-                plan.write_text(text + '\n')
-                result = self.bound('translate-plan', plan)
+                result = self.plan_result(text)
                 self.assertEqual(result.returncode, 2, result.stdout)
                 self.assertIn('native skill invocation', result.stderr)
         plan = self.consumer / 'plan.md'
@@ -97,35 +99,37 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
         prose = self.bound('translate-plan', plan)
         self.assertEqual((prose.returncode, prose.stdout), (0, plan.read_text()), prose.stderr)
 
-    def test_translate_allows_a_bundled_skill_body_spelled_exactly(self):
-        # A bundled user-only skill's own SKILL.md, spelled as the exact literal payload path
-        # (however quoted), is the mode's reference and translates to a guarded read-workflow.
-        for text in ["cat skills/tdd/SK''ILL.md", 'cat "skills/tdd/SKILL.md"']:
+    def test_translate_refuses_a_bundled_skill_body_spelled_exactly(self):
+        # PR 1 fix rounds 1 and 2 translated these exact literal spellings of a bundled user-only
+        # skill's SKILL.md into a guarded read. Round 3 reverses that: the helper never reads a
+        # skill body, so the exact spelling is refused like every other, with nothing emitted
+        # that could be run. An agent reads that file with the host's own file-read tool.
+        for text in ["cat skills/tdd/SK''ILL.md", 'cat "skills/tdd/SKILL.md"', 'cat skills/tdd/SKILL.md',
+                     '`skills/tdd/SKILL.md`', 'skills/tdd/SKILL.md', '`pstack/skills/tdd/SKILL.md`',
+                     'git show origin/main:skills/tdd/SKILL.md']:
             with self.subTest(text=text):
-                plan = self.consumer / 'plan.md'
-                plan.write_text(text + '\n')
-                result = self.bound('translate-plan', plan)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertIn('read-workflow', result.stdout)
-                command = result.stdout.strip('`\n')
-                reread = subprocess.run(shlex.split(command), cwd=self.consumer, capture_output=True, text=True)
-                self.assertEqual(reread.returncode, 0, reread.stderr)
-                self.assertEqual(reread.stdout, (self.plugin / 'skills/tdd/SKILL.md').read_text())
+                result = self.plan_result(text)
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertEqual(result.stdout, '')
+                self.assertIn('native skill invocation', result.stderr)
+                self.assertNotIn('read-workflow', result.stderr)
 
-    def test_read_workflow_refuses_every_malformed_spelling_of_a_skill_body(self):
-        for source in ['skills/tdd//SKILL.md', './skills/tdd/SKILL.md', 'SKILL.md']:
+    def test_read_workflow_refuses_every_spelling_of_a_skill_body(self):
+        for source in ['skills/tdd/SKILL.md', 'skills/tdd//SKILL.md', './skills/tdd/SKILL.md', 'SKILL.md']:
             with self.subTest(source=source):
                 result = self.bound('read-workflow', source)
                 self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.stdout, '')
                 self.assertIn('native skill invocation', result.stderr)
 
-    def test_read_workflow_allows_a_bundled_user_only_skill_body(self):
-        # The exact literal path of a bundled, user-only skill's SKILL.md is the mode's
-        # reference once it is in the approved installed payload: a guarded read, not a
-        # native invocation.
-        result = self.bound('read-workflow', 'skills/tdd/SKILL.md')
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(result.stdout, (self.plugin / 'skills/tdd/SKILL.md').read_text())
+    def test_read_workflow_refuses_a_bundled_user_only_skill_body_and_its_alias(self):
+        # Reversed in round 3: `tdd` is user-only, and the helper still returns nothing for it.
+        for source in ['skills/tdd/SKILL.md', 'pstack/skills/tdd/SKILL.md']:
+            with self.subTest(source=source):
+                result = self.bound('read-workflow', source)
+                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.stdout, '')
+                self.assertIn('native skill invocation', result.stderr)
 
     def test_translate_rejects_a_skill_body_at_any_revision_other_than_origin_main(self):
         # PR 1 fix round 2 security regression: `git show <rev>:<path>/SKILL.md` returned
@@ -139,47 +143,42 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
                      'git show HEAD:skills/tdd/SKILL.md',
                      'git show feature-branch:plugin/skills/other-plugin/SKILL.md']:
             with self.subTest(text=text):
-                plan = self.consumer / 'plan.md'
-                plan.write_text(text + '\n')
-                result = self.bound('translate-plan', plan)
+                result = self.plan_result(text)
                 self.assertEqual(result.returncode, 2, result.stdout)
                 self.assertIn('native skill invocation', result.stderr)
 
     def test_translate_rejects_consumer_and_external_skill_body_paths(self):
         # A consumer's own `.claude/skills/...` or `.agents/skills/...` convention, and an
         # external plugin's skill, are never bundled references: no guarded read ever
-        # substitutes for their native invocation.
+        # substitutes for their native invocation. The plan-check helper's operand is the
+        # round 3 review's case: it must not translate a consumer skill into a validation run.
+        helper = 'skills/hugues-mode/scripts/check-plan.mjs'
         for text in ['cat .claude/skills/mine/SKILL.md',
                      'cat .agents/skills/mine/SKILL.md',
-                     '`other-plugin/skills/foo/SKILL.md`']:
+                     '`other-plugin/skills/foo/SKILL.md`',
+                     'node ' + helper + ' .claude/skills/mine/SKILL.md',
+                     'node ' + helper + ' .agents/skills/mine/SKILL.md',
+                     'node ' + helper + ' skills/tdd/SKILL.md']:
             with self.subTest(text=text):
-                plan = self.consumer / 'plan.md'
-                plan.write_text(text + '\n')
-                result = self.bound('translate-plan', plan)
+                result = self.plan_result(text)
                 self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertEqual(result.stdout, '')
                 self.assertIn('native skill invocation', result.stderr)
 
-    def test_translate_distinguishes_unsupported_syntax_on_a_bundled_body_from_native_only(self):
-        # `sed`/other unsupported shell forms naming a KNOWN, approved bundled SKILL.md are
-        # a syntax problem, not a permission problem: the author can fix it by using one of
-        # the supported literal forms (a plain reference, `cat`, or `git show origin/main:`).
-        # That is a different, more specific failure than "native skill invocation
-        # required", which means no guarded read could ever satisfy the reference.
+    def test_translate_refuses_unsupported_shell_forms_on_a_skill_body_as_native_only(self):
+        # Round 2 gave `sed`/`head` on a bundled SKILL.md a syntax message ("use a standalone
+        # guarded read"). No guarded read of a skill body exists any more, so that advice would
+        # point at a command that also fails: the message is the native-invocation one again.
         for text in ['sed -n 1,5p skills/tdd/SKILL.md', 'head skills/tdd/SKILL.md']:
             with self.subTest(text=text):
-                plan = self.consumer / 'plan.md'
-                plan.write_text(text + '\n')
-                result = self.bound('translate-plan', plan)
+                result = self.plan_result(text)
                 self.assertEqual(result.returncode, 2, result.stdout)
-                self.assertIn('standalone guarded read', result.stderr)
-                self.assertNotIn('native skill invocation', result.stderr)
+                self.assertIn('native skill invocation', result.stderr)
+                self.assertNotIn('standalone guarded read', result.stderr)
 
     def test_read_workflow_and_translate_keep_model_invocable_skills_native_only(self):
-        # `hugues-mode` and `setup-huguesstack` stay model-invocable; their own SKILL.md is
-        # never a guarded bundled reference, even though it sits in the approved installed
-        # payload like every user-only skill's body does. Allowing it would let the router
-        # read -- and so effectively invoke -- the two skills a host's native denial is
-        # actually meant to gate.
+        # `hugues-mode` and `setup-huguesstack` stay model-invocable and, like every other
+        # bundled skill, their SKILL.md is refused by both verbs.
         for source in ['skills/hugues-mode/SKILL.md', 'skills/setup-huguesstack/SKILL.md',
                        'pstack/skills/poteto-mode/SKILL.md', 'pstack/skills/setup-pstack/SKILL.md']:
             with self.subTest(source=source):
@@ -190,11 +189,130 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
                      'git show origin/main:skills/hugues-mode/SKILL.md',
                      '`skills/setup-huguesstack/SKILL.md`']:
             with self.subTest(text=text):
-                plan = self.consumer / 'plan.md'
-                plan.write_text(text + '\n')
-                result = self.bound('translate-plan', plan)
+                result = self.plan_result(text)
                 self.assertEqual(result.returncode, 2, result.stdout)
                 self.assertIn('native skill invocation', result.stderr)
+
+    def test_a_consumer_skill_symlinked_to_a_bundled_body_is_still_refused(self):
+        # The refusal is on the spelling, so a consumer skill that happens to link to a bundled
+        # file gets no different treatment; and the symlinked file is never read.
+        skill = self.consumer / '.claude/skills/mine'
+        skill.mkdir(parents=True)
+        (skill / 'SKILL.md').symlink_to(self.plugin / 'skills/tdd/SKILL.md')
+        for text in ['cat .claude/skills/mine/SKILL.md', '`.claude/skills/mine/SKILL.md`']:
+            with self.subTest(text=text):
+                result = self.plan_result(text)
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertEqual(result.stdout, '')
+                self.assertIn('native skill invocation', result.stderr)
+
+
+class SkillBodyRejectionMatrix(InstalledFixture, unittest.TestCase):
+    """Every way an agent might reach a SKILL.md through the helper, against every skill.
+
+    PR 1 rounds 1 and 2 let the helper read bundled SKILL.md files and each review found
+    another branch that slipped past the skill-body guard. Round 3 puts the guard back, and
+    this matrix is the proof that it holds for all 50 bundled skills, their legacy aliases,
+    a consumer's skill directories and an external plugin. It runs the installed runtime
+    in-process (the same verified buffers the CLI runs) so the whole matrix stays fast;
+    the tests above exercise the CLI end to end.
+    """
+
+    EXTERNAL = ['other-plugin/skills/foo/SKILL.md', 'plugin/skills/other-plugin/SKILL.md',
+                '/abs/plugin/skills/tdd/SKILL.md', '.claude/skills/mine/SKILL.md',
+                '.agents/skills/mine/SKILL.md', 'node_modules/pkg/skills/foo/SKILL.md']
+    PLAN_FORMS = ['`{p}`', '{p}', 'cat {p}', 'cat "{p}"', "cat '{p}'", 'git show origin/main:{p}',
+                  'git show HEAD:{p}', 'git show feature-branch:{p}', 'sed -n 1,5p {p}', 'head {p}',
+                  'node skills/hugues-mode/scripts/check-plan.mjs {p}',
+                  'node pstack/skills/poteto-mode/scripts/check-plan.mjs {p}',
+                  '`cat {p}`', 'Read ({p}) first.']
+
+    def setUp(self):
+        super().setUp()
+        namespace = runpy.run_path(str(self.helper))
+        _, self.payload = namespace['load_runtime_sources'](self.binding)
+        rows = self.payload.verify(self.plugin)  # integrity is checked once, for real
+        self.payload.verify = lambda root: rows  # the same verified tree for every case below
+        self.legacy = {old: new for old, new in rows['legacy_paths'].items() if new.endswith('/SKILL.md')}
+        self.bundled = sorted(p.name for p in (self.plugin / 'skills').iterdir() if p.is_dir())
+
+    def refused(self, call, *args):
+        with self.assertRaises(ValueError) as caught:
+            call(*args)
+        self.assertIn('native skill invocation', str(caught.exception))
+        self.assertNotIn('standalone guarded read', str(caught.exception))
+
+    def test_the_fixture_covers_every_bundled_skill_and_alias(self):
+        self.assertEqual(len(self.bundled), 50)
+        self.assertEqual(len(self.legacy), 50)
+        self.assertEqual(set(self.legacy.values()), {f'skills/{name}/SKILL.md' for name in self.bundled})
+
+    def test_read_workflow_refuses_every_skill_body_spelling(self):
+        cases = 0
+        for name in self.bundled:
+            sources = [f'skills/{name}/SKILL.md', f'skills/{name}//SKILL.md', f'./skills/{name}/SKILL.md',
+                       f'skills/{name}/../{name}/SKILL.md', f'skills/../skills/{name}/SKILL.md',
+                       *[old for old, new in self.legacy.items() if new == f'skills/{name}/SKILL.md']]
+            for source in sources:
+                cases += 1
+                with self.subTest(source=source):
+                    self.refused(self.payload.workflow, self.plugin, source)
+        for source in self.EXTERNAL:
+            cases += 1
+            with self.subTest(source=source):
+                self.refused(self.payload.workflow, self.plugin, source)
+        self.assertGreaterEqual(cases, 300)
+
+    def test_translate_plan_refuses_every_skill_body_in_every_form(self):
+        paths = [f'skills/{name}/SKILL.md' for name in self.bundled] + sorted(self.legacy) + self.EXTERNAL
+        cases = 0
+        for path in paths:
+            for form in self.PLAN_FORMS:
+                text = form.format(p=path)
+                cases += 1
+                with self.subTest(text=text):
+                    self.refused(self.payload.translate, self.plugin, self.binding, text + '\n')
+        self.assertGreaterEqual(cases, 1400)
+
+    def test_every_skill_body_is_refused_inside_a_larger_plan(self):
+        # A refused line fails the whole plan, so a skill body cannot ride along with allowed lines.
+        allowed = '`skills/hugues-mode/playbooks/feature.md`'
+        for name in self.bundled:
+            with self.subTest(name=name):
+                text = f'Intro.\n{allowed}\nUse `skills/{name}/SKILL.md` here.\n'
+                self.refused(self.payload.translate, self.plugin, self.binding, text)
+
+    def test_ordinary_references_stay_readable_so_the_matrix_is_not_a_blanket_refusal(self):
+        checked = 0
+        for path in sorted((self.plugin / 'skills').glob('*/references/*.md')):
+            relative = path.relative_to(self.plugin).as_posix()
+            with self.subTest(relative=relative):
+                self.assertEqual(self.payload.workflow(self.plugin, relative), path.read_bytes())
+                checked += 1
+        self.assertGreaterEqual(checked, 20)
+        playbook = 'skills/hugues-mode/playbooks/feature.md'
+        translated = self.payload.translate(self.plugin, self.binding, f'`{playbook}`\n')
+        self.assertIn('read-workflow', translated)
+
+    def test_a_symlinked_or_traversing_skill_body_is_refused_before_any_read(self):
+        outside = self.area / 'outside.md'
+        outside.write_text('secret\n')
+        target = self.plugin / 'skills/tdd/SKILL.md'
+        original = target.read_bytes()
+        target.unlink()
+        target.symlink_to(outside)
+        for source in ['skills/tdd/SKILL.md', 'pstack/skills/tdd/SKILL.md']:
+            with self.subTest(source=source):
+                result = self.bound('read-workflow', source)
+                self.assertEqual(result.returncode, 2)
+                self.assertNotIn('secret', result.stdout)
+        target.unlink()
+        target.write_bytes(original)
+        for source in ['../outside.md', 'skills/../../outside.md', '/etc/passwd']:
+            with self.subTest(source=source):
+                result = self.bound('read-workflow', source)
+                self.assertEqual(result.returncode, 2)
+                self.assertNotIn('secret', result.stdout)
 
 
 if __name__ == '__main__':

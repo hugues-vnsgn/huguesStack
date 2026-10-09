@@ -66,11 +66,14 @@ local tests. Preserve unrelated work. Report the reproduction, changed behavior,
 checks and any proof you could not run. Do not push or publish.
 ```
 
-The workflow retains its evidence and worker requirements. When another skill is
-needed, it uses supported native invocation. A separate command is needed only
-if the host requires explicit user invocation. A disabled or denied dependency
-holds its phase; the agent must not silently replace it with direct file reads.
-These handoffs are conditional, not a proven limitation in every session.
+The workflow retains its evidence and worker requirements. When another bundled
+skill is needed, the mode reads that user-only skill's file itself with the
+host's own file-read tool; it uses supported native invocation only for
+`hugues-mode`, `setup-huguesstack` and your own skills. A separate command is
+needed only if the host requires explicit user invocation. A disabled or denied
+native-only dependency holds its phase; the agent must not silently replace it
+with a file read. These handoffs are conditional, not a proven limitation in
+every session.
 
 Inspect the actual diff and test evidence. A compilation result does not establish
 screen behavior; shared changes may need both affected targets. Missing device,
@@ -88,8 +91,9 @@ this repository's Astra PR policy is not imposed on your app.
 
 Use the pause/pickup workflow to record branch, head, completed work, evidence,
 remaining gates and actual worker state. In a fresh session, invoke the needed
-skills natively again. A saved path or parent worker's claim does not establish
-current invocation eligibility. Do not scan unrelated chat histories.
+native-only skills again and read the needed bundled user-only skills again. A
+saved path or parent worker's claim does not establish current invocation
+eligibility. Do not scan unrelated chat histories.
 
 ## Updating
 
@@ -100,17 +104,17 @@ host's supported controls. The real controls are the plugin as a whole
 (install, enable, disable) and any native denial the host applies to
 `hugues-mode` or `setup-huguesstack`'s invocation; never silently re-enable
 either after the owner disabled it. A bundled user-only skill has no separate
-per-skill disablement to preserve across an update, since the mode reads its
-body regardless of any such setting.
+per-skill disablement to preserve across an update, since the agent's own file
+read ignores any such setting.
 
 Old 0.2.0 installed-payload bindings are intentionally rejected. Review the changed
 workflow and plan, then create a new binding as described in
 [host tools](../plugin/adapters/host-tools.md). Ordinary resource rereads remain
-binding-guarded; a consumer or external skill's body still requires native
-invocation, while a bundled user-only skill's own SKILL.md is itself a
-binding-guarded reread, once it resolves into the approved installed payload.
-The plan translator holds on an obsolete or unapproved raw-skill read so the
-author can correct the plan explicitly.
+binding-guarded; no skill body is a helper read. `hugues-mode`, `setup-huguesstack`
+and consumer or external skills require native invocation, a bundled user-only
+skill's SKILL.md is read with the host's own file-read tool, and a plan names the
+skill to apply instead of a path. The plan translator holds on every raw-skill
+read so the author can correct the plan explicitly.
 
 ## Removing it
 

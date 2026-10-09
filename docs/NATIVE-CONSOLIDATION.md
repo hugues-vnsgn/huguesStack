@@ -32,10 +32,11 @@ provenance-only. The installed artifact includes the original MIT notice.
 
 ## Invocation and resources
 
-Use native skill invocation for a consumer or external skill. Read ordinary
-owned references only when the current phase needs them. A consumer or
-external skill is not a reference-file fallback: unavailable, owner-disabled,
-denied or unknown invocation stops its dependent phase. A manual handoff is
+Use native skill invocation for `hugues-mode`, `setup-huguesstack` and any
+consumer or external skill. Read ordinary owned references only when the
+current phase needs them. None of those is a reference-file fallback:
+unavailable, owner-disabled, denied or unknown invocation stops its dependent
+phase. A manual handoff is
 needed only when the host requires explicit user invocation; it is not a
 proven universal limitation in this setup.
 
@@ -45,17 +46,18 @@ table that made 46 skills model-invocable: only `hugues-mode` and
 `setup-huguesstack` are model-invocable now, so only their descriptions enter
 startup context on Claude Code. The other 48 bundled skills are user-only; the
 owner can still type any of them by name, and the mode reaches each one as its
-router's reference, reading its SKILL.md in full instead of invoking it
-natively. `hugues-agent` preloads `hugues-mode` through the Claude Code agent
+router's reference: the agent reads its SKILL.md in full with the host's own
+file-read tool instead of invoking it natively. The installed helper takes no
+part in that read. `hugues-agent` preloads `hugues-mode` through the Claude Code agent
 `skills` field and invokes it natively when the preload is absent; whether the
 plugin-scoped name `hugues-stack:hugues-mode` resolves is unobserved. Generated
 project verification skills stay consumer-local and model-invocable so proof
 steps can drive them; that tier is unrelated to the bundled table above.
 
 The host adapter's native-only rule takes precedence over inherited
-sibling-read wording for a consumer, external or model-invocable skill; for a
-bundled user-only skill it restores that inherited wording instead, read in
-full as the mode's reference. The adapter also prevents unconditional
+sibling-read wording for `hugues-mode`, `setup-huguesstack` and consumer or
+external skills; a bundled user-only skill keeps that inherited wording, read
+in full as the mode's reference. The adapter also prevents unconditional
 traversal of navigation links. A figure-it-out consultation of mode principles
 must not restart mode routing. This is an instruction contract, not a
 filesystem security boundary or proof of every possible runtime trace.
@@ -66,11 +68,17 @@ work must load the complete mobile rules before routing or execution. All prior
 adapter requirements are retained. See [progressive disclosure](CONTEXT-FOOTPRINT.md)
 for the partition and comparable required-read inventories.
 
-The installed `read-workflow` helper refuses public `SKILL.md` files and their
-legacy aliases. `translate-plan` also rejects such reads. Plans must name native
-skill invocation explicitly; owned playbook/reference rereads stay binding-guarded.
-The translator preserves consumer-owned Git reads and supports only its documented
-bounded literal shapes. It does not become a host dispatcher or shell interpreter.
+The installed `read-workflow` helper refuses every `SKILL.md`, bundled or not,
+and their legacy aliases. `translate-plan` also rejects such reads. A plan names
+the bundled skill to apply, never a path to read: the agent reads a user-only
+skill's file with the host's own file-read tool, and reaches `hugues-mode`,
+`setup-huguesstack` and consumer or external skills natively. Owned
+playbook/reference rereads stay binding-guarded. PR 1 fix rounds 1 and 2 briefly
+let the helper read bundled skill bodies; each review found another branch that
+slipped past the skill-body guard, and round 3 restored the `a67df90` runtime
+(its `payload.py` differs only by the resealed manifest digest). The translator
+preserves consumer-owned Git reads and supports only its documented bounded
+literal shapes. It does not become a host dispatcher or shell interpreter.
 
 ## Integrity and cleanup
 
@@ -103,11 +111,10 @@ Only synthetic transcripts and disposable Git consumers are used in current test
 
 See [test accounting](TEST-COVERAGE.md) for current versus historical totals.
 Current checks exercise actual installed helpers, negative inventory/mode/body
-mutations, bundled-reference and native-body read rejection, public names,
-workflow phase contracts, owned links and parser/audit safety. A bundled
-user-only skill's own `SKILL.md` is a guarded reference read once it is in
-the approved installed payload; a consumer or external skill's body still
-rejects a read in place of native invocation. Context budgets are measured
+mutations, skill-body read rejection for every bundled skill, consumer and
+external path, public names, workflow phase contracts, owned links and
+parser/audit safety. The helper never returns a `SKILL.md`; a bundled user-only
+skill's file is read by the agent's own file-read tool. Context budgets are measured
 source bytes and characters, with characters/4 as an explicit token estimate;
 they are not observed host prompt usage.
 

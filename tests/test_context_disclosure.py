@@ -18,8 +18,17 @@ class ContextDisclosure(unittest.TestCase):
         host = (ROOT / 'plugin/adapters/host.md').read_text()
         mobile = (ROOT / 'plugin/adapters/mobile.md').read_text()
         self.assertLess(len(host.encode()) + len(mobile.encode()), 6000)
-        self.assertIn('substitute a file read for them', host)
-        self.assertIn("reads the owning `SKILL.md` in full as the router's", host)
+        # The native-only set is named once, in host.md itself: hugues-mode and
+        # setup-huguesstack are reached only by native invocation, with denials respected, and
+        # a file read is no substitute. The user-only read is stated once too, beside the tier.
+        self.assertEqual(host.count("only through the host's supported native mechanism"), 1)
+        self.assertIn('Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill', host)
+        self.assertIn('owner-disabled entries and native denials', host)
+        self.assertIn('never use a file read as an invocation fallback', host)
+        self.assertIn("reads its SKILL.md in full as the scoped bundled reference, with the host's own", host)
+        self.assertIn('never read a skill body', host)
+        self.assertNotIn('supersedes the native-only', host)
+        self.assertNotIn('The native-only rule above governs', host)
         self.assertIn('never restart task routing', host)
         self.assertIn('No translation grants new authority', host)
         self.assertIn('For all other work, follow the pinned core unchanged', mobile)
@@ -82,7 +91,9 @@ class ContextDisclosure(unittest.TestCase):
         original = self.adapter_texts()
         for name, marker in [('plugin/adapters/mobile.md', '[mobile workflows](mobile-workflows.md) in full'),
                              ('plugin/adapters/mobile-workflows.md', 'separate\nfresh production worker'),
-                             ('plugin/adapters/host-workers.md', 'List length sets')]:
+                             ('plugin/adapters/host-workers.md', 'List length sets'),
+                             ('plugin/adapters/host.md', 'Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill'),
+                             ('plugin/adapters/host.md', "only through the host's supported native mechanism")]:
             with self.subTest(name=name):
                 changed = dict(original)
                 self.assertIn(marker, changed[name])

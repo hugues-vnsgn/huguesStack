@@ -1,8 +1,8 @@
 Apply [installed host tools](../../../adapters/host-tools.md): bound `read-workflow`
-for owned playbook/reference rereads, `plan-check` for validation, and a bundled
-skill's own SKILL.md once it is in the approved payload. A consumer or external
-skill dependency still requires supported native invocation; do not translate
-it to a file read. Unavailable or denied invocation holds that step.
+for owned playbook/reference rereads and `plan-check` for validation. Neither
+reads a skill body: reach each skill as [host.md](../../../adapters/host.md)
+directs, and write the skill a plan step applies, never a path to read.
+Unavailable or denied invocation holds that step.
 
 ### Autopilot-stack
 

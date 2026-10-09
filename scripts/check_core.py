@@ -187,6 +187,9 @@ def adapter_errors(texts):
             errors.append('missing phase prerequisite: ' + name)
     for marker in ['Before the triggering action, read its complete reference',
                    'never use a file read as an invocation fallback', 'never restart task routing',
+                   'Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill',
+                   "only through the host's supported native mechanism",
+                   'owner-disabled entries and native denials',
                    'No translation grants new authority', 'A constraint\ncan block execution',
                    'copy its ordered todos verbatim']:
         if marker.casefold() not in host.casefold():
@@ -235,52 +238,115 @@ def adapter_errors(texts):
     return errors
 
 
-NATIVE_REACH_INVOCATION = re.compile(r'native[\s-]+invo\w*|native[\s-]+context|auto-?load\w*', re.I)
-NATIVE_REACH_ENTRY = re.compile(r'native\s+\S+\s+entry', re.I)
-# Sentences reviewed and confirmed NOT to instruct native reach for a user-only skill,
-# even though a trigger word and a user-only skill name both land in them: each one only
-# states that native reach is disabled or absent, never that an agent should rely on it.
-# Whitespace-normalized exact match, same as the sentences the lint below builds.
+# Native-reach lint. A user-only skill cannot be invoked by a model, so agent-facing text
+# must never tell an agent to reach one natively; the agent reads its SKILL.md instead
+# (host.md states that rule once). Reviews of PR 1 found the same contradiction in rounds
+# one, two and three, each time in a spelling the previous lint missed, so the lint works on
+# whole clauses and on three kinds of evidence, each independent of the others:
+#   * a skill named in the USER_ONLY table (the only list; never a second copy);
+#   * a class word that stands for user-only skills ("principles", "bundled", "dependency");
+#   * a phrase that promises native reach without naming any skill ("native context").
+NATIVE_REACH_TRIGGER = re.compile(
+    r'\binvo[ck]\w*|\bnatively\b|\bauto-?load\w*|\bskill tool\b'
+    r'|\bnative[\s-]+(?:invo\w*|skill|context|host|mechanism|entry)\b'
+    r'|\bnative\s+\S+\s+(?:skill|entry)\b', re.I)
+# Names of a tier or a policy field state a property, never an instruction to invoke.
+NATIVE_REACH_PROPERTY = re.compile(
+    r'(?:disable-)?model-invoc\w*|allow_implicit_invocation|implicit[\s-]+invoc\w*', re.I)
+NATIVE_REACH_UNSCOPED = re.compile(r'\bnative[\s-]+(?:skill|context)\b|\bskill invocations?\b', re.I)
+# "bundled" and the principle family are always user-only, so no qualifier excuses them.
+NATIVE_REACH_STRONG_CLASS = re.compile(r'\bprinciples?\b|\bprinciple-\*|\bbundled\b', re.I)
+# These also describe consumer and external skills, so a clause that scopes itself to
+# "consumer" or "external" skills (the native-only tier) is excused.
+NATIVE_REACH_WEAK_CLASS = re.compile(
+    r'\b(?:public|other)\s+leaf\b|\bleaf\s+(?:skill|principle)s?\b|\bleaves\b|\bpublic skills?\b'
+    r'|\bdependenc(?:y|ies)\b|\bsibling\s+(?:skills?|bodies|body)\b', re.I)
+NATIVE_REACH_SCOPE = re.compile(r'\b(?:consumer|external)\b', re.I)
+# Skill names that are also ordinary English words count only when formatted as a name
+# (`code`, **bold**, /slash, [link]), followed by "skill", or placed directly beside the
+# invocation word ("invoke swarm", "swarm natively"); every other name matches bare.
+PLAIN_WORD_SKILLS = {'architect', 'arena', 'bro', 'correct', 'how', 'interrogate', 'recall',
+                     'reflect', 'swarm', 'teach', 'why'}
+# Clauses reviewed and confirmed NOT to instruct native reach, though a trigger and a user-only
+# name both land in them: each one says native reach is disabled, never that an agent should
+# rely on it. Whitespace-normalized exact match on one clause.
 NATIVE_REACH_ALLOWLIST = {
-    "TypeScript paths remain `**/*.ts` and `**/*.tsx`; `disable-model-invocation: true` "
-    "disables typescript-best-practices' preserved `paths` auto-load, so reading or "
-    "editing those files reads its SKILL.md in full first, as the scoped bundled "
-    "reference, then principle-type-system-discipline's the same way.",
+    "`disable-model-invocation: true` disables typescript-best-practices' preserved `paths` "
+    "auto-load, so reading or editing those files reads its SKILL.md in full first, as the "
+    "scoped bundled reference, then principle-type-system-discipline's the same way.",
 }
-PARAGRAPH_BREAK = re.compile(r'\n\s*\n')
+MARKDOWN_BLOCK_START = re.compile(r'^\s*(?:[-*+]|\d+[.)])\s|^\s*#|^\s*\||^\s*```')
 SENTENCE_BREAK = re.compile(r'(?<=[.!?])\s+')
+FRONTMATTER = re.compile(r'\A---\r?\n.*?\r?\n---(?:\r?\n|\Z)', re.S)
+
+
+def markdown_clauses(text):
+    """Yield each clause of authored prose: one Markdown block (paragraph, list item, table
+    row, heading or code line) at a time, wrapped lines rejoined, then one sentence at a
+    time, then split at semicolons. A hyphen at a line end joins to the next word."""
+    blocks, current = [], []
+    for line in text.splitlines():
+        if not line.strip() or MARKDOWN_BLOCK_START.match(line):
+            if current:
+                blocks.append(current)
+            current = []
+        if line.strip():
+            current.append(line.strip())
+    if current:
+        blocks.append(current)
+    for block in blocks:
+        joined = re.sub(r'(?<=\w)-\s+(?=\w)', '-', ' '.join(block))
+        for sentence in SENTENCE_BREAK.split(' '.join(joined.split())):
+            for clause in sentence.split(';'):
+                if clause.strip():
+                    yield clause.strip()
+
+
+def skill_name_pattern(name):
+    escaped = re.escape(name)
+    if name in PLAIN_WORD_SKILLS:
+        article = r'(?:(?:the|each|every|any|a|an)\s+)?'
+        return (r'`/?' + escaped + r'`|\*\*' + escaped + r'\*\*|(?<![\w-])/' + escaped
+                + r'(?![\w-])|\[' + escaped + r'\]|(?<![\w-])' + escaped + r' skills?\b|\bskill '
+                + escaped + r'\b'
+                + r'|\binvo[ck]\w*\s+' + article + escaped + r'(?![\w-])'
+                + r'|(?<![\w-])' + escaped + r'\s+natively\b'
+                + r'|\bnative(?:ly)?[\s-]+' + article + escaped + r'(?![\w-])')
+    return r'(?<![\w-])' + escaped + r'(?![\w-])'
+
+
+def native_reach_violations(text, own=None):
+    """Return the clauses of `text` that tell an agent to reach a user-only skill natively.
+    `own` is the skill whose files hold the text: a skill may name itself. The unit is one
+    clause, so a reach word and a skill (or class word) split across clauses are not tied
+    together; that is why host.md states the rule once and the corpus in
+    tests/native_reach_corpus.py pins every spelling reviewers have found so far."""
+    names = sorted((n for n in USER_ONLY if n != own), key=len, reverse=True)
+    found = []
+    for clause in markdown_clauses(text):
+        stated = NATIVE_REACH_PROPERTY.sub(' ', clause)
+        if not NATIVE_REACH_TRIGGER.search(stated) or clause in NATIVE_REACH_ALLOWLIST:
+            continue
+        scoped = bool(NATIVE_REACH_SCOPE.search(stated))
+        named = any(re.search(skill_name_pattern(n), stated) for n in names)
+        if (named or NATIVE_REACH_STRONG_CLASS.search(stated)
+                or (not scoped and (NATIVE_REACH_WEAK_CLASS.search(stated)
+                                    or NATIVE_REACH_UNSCOPED.search(stated)))):
+            found.append(clause)
+    return found
 
 
 def native_reach_errors(root):
-    """Fail when agent-facing text under plugin/ instructs reaching a USER_ONLY skill
-    through native invocation, native context or auto-load: the exact class of
-    contradiction PR 1 fix rounds 1 and 2 kept finding and patching sentence by
-    sentence, because the bundled-reference rule lived in prose repeated across many
-    files instead of one lint anyone could rerun. Scoped to whole sentences, not raw
-    Markdown lines, so arbitrary line-wrapping cannot hide a match; scoped to the
-    authored USER_ONLY table (the host-invocation source of truth already enforced
-    against each skill's frontmatter) so this set cannot drift from a second list.
-    `hugues-mode` and `setup-huguesstack` are deliberately not in that table: native
-    invocation naming them is correct, not a violation. A short, reviewed allowlist
-    exempts sentences that only state native reach is disabled, never an instruction
-    to rely on it; this is precise rather than exhaustive -- it catches a skill named
-    beside a trigger word in one sentence, not every possible phrasing of the same
-    mistake spread across a whole paragraph."""
-    names = sorted(USER_ONLY, key=len, reverse=True)
+    """Fail when agent-facing text under plugin/ instructs reaching a USER_ONLY skill through
+    native invocation, native context or auto-load. Frontmatter is metadata, not an
+    instruction, so it is skipped; the tier it declares is checked against USER_ONLY elsewhere."""
     errors = []
+    skills = root / 'plugin/skills'
     for path in sorted((root / 'plugin').rglob('*.md')):
-        text = path.read_text()
-        # Paragraph-first, so a heading or bullet with no sentence-ending punctuation
-        # never bleeds into the next paragraph's sentences.
-        for paragraph in PARAGRAPH_BREAK.split(text):
-            normalized = ' '.join(paragraph.split())
-            for sentence in SENTENCE_BREAK.split(normalized):
-                if not (NATIVE_REACH_INVOCATION.search(sentence) or NATIVE_REACH_ENTRY.search(sentence)):
-                    continue
-                hit = [n for n in names if re.search(r'(?<![\w-])' + re.escape(n) + r'(?![\w-])', sentence)]
-                if hit and sentence not in NATIVE_REACH_ALLOWLIST:
-                    errors.append(path.relative_to(root).as_posix() + ': ' + ', '.join(hit)
-                                 + ' near a native-reach trigger: ' + sentence)
+        text = FRONTMATTER.sub('', path.read_text(), count=1)
+        own = path.relative_to(skills).parts[0] if path.is_relative_to(skills) else None
+        for clause in native_reach_violations(text, own):
+            errors.append(path.relative_to(root).as_posix() + ': ' + clause)
     return errors
 
 

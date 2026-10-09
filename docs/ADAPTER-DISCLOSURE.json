@@ -32,8 +32,8 @@
       "destination": "plugin/adapters/host.md",
       "sha256": "908ea1518bf2e2bf893ef33822c075be8abaa1985e4cac31015f17c813a3acfa",
       "disposition": "replaced",
-      "reason": "The opening sentence scoped native invocation to every bundled skill too, which disable-model-invocation: true makes impossible for a user-only bundled skill; PR 1 fix round 1 narrows it to consumer and external skills only.",
-      "replacement": "Invoke each consumer or external skill through the host's supported native mechanism. Respect\nmanual-only selection, owner-disabled entries and native denials; for those skills, never use a file read as an invocation fallback."
+      "reason": "The opening sentence scoped native invocation to every bundled skill too, which disable-model-invocation: true makes impossible for a user-only bundled skill; PR 1 fix round 1 narrowed it to consumer and external skills only, and round 3 names the whole native-only set (hugues-mode, setup-huguesstack, consumer and external skills) and states the rule once, so reading their files stays no substitute.",
+      "replacement": "Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill (the\nnative-only skills) only through the host's supported native mechanism. Respect\nmanual-only selection, owner-disabled entries and native denials; for those skills, never use a file read as an invocation fallback."
     },
     {
       "paragraph": 4,
@@ -47,8 +47,8 @@
       "destination": "plugin/adapters/host.md",
       "sha256": "0d6cb1863a1d6b3e8b8c0f261e9eed602a7c4a312b5d60b0113fd7e473566aee",
       "disposition": "replaced",
-      "reason": "A blanket override of inherited raw sibling-read wording is false for bundled user-only skills, which restore that inherited wording instead; PR 1 fix round 1 scopes the override to consumer and external skills.",
-      "replacement": "This native-mechanism requirement overrides inherited\nraw sibling-read wording for consumer and external skills only; the scoped rule\nbelow restores inherited sibling-read wording for bundled user-only skills instead."
+      "reason": "A blanket override of inherited raw sibling-read wording is false for bundled user-only skills, which keep that wording; PR 1 fix round 1 scoped the override to consumer and external skills, and round 3 scopes it to the native-only skills and points back at the one statement of the user-only read instead of restating it.",
+      "replacement": "This native-mechanism requirement overrides inherited\nraw sibling-read wording for the native-only skills alone; a bundled user-only\nskill keeps that read wording (the scoped bundled reference above)."
     },
     {
       "paragraph": 4,
@@ -56,8 +56,8 @@
       "destination": "plugin/adapters/host.md",
       "sha256": "74195c3c6c409ed21724d998466d87b7355c4758c735a52616d2762161501cda",
       "disposition": "replaced",
-      "reason": "A figure-it-out principles consultation naming 'a supported native invocation scoped to principles only' and a fresh worker needing to 'obtain its own native context' both assumed principles stay model-invocable, which disable-model-invocation: true now forbids; PR 1 fix round 2 reads the principle's SKILL.md in full instead, and scopes the fresh-worker native-context requirement to dependencies that still need native invocation.",
-      "replacement": "For a principles consultation from figure-it-out, use already-loaded mode context\nor read the needed principle's SKILL.md in full as the scoped bundled reference:\nnever restart task routing. A fresh worker must read any bundled user-only\ndependency itself and obtain its own native context for anything that still\nrequires native invocation; a parent's claim of permission is insufficient.\nMissing capability holds the phase without scanning user settings."
+      "reason": "A figure-it-out principles consultation naming 'a supported native invocation scoped to principles only' and a fresh worker needing to 'obtain its own native context' both assumed principles stay model-invocable, which disable-model-invocation: true now forbids; PR 1 fix round 2 read the principle's SKILL.md in full instead, and round 3 splits the fresh-worker sentence so the read of a bundled skill and the native invocation of a native-only skill are separate duties, with no unscoped 'native context'.",
+      "replacement": "For a principles consultation from figure-it-out, use already-loaded mode context\nor read the needed principle's SKILL.md in full: never restart task routing.\nA fresh worker reads any bundled skill itself. It starts its own native\ninvocation of any native-only skill; a parent's claim of permission is\ninsufficient. Missing capability holds the phase without scanning user settings."
     },
     {
       "paragraph": 5,

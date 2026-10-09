@@ -12,10 +12,11 @@ mobile adapter is byte-identical to the previous candidate. The
 [partition receipt](ADAPTER-DISCLOSURE.json) and regression checks account for
 every original paragraph, each preserved verbatim or replaced with an explicit,
 tested reason. Deferral changes when guidance is read, not whether its
-triggered requirements apply. Unknown native invocation for a consumer or
-external skill still holds; a reference never substitutes for that invocation.
-A bundled user-only skill's reference is its sanctioned reach instead, per the
-scoped host adapter rule.
+triggered requirements apply. Unknown native invocation for `hugues-mode`,
+`setup-huguesstack` or a consumer or external skill still holds; a reference
+never substitutes for that invocation. A bundled user-only skill's SKILL.md is
+its sanctioned reach instead, read with the host's own file-read tool per the
+host adapter rule; the installed helper never reads it.
 
 ## Comparable source scenarios
 
@@ -35,11 +36,11 @@ assumptions and mandatory transitive inputs are in the
 | Scenario | Released 0.2.0, estimated tokens | Before disclosure | After disclosure | Bytes before → after |
 |---|---:|---:|---:|---:|
 | Declared startup metadata, all 50 frontmatter blocks | 3,940.25 | 3,700 | 3,685.5 | 14,803 → 14,745 |
-| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,820 | 45,289 → 35,322 |
-| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,411.75 | 135,888 → 133,709 |
-| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,108.25 | 146,269 → 144,495 |
+| Initial bug-fix routing, full playbook, todos and unslop reply | 11,331.75 | 11,307.75 | 8,752.25 | 45,289 → 35,051 |
+| One-function CLI bug fix with cheap regression test | 35,078 | 33,956 | 33,325.25 | 135,888 → 133,363 |
+| Three-module TypeScript feature with design and implementation arenas | 37,897.5 | 36,551.25 | 36,021.75 | 146,269 → 144,149 |
 
-The routing inventory falls about 22.0% from the previous native candidate.
+The routing inventory falls about 22.6% from the previous native candidate.
 Complete bundled workflow inventories fall less, because worker dispatch,
 verification and publication instructions still apply. The bug-fix profile
 includes how, why, TDD, source-control investigation and synthesis prompts,
@@ -70,8 +71,8 @@ dependency.", replacing wording that read as a blanket override of the scoped
 bundled-reference rule) touches every one of the 26 non-principle bodies. PR 1
 fix round 2 also reworded part of setup-huguesstack's own body (item 3's
 `create-verification-skill` resolution fix). The
-50 files' combined whole-file size is 192,569 bytes; bodies excluding
-frontmatter and delimiters total 177,524 bytes. The mode file is 20,961
+50 files' combined whole-file size is 192,669 bytes; bodies excluding
+frontmatter and delimiters total 177,624 bytes. The mode file is 20,961
 bytes, including its 20,460-byte body. Only `hugues-mode` and
 `setup-huguesstack` are model-invocable now, so only their 442 characters of
 description enter startup context on Claude Code; the
@@ -101,8 +102,8 @@ its own mandatory sections optional would change its agreed full-body loading
 contract.
 
 The old 9,182-versus-9,111 comparison counted only mode entry plus unconditional
-adapters, before a reply or task. That narrower read set is now 26,801 bytes,
-about 6,690.25 estimated tokens, mostly the longer router description. It must
+adapters, before a reply or task. That narrower read set is now 26,530 bytes,
+about 6,622.5 estimated tokens, mostly the longer router description. It must
 not replace the routing-reply row above, which also includes the selected
 bug-fix playbook and mandatory unslop dependency.
 
@@ -117,8 +118,8 @@ workers can load it again. The scenarios state five workers for the bug fix,
 including one mode worker, and fifteen for the feature, including eight mode
 workers. A separately reported mode-worker floor counts the required mode,
 agent and applicable shared guidance once per fresh mode worker. It falls from
-9,403.5 to 8,196.25 estimated tokens for the bug-fix worker, and from 75,228 to
-65,570.0 for the eight feature workers. These partial floors exclude other worker
+9,403.5 to 8,109.75 estimated tokens for the bug-fix worker, and from 75,228 to
+64,878.0 for the eight feature workers. These partial floors exclude other worker
 skills, role inputs and evidence; they are not additive to the unique inventories.
 
 External control/deslop/agent-writing instructions, consumer configuration,

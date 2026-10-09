@@ -14,8 +14,10 @@ and `setup-pstack` to `setup-huguesstack`; other public names are unchanged.
 
 Only `hugues-mode` and `setup-huguesstack` are model-invocable; their
 descriptions enter the host's skill list. Every other bundled skill, including
-each `principle-*`, is user-only: the owner can still type it by name, and the
-mode reaches it as the router's reference, per the scoped invocation rule below.
+each `principle-*`, is user-only: the owner can still type it by name. An agent
+reads its SKILL.md in full as the scoped bundled reference, with the host's own
+file-read tool and resolved as an owned resource below. The installed helpers
+never read a skill body. A missing or unreadable path holds the dependent step.
 
 Inherited Cursor worker wording translates before any dispatch: `poteto-agent` is
 the registered `hugues-agent`, `generalPurpose` is Claude Code's `general-purpose`
@@ -23,7 +25,8 @@ agent, `run_in_background: true` is the host's background option, and Cursor mod
 slugs are role defaults to resolve against models the native tool exposes. Read
 [workers and models](host-workers.md) before the dispatch itself.
 
-Invoke each consumer or external skill through the host's supported native mechanism. Respect
+Reach `hugues-mode`, `setup-huguesstack` and each consumer or external skill (the
+native-only skills) only through the host's supported native mechanism. Respect
 manual-only selection, owner-disabled entries and native denials; for those skills, never use a file read as an invocation fallback.
 Unavailable, disabled, denied or unknown invocation stops the dependent step.
 When supported execution requires explicit user invocation, provide the exact
@@ -34,21 +37,13 @@ Read ordinary references owned by the invoked skill only when its phase needs th
 Resolve relative resources from their owning file or the stated mode root, never
 from the consumer cwd. Do not recursively traverse navigation links or eagerly
 invoke all linked skills. This native-mechanism requirement overrides inherited
-raw sibling-read wording for consumer and external skills only; the scoped rule
-below restores inherited sibling-read wording for bundled user-only skills instead.
+raw sibling-read wording for the native-only skills alone; a bundled user-only
+skill keeps that read wording (the scoped bundled reference above).
 For a principles consultation from figure-it-out, use already-loaded mode context
-or read the needed principle's SKILL.md in full as the scoped bundled reference:
-never restart task routing. A fresh worker must read any bundled user-only
-dependency itself and obtain its own native context for anything that still
-requires native invocation; a parent's claim of permission is insufficient.
-Missing capability holds the phase without scanning user settings.
-
-The native-only rule above governs a consumer or external skill; never
-substitute a file read for them. It does not govern a bundled user-only skill:
-the agent reads the owning `SKILL.md` in full as the router's reference
-instead. A missing or unreadable path holds the dependent step. This follows
-the 0.1.0 handoff rule for disabled skills, and supersedes the native-only
-rule above for bundled skills.
+or read the needed principle's SKILL.md in full: never restart task routing.
+A fresh worker reads any bundled skill itself. It starts its own native
+invocation of any native-only skill; a parent's claim of permission is
+insufficient. Missing capability holds the phase without scanning user settings.
 
 The mode applies the pinned router, including figure-it-out for large,
 cross-cutting or unmatched work and Orchestrate for standing programs. For a
