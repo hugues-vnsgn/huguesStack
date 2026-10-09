@@ -69,14 +69,17 @@ adapter requirements are retained. See [progressive disclosure](CONTEXT-FOOTPRIN
 for the partition and comparable required-read inventories.
 
 The installed `read-workflow` helper refuses every `SKILL.md`, bundled or not,
-and their legacy aliases. `translate-plan` also rejects such reads. A plan names
-the bundled skill to apply, never a path to read: the agent reads a user-only
+and their legacy aliases. `translate-plan` also rejects such reads, including a
+path to any `SKILL.md` in any letter case or with `.`, `..` or repeated slashes.
+A plan names the bundled skill to apply, never a path to read: the agent reads a user-only
 skill's file with the host's own file-read tool, and reaches `hugues-mode`,
 `setup-huguesstack` and consumer or external skills natively. Owned
 playbook/reference rereads stay binding-guarded. PR 1 fix rounds 1 and 2 briefly
 let the helper read bundled skill bodies; each review found another branch that
 slipped past the skill-body guard, and round 3 restored the `a67df90` runtime
-(its `payload.py` differs only by the resealed manifest digest). The translator
+(its `payload.py` differed only by the resealed manifest digest). The skill-path
+normalization fix then replaced that runtime's literal-path test with one that
+normalizes the path first. The translator
 preserves consumer-owned Git reads and supports only its documented bounded
 literal shapes. It does not become a host dispatcher or shell interpreter.
 

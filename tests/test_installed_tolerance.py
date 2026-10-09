@@ -114,8 +114,39 @@ class InstalledTolerance(InstalledFixture, unittest.TestCase):
                 self.assertIn('native skill invocation', result.stderr)
                 self.assertNotIn('read-workflow', result.stderr)
 
+    def test_translate_refuses_skill_body_paths_after_normalization(self):
+        paths = ['.claude/skills/mine/./SKILL.md', '.claude/skills/x/../mine/SKILL.md',
+                 '.claude/skills/mine/SKILL.MD', '.claude/skills/mine/Skill.md',
+                 '.claude//skills//mine//SKILL.md', 'mine/SKILL.md']
+        forms = ['cat {}', 'sed -n 1,20p {}', 'git show origin/main:{}', 'git show HEAD:{}',
+                 'node skills/hugues-mode/scripts/check-plan.mjs {}', '`cat {}`']
+        for path in paths:
+            for form in forms:
+                with self.subTest(line=form.format(path)):
+                    result = self.plan_result(form.format(path))
+                    self.assertEqual(result.returncode, 2, result.stdout)
+                    self.assertIn('native skill invocation', result.stderr)
+        for text in ['Each public skill keeps one skill.md body.',
+                     'cat .claude/skills/mine/references/notes.md',
+                     'cat .claude/skills/mine/SKILL.md.bak']:
+            with self.subTest(control=text):
+                result = self.plan_result(text)
+                self.assertEqual((result.returncode, result.stdout), (0, text + '\n'), result.stderr)
+
+    def test_open_quotes_and_code_spans_cannot_skip_the_skill_body_check(self):
+        # An unclosed quote returned the line before any skill-body check ran, and a code span
+        # split the path into fragments that each looked harmless.
+        for text in ["cat .claude/Skills/mine/SKILL.md 'note", 'cat mine/./SKILL.MD "note',
+                     'cat .claude/skills/mine/`SKILL.md`']:
+            with self.subTest(text=text):
+                result = self.plan_result(text)
+                self.assertEqual(result.returncode, 2, result.stdout)
+                self.assertIn('native skill invocation', result.stderr)
+
     def test_read_workflow_refuses_every_spelling_of_a_skill_body(self):
-        for source in ['skills/tdd/SKILL.md', 'skills/tdd//SKILL.md', './skills/tdd/SKILL.md', 'SKILL.md']:
+        for source in ['skills/tdd/SKILL.md', 'skills/tdd//SKILL.md', './skills/tdd/SKILL.md', 'SKILL.md',
+                       'skills/tdd/./SKILL.md', 'skills/x/../tdd/SKILL.md', 'skills/tdd/SKILL.MD',
+                       'skills/tdd/Skill.md']:
             with self.subTest(source=source):
                 result = self.bound('read-workflow', source)
                 self.assertEqual(result.returncode, 2)
