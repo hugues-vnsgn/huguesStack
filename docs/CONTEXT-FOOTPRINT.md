@@ -90,11 +90,12 @@ characters, close to but not forced to equal the owner's earlier informally
 recorded 9,869, since that number was recorded rather than recomputed from
 pinned bytes). The other 48 skills are user-only: typed by
 name, and read in full by the mode as its router reference, never by native
-invocation. [Host validation](skill-list-host-validation.md) observed, this
-round, that exactly two huguesStack skills reach Claude Code's and Codex's
-model-visible skill list and that a user-only skill still runs when typed by
-name; it establishes that specific claim, not the byte/character counts
-themselves. A user-only skill's frontmatter still counts toward the all-50
+invocation. [Host validation](skill-list-host-validation.md) observed, at
+code commit `2559b5d`, that Claude Code's attached skill list grows by exactly
+two when the plugin loads, that exactly two huguesStack entries reach Codex's
+rendered skills block (which cuts the router's description at 243 of its 312
+characters), and that a user-only skill still runs when typed by name; it
+establishes those claims, not the byte/character counts themselves. A user-only skill's frontmatter still counts toward the all-50
 upper bound above regardless, since that bound is deliberately over every
 declared skill, not only what a host happens to expose. The reduction comes from avoiding unrelated adapter reads,
 not shrinking or omitting the procedures. Reducing the mode further by making
