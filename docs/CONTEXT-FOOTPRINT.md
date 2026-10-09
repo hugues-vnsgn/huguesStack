@@ -91,11 +91,13 @@ recorded 9,869, since that number was recorded rather than recomputed from
 pinned bytes). The other 48 skills are user-only: the owner types one by
 name, and the mode reads it in full as its router reference. The agent never
 invokes one natively; the owner still can. [Host validation](skill-list-host-validation.md) observed, at
-code commit `2559b5d`, that Claude Code's attached skill list grows by exactly
-two when the plugin loads, that exactly two huguesStack entries reach Codex's
-rendered skills block (which cuts the router's description at 243 of its 312
-characters), and that a user-only skill still runs when typed by name; it
-establishes those claims, not the byte/character counts themselves. A user-only skill's frontmatter still counts toward the all-50
+code commit `ae51493`, that Claude Code's attached skill list grows by exactly
+two when the plugin loads (a count; which two skills is inferred), that exactly
+two huguesStack entries reach Codex's rendered skills block (which cuts the
+router's description at 243 of its 312 characters), and that `tdd`, a user-only
+skill, still runs when typed by name. It leaves the router description in
+Claude's list and a typed `principle-*` skill unobserved, and it establishes
+those claims, not the byte/character counts themselves. A user-only skill's frontmatter still counts toward the all-50
 upper bound above regardless, since that bound is deliberately over every
 declared skill, not only what a host happens to expose. The reduction comes from avoiding unrelated adapter reads,
 not shrinking or omitting the procedures. Reducing the mode further by making
